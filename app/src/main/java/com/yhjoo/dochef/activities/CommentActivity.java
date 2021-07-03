@@ -41,7 +41,6 @@ public class CommentActivity extends BaseActivity {
 
     private CommentListAdapter commentListAdapter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

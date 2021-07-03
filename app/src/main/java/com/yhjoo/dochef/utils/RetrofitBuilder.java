@@ -2,6 +2,8 @@ package com.yhjoo.dochef.utils;
 
 import android.content.Context;
 
+import com.yhjoo.dochef.R;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
@@ -24,7 +26,7 @@ public final class RetrofitBuilder {
             });
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://52.78.223.19/chef/")
+                    .baseUrl(context.getString(R.string.server_url))
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(httpClient.build())
                     .build();
@@ -32,7 +34,7 @@ public final class RetrofitBuilder {
             return retrofit.create(service);
         } else {
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("http://52.78.223.19/chef/")
+                    .baseUrl(context.getString(R.string.server_url))
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

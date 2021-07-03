@@ -165,7 +165,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         });
 
         timeLineService = new Retrofit.Builder()
-                .baseUrl("http://52.78.223.19/chef/")
+                .baseUrl(getString(R.string.server_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(TimeLineService.class);
         postListAdapter.setEnableLoadMore(true);

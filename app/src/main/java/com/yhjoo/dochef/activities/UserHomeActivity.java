@@ -88,6 +88,7 @@ public class UserHomeActivity extends BaseActivity {
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
+//        TODO 이거 쳐내고 chefauth에 합치기
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (ChefAuth.isLogIn(UserHomeActivity.this)) {
             user.getIdToken(true)

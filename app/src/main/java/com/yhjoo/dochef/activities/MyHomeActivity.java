@@ -108,6 +108,7 @@ public class MyHomeActivity extends BaseActivity {
                 startActivity(new Intent(MyHomeActivity.this, RecipeActivity.class));
         });
 
+//        TODO 이거 쳐내고 chefauth에 합치기
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (ChefAuth.isLogIn(MyHomeActivity.this)) {
             user.getIdToken(true)

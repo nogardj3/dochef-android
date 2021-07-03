@@ -62,7 +62,7 @@ public class RecipeActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://52.78.223.19/chef/")
+                .baseUrl(getString(R.string.server_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 

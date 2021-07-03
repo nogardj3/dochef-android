@@ -19,7 +19,6 @@ public abstract class BasicCallback<T> implements Callback<T> {
             switch (Integer.valueOf(headers.get("err"))) {
                 case 110:
                     //DoChef.getAppInstance().showToast();
-                    //SproutAuth.SignOut(context);
                     onFailure();
                     break;
                 case 111:
@@ -31,7 +30,6 @@ public abstract class BasicCallback<T> implements Callback<T> {
                     break;
                 case 828:
                     //DoChef.getAppInstance().showToast(context.getString(R.string.auth_err1));
-                    //SproutAuth.SignOut(context);
                     onFailure();
                     break;
                 case 999:

@@ -26,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 
@@ -73,6 +74,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_main);
         ButterKnife.bind(this);
+        MobileAds.initialize(this);
+
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();

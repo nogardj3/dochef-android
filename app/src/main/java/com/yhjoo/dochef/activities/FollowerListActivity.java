@@ -66,7 +66,7 @@ public class FollowerListActivity extends BaseActivity {
         );
 
         FollowerService followerService = new Retrofit.Builder()
-                .baseUrl("http://52.78.223.19/chef/")
+                .baseUrl(getString(R.string.server_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(FollowerService.class);
 

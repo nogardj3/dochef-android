@@ -6,15 +6,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
@@ -24,18 +24,17 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.JsonObject;
-
-import java.util.Arrays;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.ChefAuth;
+import com.yhjoo.dochef.utils.Util;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -54,6 +53,7 @@ public class LoginActivity extends BaseActivity {
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
     private GoogleApiClient mGoogleApiClient;
+    private GoogleSignInClient mGoogleSignInClient;
 
     private LoginService loginService;
 
@@ -71,40 +71,47 @@ public class LoginActivity extends BaseActivity {
                 .requestEmail()
                 .build();
 
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, connectionResult -> Log.w("login_error", "google1"))
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
+//        deprecated methods
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .enableAutoManage(this, connectionResult -> Log.w("login_error", "google1"))
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+//        new
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         loginService = new Retrofit.Builder()
-                .baseUrl("http://52.78.223.19/chef/")
+                .baseUrl(getString(R.string.server_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(LoginService.class);
 
         if (mAuth.getCurrentUser() != null) {
             mAuth.getCurrentUser().getIdToken(true)
-                    .addOnCompleteListener(this::authWithSproutServer);
+                    .addOnCompleteListener(this::authWithServer);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case RC_SIGN_IN:
-                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                progressON(this);
-                if (result.isSuccess()) {
-                    GoogleSignInAccount account = result.getSignInAccount();
-                    firebaseAuthWithGoogle(account);
-                } else {
-                    DoChef.getAppInstance().showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.");
-                    mProgressDialog.dismiss();
-                }
-                break;
-            default:
+        if (requestCode == RC_SIGN_IN){
+            progressON(this);
+
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                Util.log("firebaseAuthWithGoogle:" + account.getId());
+                firebaseAuthWithGoogle(account.getIdToken());
+            } catch (ApiException e) {
+                // Google Sign In failed, update UI appropriately
+                Util.log("Google sign in failed", e.toString());
+                DoChef.getAppInstance().showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.");
                 mProgressDialog.dismiss();
-                break;
+            }
+        }
+        else{
+            Util.log("Something wrong?");
+            mProgressDialog.dismiss();
         }
     }
 
@@ -118,6 +125,7 @@ public class LoginActivity extends BaseActivity {
     void oc(View v) {
         switch (v.getId()) {
             case R.id.login_ok:
+//              TODO textwatcher로 바꾸기
                 if (mAuth.getCurrentUser() != null) {
                     //DoChef.getAppInstance().showToast(getString(R.string.signin_err_wronginput));
                 } else if (editText_id.getText().length() > 0 && editText_pw.length() > 0) {
@@ -144,14 +152,17 @@ public class LoginActivity extends BaseActivity {
                 startActivity(new Intent(LoginActivity.this, FindPWActivity.class));
                 break;
             case R.id.login_google:
-                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+//                deprecated
+//                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+
+                Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, RC_SIGN_IN);
                 break;
         }
     }
 
-    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        mAuth.signInWithCredential(GoogleAuthProvider.getCredential(acct.getIdToken(), null))
+    private void firebaseAuthWithGoogle(String idToken) {
+        mAuth.signInWithCredential(GoogleAuthProvider.getCredential(idToken, null))
                 .addOnCompleteListener(this::authResultChecker);
     }
 
@@ -191,7 +202,7 @@ public class LoginActivity extends BaseActivity {
             authTask.getResult().getUser().getIdToken(true)
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
-                            authWithSproutServer(task);
+                            authWithServer(task);
                         } else {
                             ChefAuth.LogOut(LoginActivity.this);
                             mProgressDialog.dismiss();
@@ -200,7 +211,7 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void authWithSproutServer(Task<GetTokenResult> task) {
+    private void authWithServer(Task<GetTokenResult> task) {
         if (task.isSuccessful()) {
             final String idToken = task.getResult().getToken();
 

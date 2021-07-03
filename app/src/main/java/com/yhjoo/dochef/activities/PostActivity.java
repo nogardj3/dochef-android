@@ -59,7 +59,7 @@ public class PostActivity extends BaseActivity {
         //temp
         if (post == null) {
             TimeLineService timeLineService = new Retrofit.Builder()
-                    .baseUrl("http://52.78.223.19/chef/")
+                    .baseUrl(getString(R.string.server_url))
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(TimeLineService.class);
 
@@ -70,7 +70,7 @@ public class PostActivity extends BaseActivity {
                             post = response.body().get(0);
 
                             PostActivityService postActivityService = new Retrofit.Builder()
-                                    .baseUrl("http://52.78.223.19/chef/")
+                                    .baseUrl(getString(R.string.server_url))
                                     .addConverterFactory(GsonConverterFactory.create())
                                     .build().create(PostActivityService.class);
 
@@ -90,7 +90,7 @@ public class PostActivity extends BaseActivity {
                     });
         } else {
             PostActivityService postActivityService = new Retrofit.Builder()
-                    .baseUrl("http://52.78.223.19/chef/")
+                    .baseUrl(getString(R.string.server_url))
                     .addConverterFactory(GsonConverterFactory.create())
                     .build().create(PostActivityService.class);
 

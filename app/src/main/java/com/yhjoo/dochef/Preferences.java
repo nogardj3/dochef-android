@@ -3,7 +3,6 @@ package com.yhjoo.dochef;
 public class Preferences {
     public static final String SHAREDPREFERENCE_AUTOLOGIN = "AutoLogin";
     public static final String SHAREDPREFERENCE_USERINFO = "UserInfo";
-    public static final int FACEBOOK_REQUEST_CODE = 64206;
     public static int NOTIFICATION_TYPE_1 = 0;
     public static int NOTIFICATION_TYPE_2 = 1;
     public static int NOTIFICATION_TYPE_3 = 2;

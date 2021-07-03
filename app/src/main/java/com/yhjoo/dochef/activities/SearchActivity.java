@@ -12,6 +12,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class SearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_search);
         ButterKnife.bind(this);
+        MobileAds.initialize(this);
 
         viewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager());
         Types.add(new SearchType(1, "레시피"));

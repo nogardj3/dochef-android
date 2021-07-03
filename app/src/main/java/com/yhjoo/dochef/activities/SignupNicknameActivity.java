@@ -35,6 +35,7 @@ public class SignupNicknameActivity extends BaseActivity {
     private ProgressDialog mProgressDialog;
     private SignUpService signUpService;
 
+//    TODO 이거 쳐내고 signupdactivity에서 응답받으면 nickname 뜨는걸로 바꾸기
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +46,7 @@ public class SignupNicknameActivity extends BaseActivity {
         AccessToken = getIntent().getStringExtra(ACCESS_TOKEN);
 
         signUpService = new Retrofit.Builder()
-                .baseUrl("http://52.78.223.19/chef/")
+                .baseUrl(getString(R.string.server_url))
                 .addConverterFactory(GsonConverterFactory.create())
                 .build().create(SignUpService.class);
     }

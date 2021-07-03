@@ -23,6 +23,10 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.RecipeActivity;
+import com.yhjoo.dochef.activities.ThemeActivity;
+import com.yhjoo.dochef.classes.RecipeListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,10 +34,6 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.RecipeActivity;
-import com.yhjoo.dochef.activities.ThemeActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
 
 import static com.yhjoo.dochef.Preferences.temprecipes;
 
@@ -169,18 +169,9 @@ public class MyRecipeFragment extends Fragment {
                     break;
 
                 case VIEWHOLDER_AD:
-//                    MobileAds.initialize(mContext.getApplicationContext(), getString(R.string.admob_app_id));
-//                    AdView aa = helper.getView(R.id.tempadview);
-//                    aa.loadAd(new AdRequest.Builder()
-//                            .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)
-//                            .addTestDevice("261FE916C76D665A68B698D7A5F24CBF") //갤럭시5
-//                            .addTestDevice("1E5B6FBD0872DDC2E1F3B510504E9175") //노트2
-//                            .addTestDevice("7223B83422E9FEEB314276808FD76ECF") //갤럭시탭
-//                            .addTestDevice("974B0DAE919F69B4E73161BFF18F5AB6") //g3
-//                            .addTestDevice("5EEFADA7E9BDB9EABE5991DDFCA8594B") //Gpro
-//                            .addTestDevice("7E9FA06DCFC5D93A0A88B26846169530") //아이언1
-//                            .addTestDevice("2DCC82F592CEB944957E716A561951C7") //베가노트
-//                            .build());
+                    AdView mAdview = helper.getView(R.id.tempadview);
+                    AdRequest adRequest = new AdRequest.Builder().build();
+                    mAdview.loadAd(adRequest);
                     break;
             }
         }

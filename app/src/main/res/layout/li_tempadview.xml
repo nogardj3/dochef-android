@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
+    android:layout_height="100dp"
     android:background="@color/black">
 
     <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
@@ -10,6 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         ads:adSize="SMART_BANNER"
-        ads:adUnitId="@string/home_ad_unit_id" />
+        ads:adUnitId="@string/admob_banner_id_test" />
 
 </androidx.percentlayout.widget.PercentRelativeLayout>
