@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginStart="5dp"
+    android:background="@drawable/background_stroke_2dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:padding="2dp">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/review_recipeimg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:scaleType="centerCrop"
+        app:layout_aspectRatio="150%"
+        app:layout_widthPercent="100%"
+        tools:src="@drawable/tempimg_recipe1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/review_recipeimg"
+        android:orientation="vertical"
+        android:padding="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/review_userimg"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@drawable/background_round"
+                app:srcCompat="@drawable/ic_person_black_24dp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/review_nickname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:maxEms="5"
+                android:maxLines="1"
+                android:textStyle="bold"
+                tools:text="nickname" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/review_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="5dp"
+                tools:text="date" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/review_rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:theme="@style/BaseTheme.RatingBar" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/review_contents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            tools:text="contents" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:text="요리사의 한마디"/>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                app:srcCompat="@drawable/ic_subdirectory_arrow_right_black_24dp" />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/review_reply"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:text="답글"
+                tools:text="답글" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/review_comment_write"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginBottom="5dp"
+            android:text="답글달기" />
+
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/review_comment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <android.support.percent.PercentRelativeLayout
+                android:id="@+id/review_comment_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/review_comment_ok"
+                android:background="@drawable/background_commentedittext">
+
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/review_comment_edittext"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/review_comment_clear"
+                    android:background="@null"
+                    android:hint="댓글을 입력해 주세요"
+                    android:imeOptions="actionDone"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:overScrollMode="always"
+                    android:padding="5dp"
+                    android:scrollbarStyle="insideInset"
+                    android:scrollbars="vertical"
+                    android:theme="@style/BaseTheme.EditTextStyle" />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/review_comment_clear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp"
+                    android:tint="@color/grey_text"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_cancel_black_24dp" />
+
+            </android.support.percent.PercentRelativeLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/review_comment_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/review_comment_layout"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/review_comment_layout"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="5dp"
+                android:background="@drawable/background_commentedittextok"
+                android:gravity="center"
+                android:paddingEnd="20dp"
+                android:paddingStart="20dp"
+                android:text="입력"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/colorPrimary" />
+
+        </android.support.percent.PercentRelativeLayout>
+    </LinearLayout>
+</android.support.percent.PercentRelativeLayout>

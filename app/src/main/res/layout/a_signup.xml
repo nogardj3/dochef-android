@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/signup_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        app:layout_aspectRatio="165%"
+        app:layout_marginTopPercent="12%"
+        app:layout_widthPercent="50%"
+        app:srcCompat="@drawable/logo_red" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/signup_email"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/signup_logo"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:hint="Email"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/grey_text"
+        app:layout_heightPercent="6%"
+        app:layout_marginTopPercent="7%"
+        app:layout_widthPercent="69%"
+        android:theme="@style/BaseTheme.EditTextStyle" />
+
+
+    <View
+        android:id="@+id/signup_divider0"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/signup_email"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        app:layout_widthPercent="69%" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/signup_password"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/signup_divider0"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:hint="Password"
+        android:imeOptions="actionNext"
+        android:inputType="textPassword"
+        android:textColor="@color/grey_text"
+        app:layout_heightPercent="6%"
+        app:layout_widthPercent="69%"
+        android:theme="@style/BaseTheme.EditTextStyle" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_password"
+        android:layout_centerHorizontal="true"
+        android:text="- 이메일과 비밀번호를 입력해 주세요"
+        android:textColor="@color/grey_text"
+        android:textSize="12sp"
+        app:layout_marginTopPercent="1%"
+        app:layout_widthPercent="69%" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/signup_ok"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/signup_password"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="다음"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_marginTopPercent="7%"
+        app:layout_widthPercent="69%" />
+
+</android.support.percent.PercentRelativeLayout>

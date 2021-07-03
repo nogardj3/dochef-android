@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.core.view.ViewPager
+        android:id="@+id/playrecipe_viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:overScrollMode="never" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:id="@+id/playrecipe_timer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/playrecipe_podslider"
+        android:visibility="gone"
+        android:layout_marginBottom="12dp"
+        tools:visibility="visible" >
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/playrecipe_timer_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignBottom="@+id/playrecipe_timer_fab"
+            android:text="05:00"
+            android:textSize="36sp"
+            android:textColor="@color/black"/>
+
+        <com.github.clans.fab.FloatingActionButton
+            android:id="@+id/playrecipe_timer_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:tint="@color/white"
+            app:fab_colorNormal="@color/colorPrimary"
+            app:fab_colorPressed="@color/colorPrimary"
+            app:fab_colorRipple="@color/colorPrimary"/>
+
+    </android.support.percent.PercentRelativeLayout>
+
+    <com.bhargavms.podslider.PodSlider
+        android:id="@+id/playrecipe_podslider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        app:largeCircleColor="@color/colorPrimary"
+        app:mainSliderColor="@color/colorPrimary"
+        app:mediumCircleColor="@color/colorSecondary"
+        app:podColor="@color/white"
+        app:selectedPodColor="@color/white" />
+
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/playrecipe_tts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"/>
+
+</android.support.percent.PercentRelativeLayout>

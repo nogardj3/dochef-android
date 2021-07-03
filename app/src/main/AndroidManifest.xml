@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="quvesoft.project2">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <application
+        android:name=".Project2"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/BaseTheme">
+
+        <activity
+            android:name=".activities.CommentActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity
+            android:name=".activities.FindPWActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activities.FollowerListActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.FollowingListActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.HelpActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activities.MainActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.MakeRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.MyHomeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.MyRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.NoticeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.NotificationActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.PlayRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.PostActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.RecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.ReviewActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.RevisePostActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity
+            android:name=".activities.ReviseRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.SearchActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activities.SettingActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.SignupActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activities.SignupNicknameActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name=".activities.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activities.ThemeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.TOSActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.UserHomeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name=".activities.WritePostActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <activity
+            android:name=".activities.WriteReviewActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize"/>
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+        <service
+            android:name=".services.Project2MessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".services.Project2InstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/splash_logo" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorPrimary" />
+
+    </application>
+</manifest>

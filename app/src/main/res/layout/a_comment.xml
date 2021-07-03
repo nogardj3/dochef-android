@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/comment_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/BaseTheme.Toolbar"
+        app:title="댓글 보기" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comment_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        android:overScrollMode="never"
+        tools:listitem="@layout/li_comment" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:focusable="false"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="5dp"
+        android:paddingEnd="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="5dp">
+
+        <android.support.percent.PercentRelativeLayout
+            android:id="@+id/footer_comment_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toStartOf="@+id/footer_comment_ok"
+            android:background="@drawable/background_commentedittext">
+
+            <android.support.v7.widget.AppCompatEditText
+                android:id="@+id/footer_comment_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/footer_comment_clear"
+                android:background="@null"
+                android:hint="댓글을 입력해 주세요"
+                android:imeOptions="actionDone"
+                android:inputType="textMultiLine"
+                android:maxLines="3"
+                android:overScrollMode="always"
+                android:padding="5dp"
+                android:scrollbarStyle="insideInset"
+                android:scrollbars="vertical"
+                android:theme="@style/BaseTheme.EditTextStyle" />
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/footer_comment_clear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="10dp"
+                android:tint="@color/grey_text"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_cancel_black_24dp" />
+
+        </android.support.percent.PercentRelativeLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/footer_comment_ok"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/footer_comment_layout"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/footer_comment_layout"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="5dp"
+            android:background="@drawable/background_commentedittextok"
+            android:gravity="center"
+            android:paddingEnd="20dp"
+            android:paddingStart="20dp"
+            android:text="입력"
+            android:textColor="@color/white"
+            app:backgroundTint="@color/colorPrimary" />
+
+    </android.support.percent.PercentRelativeLayout>
+</LinearLayout>

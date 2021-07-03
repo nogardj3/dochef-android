@@ -1,0 +1,38 @@
+<resources>
+    <style name="BaseTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/grey</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:splitMotionEvents">false</item>
+        <item name="alertDialogTheme">@style/BaseTheme.AlertDialogStyle</item>
+    </style>
+
+    <style name="BaseTheme.EditTextStyle">
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="BaseTheme.ProgressBarStyle">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="BaseTheme.RatingBar">
+        <item name="colorControlNormal">@color/grey_text</item>
+        <item name="colorControlActivated">@color/colorPrimary</item>
+    </style>
+
+    <style name="BaseTheme.Toolbar" parent="BaseTheme">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+    </style>
+
+
+    <style name="BaseTheme.AlertDialogStyle" parent = "Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorAccent">@color/black</item>
+    </style>
+
+</resources>
