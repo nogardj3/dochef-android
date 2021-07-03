@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/login_logo"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -15,7 +15,7 @@
         app:layout_widthPercent="50%"
         app:srcCompat="@drawable/logo_red" />
 
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/login_email"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -25,10 +25,10 @@
         android:hint="Email"
         android:imeOptions="actionNext"
         android:inputType="textEmailAddress"
+        android:theme="@style/BaseTheme.EditTextStyle"
         app:layout_heightPercent="6%"
         app:layout_marginTopPercent="7%"
-        app:layout_widthPercent="69%"
-        android:theme="@style/BaseTheme.EditTextStyle" />
+        app:layout_widthPercent="69%" />
 
     <View
         android:id="@+id/login_divider1"
@@ -39,7 +39,7 @@
         android:background="@color/colorPrimary"
         app:layout_widthPercent="69%" />
 
-    <android.support.v7.widget.AppCompatEditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/login_password"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -49,11 +49,11 @@
         android:hint="Password"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
+        android:theme="@style/BaseTheme.EditTextStyle"
         app:layout_heightPercent="6%"
-        app:layout_widthPercent="69%"
-        android:theme="@style/BaseTheme.EditTextStyle" />
+        app:layout_widthPercent="69%" />
 
-    <android.support.v7.widget.AppCompatButton
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/login_ok"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
         app:layout_marginTopPercent="6%"
         app:layout_widthPercent="69%">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/login_signup"
             android:layout_width="match_parent"
             android:layout_height="36dp"
@@ -86,7 +86,7 @@
             android:gravity="center"
             android:text="회원가입" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/login_findpw"
             android:layout_width="match_parent"
             android:layout_height="36dp"
@@ -96,24 +96,12 @@
             android:text="비밀번호 찾기" />
     </LinearLayout>
 
-    <android.support.v7.widget.AppCompatImageView
-        android:id="@+id/login_facebook"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_below="@+id/login_button_layout"
-        android:layout_marginTop="20dp"
-        android:scaleType="fitXY"
-        app:layout_aspectRatio="100%"
-        app:layout_marginLeftPercent="25%"
-        app:layout_widthPercent="15%"
-        app:srcCompat="@drawable/selector_facebook" />
-
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/login_google"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignParentEnd="true"
         android:layout_below="@+id/login_button_layout"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="20dp"
         android:scaleType="fitXY"
         app:layout_aspectRatio="100%"
@@ -128,7 +116,7 @@
         android:layout_centerHorizontal="true"
         app:layout_widthPercent="69%">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -137,7 +125,7 @@
             android:textColor="#3b5998"
             android:textSize="12sp" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -146,4 +134,4 @@
             android:textColor="#dc4e41"
             android:textSize="12sp" />
     </LinearLayout>
-</android.support.percent.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>

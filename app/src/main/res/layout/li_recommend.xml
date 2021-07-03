@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="210dp"
     android:layout_height="wrap_content"
-    android:layout_marginEnd="5dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginBottom="2dp"
     android:layout_marginStart="2dp"
+    android:layout_marginTop="2dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="2dp"
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="5dp">
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/li_recommend_recipeimg"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:scaleType="fitXY"
             tools:src="@drawable/tempimg_recipe1" />
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/li_recommend_recipeimg"
             android:layout_centerHorizontal="true">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/li_recommend_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                 android:textSize="16sp"
                 tools:text="recipetitle" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/li_recommend_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +48,6 @@
                 android:textSize="12sp"
                 tools:text="nickname" />
 
-        </android.support.percent.PercentRelativeLayout>
-    </android.support.percent.PercentRelativeLayout>
-</android.support.v7.widget.CardView>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.cardview.widget.CardView>

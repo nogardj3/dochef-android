@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="quvesoft.project2">
+    package="com.yhjoo.dochef">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".Project2"
+        android:name="com.yhjoo.dochef.DoChef"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -18,116 +17,116 @@
         android:theme="@style/BaseTheme">
 
         <activity
-            android:name=".activities.CommentActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <activity
-            android:name=".activities.FindPWActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activities.FollowerListActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.FollowingListActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.HelpActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.LoginActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activities.MainActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.MakeRecipeActivity"
+            android:name="com.yhjoo.dochef.activities.CommentActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".activities.MyHomeActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.MyRecipeActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.NoticeActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.NotificationActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.PlayRecipeActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.PostActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.RecipeActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.ReviewActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".activities.RevisePostActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize"/>
-
-        <activity
-            android:name=".activities.ReviseRecipeActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".activities.SearchActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name=".activities.SettingActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
-            android:name=".activities.SignupActivity"
+            android:name="com.yhjoo.dochef.activities.FindPWActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activities.SignupNicknameActivity"
+            android:name="com.yhjoo.dochef.activities.FollowerListActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.FollowingListActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.HelpActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.LoginActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity android:name=".activities.SplashActivity">
+        <activity
+            android:name="com.yhjoo.dochef.activities.MainActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.MakeRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.MyHomeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.MyRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.NoticeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.NotificationActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.PlayRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.PostActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.RecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.ReviewActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.RevisePostActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.ReviseRecipeActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.SearchActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.SettingActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustNothing" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.SignupActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name="com.yhjoo.dochef.activities.SignupNicknameActivity"
+            android:theme="@style/BaseTheme"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity android:name="com.yhjoo.dochef.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -136,45 +135,39 @@
         </activity>
 
         <activity
-            android:name=".activities.ThemeActivity"
+            android:name="com.yhjoo.dochef.activities.ThemeActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name=".activities.TOSActivity"
+            android:name="com.yhjoo.dochef.activities.TOSActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name=".activities.UserHomeActivity"
+            android:name="com.yhjoo.dochef.activities.UserHomeActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name=".activities.WritePostActivity"
+            android:name="com.yhjoo.dochef.activities.WritePostActivity"
             android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".activities.WriteReviewActivity"
+            android:name="com.yhjoo.dochef.activities.WriteReviewActivity"
             android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
-        <meta-data
-            android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id" />
-
-        <service
-            android:name=".services.Project2MessagingService">
+        <service android:name="com.yhjoo.dochef.services.DoChefMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".services.Project2InstanceIDService">
+        <service android:name="com.yhjoo.dochef.services.DoChefInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 

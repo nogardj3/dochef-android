@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    android:paddingEnd="10dp"
-    android:paddingStart="10dp">
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/li_comment_userimg"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/background_round"
         app:srcCompat="@drawable/ic_person_black_24dp" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_comment_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
         android:textStyle="bold"
         tools:text="nickname" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_comment_contents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -35,18 +35,18 @@
         android:layout_toEndOf="@+id/li_comment_userimg"
         tools:text="contents" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_comment_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/li_comment_other"
-        android:layout_marginBottom="5dp"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_toStartOf="@+id/li_comment_other"
         tools:text="date" />
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/li_comment_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,4 +62,4 @@
         android:layout_marginTop="3dp"
         android:background="@color/grey" />
 
-</android.support.percent.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>

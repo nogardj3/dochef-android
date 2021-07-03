@@ -1,11 +1,9 @@
 <resources>
-    <string name="app_name">Project2</string>
+    <string name="app_name">DoChef</string>
 
     <string name="admob_app_id">ca-app-pub-8810793802378700~9169858677</string>
 
     <string name="home_ad_unit_id">ca-app-pub-8810793802378700/1646591874</string>
-
-    <string name="facebook_app_id">281236645618689</string>
 
     <string name="notification_texttype1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신의 팔로워가 되었습니다.</string>
     <string name="notification_texttype2">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;에 새로운 리뷰가 등록되었습니다.</string>

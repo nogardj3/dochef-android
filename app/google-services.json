@@ -1,52 +1,36 @@
 {
   "project_info": {
-    "project_number": "4709297181",
-    "firebase_url": "https://project2-ee6a1.firebaseio.com",
-    "project_id": "project2-ee6a1",
-    "storage_bucket": "project2-ee6a1.appspot.com"
+    "project_number": "227618773978",
+    "project_id": "dochef-e255c",
+    "storage_bucket": "dochef-e255c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:4709297181:android:e15e55f20f53d9d4",
+        "mobilesdk_app_id": "1:227618773978:android:f0f4c8246fab5eae13bee3",
         "android_client_info": {
-          "package_name": "quvesoft.project2"
+          "package_name": "com.yhjoo.dochef"
         }
       },
       "oauth_client": [
         {
-          "client_id": "4709297181-i08ue35go6oimrl6d5h5n73c9dogsf71.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "quvesoft.project2",
-            "certificate_hash": "e0509fde9ba30496b9835eb9a55acf30359b4bcb"
-          }
-        },
-        {
-          "client_id": "4709297181-scuf17a5p63cecj843on6h0ga7lv9c8u.apps.googleusercontent.com",
+          "client_id": "227618773978-c5ptgsjltcrv8hl1dmgci6rnedd8ene9.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyDnx3UAWflAsPYWMp03CDBozDtGiQaWPG0"
+          "current_key": "AIzaSyAJ2pTkQfEKBFjvnB5LpkmM32LSSmHes6M"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "4709297181-scuf17a5p63cecj843on6h0ga7lv9c8u.apps.googleusercontent.com",
+              "client_id": "227618773978-c5ptgsjltcrv8hl1dmgci6rnedd8ene9.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

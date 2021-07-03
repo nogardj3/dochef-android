@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/playrecipe_end_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -15,7 +15,7 @@
         app:layout_widthPercent="100%"
         tools:src="@drawable/tempimg_playrecipe1" />
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_end_explain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,13 +31,13 @@
         android:layout_below="@+id/playrecipe_end_explain"
         android:layout_marginStart="5dp">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tint="@color/colorSecondary"
             app:srcCompat="@drawable/ic_lightbulb_outline_black_24dp" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -57,8 +57,8 @@
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
         android:layout_below="@+id/playrecipe_end_tags"
-        android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
         android:background="@color/grey" />
 
     <LinearLayout
@@ -67,28 +67,28 @@
         android:layout_below="@+id/playrecipe_end_divider"
         android:gravity="center_vertical|end">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/playrecipe_end_like"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/playrecipe_end_addmyrecipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             app:srcCompat="@drawable/ic_bookmark_border_black_24dp" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/playrecipe_end_share"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             app:srcCompat="@drawable/ic_share_black_24dp" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/playrecipe_end_review"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,4 +96,4 @@
             android:textColor="@color/white"
             app:backgroundTint="@color/colorPrimary" />
     </LinearLayout>
-</android.support.percent.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>

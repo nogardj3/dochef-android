@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/writereview_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:title="작성하기">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/writereview_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -21,7 +21,7 @@
             android:text="완료"
             android:textColor="@color/white" />
 
-    </android.support.v7.widget.Toolbar>
+    </androidx.appcompat.widget.Toolbar>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -29,22 +29,22 @@
         android:layout_above="@+id/writereview_bottom"
         android:layout_below="@+id/writereview_toolbar">
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/writereview_reviewimg"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:overScrollMode="never"
-                android:visibility="gone"
                 android:scaleType="centerCrop"
+                android:visibility="gone"
                 app:layout_aspectRatio="150%"
                 app:layout_widthPercent="100%" />
 
-            <android.support.v7.widget.AppCompatRatingBar
+            <androidx.appcompat.widget.AppCompatRatingBar
                 android:id="@+id/writereview_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
                 android:stepSize="1.0"
                 android:theme="@style/BaseTheme.RatingBar" />
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/writereview_contents"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -67,8 +67,9 @@
                 android:hint="입력해 보세요"
                 android:maxLines="4"
                 android:theme="@style/BaseTheme.EditTextStyle" />
-        </android.support.percent.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
     </ScrollView>
+
     <LinearLayout
         android:id="@+id/writereview_bottom"
         android:layout_width="match_parent"
@@ -76,13 +77,13 @@
         android:layout_alignParentBottom="true"
         android:background="@color/grey">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/writereview_reviewimg_add"
             android:layout_width="36dp"
             android:layout_height="36dp"
-            android:tint="@color/grey_text"
             android:layout_marginStart="10dp"
+            android:tint="@color/grey_text"
             app:srcCompat="@drawable/ic_image_black_24dp" />
     </LinearLayout>
 
-</android.support.percent.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>

@@ -7,14 +7,14 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <android.support.v7.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/comment_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:title="댓글 보기" />
 
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/comment_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -23,25 +23,25 @@
         android:overScrollMode="never"
         tools:listitem="@layout/li_comment" />
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/grey"
         android:focusable="false"
         android:focusableInTouchMode="true"
-        android:paddingBottom="5dp"
-        android:paddingEnd="10dp"
         android:paddingStart="10dp"
-        android:paddingTop="5dp">
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="5dp">
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:id="@+id/footer_comment_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/footer_comment_ok"
             android:background="@drawable/background_commentedittext">
 
-            <android.support.v7.widget.AppCompatEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/footer_comment_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -58,7 +58,7 @@
                 android:scrollbars="vertical"
                 android:theme="@style/BaseTheme.EditTextStyle" />
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/footer_comment_clear"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,24 +69,24 @@
                 android:visibility="gone"
                 app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
-        </android.support.percent.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/footer_comment_ok"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/footer_comment_layout"
             android:layout_alignBottom="@+id/footer_comment_layout"
             android:layout_alignParentEnd="true"
-            android:layout_alignTop="@+id/footer_comment_layout"
             android:layout_centerVertical="true"
             android:layout_marginStart="5dp"
             android:background="@drawable/background_commentedittextok"
             android:gravity="center"
-            android:paddingEnd="20dp"
             android:paddingStart="20dp"
+            android:paddingEnd="20dp"
             android:text="입력"
             android:textColor="@color/white"
             app:backgroundTint="@color/colorPrimary" />
 
-    </android.support.percent.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
 </LinearLayout>

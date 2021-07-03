@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         app:layout_widthPercent="69%">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/findpw_logo"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -21,7 +21,7 @@
             app:layout_widthPercent="72%"
             app:srcCompat="@drawable/logo_red" />
 
-        <android.support.v7.widget.AppCompatEditText
+        <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/findpw_email"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -31,9 +31,9 @@
             android:imeOptions="actionDone"
             android:inputType="textEmailAddress"
             android:textColor="@color/grey_text"
+            android:theme="@style/BaseTheme.EditTextStyle"
             app:layout_heightPercent="6%"
-            app:layout_marginTopPercent="5%"
-            android:theme="@style/BaseTheme.EditTextStyle" />
+            app:layout_marginTopPercent="5%" />
 
         <View
             android:id="@+id/findpw_divider1"
@@ -42,7 +42,7 @@
             android:layout_below="@+id/findpw_email"
             android:background="@color/colorPrimary" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/findpw_divider1"
@@ -51,7 +51,7 @@
             android:textSize="12sp"
             app:layout_marginTopPercent="1%" />
 
-        <android.support.v7.widget.AppCompatButton
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/findpw_ok"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -63,5 +63,5 @@
             app:backgroundTint="@color/colorPrimary"
             app:layout_marginTopPercent="12%" />
 
-    </android.support.percent.PercentRelativeLayout>
-</android.support.percent.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>

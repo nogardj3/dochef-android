@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,11 +10,11 @@
     app:cardCornerRadius="5dp">
 
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/timeline_postimg"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -23,13 +23,13 @@
             app:layout_widthPercent="100%"
             tools:src="@drawable/tempimg_post1" />
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:id="@+id/timeline_user_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/timeline_postimg">
 
-            <android.support.v7.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/timeline_userimg"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
@@ -37,7 +37,7 @@
                 android:background="@drawable/background_round"
                 tools:src="@drawable/ic_person_black_24dp" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timeline_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -46,19 +46,19 @@
                 android:textSize="16sp"
                 android:textStyle="bold"
                 tools:text="nickname" />
-        </android.support.percent.PercentRelativeLayout>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/timeline_user_layout"
-            android:paddingBottom="5dp"
-            android:paddingEnd="10dp"
+            android:layout_alignParentStart="true"
             android:paddingStart="10dp"
-            android:paddingTop="5dp">
+            android:paddingTop="5dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="5dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timeline_contents"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -74,12 +74,12 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/timeline_contents" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/timeline_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_below="@+id/timeline_tags"
+                android:layout_alignParentEnd="true"
                 android:layout_marginBottom="5dp"
                 android:maxLines="1"
                 tools:text="time" />
@@ -92,25 +92,25 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical">
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="좋아요" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/timeline_likecount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="3dp"
                     tools:text="0" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="7dp"
                     android:text="댓글" />
 
-                <android.support.v7.widget.AppCompatTextView
+                <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/timeline_commentcount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -123,21 +123,21 @@
                     android:layout_weight="1"
                     android:gravity="center_vertical|end">
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/timeline_like"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/timeline_comment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
                         app:srcCompat="@drawable/ic_comment_black_24dp" />
 
-                    <android.support.v7.widget.AppCompatImageView
+                    <androidx.appcompat.widget.AppCompatImageView
                         android:id="@+id/timeline_other"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -156,8 +156,8 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginBottom="5dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
                     android:background="@color/grey" />
 
                 <com.google.android.flexbox.FlexboxLayout
@@ -166,6 +166,6 @@
                     android:layout_height="wrap_content"
                     app:flexDirection="column" />
             </LinearLayout>
-        </android.support.percent.PercentRelativeLayout>
-    </android.support.percent.PercentRelativeLayout>
-</android.support.v7.widget.CardView>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.cardview.widget.CardView>

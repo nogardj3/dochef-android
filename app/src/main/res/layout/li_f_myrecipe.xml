@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="240dp"
-    android:layout_marginBottom="10dp"
-    android:layout_marginEnd="5dp"
     android:layout_marginStart="5dp"
+    android:layout_marginEnd="5dp"
+    android:layout_marginBottom="10dp"
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="5dp">
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/li_f_myrecipe_recipeimg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             tools:src="@drawable/tempimg_recipe1" />
 
-        <android.support.percent.PercentRelativeLayout
+        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
@@ -29,7 +29,7 @@
             android:background="@drawable/background_gradient"
             android:padding="6dp">
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/li_f_myrecipe_recipetitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textStyle="bold"
                 tools:text="recipetitle" />
 
-            <android.support.v7.widget.AppCompatTextView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/li_f_myrecipe_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -56,10 +56,10 @@
                 android:layout_alignBottom="@+id/li_f_myrecipe_nickname"
                 android:layout_alignParentEnd="true"
                 android:orientation="horizontal"
-                android:paddingEnd="5dp"
-                android:paddingStart="5dp">
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp">
 
-                <android.support.v7.widget.AppCompatImageView
+                <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/li_f_myrecipe_new"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -67,6 +67,6 @@
                     android:tint="@color/white"
                     app:srcCompat="@drawable/ic_fiber_new_black_24dp" />
             </LinearLayout>
-        </android.support.percent.PercentRelativeLayout>
-    </android.support.percent.PercentRelativeLayout>
-</android.support.v7.widget.CardView>
+        </androidx.percentlayout.widget.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.cardview.widget.CardView>

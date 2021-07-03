@@ -1,34 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.core.view.ViewPager
+    <androidx.viewpager.widget.ViewPager
         android:id="@+id/playrecipe_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never" />
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:id="@+id/playrecipe_timer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/playrecipe_podslider"
-        android:visibility="gone"
         android:layout_marginBottom="12dp"
-        tools:visibility="visible" >
+        android:visibility="gone"
+        tools:visibility="visible">
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/playrecipe_timer_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignBottom="@+id/playrecipe_timer_fab"
+            android:layout_centerHorizontal="true"
             android:text="05:00"
-            android:textSize="36sp"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black"
+            android:textSize="36sp" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/playrecipe_timer_fab"
@@ -39,9 +39,9 @@
             android:tint="@color/white"
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
-            app:fab_colorRipple="@color/colorPrimary"/>
+            app:fab_colorRipple="@color/colorPrimary" />
 
-    </android.support.percent.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
 
     <com.bhargavms.podslider.PodSlider
         android:id="@+id/playrecipe_podslider"
@@ -57,10 +57,10 @@
         app:selectedPodColor="@color/white" />
 
 
-    <android.support.v7.widget.AppCompatTextView
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_tts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
-</android.support.percent.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>

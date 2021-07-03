@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/background_stroke_2dp"
     android:foreground="?attr/selectableItemBackground"
-    android:layout_marginBottom="5dp"
     android:padding="2dp">
 
 
-    <android.support.v7.widget.AppCompatImageView
+    <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/reviewbrief_recipeimg"
         android:layout_width="120dp"
         android:layout_height="120dp"
@@ -18,23 +18,23 @@
         android:scaleType="centerCrop"
         tools:src="@drawable/tempimg_recipe1" />
 
-    <android.support.percent.PercentRelativeLayout
+    <androidx.percentlayout.widget.PercentRelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:padding="5dp"
-
         android:layout_alignBottom="@+id/reviewbrief_recipeimg"
-        android:layout_toEndOf="@+id/reviewbrief_recipeimg">
+        android:layout_alignParentTop="true"
 
-        <android.support.v7.widget.AppCompatImageView
+        android:layout_toEndOf="@+id/reviewbrief_recipeimg"
+        android:padding="5dp">
+
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/reviewbrief_userimg"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:background="@drawable/background_round"
             app:srcCompat="@drawable/ic_person_black_24dp" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/reviewbrief_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,34 +45,33 @@
             android:textStyle="bold"
             tools:text="nickname" />
 
-        <android.support.v7.widget.AppCompatRatingBar
+        <androidx.appcompat.widget.AppCompatRatingBar
             android:id="@+id/reviewbrief_rating"
+            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/reviewbrief_userimg"
             android:isIndicator="true"
             android:numStars="5"
-            android:layout_below="@+id/reviewbrief_userimg"
-            style="?android:attr/ratingBarStyleSmall"
-            android:theme="@style/BaseTheme.RatingBar"
-            />
+            android:theme="@style/BaseTheme.RatingBar" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/reviewbrief_contents"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/reviewbrief_rating"
             tools:text="contents" />
 
-        <android.support.v7.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/reviewbrief_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="3dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
             tools:text="date" />
 
-    </android.support.percent.PercentRelativeLayout>
-</android.support.percent.PercentRelativeLayout>
+    </androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.percentlayout.widget.PercentRelativeLayout>
