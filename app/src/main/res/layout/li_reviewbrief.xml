@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_stroke_2dp"
+    android:foreground="?attr/selectableItemBackground"
+    android:layout_marginBottom="5dp"
+    android:padding="2dp">
+
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/reviewbrief_recipeimg"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:padding="5dp"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/tempimg_recipe1" />
+
+    <android.support.percent.PercentRelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:padding="5dp"
+
+        android:layout_alignBottom="@+id/reviewbrief_recipeimg"
+        android:layout_toEndOf="@+id/reviewbrief_recipeimg">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/reviewbrief_userimg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/background_round"
+            app:srcCompat="@drawable/ic_person_black_24dp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/reviewbrief_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_toEndOf="@+id/reviewbrief_userimg"
+            android:maxEms="5"
+            android:maxLines="1"
+            android:textStyle="bold"
+            tools:text="nickname" />
+
+        <android.support.v7.widget.AppCompatRatingBar
+            android:id="@+id/reviewbrief_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:layout_below="@+id/reviewbrief_userimg"
+            style="?android:attr/ratingBarStyleSmall"
+            android:theme="@style/BaseTheme.RatingBar"
+            />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/reviewbrief_contents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reviewbrief_rating"
+            tools:text="contents" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/reviewbrief_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            tools:text="date" />
+
+    </android.support.percent.PercentRelativeLayout>
+</android.support.percent.PercentRelativeLayout>

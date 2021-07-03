@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:background="@color/white"
+    android:foreground="?attr/selectableItemBackground">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/li_notification_userimg"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/background_round"
+        android:scaleType="centerCrop"
+        app:layout_aspectRatio="100%"
+        tools:src="@drawable/ic_person_black_24dp" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/li_notification_contents"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/li_notification_userimg"
+        android:maxLines="2"
+        tools:text="contents\ncontents" />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/li_notification_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="12dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/li_notification_userimg"
+        tools:text="date" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/grey" />
+
+</android.support.percent.PercentRelativeLayout>

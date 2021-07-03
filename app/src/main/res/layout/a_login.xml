@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/login_logo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerHorizontal="true"
+        app:layout_aspectRatio="165%"
+        app:layout_marginTopPercent="12%"
+        app:layout_widthPercent="50%"
+        app:srcCompat="@drawable/logo_red" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/login_email"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/login_logo"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:hint="Email"
+        android:imeOptions="actionNext"
+        android:inputType="textEmailAddress"
+        app:layout_heightPercent="6%"
+        app:layout_marginTopPercent="7%"
+        app:layout_widthPercent="69%"
+        android:theme="@style/BaseTheme.EditTextStyle" />
+
+    <View
+        android:id="@+id/login_divider1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_below="@+id/login_email"
+        android:layout_centerHorizontal="true"
+        android:background="@color/colorPrimary"
+        app:layout_widthPercent="69%" />
+
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/login_password"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/login_divider1"
+        android:layout_centerHorizontal="true"
+        android:background="@null"
+        android:hint="Password"
+        android:imeOptions="actionDone"
+        android:inputType="textPassword"
+        app:layout_heightPercent="6%"
+        app:layout_widthPercent="69%"
+        android:theme="@style/BaseTheme.EditTextStyle" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/login_ok"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_password"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="로그인"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_marginTopPercent="5%"
+        app:layout_widthPercent="69%" />
+
+    <LinearLayout
+        android:id="@+id/login_button_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_ok"
+        android:layout_centerHorizontal="true"
+        app:layout_marginTopPercent="6%"
+        app:layout_widthPercent="69%">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/login_signup"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="회원가입" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/login_findpw"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:text="비밀번호 찾기" />
+    </LinearLayout>
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/login_facebook"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/login_button_layout"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        app:layout_aspectRatio="100%"
+        app:layout_marginLeftPercent="25%"
+        app:layout_widthPercent="15%"
+        app:srcCompat="@drawable/selector_facebook" />
+
+    <android.support.v7.widget.AppCompatImageView
+        android:id="@+id/login_google"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentEnd="true"
+        android:layout_below="@+id/login_button_layout"
+        android:layout_marginTop="20dp"
+        android:scaleType="fitXY"
+        app:layout_aspectRatio="100%"
+        app:layout_marginRightPercent="25%"
+        app:layout_widthPercent="15%"
+        app:srcCompat="@drawable/selector_login_gg" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/login_google"
+        android:layout_centerHorizontal="true"
+        app:layout_widthPercent="69%">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Facebook"
+            android:textColor="#3b5998"
+            android:textSize="12sp" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Google"
+            android:textColor="#dc4e41"
+            android:textSize="12sp" />
+    </LinearLayout>
+</android.support.percent.PercentRelativeLayout>
