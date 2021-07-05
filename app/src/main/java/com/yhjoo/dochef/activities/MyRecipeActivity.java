@@ -22,6 +22,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.RecipeListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +33,6 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -40,13 +40,13 @@ import retrofit2.http.Query;
 import static com.yhjoo.dochef.Preferences.temprecipes;
 
 public class MyRecipeActivity extends BaseActivity {
+    private final ArrayList<RecipeListItem> recipeListItems = new ArrayList<>();
     public boolean AlignMode = false;
     @BindView(R.id.a_myrecipe_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.a_myrecipe_alignbutton)
     AppCompatImageView alignModeIcon;
     private RecipeListAdapter recipeListAdapter;
-    private final ArrayList<RecipeListItem> recipeListItems = new ArrayList<>();
     private ItemTouchHelper dragitemTouchHelper;
 
     @Override
@@ -209,7 +209,7 @@ public class MyRecipeActivity extends BaseActivity {
                     .into((AppCompatImageView) helper.getView(R.id.li_a_myrecipe_recipeimg));
 
             helper.setText(R.id.li_a_myrecipe_recipetitle, item.getTitle());
-            helper.setText(R.id.li_a_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>",Html.FROM_HTML_MODE_LEGACY));
+            helper.setText(R.id.li_a_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
             helper.setVisible(R.id.li_a_myrecipe_mine, item.getNickName().equals("나"));
             helper.setVisible(R.id.li_a_myrecipe_revise, item.getNickName().equals("나") && !AlignMode);
             helper.setVisible(R.id.li_a_myrecipe_delete, !AlignMode);

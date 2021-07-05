@@ -11,21 +11,21 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 
 public class HelpActivity extends BaseActivity {
     private final int HELP_DEPTH_0 = 0;
     private final int HELP_CONTENTS = 1;
+    private final ArrayList<MultiItemEntity> announces = new ArrayList<>();
     @BindView(R.id.help_recycler)
     RecyclerView recyclerView;
-    private final ArrayList<MultiItemEntity> announces = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +108,7 @@ public class HelpActivity extends BaseActivity {
 
                 case HELP_CONTENTS:
                     final Contents contents = (Contents) item;
-                    helper.setText(R.id.exp_help1_text, contents.text);
+                    helper.setText(R.id.exp_d1_text, contents.text);
 
                     break;
             }

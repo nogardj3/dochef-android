@@ -3,18 +3,18 @@ package com.yhjoo.dochef.classes;
 import com.google.gson.annotations.SerializedName;
 
 public class Comment {
-    @SerializedName("COMMENT_ID")
-    private int CommentID;
-    @SerializedName("RECIPE_ID")
-    private int ReciepeID;
-    @SerializedName("USER_ID")
-    private String UserID;
     @SerializedName("NICKNAME")
     private final String NickName;
     @SerializedName("COMMENT")
     private final String Contents;
     @SerializedName("TIME")
     private final String Date;
+    @SerializedName("COMMENT_ID")
+    private int CommentID;
+    @SerializedName("RECIPE_ID")
+    private int ReciepeID;
+    @SerializedName("USER_ID")
+    private String UserID;
 
     public Comment(String nickName, String contents, String date) {
         NickName = nickName;

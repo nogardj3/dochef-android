@@ -5,17 +5,17 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    android:paddingStart="10dp"
-    android:paddingEnd="10dp">
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/li_comment_userimg"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/background_round"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_person_black_24dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -28,7 +28,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/li_comment_userimg"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="nickname" />
+        tools:text="닉네임" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_comment_contents"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="@+id/li_comment_nickname"
         app:layout_constraintTop_toBottomOf="@+id/li_comment_nickname"
-        tools:text="contents" />
+        tools:text="내용" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_comment_date"

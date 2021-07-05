@@ -21,6 +21,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.User;
+import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.ChefAuth;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,13 +39,6 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.User;
-import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.ChefAuth;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Field;
@@ -50,11 +50,10 @@ import retrofit2.http.QueryMap;
 import static com.yhjoo.dochef.Preferences.tempgrid;
 
 public class UserHomeActivity extends BaseActivity {
+    private final ArrayList<PostItem> postItems = new ArrayList<>();
     @BindView(R.id.userhome_recycler)
     RecyclerView recyclerView;
-
     private PostListAdapter postListAdapter;
-    private final ArrayList<PostItem> postItems = new ArrayList<>();
     private SharedPreferences mSharedPreferences;
     private UserHomeService userHomeService;
     private String UserID;

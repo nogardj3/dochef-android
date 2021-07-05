@@ -19,6 +19,9 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.RecipeListItem;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,18 +29,15 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
 
 import static com.yhjoo.dochef.Preferences.temprecipes;
 
 public class ThemeActivity extends BaseActivity {
     private final int VIEWHOLDER_AD = 1;
     private final int VIEWHOLDER_ITEM = 2;
+    private final ArrayList<ThemeItem> recipeListItems = new ArrayList<>();
     @BindView(R.id.theme_recycler)
     RecyclerView recyclerView;
-    private final ArrayList<ThemeItem> recipeListItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

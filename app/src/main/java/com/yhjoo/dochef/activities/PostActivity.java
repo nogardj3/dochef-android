@@ -19,6 +19,13 @@ import androidx.appcompat.widget.Toolbar;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.Post;
+import com.yhjoo.dochef.classes.PostComment;
+import com.yhjoo.dochef.utils.BasicCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -27,13 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Post;
-import com.yhjoo.dochef.classes.PostComment;
-import com.yhjoo.dochef.utils.BasicCallback;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

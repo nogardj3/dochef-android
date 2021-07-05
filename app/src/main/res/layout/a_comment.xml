@@ -29,25 +29,26 @@
         android:background="@color/grey"
         android:focusable="false"
         android:focusableInTouchMode="true"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
         android:paddingStart="10dp"
-        android:paddingEnd="10dp">
+        android:paddingTop="5dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/footer_comment_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/background_commentedittext"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/footer_comment_ok"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/footer_comment_ok">
+            app:layout_constraintTop_toTopOf="parent">
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/footer_comment_edittext"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/footer_comment_clear"
                 android:background="@null"
                 android:hint="댓글을 입력해 주세요"
                 android:imeOptions="actionDone"
@@ -57,11 +58,10 @@
                 android:padding="5dp"
                 android:scrollbarStyle="insideInset"
                 android:scrollbars="vertical"
-                android:layout_toStartOf="@+id/footer_comment_clear"
-                app:layout_constraintEnd_toStartOf="@+id/footer_comment_clear"
-                app:layout_constraintTop_toTopOf="parent"
+                android:theme="@style/BaseTheme.EditTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:theme="@style/BaseTheme.EditTextStyle"/>
+                app:layout_constraintEnd_toStartOf="@+id/footer_comment_clear"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/footer_comment_clear"
@@ -70,10 +70,10 @@
                 android:layout_marginEnd="10dp"
                 android:tint="@color/grey_text"
                 android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/footer_comment_edittext"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/footer_comment_edittext"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_cancel_black_24dp" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -90,11 +90,11 @@
             android:paddingEnd="20dp"
             android:text="입력"
             android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
+            app:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/footer_comment_layout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:backgroundTint="@color/colorPrimary"/>
+            app:layout_constraintStart_toEndOf="@+id/footer_comment_layout"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </LinearLayout>

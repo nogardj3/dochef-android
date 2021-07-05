@@ -12,7 +12,6 @@ import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.Utils;
@@ -54,7 +53,7 @@ public class SplashActivity extends BaseActivity {
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
 
-        Utils.showSnackbar(root,"hello~!@");
+        Utils.showSnackbar(root, "hello~!@");
 
         ViewAnimator.animate(logo)
                 .alpha(0.0f, 1.0f)

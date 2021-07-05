@@ -16,15 +16,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.github.clans.fab.FloatingActionButton;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.Review;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Review;
 
 import static com.yhjoo.dochef.Preferences.tempprofile;
 import static com.yhjoo.dochef.Preferences.temprecipes;

@@ -17,17 +17,17 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.utils.PermissionUtil;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.utils.PermissionUtil;
-import com.yhjoo.dochef.utils.Utils;
 
 public class WritePostActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
@@ -69,7 +69,7 @@ public class WritePostActivity extends BaseActivity {
         if (requestCode == CODE_PERMISSION) {
             for (int result : grantResults) {
                 if (result == PackageManager.PERMISSION_DENIED) {
-                    Utils.showSnackbar(this,"권한 거부");
+                    Utils.showSnackbar(this, "권한 거부");
 //                    App.getAppInstance().showToast("권한 거부");
                     return;
                 }

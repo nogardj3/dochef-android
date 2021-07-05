@@ -15,11 +15,11 @@ import androidx.percentlayout.widget.PercentRelativeLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.classes.RecipeItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.classes.RecipeItem;
 
 public class PlayRecipeStartFragment extends Fragment {
     @BindView(R.id.playrecipe_start_img)

@@ -15,9 +15,9 @@
         android:id="@+id/playrecipe_timer_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/playrecipe_podslider"
         android:layout_marginBottom="12dp"
         android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/playrecipe_podslider"
         tools:visibility="visible">
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -25,12 +25,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/playrecipe_timer_fab"
+            android:textColor="@color/black"
+            android:textSize="36sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            android:text="05:00"
-            android:textColor="@color/black"
             app:layout_constraintTop_toTopOf="parent"
-            android:textSize="36sp" />
+            tools:text="05:00" />
 
         <com.github.clans.fab.FloatingActionButton
             android:id="@+id/playrecipe_timer_fab"
@@ -41,8 +41,8 @@
             app:fab_colorNormal="@color/colorPrimary"
             app:fab_colorPressed="@color/colorPrimary"
             app:fab_colorRipple="@color/colorPrimary"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toRightOf="parent"/>
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -51,10 +51,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
+        app:largeCircleColor="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:largeCircleColor="@color/colorPrimary"
         app:mainSliderColor="@color/colorPrimary"
         app:mediumCircleColor="@color/colorSecondary"
         app:podColor="@color/white"
@@ -65,7 +65,7 @@
         android:id="@+id/playrecipe_tts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

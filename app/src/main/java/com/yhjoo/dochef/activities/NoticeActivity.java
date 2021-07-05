@@ -11,22 +11,21 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 
 public class NoticeActivity extends BaseActivity {
     private final int NOTICE_DEPTH_0 = 0;
     private final int NOTICE_CONTENTS = 1;
+    private final ArrayList<MultiItemEntity> announces = new ArrayList<>();
     @BindView(R.id.notice_recycler)
     RecyclerView recyclerView;
-
-    private final ArrayList<MultiItemEntity> announces = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +91,8 @@ public class NoticeActivity extends BaseActivity {
             switch (helper.getItemViewType()) {
                 case NOTICE_DEPTH_0:
                     final Title lv0 = (Title) item;
-                    helper.setText(R.id.exp_notice0_title, lv0.title)
-                            .setImageResource(R.id.exp_notice0_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
+                    helper.setText(R.id.exp_d0_title, lv0.title)
+                            .setImageResource(R.id.exp_d0_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
                     helper.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -109,7 +108,7 @@ public class NoticeActivity extends BaseActivity {
 
                 case NOTICE_CONTENTS:
                     final Contents contents = (Contents) item;
-                    helper.setText(R.id.exp_notice1_text, contents.text);
+                    helper.setText(R.id.exp_d1_text, contents.text);
 
                     break;
             }

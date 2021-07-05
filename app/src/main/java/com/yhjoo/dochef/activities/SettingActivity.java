@@ -7,12 +7,13 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.appcompat.widget.Toolbar;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.ChefAuth;
+
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
 

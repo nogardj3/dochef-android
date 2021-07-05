@@ -51,8 +51,8 @@ import static com.yhjoo.dochef.Preferences.tempprofile;
 import static com.yhjoo.dochef.Preferences.temprecipes;
 
 public class RecipeActivity extends BaseActivity {
-    private RecipeOverview recipeOverview;
     private final int RecipeID = 1;
+    private RecipeOverview recipeOverview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

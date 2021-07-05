@@ -24,6 +24,12 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.RecipeActivity;
+import com.yhjoo.dochef.activities.ThemeActivity;
+import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,12 +40,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.RecipeActivity;
-import com.yhjoo.dochef.activities.ThemeActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
-import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import static com.yhjoo.dochef.Preferences.temprecipes;
 
@@ -49,13 +49,13 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
     private final int VIEWHOLDER_AD = 1;
     private final int VIEWHOLDER_PAGER = 2;
     private final int VIEWHOLDER_ITEM = 3;
+    private final ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
+    private final String[] aa = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
     @BindView(R.id.f_recipe_swipe)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.f_recipe_recycler)
     RecyclerView recyclerView;
     private RecipeListAdapter recipeListAdapter;
-    private final ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
-    private final String[] aa = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
     private int currentMode = 1;
 
     @Override

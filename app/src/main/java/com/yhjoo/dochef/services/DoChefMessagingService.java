@@ -13,7 +13,6 @@ import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.SplashActivity;
 

@@ -2,13 +2,14 @@ package com.yhjoo.dochef.activities;
 
 import android.os.Bundle;
 
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+
 import java.util.concurrent.TimeUnit;
 
 import butterknife.OnClick;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 
 public class FindPWActivity extends BaseActivity {
 

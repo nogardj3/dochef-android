@@ -25,7 +25,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/li_resultuser_userimg"
         app:layout_constraintLeft_toRightOf="@+id/li_resultuser_userimg"
         app:layout_constraintTop_toTopOf="@+id/li_resultuser_userimg"
-        tools:text="nickname" />
+        tools:text="닉네임" />
 
     <View
         android:layout_width="match_parent"

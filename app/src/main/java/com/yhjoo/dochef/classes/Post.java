@@ -5,10 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Post implements Serializable {
-    @SerializedName("POST_ID")
-    private int postID;
-    @SerializedName("USER_ID")
-    private String UserID;
     @SerializedName("NICKNAME")
     private final String Nickname;
     @SerializedName("PROFILE_IMAGE")
@@ -17,9 +13,12 @@ public class Post implements Serializable {
     private final String PostImg;
     @SerializedName("SUBSTANCE")
     private final String Contents;
-
     private final int LikeCount;
     private final String[] Tags;
+    @SerializedName("POST_ID")
+    private int postID;
+    @SerializedName("USER_ID")
+    private String UserID;
 
     public Post(String nickname, String userImg, String postImg, int likeCount, String contents, String[] tags) {
         Nickname = nickname;

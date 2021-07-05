@@ -7,14 +7,14 @@
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/followerlist_toolbar"
+        android:id="@+id/followlist_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:title="팔로워" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/followerlist_recycler"
+        android:id="@+id/followlist_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"

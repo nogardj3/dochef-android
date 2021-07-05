@@ -17,19 +17,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeActivity;
@@ -40,6 +32,13 @@ import com.yhjoo.dochef.classes.UserList;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.views.CustomTextView;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.GET;

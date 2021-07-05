@@ -22,7 +22,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeActivity;
 import com.yhjoo.dochef.activities.ThemeActivity;
@@ -41,10 +40,10 @@ public class MyRecipeFragment extends Fragment {
     private final int VIEWHOLDER_AD = 1;
     private final int VIEWHOLDER_PAGER = 2;
     private final int VIEWHOLDER_ITEM = 3;
-    @BindView(R.id.f_myrecipe_recycler)
-    RecyclerView recyclerView;
     private final ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
     private final String[] aa = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
+    @BindView(R.id.f_myrecipe_recycler)
+    RecyclerView recyclerView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -132,7 +131,7 @@ public class MyRecipeFragment extends Fragment {
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_f_myrecipe_recipeimg));
                     helper.setText(R.id.li_f_myrecipe_recipetitle, item.getContent().getTitle());
-                    helper.setText(R.id.li_f_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getContent().getNickName() + "</b>",Html.FROM_HTML_MODE_LEGACY));
+                    helper.setText(R.id.li_f_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getContent().getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
                     helper.setVisible(R.id.li_f_myrecipe_new, true);
 
                     break;

@@ -21,6 +21,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.viewpagerindicator.CirclePageIndicator;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.RecipeActivity;
+import com.yhjoo.dochef.activities.ThemeActivity;
+import com.yhjoo.dochef.classes.RecipeListItem;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -30,10 +34,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.RecipeActivity;
-import com.yhjoo.dochef.activities.ThemeActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
 
 import static com.yhjoo.dochef.Preferences.temprecipes;
 

@@ -10,10 +10,10 @@
         android:layout_width="240dp"
         android:layout_height="240dp"
         android:layout_marginTop="24dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/findpw_email"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/logo_red" />
 
     <androidx.appcompat.widget.AppCompatEditText
@@ -21,28 +21,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
         android:background="@null"
         android:hint="Email"
         android:imeOptions="actionDone"
         android:inputType="textEmailAddress"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:textColor="@color/grey_text"
         android:theme="@style/BaseTheme.EditTextStyle"
-        app:layout_constraintTop_toBottomOf="@+id/findpw_logo"
         app:layout_constraintBottom_toTopOf="@+id/findpw_divider1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_logo" />
 
     <View
         android:id="@+id/findpw_divider1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/findpw_email"
         app:layout_constraintBottom_toTopOf="@+id/findpw_notice"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_email" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/findpw_notice"
@@ -52,10 +52,10 @@
         android:text="- 가입시 입력한 이메일주소를 정확히 입력 해 주세요."
         android:textColor="@color/grey_text"
         android:textSize="12sp"
-        app:layout_constraintTop_toBottomOf="@+id/findpw_divider1"
         app:layout_constraintBottom_toTopOf="@+id/findpw_ok"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_divider1" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/findpw_ok"
@@ -67,8 +67,8 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:backgroundTint="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/findpw_notice"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/findpw_notice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

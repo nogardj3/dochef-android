@@ -14,6 +14,10 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.UserList;
+import com.yhjoo.dochef.utils.BasicCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +25,6 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.UserList;
-import com.yhjoo.dochef.utils.BasicCallback;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -35,7 +35,7 @@ import retrofit2.http.Query;
 import static com.yhjoo.dochef.Preferences.tempprofile;
 
 public class FollowerListActivity extends BaseActivity {
-    @BindView(R.id.followerlist_recycler)
+    @BindView(R.id.followlist_recycler)
     RecyclerView recyclerView;
 
     private UserListAdapter userListAdapter;
@@ -43,10 +43,10 @@ public class FollowerListActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_followerlist);
+        setContentView(R.layout.a_follow);
         ButterKnife.bind(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.followerlist_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.followlist_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 

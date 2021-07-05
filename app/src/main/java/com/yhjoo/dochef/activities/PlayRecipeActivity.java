@@ -31,6 +31,15 @@ import androidx.viewpager.widget.ViewPager;
 import com.bhargavms.podslider.PodSlider;
 import com.github.clans.fab.FloatingActionButton;
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.RecipeItem;
+import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
+import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
+import com.yhjoo.dochef.fragments.PlayRecipeStartFragment;
+import com.yhjoo.dochef.utils.PermissionUtil;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -45,15 +54,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.RecipeItem;
-import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
-import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
-import com.yhjoo.dochef.fragments.PlayRecipeStartFragment;
-import com.yhjoo.dochef.utils.PermissionUtil;
 
 public class PlayRecipeActivity extends BaseActivity implements SensorEventListener {
     @BindView(R.id.playrecipe_viewpager)

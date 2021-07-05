@@ -14,6 +14,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.fragments.ResultFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +25,9 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.fragments.ResultFragment;
 
 public class SearchActivity extends BaseActivity {
+    private final List<SearchType> Types = new ArrayList<>();
     @BindView(R.id.search_viewpager)
     ViewPager viewPager;
     @BindView(R.id.search_tablayout)
@@ -37,8 +38,6 @@ public class SearchActivity extends BaseActivity {
     AppCompatImageView searchButton;
     @BindView(R.id.search_edittext)
     AppCompatEditText searchview;
-
-    private final List<SearchType> Types = new ArrayList<>();
     private SearchViewPagerAdapter viewPagerAdapter;
     private String keyword;
 

@@ -43,7 +43,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/timeline_userimg"
             app:layout_constraintLeft_toRightOf="@+id/timeline_userimg"
             app:layout_constraintTop_toTopOf="@+id/timeline_userimg"
-            tools:text="nickname" />
+            tools:text="닉네임" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timeline_contents"

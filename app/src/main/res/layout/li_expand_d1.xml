@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:paddingStart="20dp"
-        tools:text="text\ntext\ntext\ntext" />
+        tools:text="확장\n확장" />
 
     <View
         android:layout_width="match_parent"

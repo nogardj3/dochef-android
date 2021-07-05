@@ -9,15 +9,15 @@ import androidx.appcompat.widget.AppCompatEditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.JsonObject;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.utils.BasicCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.utils.BasicCallback;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -35,7 +35,7 @@ public class SignupNicknameActivity extends BaseActivity {
     private ProgressDialog mProgressDialog;
     private SignUpService signUpService;
 
-//    TODO 이거 쳐내고 signupdactivity에서 응답받으면 nickname 뜨는걸로 바꾸기
+    //    TODO 이거 쳐내고 signupdactivity에서 응답받으면 nickname 뜨는걸로 바꾸기
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

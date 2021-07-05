@@ -18,27 +18,26 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import static com.yhjoo.dochef.Preferences.tempprofile;
 
 public class NotificationActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+    private final ArrayList<Notification> notifications = new ArrayList<>();
     @BindView(R.id.notification_swipe)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.notification_recycler)
     RecyclerView recyclerView;
-
     private NotificationListAdapter notificationListAdapter;
-    private final ArrayList<Notification> notifications = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

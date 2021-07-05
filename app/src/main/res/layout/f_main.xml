@@ -10,21 +10,21 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:overScrollMode="never"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintDimensionRatio="w,1:1.5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintDimensionRatio="w,1:1.5"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_widthPercent="100%" />
 
     <com.viewpagerindicator.CirclePageIndicator
         android:id="@+id/main_adviewpager_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_alignEnd="@+id/main_adviewpager"
         android:layout_alignBottom="@+id/main_adviewpager"
-        android:padding="10dp" />
+        android:padding="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="wrap_content"
@@ -32,9 +32,9 @@
         android:layout_marginStart="5dp"
         android:text="인기 급상승 레시피"
         android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager_indicator"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:textStyle="bold" />
+        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager_indicator" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/main_recommend_more"
@@ -43,19 +43,19 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_margin="5dp"
-        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager_indicator"
-        app:layout_constraintRight_toRightOf="parent"
         android:text="더보기"
-        android:textColor="@color/grey_text" />
+        android:textColor="@color/grey_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager_indicator" />
 
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_recommend_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="190dp"
+        android:overScrollMode="never"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_recommend_more"
-        android:overScrollMode="never" />
+        app:layout_constraintTop_toBottomOf="@+id/main_recommend_more" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

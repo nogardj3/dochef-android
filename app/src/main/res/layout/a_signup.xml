@@ -21,8 +21,8 @@
         android:id="@+id/signup_default"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:constraint_referenced_ids="signup_divider0, signup_email,signup_hurry,signup_password,signup_ok"
-        />
+        app:constraint_referenced_ids="signup_divider0, signup_email,signup_hurry,signup_password,signup_ok" />
+
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/signup_email"
         android:layout_width="0dp"
@@ -95,14 +95,12 @@
         app:layout_constraintTop_toBottomOf="@+id/signup_hurry" />
 
 
-
     <androidx.constraintlayout.widget.Group
         android:id="@+id/signup_nick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="signupnick_email, signupnick_divider0, signupnick_hurry, signupnick_ok"
-        />
+        app:constraint_referenced_ids="signupnick_email, signupnick_divider0, signupnick_hurry, signupnick_ok" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/signupnick_email"
@@ -158,7 +156,6 @@
         app:layout_constraintLeft_toLeftOf="@+id/signupnick_email"
         app:layout_constraintRight_toRightOf="@+id/signupnick_email"
         app:layout_constraintTop_toBottomOf="@+id/signupnick_hurry" />
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

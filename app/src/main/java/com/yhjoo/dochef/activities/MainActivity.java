@@ -29,6 +29,14 @@ import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.fragments.MainFragment;
+import com.yhjoo.dochef.fragments.MyRecipeFragment;
+import com.yhjoo.dochef.fragments.RecipeFragment;
+import com.yhjoo.dochef.fragments.TimeLineFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,15 +48,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.fragments.MainFragment;
-import com.yhjoo.dochef.fragments.MyRecipeFragment;
-import com.yhjoo.dochef.fragments.RecipeFragment;
-import com.yhjoo.dochef.fragments.TimeLineFragment;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     @BindView(R.id.main_toolbar)

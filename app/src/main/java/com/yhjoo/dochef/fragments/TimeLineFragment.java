@@ -28,17 +28,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.flexbox.FlexboxLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.CommentActivity;
 import com.yhjoo.dochef.activities.MyHomeActivity;
@@ -49,6 +40,15 @@ import com.yhjoo.dochef.classes.Post;
 import com.yhjoo.dochef.classes.PostComment;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.views.CustomLoadMoreView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

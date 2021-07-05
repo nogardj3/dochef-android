@@ -31,6 +31,15 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.Preferences;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.User;
+import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.ChefAuth;
+import com.yhjoo.dochef.utils.PermissionUtil;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,15 +50,6 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.User;
-import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.ChefAuth;
-import com.yhjoo.dochef.utils.PermissionUtil;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.GET;
@@ -60,20 +60,20 @@ import static com.yhjoo.dochef.Preferences.tempgrid;
 public class MyHomeActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
     private final int EXTRA_RQ_PICKFROMGALLERY = 200;
+    private final ArrayList<View> revise_Icons = new ArrayList<>();
+    private final ArrayList<PostItem> postItems = new ArrayList<>();
+    private final int mode_Normal = 1;
+    private final int mode_Revise = 2;
     @BindView(R.id.myhome_recycler)
     RecyclerView recyclerView;
     AppCompatButton appCompatButton;
     AppCompatImageView userimg;
-    private final ArrayList<View> revise_Icons = new ArrayList<>();
     private PostListAdapter postListAdapter;
-    private final ArrayList<PostItem> postItems = new ArrayList<>();
     private SharedPreferences mSharedPreferences;
     private MyHomeService myHomeService;
     private JSONObject userInfoJson;
     private User userInfo;
     private int currentMode = 1;
-    private final int mode_Normal = 1;
-    private final int mode_Revise = 2;
     private Uri mImageUri;
 
     @Override

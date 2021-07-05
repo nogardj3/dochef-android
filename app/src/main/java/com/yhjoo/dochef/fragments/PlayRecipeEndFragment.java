@@ -14,13 +14,13 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.WriteReviewActivity;
+import com.yhjoo.dochef.classes.RecipeItem;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.WriteReviewActivity;
-import com.yhjoo.dochef.classes.RecipeItem;
 
 public class PlayRecipeEndFragment extends Fragment {
     @BindView(R.id.playrecipe_end_img)

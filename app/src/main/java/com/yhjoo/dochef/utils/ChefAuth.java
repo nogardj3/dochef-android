@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.google.firebase.auth.FirebaseAuth;
-
 import com.yhjoo.dochef.Preferences;
 
 public class ChefAuth {
