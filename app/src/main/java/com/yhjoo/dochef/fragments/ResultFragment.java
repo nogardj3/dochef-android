@@ -23,7 +23,6 @@ import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +30,7 @@ import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeActivity;
 import com.yhjoo.dochef.activities.SearchActivity;
@@ -79,7 +78,7 @@ public class ResultFragment extends Fragment {
         else if (type == VIEWHOLDER_ITEM_TAG)
             resultListAdapter = new ResultListAdapter(new ArrayList<>(), R.layout.li_resulttag, Glide.with(getContext()));
         else
-            DoChef.getAppInstance().showToast("ddd");
+            App.getAppInstance().showToast("ddd");
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(resultListAdapter);

@@ -26,8 +26,6 @@ public class NoticeActivity extends BaseActivity {
     @BindView(R.id.notice_recycler)
     RecyclerView recyclerView;
 
-    private NoticeListAdapter noticeListAdapter;
-
     private final ArrayList<MultiItemEntity> announces = new ArrayList<>();
 
     @Override
@@ -46,7 +44,7 @@ public class NoticeActivity extends BaseActivity {
             announces.add(Title);
         }
 
-        noticeListAdapter = new NoticeListAdapter(announces);
+        NoticeListAdapter noticeListAdapter = new NoticeListAdapter(announces);
         recyclerView.setAdapter(noticeListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

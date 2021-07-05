@@ -23,10 +23,11 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.PermissionUtil;
+import com.yhjoo.dochef.utils.Utils;
 
 public class WritePostActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
@@ -68,7 +69,8 @@ public class WritePostActivity extends BaseActivity {
         if (requestCode == CODE_PERMISSION) {
             for (int result : grantResults) {
                 if (result == PackageManager.PERMISSION_DENIED) {
-                    DoChef.getAppInstance().showToast("권한 거부");
+                    Utils.showSnackbar(this,"권한 거부");
+//                    App.getAppInstance().showToast("권한 거부");
                     return;
                 }
             }
@@ -111,7 +113,7 @@ public class WritePostActivity extends BaseActivity {
                 break;
 
             case R.id.writepost_ok:
-                DoChef.getAppInstance().showToast("글이 등록되었습니다.");
+                App.getAppInstance().showToast("글이 등록되었습니다.");
                 finish();
                 break;
         }

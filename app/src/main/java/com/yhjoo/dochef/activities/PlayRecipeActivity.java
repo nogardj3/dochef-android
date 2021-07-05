@@ -46,7 +46,7 @@ import butterknife.OnClick;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.RecipeItem;
@@ -74,8 +74,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     private SpeechRecognizer mRecognizer;
     private CountDownTimer countDownTimer;
     private MediaPlayer player;
-
-    private RecipeViewPagerAdapter recipeViewPagerAdapter;
 
     private boolean timerSet = false;
 
@@ -165,7 +163,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                         0, tags)));
 
 
-        recipeViewPagerAdapter = new RecipeViewPagerAdapter(getSupportFragmentManager());
+        RecipeViewPagerAdapter recipeViewPagerAdapter = new RecipeViewPagerAdapter(getSupportFragmentManager());
 
         for (int i = 0; i < recipeItems.size(); i++) {
             if (i == 0)
@@ -364,7 +362,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
                         @Override
                         public void onError(int error) {
-                            DoChef.getAppInstance().showToast("음성 인식 실패");
+                            App.getAppInstance().showToast("음성 인식 실패");
                         }
 
                         @Override

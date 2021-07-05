@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.fragments.ResultFragment;
@@ -85,7 +85,7 @@ public class SearchActivity extends BaseActivity {
         switch (vv.getId()) {
             case R.id.search_btn_search:
                 if (searchview.getText().toString().trim().length() == 0) {
-                    DoChef.getAppInstance().showToast("한 글자 이상 입력해주세요.");
+                    App.getAppInstance().showToast("한 글자 이상 입력해주세요.");
                 } else {
                     this.keyword = searchview.getText().toString().trim();
                     searchview.setText(this.keyword);

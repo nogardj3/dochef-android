@@ -61,7 +61,7 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         }
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setColorSchemeColors(this.getColor(R.color.colorPrimary));
         notificationListAdapter = new NotificationListAdapter(Glide.with(this));
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
         notificationListAdapter.setOnLoadMoreListener(this, recyclerView);

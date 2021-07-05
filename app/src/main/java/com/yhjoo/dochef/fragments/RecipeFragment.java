@@ -24,7 +24,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeActivity;
 import com.yhjoo.dochef.activities.ThemeActivity;
@@ -130,7 +129,7 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(count -> {
-                        DoChef.getAppInstance().showToast("인기순");
+                        App.getAppInstance().showToast("인기순");
                         recipeListAdapter.setNewData(recipeListItems);
                         recipeListAdapter.notifyDataSetChanged();
                         recyclerView.getLayoutManager().scrollToPosition(0);
@@ -144,7 +143,7 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
                     .subscribeOn(AndroidSchedulers.mainThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(count -> {
-                        DoChef.getAppInstance().showToast("최신순");
+                        App.getAppInstance().showToast("최신순");
                         recipeListAdapter.setNewData(recipeListItems);
                         recipeListAdapter.notifyDataSetChanged();
                         recyclerView.getLayoutManager().scrollToPosition(0);

@@ -26,7 +26,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Comment;
@@ -143,7 +143,7 @@ public class CommentActivity extends BaseActivity {
                     recyclerView.getLayoutManager().scrollToPosition(commentListAdapter.getData().size() - 1);
                     editText.setText("");
                 } else {
-                    DoChef.getAppInstance().showToast("댓글을 입력 해 주세요");
+                    App.getAppInstance().showToast("댓글을 입력 해 주세요");
                 }
                 break;
         }

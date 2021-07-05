@@ -37,7 +37,6 @@ public class ThemeActivity extends BaseActivity {
     private final int VIEWHOLDER_ITEM = 2;
     @BindView(R.id.theme_recycler)
     RecyclerView recyclerView;
-    private RecipeListAdapter recipeListAdapter;
     private final ArrayList<ThemeItem> recipeListItems = new ArrayList<>();
 
     @Override
@@ -64,7 +63,7 @@ public class ThemeActivity extends BaseActivity {
             recipeListItems.add(new ThemeItem(VIEWHOLDER_AD, 2));
         }
 
-        recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(this));
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(this));
         final GridLayoutManager manager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(manager);
         recipeListAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {

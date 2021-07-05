@@ -44,7 +44,6 @@ public class MyRecipeFragment extends Fragment {
     @BindView(R.id.f_myrecipe_recycler)
     RecyclerView recyclerView;
     private final ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
-    private RecipeListAdapter recipeListAdapter;
     private final String[] aa = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
 
     @Override
@@ -65,7 +64,7 @@ public class MyRecipeFragment extends Fragment {
             recipeListItems.add(new RecipeItem(VIEWHOLDER_AD));
         }
 
-        recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(getContext()));
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(getContext()));
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(recipeListAdapter);
         recipeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
@@ -133,7 +132,7 @@ public class MyRecipeFragment extends Fragment {
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_f_myrecipe_recipeimg));
                     helper.setText(R.id.li_f_myrecipe_recipetitle, item.getContent().getTitle());
-                    helper.setText(R.id.li_f_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getContent().getNickName() + "</b>"));
+                    helper.setText(R.id.li_f_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getContent().getNickName() + "</b>",Html.FROM_HTML_MODE_LEGACY));
                     helper.setVisible(R.id.li_f_myrecipe_new, true);
 
                     break;

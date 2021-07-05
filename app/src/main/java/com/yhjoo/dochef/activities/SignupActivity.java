@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.GetTokenResult;
@@ -22,7 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.BasicCallback;
@@ -42,6 +43,7 @@ public class SignupActivity extends BaseActivity {
 
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,18 +51,31 @@ public class SignupActivity extends BaseActivity {
         setContentView(R.layout.a_signup);
         ButterKnife.bind(this);
 
-        mProgressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        mProgressDialog = new ProgressDialog(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_signup));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_signup));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
     }
 
     @OnClick(R.id.signup_ok)
     void oc() {
         if (editText_email.getText().length() == 0 && editText_pw.getText().length() == 0) {
-            DoChef.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");
+            App.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");
         } else if (!isValidEmail(editText_email.getText())) {
-            DoChef.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
+            App.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
         } else if (editText_pw.getText().length() < 6) {
-            DoChef.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
+            App.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
         } else {
             mProgressDialog.show();
             mAuth.createUserWithEmailAndPassword(editText_email.getText().toString(), editText_pw.getText().toString())
@@ -72,22 +87,22 @@ public class SignupActivity extends BaseActivity {
                                 String fbae = ((FirebaseAuthException) e).getErrorCode();
                                 switch (fbae) {
                                     case "ERROR_INVALID_EMAIL":
-                                        DoChef.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
+                                        App.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
                                         break;
                                     case "ERROR_WEAK_PASSWORD":
-                                        DoChef.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
+                                        App.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
                                         break;
                                     case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        DoChef.getAppInstance().showToast("이미 가입되있는 이메일입니다.");
+                                        App.getAppInstance().showToast("이미 가입되있는 이메일입니다.");
                                         break;
                                     default:
-                                        DoChef.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
+                                        App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
                                         break;
                                 }
                             } else if (e instanceof FirebaseNetworkException) {
-                                DoChef.getAppInstance().showToast("네트워크 상태를 확인해주세요.");
+                                App.getAppInstance().showToast("네트워크 상태를 확인해주세요.");
                             } else {
-                                DoChef.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
+                                App.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
                             }
                         } else {
                             authTask.getResult().getUser().getIdToken(true)
@@ -134,7 +149,7 @@ public class SignupActivity extends BaseActivity {
                                                         });
                                             } else {
                                                 mProgressDialog.dismiss();
-                                                DoChef.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
+                                                App.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
                                             }
                                         }
                                     });

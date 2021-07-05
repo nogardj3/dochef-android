@@ -31,14 +31,12 @@ public class PlayRecipeStartFragment extends Fragment {
     @BindView(R.id.playrecipe_start_ingredients)
     FlexboxLayout recipeIngredients;
 
-    private RecipeItem recipeItem;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.f_playrecipe_start, container, false);
         ButterKnife.bind(this, view);
 
-        recipeItem = (RecipeItem) getArguments().getSerializable("item");
+        RecipeItem recipeItem = (RecipeItem) getArguments().getSerializable("item");
 
         Glide.with(getContext())
                 .load(recipeItem.getRecipeImg())

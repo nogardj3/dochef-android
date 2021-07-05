@@ -28,7 +28,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Post;
@@ -120,7 +120,7 @@ public class PostActivity extends BaseActivity {
         ((AppCompatTextView) findViewById(R.id.post_contents)).setText(post.getContents());
         ((AppCompatTextView) findViewById(R.id.post_time)).setText("1일전");
 
-        findViewById(R.id.post_like).setOnClickListener(v -> DoChef.getAppInstance().showToast("좋아요"));
+        findViewById(R.id.post_like).setOnClickListener(v -> App.getAppInstance().showToast("좋아요"));
         findViewById(R.id.post_comment).setOnClickListener(v -> startActivity(new Intent(PostActivity.this, CommentActivity.class)));
         findViewById(R.id.post_other).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,7 +142,7 @@ public class PostActivity extends BaseActivity {
                                 startActivity(intent);
                                 break;
                             case R.id.menu_post_master_delete:
-                                DoChef.getAppInstance().showToast("삭제");
+                                App.getAppInstance().showToast("삭제");
                                 AlertDialog.Builder builder = new AlertDialog.Builder(PostActivity.this);
                                 builder.setMessage("삭제하시겠습니까?")
                                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {

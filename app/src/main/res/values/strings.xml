@@ -1,13 +1,29 @@
 <resources>
     <string name="app_name">DoChef</string>
 
-    <string name="admob_app_id">ca-app-pub-2434314226925480~8023298125</string>
+<!--    server-->
+    <string name="server_url">http://localhost:4000/chef/</string>
 
+<!--    admob-->
+    <string name="admob_app_id">ca-app-pub-2434314226925480~8023298125</string>
+    <!--테스트용-->
     <string name="admob_banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
+    <!--배포용-->
     <string name="admob_banner_id">ca-app-pub-2434314226925480/4957031528</string>
 
-<!--    <string name="server_url">http://52.78.223.19</string>-->
-    <string name="server_url">http://localhost:4000/chef/</string>
+<!--    analytics-->
+    <string name="analytics_type_text">text</string>
+    <string name="analytics_type_image">image</string>
+    <string name="analytics_event_terminated">app_terminated</string>
+    <string name="analytics_id_start">0</string>
+    <string name="analytics_id_signup">1</string>
+    <string name="analytics_id_signin">2</string>
+    <string name="analytics_id_terminated">3</string>
+    <string name="analytics_name_start">APP_START</string>
+    <string name="analytics_name_signup">APP_SIGNUP</string>
+    <string name="analytics_name_signin">APP_SIGNIN</string>
+    <string name="analytics_name_terminated">APP_TERMINATED</string>
+
 
 
     <string name="notification_texttype1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신의 팔로워가 되었습니다.</string>

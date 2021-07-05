@@ -38,7 +38,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.CommentActivity;
 import com.yhjoo.dochef.activities.MyHomeActivity;
@@ -89,7 +89,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
             public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
                 switch (view.getId()) {
                     case R.id.timeline_like:
-                        DoChef.getAppInstance().showToast("좋아요");
+                        App.getAppInstance().showToast("좋아요");
                         break;
                     case R.id.timeline_comment:
                         startActivity(new Intent(TimeLineFragment.this.getContext(), CommentActivity.class));

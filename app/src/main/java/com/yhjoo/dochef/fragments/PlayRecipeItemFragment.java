@@ -28,14 +28,12 @@ public class PlayRecipeItemFragment extends Fragment {
     @BindView(R.id.playrecipe_item_explain)
     AppCompatTextView recipeExplain;
 
-    private RecipeItem recipeItem;
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.f_playrecipe_item, container, false);
         ButterKnife.bind(this, view);
 
-        recipeItem = (RecipeItem) getArguments().getSerializable("item");
+        RecipeItem recipeItem = (RecipeItem) getArguments().getSerializable("item");
 
         Glide.with(getContext())
                 .load(recipeItem.getRecipeImg())

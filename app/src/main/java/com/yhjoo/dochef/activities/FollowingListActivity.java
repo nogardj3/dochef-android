@@ -39,7 +39,6 @@ public class FollowingListActivity extends BaseActivity {
     RecyclerView recyclerView;
 
     private UserListAdapter userListAdapter;
-    private String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +50,7 @@ public class FollowingListActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        userID = getIntent().getStringExtra("UserID");
+        String userID = getIntent().getStringExtra("UserID");
 
         userListAdapter = new UserListAdapter(Glide.with(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

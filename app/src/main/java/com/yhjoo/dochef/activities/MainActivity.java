@@ -40,6 +40,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
@@ -69,12 +71,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private TabPagerAdapter tabPagerAdapter;
 
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.a_main);
         ButterKnife.bind(this);
         MobileAds.initialize(this);
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 
         setSupportActionBar(toolbar);
 
@@ -179,8 +185,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     .apply(RequestOptions.circleCropTransform())
                     .into(userImage);
 
-            userImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
-            username.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, LoginActivity.class)));
+            userImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SigninActivity.class)));
+            username.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SigninActivity.class)));
             username.setText("가나다라마바");
 
             navigationView.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
@@ -200,6 +206,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     .setPositiveButton("종료", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_terminated));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_terminated));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
+                            mFirebaseAnalytics.logEvent(getString(R.string.analytics_event_terminated), bundle);
+
                             dialog.dismiss();
                             finish();
                         }

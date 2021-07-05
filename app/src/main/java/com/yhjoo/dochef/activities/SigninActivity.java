@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.View;
 
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.widget.AppCompatEditText;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -15,22 +16,22 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.JsonObject;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.ChefAuth;
-import com.yhjoo.dochef.utils.Util;
+import com.yhjoo.dochef.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +44,7 @@ import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 
-public class LoginActivity extends BaseActivity {
+public class SigninActivity extends BaseActivity {
     private final int RC_SIGN_IN = 6006;
     @BindView(R.id.login_email)
     AppCompatEditText editText_id;
@@ -52,8 +53,8 @@ public class LoginActivity extends BaseActivity {
 
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
-    private GoogleApiClient mGoogleApiClient;
     private GoogleSignInClient mGoogleSignInClient;
+    private FirebaseAnalytics mFirebaseAnalytics;
 
     private LoginService loginService;
 
@@ -66,17 +67,13 @@ public class LoginActivity extends BaseActivity {
         mProgressDialog = new ProgressDialog(this);
         mAuth = FirebaseAuth.getInstance();
 
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
 
-//        deprecated methods
-//        mGoogleApiClient = new GoogleApiClient.Builder(this)
-//                .enableAutoManage(this, connectionResult -> Log.w("login_error", "google1"))
-//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-//                .build();
-//        new
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         loginService = new Retrofit.Builder()
@@ -91,26 +88,35 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_signin));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_signin));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN){
+        if (requestCode == RC_SIGN_IN) {
             progressON(this);
 
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                Util.log("firebaseAuthWithGoogle:" + account.getId());
+                Utils.log("firebaseAuthWithGoogle:" + account.getId());
                 firebaseAuthWithGoogle(account.getIdToken());
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Util.log("Google sign in failed", e.toString());
-                DoChef.getAppInstance().showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.");
+                Utils.log("Google sign in failed", e.toString());
+                App.getAppInstance().showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.");
                 mProgressDialog.dismiss();
             }
-        }
-        else{
-            Util.log("Something wrong?");
+        } else {
+            Utils.log("Something wrong?");
             mProgressDialog.dismiss();
         }
     }
@@ -131,9 +137,9 @@ public class LoginActivity extends BaseActivity {
                 } else if (editText_id.getText().length() > 0 && editText_pw.length() > 0) {
 
                     if (!isValidEmail(editText_id.getText())) {
-                        DoChef.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
+                        App.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
                     } else if (editText_pw.getText().length() < 6) {
-                        DoChef.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
+                        App.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
                     } else {
                         mProgressDialog.show();
 
@@ -142,21 +148,43 @@ public class LoginActivity extends BaseActivity {
                     }
 
                 } else {
-                    DoChef.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");
+                    App.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");
                 }
                 break;
             case R.id.login_signup:
-                startActivity(new Intent(LoginActivity.this, SignupActivity.class));
+                startActivity(new Intent(SigninActivity.this, SignupActivity.class));
                 break;
             case R.id.login_findpw:
-                startActivity(new Intent(LoginActivity.this, FindPWActivity.class));
+                startActivity(new Intent(SigninActivity.this, FindPWActivity.class));
                 break;
             case R.id.login_google:
-//                deprecated
-//                Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, RC_SIGN_IN);
+                registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                    int requestCode = result.getResultCode();
+                    Intent data = result.getData();
+
+                    if (requestCode == RC_SIGN_IN) {
+                        progressON(this);
+
+                        Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                        try {
+                            // Google Sign In was successful, authenticate with Firebase
+                            GoogleSignInAccount account = task.getResult(ApiException.class);
+                            Utils.log("firebaseAuthWithGoogle:" + account.getId());
+                            firebaseAuthWithGoogle(account.getIdToken());
+                        } catch (ApiException e) {
+                            // Google Sign In failed, update UI appropriately
+                            Utils.log("Google sign in failed", e.toString());
+                            App.getAppInstance().showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.");
+                            mProgressDialog.dismiss();
+                        }
+                    } else {
+                        Utils.log("Something wrong?");
+                        mProgressDialog.dismiss();
+                    }
+                }).launch(signInIntent);
+
+//                startActivityForResult(signInIntent, RC_SIGN_IN);
                 break;
         }
     }
@@ -173,28 +201,28 @@ public class LoginActivity extends BaseActivity {
                 String fbae = ((FirebaseAuthException) e).getErrorCode();
                 switch (fbae) {
                     case "ERROR_INVALID_EMAIL":
-                        DoChef.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
+                        App.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
                         break;
                     case "ERROR_WEAK_PASSWORD":
-                        DoChef.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
+                        App.getAppInstance().showToast("비밀번호를 6자 이상 입력해주세요.");
                         break;
                     case "ERROR_USER_NOT_FOUND":
-                        DoChef.getAppInstance().showToast("존재하지 않는 이메일입니다.");
+                        App.getAppInstance().showToast("존재하지 않는 이메일입니다.");
                         break;
                     case "ERROR_WRONG_PASSWORD":
-                        DoChef.getAppInstance().showToast("비밀번호가 올바르지 않습니다.");
+                        App.getAppInstance().showToast("비밀번호가 올바르지 않습니다.");
                         break;
                     case "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL":
-                        DoChef.getAppInstance().showToast("해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오.");
+                        App.getAppInstance().showToast("해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오.");
                         break;
                     default:
-                        DoChef.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
+                        App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
                         break;
                 }
             } else if (e instanceof FirebaseNetworkException) {
-                DoChef.getAppInstance().showToast("네트워크 상태를 확인해주세요.");
+                App.getAppInstance().showToast("네트워크 상태를 확인해주세요.");
             } else {
-                DoChef.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
+                App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
             }
             mProgressDialog.dismiss();
         } else {
@@ -204,7 +232,7 @@ public class LoginActivity extends BaseActivity {
                         if (task.isSuccessful()) {
                             authWithServer(task);
                         } else {
-                            ChefAuth.LogOut(LoginActivity.this);
+                            ChefAuth.LogOut(SigninActivity.this);
                             mProgressDialog.dismiss();
                         }
                     });
@@ -216,19 +244,19 @@ public class LoginActivity extends BaseActivity {
             final String idToken = task.getResult().getToken();
 
             loginService.CheckTokenCall(idToken)
-                    .enqueue(new BasicCallback<JsonObject>(LoginActivity.this) {
+                    .enqueue(new BasicCallback<JsonObject>(SigninActivity.this) {
                         @Override
                         public void onResponse(Response<JsonObject> response, int err) {
                             switch (err) {
                                 case 814:
-                                    Intent intent = new Intent(LoginActivity.this, SignupNicknameActivity.class)
+                                    Intent intent = new Intent(SigninActivity.this, SignupNicknameActivity.class)
                                             .putExtra(SignupNicknameActivity.ACCESS_TOKEN, idToken);
                                     startActivity(intent);
                                     mProgressDialog.dismiss();
                                     finish();
                                     break;
                                 case 0:
-                                    DoChef.getAppInstance().showToast("로그인되었습니다.");
+                                    App.getAppInstance().showToast("로그인되었습니다.");
 
                                     SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -244,13 +272,13 @@ public class LoginActivity extends BaseActivity {
 
                         @Override
                         public void onFailure() {
-                            ChefAuth.LogOut(LoginActivity.this);
+                            ChefAuth.LogOut(SigninActivity.this);
                             mProgressDialog.dismiss();
                         }
                     });
         } else {
-            ChefAuth.LogOut(LoginActivity.this);
-            DoChef.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
+            ChefAuth.LogOut(SigninActivity.this);
+            App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
             mProgressDialog.dismiss();
         }
     }

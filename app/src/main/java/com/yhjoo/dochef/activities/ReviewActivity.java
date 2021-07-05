@@ -35,8 +35,6 @@ public class ReviewActivity extends BaseActivity {
     @BindView(R.id.review_fab)
     FloatingActionButton floatingActionButton;
 
-    private ReviewListAdapter reviewListAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +45,7 @@ public class ReviewActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        reviewListAdapter = new ReviewListAdapter(Glide.with(this));
+        ReviewListAdapter reviewListAdapter = new ReviewListAdapter(Glide.with(this));
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(reviewListAdapter);
 

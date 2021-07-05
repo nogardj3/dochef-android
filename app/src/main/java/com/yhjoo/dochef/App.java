@@ -9,11 +9,11 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
-public class DoChef extends Application {
-    private static DoChef appInstance;
+public class App extends Application {
+    private static App appInstance;
     private Toast toast;
 
-    public static DoChef getAppInstance() {
+    public static App getAppInstance() {
         return appInstance;
     }
 

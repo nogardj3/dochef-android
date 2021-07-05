@@ -42,7 +42,7 @@ import java.util.Random;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.yhjoo.dochef.Preferences;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.User;
@@ -155,7 +155,7 @@ public class MyHomeActivity extends BaseActivity {
         if (requestCode == CODE_PERMISSION) {
             for (int result : grantResults)
                 if (result == PackageManager.PERMISSION_DENIED) {
-                    DoChef.getAppInstance().showToast("권한 거부");
+                    App.getAppInstance().showToast("권한 거부");
                     return;
                 }
 
@@ -264,7 +264,7 @@ public class MyHomeActivity extends BaseActivity {
                             } else
                                 ActivityCompat.requestPermissions(MyHomeActivity.this, permissions, CODE_PERMISSION);
                         } else if (which == 1)
-                            DoChef.getAppInstance().showToast("삭제");
+                            App.getAppInstance().showToast("삭제");
                         dialog.dismiss();
                     }
                 }).show();
@@ -281,7 +281,7 @@ public class MyHomeActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(editText.getText().toString());
-                                DoChef.getAppInstance().showToast("변경되었습니다.");
+                                App.getAppInstance().showToast("변경되었습니다.");
                                 dialog.dismiss();
                             }
                         })
@@ -304,7 +304,7 @@ public class MyHomeActivity extends BaseActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(editText.getText().toString());
-                                DoChef.getAppInstance().showToast("변경되었습니다.");
+                                App.getAppInstance().showToast("변경되었습니다.");
                                 dialog.dismiss();
                             }
                         })

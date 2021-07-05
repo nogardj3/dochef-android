@@ -209,7 +209,7 @@ public class MyRecipeActivity extends BaseActivity {
                     .into((AppCompatImageView) helper.getView(R.id.li_a_myrecipe_recipeimg));
 
             helper.setText(R.id.li_a_myrecipe_recipetitle, item.getTitle());
-            helper.setText(R.id.li_a_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>"));
+            helper.setText(R.id.li_a_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>",Html.FROM_HTML_MODE_LEGACY));
             helper.setVisible(R.id.li_a_myrecipe_mine, item.getNickName().equals("나"));
             helper.setVisible(R.id.li_a_myrecipe_revise, item.getNickName().equals("나") && !AlignMode);
             helper.setVisible(R.id.li_a_myrecipe_delete, !AlignMode);

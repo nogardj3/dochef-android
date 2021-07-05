@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import com.yhjoo.dochef.DoChef;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.utils.ChefAuth;
@@ -49,7 +49,7 @@ public class SettingActivity extends BaseActivity {
                 ((AppCompatCheckBox) findViewById(R.id.setting_option1)).toggle();
                 break;
             case R.id.setting_logout:
-                DoChef.getAppInstance().showToast("로그아웃");
+                App.getAppInstance().showToast("로그아웃");
                 ChefAuth.LogOut(this);
                 finish();
                 break;

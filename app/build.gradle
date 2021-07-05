@@ -61,7 +61,7 @@ dependencies {
 
     // components
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.25'
-    implementation 'com.github.florent37:viewanimator:1.1.0' // TODO 이거 버리고 딴걸로 대체 spruce-android?
+    implementation 'com.github.florent37:viewanimator:1.1.0'
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1@aar'
     implementation 'com.github.bhargavms:PodSLider:1.2.0'
     implementation 'com.github.clans:fab:1.6.4'
