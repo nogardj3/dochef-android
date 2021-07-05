@@ -7,16 +7,12 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatEditText;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseNetworkException;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.GetTokenResult;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.Preferences;
@@ -106,51 +102,48 @@ public class SignupActivity extends BaseActivity {
                             }
                         } else {
                             authTask.getResult().getUser().getIdToken(true)
-                                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<GetTokenResult> task) {
-                                            if (task.isSuccessful()) {
-                                                final String idToken = task.getResult().getToken();
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            final String idToken = task.getResult().getToken();
 
-                                                SignUpService signUpService = new Retrofit.Builder()
-                                                        .baseUrl(getString(R.string.server_url))
-                                                        .addConverterFactory(GsonConverterFactory.create())
-                                                        .build().create(SignUpService.class);
+                                            SignUpService signUpService = new Retrofit.Builder()
+                                                    .baseUrl(getString(R.string.server_url))
+                                                    .addConverterFactory(GsonConverterFactory.create())
+                                                    .build().create(SignUpService.class);
 
-                                                signUpService
-                                                        .CheckTokenCall(idToken)
-                                                        .enqueue(new BasicCallback<JsonObject>(SignupActivity.this) {
-                                                            @Override
-                                                            public void onResponse(Response<JsonObject> response, int err) {
-                                                                mProgressDialog.dismiss();
-                                                                switch (err) {
-                                                                    case 814:
-                                                                        Intent intent = new Intent(SignupActivity.this, SignupNicknameActivity.class)
-                                                                                .putExtra(SignupNicknameActivity.ACCESS_TOKEN, idToken);
-                                                                        startActivity(intent);
-                                                                        finish();
-                                                                        break;
-                                                                    case 0:
-                                                                        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                                                                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                                                                        editor.putBoolean(Preferences.SHAREDPREFERENCE_AUTOLOGIN, true);
-                                                                        editor.putString(Preferences.SHAREDPREFERENCE_USERINFO, response.body().toString());
-                                                                        editor.apply();
+                                            signUpService
+                                                    .CheckTokenCall(idToken)
+                                                    .enqueue(new BasicCallback<JsonObject>(SignupActivity.this) {
+                                                        @Override
+                                                        public void onResponse(Response<JsonObject> response, int err) {
+                                                            mProgressDialog.dismiss();
+                                                            switch (err) {
+                                                                case 814:
+                                                                    Intent intent = new Intent(SignupActivity.this, SignupNicknameActivity.class)
+                                                                            .putExtra(SignupNicknameActivity.ACCESS_TOKEN, idToken);
+                                                                    startActivity(intent);
+                                                                    finish();
+                                                                    break;
+                                                                case 0:
+                                                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                                                                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                                                                    editor.putBoolean(Preferences.SHAREDPREFERENCE_AUTOLOGIN, true);
+                                                                    editor.putString(Preferences.SHAREDPREFERENCE_USERINFO, response.body().toString());
+                                                                    editor.apply();
 
-                                                                        finish();
-                                                                        break;
-                                                                }
+                                                                    finish();
+                                                                    break;
                                                             }
+                                                        }
 
-                                                            @Override
-                                                            public void onFailure() {
-                                                                mProgressDialog.dismiss();
-                                                            }
-                                                        });
-                                            } else {
-                                                mProgressDialog.dismiss();
-                                                App.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
-                                            }
+                                                        @Override
+                                                        public void onFailure() {
+                                                            mProgressDialog.dismiss();
+                                                        }
+                                                    });
+                                        } else {
+                                            mProgressDialog.dismiss();
+                                            App.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
                                         }
                                     });
                         }

@@ -57,9 +57,7 @@ public class MainFragment extends Fragment {
         Observable.interval(2, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(count -> {
-                    viewPager.setCurrentItem(viewPager.getCurrentItem() == imgs.size() - 1 ? 0 : viewPager.getCurrentItem() + 1);
-                });
+                .subscribe(count -> viewPager.setCurrentItem(viewPager.getCurrentItem() == imgs.size() - 1 ? 0 : viewPager.getCurrentItem() + 1));
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.main_recommend_recyclerview);
 
@@ -72,18 +70,8 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, Glide.with(getContext()));
         recyclerView.setAdapter(recommendAdapter);
-        recommendAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(MainFragment.this.getActivity(), RecipeActivity.class));
-            }
-        });
-        view.findViewById(R.id.main_recommend_more).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(MainFragment.this.getActivity(), ThemeActivity.class));
-            }
-        });
+        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainFragment.this.getActivity(), RecipeActivity.class)));
+        view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainFragment.this.getActivity(), ThemeActivity.class)));
 
 
         return view;

@@ -67,12 +67,9 @@ public class MyRecipeFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(recipeListAdapter);
         recipeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
-        recipeListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM)
-                    startActivity(new Intent(MyRecipeFragment.this.getActivity(), RecipeActivity.class));
-            }
+        recipeListAdapter.setOnItemClickListener((adapter, view1, position) -> {
+            if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM)
+                startActivity(new Intent(MyRecipeFragment.this.getActivity(), RecipeActivity.class));
         });
 
         return view;
@@ -138,12 +135,7 @@ public class MyRecipeFragment extends Fragment {
 
                 case VIEWHOLDER_PAGER:
                     helper.setText(R.id.recommend_title, item.getPager_title());
-                    helper.getView(R.id.recommend_more).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(MyRecipeFragment.this.getActivity(), ThemeActivity.class));
-                        }
-                    });
+                    helper.getView(R.id.recommend_more).setOnClickListener(v -> startActivity(new Intent(MyRecipeFragment.this.getActivity(), ThemeActivity.class)));
 
                     RecyclerView recyclerView = (RecyclerView) helper.getView(R.id.recommend_recyclerview);
 
@@ -157,12 +149,7 @@ public class MyRecipeFragment extends Fragment {
                     recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                     RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, requestManager);
                     recyclerView.setAdapter(recommendAdapter);
-                    recommendAdapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            startActivity(new Intent(MyRecipeFragment.this.getActivity(), RecipeActivity.class));
-                        }
-                    });
+                    recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(MyRecipeFragment.this.getActivity(), RecipeActivity.class)));
 
                     break;
 

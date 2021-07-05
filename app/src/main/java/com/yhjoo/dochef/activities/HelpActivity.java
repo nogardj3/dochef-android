@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.activities;
 
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -93,15 +92,12 @@ public class HelpActivity extends BaseActivity {
                     final Title lv0 = (Title) item;
                     helper.setText(R.id.exp_d0_title, lv0.title)
                             .setImageResource(R.id.exp_d0_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
-                    helper.itemView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            int pos = helper.getAdapterPosition();
-                            if (lv0.isExpanded()) {
-                                collapse(pos);
-                            } else {
-                                expand(pos);
-                            }
+                    helper.itemView.setOnClickListener(v -> {
+                        int pos = helper.getAdapterPosition();
+                        if (lv0.isExpanded()) {
+                            collapse(pos);
+                        } else {
+                            expand(pos);
                         }
                     });
                     break;

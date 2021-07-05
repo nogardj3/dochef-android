@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.AppCompatImageView;
@@ -66,14 +65,11 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         notificationListAdapter.setOnLoadMoreListener(this, recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(notificationListAdapter);
-        notificationListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (notifications.get(position).getType() != Preferences.NOTIFICATION_TYPE_2)
-                    startActivity(new Intent(NotificationActivity.this, RecipeActivity.class));
-                else
-                    startActivity(new Intent(NotificationActivity.this, UserHomeActivity.class));
-            }
+        notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (notifications.get(position).getType() != Preferences.NOTIFICATION_TYPE_2)
+                startActivity(new Intent(NotificationActivity.this, RecipeActivity.class));
+            else
+                startActivity(new Intent(NotificationActivity.this, UserHomeActivity.class));
         });
         notificationListAdapter.setNewData(notifications);
         notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
@@ -91,13 +87,10 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
     @Override
     public void onRefresh() {
         notificationListAdapter.setEnableLoadMore(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                notificationListAdapter.setNewData(notifications);
-                swipeRefreshLayout.setRefreshing(false);
-                notificationListAdapter.setEnableLoadMore(true);
-            }
+        new Handler().postDelayed(() -> {
+            notificationListAdapter.setNewData(notifications);
+            swipeRefreshLayout.setRefreshing(false);
+            notificationListAdapter.setEnableLoadMore(true);
         }, 1000);
     }
 

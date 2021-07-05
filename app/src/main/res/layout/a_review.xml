@@ -10,27 +10,25 @@
         android:id="@+id/review_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        app:layout_constraintTop_toTopOf="parent"
         android:theme="@style/BaseTheme.Toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:title="리뷰" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/review_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@+id/review_toolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_alignParentStart="true"
         android:overScrollMode="never"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/review_toolbar"
         tools:listitem="@layout/li_review" />
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/review_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="10dp"
@@ -38,6 +36,8 @@
         android:tint="@color/white"
         app:fab_colorNormal="@color/colorPrimary"
         app:fab_colorPressed="@color/colorPrimary"
-        app:fab_colorRipple="@color/colorPrimary" />
+        app:fab_colorRipple="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

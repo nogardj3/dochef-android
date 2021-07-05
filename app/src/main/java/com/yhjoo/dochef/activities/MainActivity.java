@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -202,25 +201,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("종료하시겠습니까?")
-                    .setPositiveButton("종료", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_terminated));
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_terminated));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
-                            mFirebaseAnalytics.logEvent(getString(R.string.analytics_event_terminated), bundle);
+                    .setPositiveButton("종료", (dialog, which) -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_terminated));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_terminated));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
+                        mFirebaseAnalytics.logEvent(getString(R.string.analytics_event_terminated), bundle);
 
-                            dialog.dismiss();
-                            finish();
-                        }
+                        dialog.dismiss();
+                        finish();
                     })
-                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
                     .show();
         }
     }

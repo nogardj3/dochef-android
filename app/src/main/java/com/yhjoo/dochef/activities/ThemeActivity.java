@@ -2,7 +2,6 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.Toolbar;
@@ -13,7 +12,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.google.android.gms.ads.AdRequest;
@@ -66,19 +64,11 @@ public class ThemeActivity extends BaseActivity {
         RecipeListAdapter recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(this));
         final GridLayoutManager manager = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(manager);
-        recipeListAdapter.setSpanSizeLookup(new BaseQuickAdapter.SpanSizeLookup() {
-            @Override
-            public int getSpanSize(GridLayoutManager gridLayoutManager, int position) {
-                return recipeListItems.get(position).getSpanSize();
-            }
-        });
+        recipeListAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
         recyclerView.setAdapter(recipeListAdapter);
-        recipeListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                    startActivity(new Intent(ThemeActivity.this, RecipeActivity.class));
-                }
+        recipeListAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
+                startActivity(new Intent(ThemeActivity.this, RecipeActivity.class));
             }
         });
     }

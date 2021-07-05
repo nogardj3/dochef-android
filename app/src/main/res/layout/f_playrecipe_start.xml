@@ -10,7 +10,7 @@
         android:id="@+id/playrecipe_start_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/background_translucent"/>
+        android:foreground="@drawable/background_translucent" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_start_title"

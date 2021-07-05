@@ -1,11 +1,9 @@
 package com.yhjoo.dochef.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -56,46 +54,32 @@ public class CommentActivity extends BaseActivity {
         recyclerView.setAdapter(commentListAdapter);
 
         commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        commentListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int position) {
-                PopupMenu popup = new PopupMenu(CommentActivity.this, view);
+        commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
+            PopupMenu popup = new PopupMenu(CommentActivity.this, view);
 //                    if(ismaster)
-                CommentActivity.this.getMenuInflater().inflate(R.menu.menu_comment_master, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
+            CommentActivity.this.getMenuInflater().inflate(R.menu.menu_comment_master, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
 //                                case R.id.menu_comment_user_revise:
 //                                    break;
 //                                case R.id.menu_comment_user_delete:
 //                                    break;
 
-                            case R.id.menu_comment_master_delete:
-                                AlertDialog.Builder builder = new AlertDialog.Builder(CommentActivity.this);
-                                builder.setMessage("삭제하시겠습니까?")
-                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                baseQuickAdapter.getData().remove(position);
-                                                baseQuickAdapter.notifyItemRemoved(position);
-                                            }
-                                        })
-                                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .show();
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
-            }
+                    case R.id.menu_comment_master_delete:
+                        AlertDialog.Builder builder = new AlertDialog.Builder(CommentActivity.this);
+                        builder.setMessage("삭제하시겠습니까?")
+                                .setPositiveButton("확인", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    baseQuickAdapter.getData().remove(position);
+                                    baseQuickAdapter.notifyItemRemoved(position);
+                                })
+                                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                                .show();
+                        break;
+                }
+                return false;
+            });
+            popup.show();
         });
 
 

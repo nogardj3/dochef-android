@@ -8,7 +8,6 @@ import android.os.Bundle;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.percentlayout.widget.PercentRelativeLayout;
 
-import com.github.florent37.viewanimator.AnimationListener;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -71,12 +70,7 @@ public class SplashActivity extends BaseActivity {
                 .duration(400)
                 .thenAnimate(logo2)
                 .duration(200)
-                .onStop(new AnimationListener.Stop() {
-                    @Override
-                    public void onStop() {
-                        checkInternet();
-                    }
-                })
+                .onStop(this::checkInternet)
                 .start();
     }
 

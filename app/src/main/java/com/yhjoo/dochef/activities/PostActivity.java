@@ -1,12 +1,10 @@
 package com.yhjoo.dochef.activities;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -82,11 +80,6 @@ public class PostActivity extends BaseActivity {
                                         }
                                     });
                         }
-
-                        @Override
-
-                        public void onFailure() {
-                        }
                     });
         } else {
             PostActivityService postActivityService = new Retrofit.Builder()
@@ -122,50 +115,36 @@ public class PostActivity extends BaseActivity {
 
         findViewById(R.id.post_like).setOnClickListener(v -> App.getAppInstance().showToast("좋아요"));
         findViewById(R.id.post_comment).setOnClickListener(v -> startActivity(new Intent(PostActivity.this, CommentActivity.class)));
-        findViewById(R.id.post_other).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(PostActivity.this, v);
-                // if(ismaster)
-                PostActivity.this.getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
+        findViewById(R.id.post_other).setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(PostActivity.this, v);
+            // if(ismaster)
+            PostActivity.this.getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
 //                                case R.id.menu_post_normal_report:
 //                                    break;
-                            case R.id.menu_post_master_revise:
-                                Intent intent = new Intent(PostActivity.this, RevisePostActivity.class);
-                                intent.putExtra("postid", post.getPostID())
-                                        .putExtra("contents", post.getContents())
-                                        .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + post.getPostImg());
-                                startActivity(intent);
-                                break;
-                            case R.id.menu_post_master_delete:
-                                App.getAppInstance().showToast("삭제");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(PostActivity.this);
-                                builder.setMessage("삭제하시겠습니까?")
-                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                                finish();
-                                            }
-                                        })
-                                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.dismiss();
-                                            }
-                                        })
-                                        .show();
-                                break;
-                        }
-                        return false;
-                    }
-                });
-                popup.show();
-            }
+                    case R.id.menu_post_master_revise:
+                        Intent intent = new Intent(PostActivity.this, RevisePostActivity.class);
+                        intent.putExtra("postid", post.getPostID())
+                                .putExtra("contents", post.getContents())
+                                .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + post.getPostImg());
+                        startActivity(intent);
+                        break;
+                    case R.id.menu_post_master_delete:
+                        App.getAppInstance().showToast("삭제");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PostActivity.this);
+                        builder.setMessage("삭제하시겠습니까?")
+                                .setPositiveButton("확인", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    finish();
+                                })
+                                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                                .show();
+                        break;
+                }
+                return false;
+            });
+            popup.show();
         });
 
         findViewById(R.id.post_user_layout).setOnClickListener(v -> {
@@ -192,9 +171,9 @@ public class PostActivity extends BaseActivity {
         ((FlexboxLayout) findViewById(R.id.post_tags)).removeAllViews();
         String[] tags = {"tag1", "tag2", "tag3", "tag4"};
 
-        for (int i = 0; i < tags.length; i++) {
+        for (String tag : tags) {
             AppCompatTextView textView = new AppCompatTextView(PostActivity.this);
-            textView.setText("#" + tags[i] + " ");
+            textView.setText("#" + tag + " ");
             textView.setTextColor(getResources().getColor(R.color.colorPrimary));
 
             ((FlexboxLayout) findViewById(R.id.post_tags)).addView(textView);

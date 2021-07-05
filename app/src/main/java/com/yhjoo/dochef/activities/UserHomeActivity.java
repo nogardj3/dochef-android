@@ -75,14 +75,11 @@ public class UserHomeActivity extends BaseActivity {
         recyclerView.setLayoutManager(new GridLayoutManager(UserHomeActivity.this, 3));
         recyclerView.setAdapter(postListAdapter);
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        postListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (postItems.get(position).getType() == Preferences.HOMEITEM_TYPE_PHOTO)
-                    startActivity(new Intent(UserHomeActivity.this, PostActivity.class));
-                else if (postItems.get(position).getType() == Preferences.HOMEITEM_TYPE_RECIPE)
-                    startActivity(new Intent(UserHomeActivity.this, RecipeActivity.class));
-            }
+        postListAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (postItems.get(position).getType() == Preferences.HOMEITEM_TYPE_PHOTO)
+                startActivity(new Intent(UserHomeActivity.this, PostActivity.class));
+            else if (postItems.get(position).getType() == Preferences.HOMEITEM_TYPE_RECIPE)
+                startActivity(new Intent(UserHomeActivity.this, RecipeActivity.class));
         });
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -134,11 +131,6 @@ public class UserHomeActivity extends BaseActivity {
 
                         postListAdapter.setNewData(postItems);
                         postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
-                    }
-
-                    @Override
-                    public void onFailure() {
-
                     }
                 });
     }

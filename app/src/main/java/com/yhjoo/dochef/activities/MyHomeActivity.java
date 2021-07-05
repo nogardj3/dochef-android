@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.activities;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -172,11 +171,6 @@ public class MyHomeActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     private void setInfo() {
         myHomeService.GetBasicInfoCall(userInfo.getUserID())
                 .enqueue(new BasicCallback<User>(MyHomeActivity.this) {
@@ -242,31 +236,28 @@ public class MyHomeActivity extends BaseActivity {
         itemView.findViewById(R.id.home_userimglayout).setOnClickListener((v -> {
             if (currentMode == mode_Revise) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setItems(new String[]{"이미지 변경", "삭제"}, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            final String[] permissions = {
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                            };
+                builder.setItems(new String[]{"이미지 변경", "삭제"}, (dialog, which) -> {
+                    if (which == 0) {
+                        final String[] permissions = {
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                        };
 
-                            if (PermissionUtil.checkPermission(MyHomeActivity.this, permissions)) {
-                                mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
+                        if (PermissionUtil.checkPermission(MyHomeActivity.this, permissions)) {
+                            mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
 
-                                Intent intent = new Intent(Intent.ACTION_PICK)
-                                        .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                                        .putExtra("crop", "true")
-                                        .putExtra("aspectX", 1)
-                                        .putExtra("aspectY", 1)
-                                        .putExtra("scale", true)
-                                        .putExtra("output", mImageUri);
-                                startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
-                            } else
-                                ActivityCompat.requestPermissions(MyHomeActivity.this, permissions, CODE_PERMISSION);
-                        } else if (which == 1)
-                            App.getAppInstance().showToast("삭제");
-                        dialog.dismiss();
-                    }
+                            Intent intent = new Intent(Intent.ACTION_PICK)
+                                    .setType(MediaStore.Images.Media.CONTENT_TYPE)
+                                    .putExtra("crop", "true")
+                                    .putExtra("aspectX", 1)
+                                    .putExtra("aspectY", 1)
+                                    .putExtra("scale", true)
+                                    .putExtra("output", mImageUri);
+                            startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
+                        } else
+                            ActivityCompat.requestPermissions(MyHomeActivity.this, permissions, CODE_PERMISSION);
+                    } else if (which == 1)
+                        App.getAppInstance().showToast("삭제");
+                    dialog.dismiss();
                 }).show();
             }
         }));
@@ -277,20 +268,12 @@ public class MyHomeActivity extends BaseActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("닉네임 변경")
                         .setView(editText)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(editText.getText().toString());
-                                App.getAppInstance().showToast("변경되었습니다.");
-                                dialog.dismiss();
-                            }
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(editText.getText().toString());
+                            App.getAppInstance().showToast("변경되었습니다.");
+                            dialog.dismiss();
                         })
-                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss()).show();
             }
         }));
         itemView.findViewById(R.id.home_profiletextlayout).setOnClickListener((v -> {
@@ -300,20 +283,12 @@ public class MyHomeActivity extends BaseActivity {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle("프로필 변경")
                         .setView(editText)
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(editText.getText().toString());
-                                App.getAppInstance().showToast("변경되었습니다.");
-                                dialog.dismiss();
-                            }
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(editText.getText().toString());
+                            App.getAppInstance().showToast("변경되었습니다.");
+                            dialog.dismiss();
                         })
-                        .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        }).show();
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss()).show();
             }
         }));
 

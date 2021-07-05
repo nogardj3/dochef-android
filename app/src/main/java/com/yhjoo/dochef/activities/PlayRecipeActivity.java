@@ -83,17 +83,14 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         setContentView(R.layout.a_playrecipe);
         ButterKnife.bind(this);
 
-        textToSpeech = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-            }
+        textToSpeech = new TextToSpeech(this, status -> {
         });
 
         String[] ingredients = {"김치1", "김치2"};
         String[] tags = {"태그1", "태그2", "태그3", "태그4", "태그5"};
         timerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
 
-        recipeItems = new ArrayList<RecipeItem>(Arrays.asList(
+        recipeItems = new ArrayList<>(Arrays.asList(
                 new RecipeItem(Preferences.RECIPEITEM_TYPE_START,
                         R.drawable.tempimg_playrecipestart,
                         "치즈김치볶음밥!! / 백종원 김치볶음밥, 묵은지해결",
@@ -249,7 +246,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
         if (dbDistance <= 2) {
             if (!textToSpeech.isSpeaking()) {
-                HashMap<String, String> map = new HashMap<String, String>();
+                HashMap<String, String> map = new HashMap<>();
                 map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, String.valueOf(System.currentTimeMillis()));
                 textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
@@ -374,22 +371,27 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                             Log.w("dd", rs[0]);
                             tts.setText(rs[0]);
 
-                            if (rs[0].equals("다음")) {
-                                if (viewpager.getCurrentItem() != recipeItems.size() - 1)
-                                    viewpager.setCurrentItem(viewpager.getCurrentItem() + 1);
-                            } else if (rs[0].equals("이전")) {
-                                if (viewpager.getCurrentItem() != 0)
-                                    viewpager.setCurrentItem(viewpager.getCurrentItem() - 1);
-                            } else if (rs[0].equals("재료")) {
-                                if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeItems.size() - 1) {
-                                    String temp = "";
-                                    for (int i = 0; i < recipeItems.get(viewpager.getCurrentItem()).getIngredients().length; i++)
-                                        temp = temp + (recipeItems.get(viewpager.getCurrentItem()).getIngredients()[i] + " ");
-                                    textToSpeech.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
-                                }
-                            } else if (rs[0].equals("시작")) {
-                                if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeItems.size() - 1)
-                                    starttimer();
+                            switch (rs[0]) {
+                                case "다음":
+                                    if (viewpager.getCurrentItem() != recipeItems.size() - 1)
+                                        viewpager.setCurrentItem(viewpager.getCurrentItem() + 1);
+                                    break;
+                                case "이전":
+                                    if (viewpager.getCurrentItem() != 0)
+                                        viewpager.setCurrentItem(viewpager.getCurrentItem() - 1);
+                                    break;
+                                case "재료":
+                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeItems.size() - 1) {
+                                        String temp = "";
+                                        for (int i = 0; i < recipeItems.get(viewpager.getCurrentItem()).getIngredients().length; i++)
+                                            temp = temp + (recipeItems.get(viewpager.getCurrentItem()).getIngredients()[i] + " ");
+                                        textToSpeech.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
+                                    }
+                                    break;
+                                case "시작":
+                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeItems.size() - 1)
+                                        starttimer();
+                                    break;
                             }
                         }
 

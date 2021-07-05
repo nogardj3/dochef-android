@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.activities;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
@@ -18,7 +17,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
@@ -99,30 +97,19 @@ public class MyRecipeActivity extends BaseActivity {
         });
 
         recipeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
-        recipeListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                if (view.getId() == R.id.li_a_myrecipe_revise) {
-                    startActivity(new Intent(new Intent(MyRecipeActivity.this, ReviseRecipeActivity.class)));
-                } else if (view.getId() == R.id.li_a_myrecipe_delete) {
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MyRecipeActivity.this);
-                    builder.setMessage("삭제하시겠습니까?")
-                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    adapter.getData().remove(position);
-                                    adapter.notifyItemRemoved(position);
-                                    dialog.dismiss();
-                                }
-                            })
-                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.dismiss();
-                                }
-                            })
-                            .show();
-                }
+        recipeListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            if (view.getId() == R.id.li_a_myrecipe_revise) {
+                startActivity(new Intent(new Intent(MyRecipeActivity.this, ReviseRecipeActivity.class)));
+            } else if (view.getId() == R.id.li_a_myrecipe_delete) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(MyRecipeActivity.this);
+                builder.setMessage("삭제하시겠습니까?")
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            adapter.getData().remove(position);
+                            adapter.notifyItemRemoved(position);
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                        .show();
             }
         });
     }
@@ -134,23 +121,15 @@ public class MyRecipeActivity extends BaseActivity {
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(MyRecipeActivity.this);
             builder.setMessage("적용하시겠습니까?")
-                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            recipeListAdapter.disableDragItem();
-                            ((AppCompatImageView) MyRecipeActivity.this.findViewById(R.id.a_myrecipe_alignbutton)).setImageResource(R.drawable.ic_low_priority_white_24dp);
-                            recipeListAdapter.notifyDataSetChanged();
-                            recyclerView.getLayoutManager().scrollToPosition(0);
-                            AlignMode = !AlignMode;
-                            dialog.dismiss();
-                        }
+                    .setPositiveButton("확인", (dialog, which) -> {
+                        recipeListAdapter.disableDragItem();
+                        ((AppCompatImageView) MyRecipeActivity.this.findViewById(R.id.a_myrecipe_alignbutton)).setImageResource(R.drawable.ic_low_priority_white_24dp);
+                        recipeListAdapter.notifyDataSetChanged();
+                        recyclerView.getLayoutManager().scrollToPosition(0);
+                        AlignMode = !AlignMode;
+                        dialog.dismiss();
                     })
-                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
                     .show();
         }
     }
@@ -167,23 +146,15 @@ public class MyRecipeActivity extends BaseActivity {
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(MyRecipeActivity.this);
             builder.setMessage("적용하시겠습니까?")
-                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            recipeListAdapter.disableDragItem();
-                            ((AppCompatImageView) v).setImageResource(R.drawable.ic_low_priority_white_24dp);
-                            recipeListAdapter.notifyDataSetChanged();
-                            recyclerView.getLayoutManager().scrollToPosition(0);
-                            AlignMode = !AlignMode;
-                            dialog.dismiss();
-                        }
+                    .setPositiveButton("확인", (dialog, which) -> {
+                        recipeListAdapter.disableDragItem();
+                        ((AppCompatImageView) v).setImageResource(R.drawable.ic_low_priority_white_24dp);
+                        recipeListAdapter.notifyDataSetChanged();
+                        recyclerView.getLayoutManager().scrollToPosition(0);
+                        AlignMode = !AlignMode;
+                        dialog.dismiss();
                     })
-                    .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    })
+                    .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
                     .show();
         }
     }

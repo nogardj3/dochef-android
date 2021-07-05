@@ -99,7 +99,7 @@ public class RecipeActivity extends BaseActivity {
     void setheaderview() {
         try {
             ((ViewPager) findViewById(R.id.recipe_recipeimgs)).setAdapter(new ImagePagerAdapter(RecipeActivity.this,
-                    new ArrayList<Integer>(Arrays.asList(R.drawable.tempimg_playrecipestart, R.drawable.tempimg_playrecipe1, R.drawable.tempimg_playrecipe2, R.drawable.tempimg_playrecipe3, R.drawable.tempimg_playrecipe4, R.drawable.tempimg_playrecipefinish)), Glide.with(this)));
+                    new ArrayList<>(Arrays.asList(R.drawable.tempimg_playrecipestart, R.drawable.tempimg_playrecipe1, R.drawable.tempimg_playrecipe2, R.drawable.tempimg_playrecipe3, R.drawable.tempimg_playrecipe4, R.drawable.tempimg_playrecipefinish)), Glide.with(this)));
             ((CirclePageIndicator) findViewById(R.id.recipe_recipeimgs_indicator)).setViewPager(((ViewPager) findViewById(R.id.recipe_recipeimgs)));
 
             ((AppCompatTextView) findViewById(R.id.recipe_recipetitle)).setText(recipeOverview.getTitle());
@@ -151,12 +151,7 @@ public class RecipeActivity extends BaseActivity {
             findViewById(R.id.recipe_review_more).setOnClickListener((v) -> startActivity(new Intent(this, ReviewActivity.class)));
 
             ReviewListAdapter reviewListAdapter = new ReviewListAdapter(bb, Glide.with(this));
-            reviewListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                    startActivity(new Intent(RecipeActivity.this, ReviewActivity.class));
-                }
-            });
+            reviewListAdapter.setOnItemClickListener((baseQuickAdapter, view, i) -> startActivity(new Intent(RecipeActivity.this, ReviewActivity.class)));
             ((RecyclerView) findViewById(R.id.recipe_review_recycler)).setLayoutManager(new LinearLayoutManager(this));
             ((RecyclerView) findViewById(R.id.recipe_review_recycler)).setAdapter(reviewListAdapter);
 
@@ -172,19 +167,9 @@ public class RecipeActivity extends BaseActivity {
             recyclerView.setLayoutManager(new LinearLayoutManager(RecipeActivity.this, LinearLayoutManager.HORIZONTAL, false));
             RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, Glide.with(this));
             recyclerView.setAdapter(recommendAdapter);
-            recommendAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-                @Override
-                public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                    startActivity(new Intent(RecipeActivity.this, ThemeActivity.class));
-                }
-            });
+            recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(RecipeActivity.this, ThemeActivity.class)));
 
-            findViewById(R.id.recipe_theme_more).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(RecipeActivity.this, ThemeActivity.class));
-                }
-            });
+            findViewById(R.id.recipe_theme_more).setOnClickListener(v -> startActivity(new Intent(RecipeActivity.this, ThemeActivity.class)));
         } catch (JSONException e) {
             e.printStackTrace();
         }

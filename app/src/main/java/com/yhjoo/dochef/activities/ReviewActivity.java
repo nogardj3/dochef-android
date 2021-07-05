@@ -50,23 +50,15 @@ public class ReviewActivity extends BaseActivity {
         recyclerView.setAdapter(reviewListAdapter);
 
         reviewListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        reviewListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                if (baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).getVisibility() == View.VISIBLE)
-                    baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).setVisibility(View.GONE);
-                else
-                    baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).setVisibility(View.VISIBLE);
-            }
+        reviewListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, i) -> {
+            if (baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).getVisibility() == View.VISIBLE)
+                baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).setVisibility(View.GONE);
+            else
+                baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).setVisibility(View.VISIBLE);
         });
 
         floatingActionButton.setImageResource(R.drawable.ic_create_white_24dp);
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ReviewActivity.this, WriteReviewActivity.class));
-            }
-        });
+        floatingActionButton.setOnClickListener(v -> startActivity(new Intent(ReviewActivity.this, WriteReviewActivity.class)));
 
 
         ArrayList<Review> reviews = new ArrayList<>();

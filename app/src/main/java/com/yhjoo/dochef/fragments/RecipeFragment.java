@@ -83,12 +83,9 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
         recipeListAdapter.setLoadMoreView(new CustomLoadMoreView());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(recipeListAdapter);
-        recipeListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM)
-                    startActivity(new Intent(RecipeFragment.this.getActivity(), RecipeActivity.class));
-            }
+        recipeListAdapter.setOnItemClickListener((adapter, view1, position) -> {
+            if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM)
+                startActivity(new Intent(RecipeFragment.this.getActivity(), RecipeActivity.class));
         });
         recipeListAdapter.setEnableLoadMore(true);
 
@@ -105,13 +102,10 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
     @Override
     public void onRefresh() {
         recipeListAdapter.setEnableLoadMore(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                recipeListAdapter.setNewData(recipeListItems);
-                swipeRefreshLayout.setRefreshing(false);
-                recipeListAdapter.setEnableLoadMore(true);
-            }
+        new Handler().postDelayed(() -> {
+            recipeListAdapter.setNewData(recipeListItems);
+            swipeRefreshLayout.setRefreshing(false);
+            recipeListAdapter.setEnableLoadMore(true);
         }, 1000);
     }
 
@@ -214,12 +208,7 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
 
                 case VIEWHOLDER_PAGER:
                     helper.setText(R.id.recommend_title, item.getPager_title());
-                    helper.getView(R.id.recommend_more).setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            startActivity(new Intent(RecipeFragment.this.getActivity(), ThemeActivity.class));
-                        }
-                    });
+                    helper.getView(R.id.recommend_more).setOnClickListener(v -> startActivity(new Intent(RecipeFragment.this.getActivity(), ThemeActivity.class)));
 
                     recyclerView = (RecyclerView) helper.getView(R.id.recommend_recyclerview);
                     ArrayList<RecipeListItem> recipeListItems = new ArrayList<>();
@@ -231,12 +220,7 @@ public class RecipeFragment extends Fragment implements BaseQuickAdapter.Request
                     recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                     RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems);
                     recyclerView.setAdapter(recommendAdapter);
-                    recommendAdapter.setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                            startActivity(new Intent(RecipeFragment.this.getActivity(), RecipeActivity.class));
-                        }
-                    });
+                    recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(RecipeFragment.this.getActivity(), RecipeActivity.class)));
 
                     break;
 

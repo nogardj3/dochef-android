@@ -22,8 +22,8 @@
         android:layout_marginTop="10dp"
         android:layout_weight="1"
         android:overScrollMode="never"
-        app:layout_constraintTop_toBottomOf="@+id/comment_toolbar"
         app:layout_constraintBottom_toTopOf="@+id/footer_comment_edittext"
+        app:layout_constraintTop_toBottomOf="@+id/comment_toolbar"
         tools:listitem="@layout/li_comment" />
 
 
@@ -31,8 +31,8 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/background_grey"
-        app:layout_constraintTop_toTopOf="@+id/footer_comment_edittext"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/footer_comment_edittext" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/footer_comment_edittext"
@@ -65,14 +65,14 @@
         app:layout_constraintRight_toLeftOf="@+id/footer_comment_ok"
         app:layout_constraintTop_toTopOf="@+id/footer_comment_ok"
         app:srcCompat="@drawable/ic_cancel_black_24dp"
-        tools:visibility="visible"/>
+        tools:visibility="visible" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/footer_comment_ok"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginVertical="10dp"
         android:layout_centerVertical="true"
+        android:layout_marginVertical="10dp"
         android:layout_marginStart="5dp"
         android:background="@drawable/background_commentedittextok"
         android:paddingStart="20dp"
@@ -81,5 +81,5 @@
         android:textColor="@color/white"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

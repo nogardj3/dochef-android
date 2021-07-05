@@ -27,7 +27,7 @@
             android:layout_height="0dp"
             android:background="@drawable/background_gradient"
             app:layout_constraintBottom_toBottomOf="parent  "
-            app:layout_constraintTop_toTopOf="@+id/li_recipe_title"></View>
+            app:layout_constraintTop_toTopOf="@+id/li_recipe_title" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/li_recipe_title"

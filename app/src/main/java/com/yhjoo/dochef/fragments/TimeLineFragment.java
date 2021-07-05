@@ -1,13 +1,11 @@
 package com.yhjoo.dochef.fragments;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -97,43 +95,32 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
                     PopupMenu popup = new PopupMenu(TimeLineFragment.this.getContext(), view12);
                     //if(ismaster)
                     TimeLineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
-                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                        @Override
-                        public boolean onMenuItemClick(MenuItem item) {
-                            switch (item.getItemId()) {
+                    popup.setOnMenuItemClickListener(item -> {
+                        switch (item.getItemId()) {
 //                                case R.id.menu_post_normal_report:
 //                                    break;
 
-                                case R.id.menu_post_master_revise:
-                                    Intent intent = new Intent(TimeLineFragment.this.getContext(), RevisePostActivity.class);
-                                    intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
-                                            .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
-                                            .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
-                                    startActivity(intent);
+                            case R.id.menu_post_master_revise:
+                                Intent intent = new Intent(TimeLineFragment.this.getContext(), RevisePostActivity.class);
+                                intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
+                                        .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
+                                        .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
+                                startActivity(intent);
 
-                                    break;
-                                case R.id.menu_post_master_delete:
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeLineFragment.this.getContext());
-                                    builder.setMessage("삭제하시겠습니까?")
-                                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    baseQuickAdapter.getData().remove(i);
-                                                    baseQuickAdapter.notifyItemRemoved(i);
-                                                    dialog.dismiss();
-                                                }
-                                            })
-                                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                                @Override
-                                                public void onClick(DialogInterface dialog, int which) {
-                                                    dialog.dismiss();
-                                                }
-                                            })
-                                            .show();
-                                    break;
-                            }
-                            return false;
+                                break;
+                            case R.id.menu_post_master_delete:
+                                AlertDialog.Builder builder = new AlertDialog.Builder(TimeLineFragment.this.getContext());
+                                builder.setMessage("삭제하시겠습니까?")
+                                        .setPositiveButton("확인", (dialog, which) -> {
+                                            baseQuickAdapter.getData().remove(i);
+                                            baseQuickAdapter.notifyItemRemoved(i);
+                                            dialog.dismiss();
+                                        })
+                                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                                        .show();
+                                break;
                         }
+                        return false;
                     });
                     popup.show();
                     break;
@@ -180,13 +167,10 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
     @Override
     public void onRefresh() {
         postListAdapter.setEnableLoadMore(false);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                postListAdapter.setNewData(postList);
-                swipeRefreshLayout.setRefreshing(false);
-                postListAdapter.setEnableLoadMore(true);
-            }
+        new Handler().postDelayed(() -> {
+            postListAdapter.setNewData(postList);
+            swipeRefreshLayout.setRefreshing(false);
+            postListAdapter.setEnableLoadMore(true);
         }, 1000);
     }
 
@@ -204,11 +188,6 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
                                 postList = response.body();
                                 postListAdapter.setNewData(postList);
                                 postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
-                            }
-
-                            @Override
-
-                            public void onFailure() {
                             }
                         });
             }
@@ -252,9 +231,9 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
             ((FlexboxLayout) helper.getView(R.id.timeline_tags)).removeAllViews();
             String[] tags = {"tag1", "tag2", "tag3", "tag4"};
 
-            for (int i = 0; i < tags.length; i++) {
+            for (String tag : tags) {
                 AppCompatTextView textView = new AppCompatTextView(TimeLineFragment.this.getContext());
-                textView.setText("#" + tags[i] + " ");
+                textView.setText("#" + tag + " ");
                 textView.setTextColor(getResources().getColor(R.color.colorPrimary));
 
                 ((FlexboxLayout) helper.getView(R.id.timeline_tags)).addView(textView);
