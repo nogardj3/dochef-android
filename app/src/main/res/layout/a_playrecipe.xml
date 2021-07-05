@@ -11,40 +11,30 @@
         android:layout_height="match_parent"
         android:overScrollMode="never" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/playrecipe_timer_layout"
-        android:layout_width="match_parent"
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/playrecipe_timer_text"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:visibility="gone"
+        android:layout_alignBottom="@+id/playrecipe_timer_fab"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        app:layout_constraintBottom_toBottomOf="@+id/playrecipe_timer_fab"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/playrecipe_timer_fab"
+        tools:text="05:00" />
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/playrecipe_timer_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:tint="@color/white"
+        app:fab_colorNormal="@color/colorPrimary"
+        app:fab_colorPressed="@color/colorPrimary"
+        app:fab_colorRipple="@color/colorPrimary"
         app:layout_constraintBottom_toTopOf="@+id/playrecipe_podslider"
-        tools:visibility="visible">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/playrecipe_timer_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/playrecipe_timer_fab"
-            android:textColor="@color/black"
-            android:textSize="36sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="05:00" />
-
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/playrecipe_timer_fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:tint="@color/white"
-            app:fab_colorNormal="@color/colorPrimary"
-            app:fab_colorPressed="@color/colorPrimary"
-            app:fab_colorRipple="@color/colorPrimary"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintRight_toRightOf="parent" />
 
     <com.bhargavms.podslider.PodSlider
         android:id="@+id/playrecipe_podslider"
@@ -59,7 +49,6 @@
         app:mediumCircleColor="@color/colorSecondary"
         app:podColor="@color/white"
         app:selectedPodColor="@color/white" />
-
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_tts"

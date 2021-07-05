@@ -5,11 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- 풀 이미지-->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/playrecipe_start_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/background_translucent" />
+        android:foreground="@drawable/background_translucent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_start_title"
@@ -22,7 +23,7 @@
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="title" />
+        tools:text="레시피" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_start_explain"
@@ -33,7 +34,7 @@
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_title"
-        tools:text="contents\n\n\n" />
+        tools:text="내용\n\n\n" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_start_ingredienttext"
