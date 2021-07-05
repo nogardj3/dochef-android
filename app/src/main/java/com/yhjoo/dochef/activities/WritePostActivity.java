@@ -41,7 +41,7 @@ public class WritePostActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_writepost);
+        setContentView(R.layout.a_write);
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.writepost_toolbar);

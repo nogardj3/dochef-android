@@ -82,8 +82,8 @@ public class HelpActivity extends BaseActivity {
     private class HelpListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
         HelpListAdapter(List<MultiItemEntity> data) {
             super(data);
-            addItemType(HELP_DEPTH_0, R.layout.exp_help0);
-            addItemType(HELP_CONTENTS, R.layout.exp_help1);
+            addItemType(HELP_DEPTH_0, R.layout.li_expand_d0);
+            addItemType(HELP_CONTENTS, R.layout.li_expand_d1);
         }
 
         @Override
@@ -91,8 +91,8 @@ public class HelpActivity extends BaseActivity {
             switch (helper.getItemViewType()) {
                 case HELP_DEPTH_0:
                     final Title lv0 = (Title) item;
-                    helper.setText(R.id.exp_help0_title, lv0.title)
-                            .setImageResource(R.id.exp_help0_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
+                    helper.setText(R.id.exp_d0_title, lv0.title)
+                            .setImageResource(R.id.exp_d0_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
                     helper.itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

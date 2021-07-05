@@ -83,8 +83,8 @@ public class NoticeActivity extends BaseActivity {
     private class NoticeListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
         NoticeListAdapter(List<MultiItemEntity> data) {
             super(data);
-            addItemType(NOTICE_DEPTH_0, R.layout.exp_notice0);
-            addItemType(NOTICE_CONTENTS, R.layout.exp_notice1);
+            addItemType(NOTICE_DEPTH_0, R.layout.li_expand_d0);
+            addItemType(NOTICE_CONTENTS, R.layout.li_expand_d1);
         }
 
         @Override
