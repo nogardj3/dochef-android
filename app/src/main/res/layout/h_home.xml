@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,212 +7,198 @@
     android:background="@color/white"
     android:orientation="vertical">
 
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/home_userimg"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:background="@drawable/background_round"
+        tools:src="@drawable/ic_person_black_24dp" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/home_userimg_revise"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        app:layout_constraintRight_toRightOf="@+id/home_userimg"
+        app:layout_constraintBottom_toBottomOf="@+id/home_userimg"
+        android:background="@drawable/background_round2"
+        android:padding="5dp"
+        android:tint="@color/white"
+        android:visibility="gone"
+        app:backgroundTint="@color/colorPrimary"
+        tools:visibility="visible"
+        app:srcCompat="@drawable/ic_build_black_24dp" />
+
+
+
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/home_recipelayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
-        android:orientation="horizontal">
-
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:id="@+id/home_userimglayout"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="5dp"
-            android:layout_marginBottom="20dp">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/home_userimg"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@drawable/background_round"
-                tools:src="@drawable/ic_person_black_24dp" />
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/home_userimg_revise"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:background="@drawable/background_round2"
-                android:padding="5dp"
-                android:tint="@color/white"
-                android:visibility="gone"
-                app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_build_black_24dp" />
-
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="30dp">
-
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:id="@+id/home_recipelayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                app:layout_marginTopPercent="25%"
-                app:layout_widthPercent="30%">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/home_recipecount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="0" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/home_recipecount"
-                    android:layout_centerHorizontal="true"
-                    android:text="레시피"
-                    android:textColor="@color/black" />
-
-            </androidx.percentlayout.widget.PercentRelativeLayout>
-
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:id="@+id/home_followerlayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/home_recipelayout"
-                app:layout_marginTopPercent="25%"
-                app:layout_widthPercent="30%">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/home_followercount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="0" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/home_followercount"
-                    android:layout_centerHorizontal="true"
-                    android:text="팔로워"
-                    android:textColor="@color/black" />
-
-            </androidx.percentlayout.widget.PercentRelativeLayout>
-
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:id="@+id/home_followinglayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_toEndOf="@+id/home_followerlayout"
-                app:layout_marginTopPercent="25%"
-                app:layout_widthPercent="30%">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/home_followingcount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="5dp"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    tools:text="0" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/home_followingcount"
-                    android:layout_centerHorizontal="true"
-                    android:text="팔로잉"
-                    android:textColor="@color/black" />
-
-            </androidx.percentlayout.widget.PercentRelativeLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/home_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/home_followinglayout"
-                android:layout_alignStart="@+id/home_recipelayout"
-                android:layout_alignEnd="@+id/home_followinglayout"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp"
-                android:text="프로필 수정"
-                android:textColor="@color/white"
-                app:backgroundTint="@color/colorPrimary" />
-
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-    </LinearLayout>
-
-    <androidx.percentlayout.widget.PercentRelativeLayout
-        android:id="@+id/home_nicknamelayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="32dp"
+        android:layout_marginLeft="30dp"
+        app:layout_constraintWidth_percent="0.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/home_userimg">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/home_nickname"
+            android:id="@+id/home_recipecount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="5dp"
-            android:padding="10dp"
+            android:layout_marginBottom="5dp"
             android:textColor="@color/black"
-            android:textSize="16sp"
-            tools:text="nickname" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/home_nickname_revise"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/home_nickname"
-            android:background="@drawable/background_round2"
-            android:padding="5dp"
-            android:tint="@color/white"
-            android:visibility="gone"
-            app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_build_black_24dp" />
-
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-
-    <androidx.percentlayout.widget.PercentRelativeLayout
-        android:id="@+id/home_profiletextlayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="0" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/home_profiletext"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/grey"
-            android:gravity="start"
-            android:lines="4"
-            android:maxLines="4"
-            android:padding="10dp"
-            tools:text="profile\nprofile\nprofile\nprofile" />
+            android:text="레시피"
+            android:textColor="@color/black" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/home_profiletext_revise"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/background_round2"
-            android:padding="5dp"
-            android:tint="@color/white"
-            android:visibility="gone"
-            app:backgroundTint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_build_black_24dp" />
+    </LinearLayout>
 
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_followerlayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintWidth_percent="0.2"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@+id/home_recipelayout"
+        app:layout_constraintLeft_toRightOf="@+id/home_recipelayout">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/home_followercount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="0" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="팔로워"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/home_followinglayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintWidth_percent="0.2"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@+id/home_recipelayout"
+        app:layout_constraintLeft_toRightOf="@+id/home_followerlayout">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/home_followingcount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            tools:text="0" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="팔로잉"
+            android:textColor="@color/black" />
+
+    </LinearLayout>
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/home_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/home_recipelayout"
+        app:layout_constraintTop_toBottomOf="@+id/home_recipelayout"
+        app:layout_constraintRight_toRightOf="@+id/home_followinglayout"
+        android:layout_marginTop="10dp"
+        android:text="프로필 수정"
+        android:textColor="@color/white"
+        app:backgroundTint="@color/colorPrimary" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="3dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toTopOf="@+id/home_nickname"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/home_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:padding="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@+id/home_button"
+        app:layout_constraintLeft_toLeftOf="parent"
+        tools:text="nickname" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/home_nickname_revise"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:background="@drawable/background_round2"
+        android:padding="5dp"
+        android:tint="@color/white"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@+id/home_nickname"
+        app:layout_constraintBottom_toBottomOf="@+id/home_nickname"
+        app:layout_constraintLeft_toRightOf="@+id/home_nickname"
+        tools:visibility="visible"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_build_black_24dp" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/home_profiletext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey"
+        android:gravity="start"
+        android:layout_marginTop="8dp"
+        android:lines="4"
+        android:maxLines="4"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/home_nickname_revise"
+        tools:text="profile" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/home_profiletext_revise"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/background_round2"
+        android:padding="5dp"
+        android:tint="@color/white"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintTop_toTopOf="@+id/home_profiletext"
+        app:layout_constraintBottom_toBottomOf="@+id/home_profiletext"
+        app:layout_constraintRight_toRightOf="parent"
+        app:backgroundTint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_build_black_24dp" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

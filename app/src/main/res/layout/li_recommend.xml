@@ -11,7 +11,7 @@
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="5dp">
 
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -20,34 +20,31 @@
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/tempimg_recipe1" />
 
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/li_recommend_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/li_recommend_recipeimg"
-            android:layout_centerHorizontal="true">
+            android:textColor="@color/grey_text"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="recipetitle" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/li_recommend_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/grey_text"
-                android:textSize="16sp"
-                tools:text="recipetitle" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/li_recommend_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/grey_text"
+            android:textSize="12sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/li_recommend_title"
+            tools:text="nickname" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/li_recommend_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/li_recommend_title"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="5dp"
-                android:textColor="@color/grey_text"
-                android:textSize="12sp"
-                tools:text="nickname" />
-
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-    </androidx.percentlayout.widget.PercentRelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

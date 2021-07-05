@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,6 +13,9 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/background_round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/ic_person_black_24dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -20,19 +23,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/li_comment_userimg"
         android:maxEms="5"
         android:maxLines="1"
         android:textStyle="bold"
+        app:layout_constraintLeft_toRightOf="@+id/li_comment_userimg"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="nickname" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_comment_contents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/li_comment_nickname"
-        android:layout_marginStart="10dp"
-        android:layout_toEndOf="@+id/li_comment_userimg"
+        app:layout_constraintLeft_toLeftOf="@+id/li_comment_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/li_comment_nickname"
         tools:text="contents" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -43,23 +46,25 @@
         android:layout_marginTop="3dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:layout_toStartOf="@+id/li_comment_other"
-        tools:text="date" />
+        app:layout_constraintRight_toLeftOf="@+id/li_comment_other"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="1일 전" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/li_comment_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_marginEnd="5dp"
         android:tint="@color/grey_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@+id/li_comment_contents"
         android:layout_marginTop="3dp"
-        android:background="@color/grey" />
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

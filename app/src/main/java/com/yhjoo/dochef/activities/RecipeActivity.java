@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.percentlayout.widget.PercentRelativeLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
@@ -24,6 +23,11 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.annotations.SerializedName;
 import com.viewpagerindicator.CirclePageIndicator;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.Comment;
+import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Review;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,11 +38,6 @@ import java.util.Arrays;
 import java.util.Random;
 
 import butterknife.ButterKnife;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Comment;
-import com.yhjoo.dochef.classes.RecipeListItem;
-import com.yhjoo.dochef.classes.Review;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -134,7 +133,7 @@ public class RecipeActivity extends BaseActivity {
                 ingredientsItems.add(aa.getJSONObject(i));
 
             for (int i = 0; i < aa.length(); i++) {
-                @SuppressLint("InflateParams") PercentRelativeLayout motherview = (PercentRelativeLayout) getLayoutInflater().inflate(R.layout.li_ingredient, null);
+                @SuppressLint("InflateParams") ViewGroup motherview = (ViewGroup) getLayoutInflater().inflate(R.layout.li_ingredient, null);
                 AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_product));
                 view1.setText(aa.getJSONObject(i).getString("name"));
                 AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_quantity));

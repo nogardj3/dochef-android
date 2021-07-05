@@ -84,83 +84,80 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
             intent.putExtra("post", (Post) adapter.getData().get(position));
             startActivity(intent);
         });
-        postListAdapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter baseQuickAdapter, View view, int i) {
-                switch (view.getId()) {
-                    case R.id.timeline_like:
-                        App.getAppInstance().showToast("좋아요");
-                        break;
-                    case R.id.timeline_comment:
-                        startActivity(new Intent(TimeLineFragment.this.getContext(), CommentActivity.class));
-                        break;
+        postListAdapter.setOnItemChildClickListener((baseQuickAdapter, view12, i) -> {
+            switch (view12.getId()) {
+                case R.id.timeline_like:
+                    App.getAppInstance().showToast("좋아요");
+                    break;
+                case R.id.timeline_comment:
+                    startActivity(new Intent(TimeLineFragment.this.getContext(), CommentActivity.class));
+                    break;
 
-                    case R.id.timeline_other:
-                        PopupMenu popup = new PopupMenu(TimeLineFragment.this.getContext(), view);
-                        //if(ismaster)
-                        TimeLineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
-                        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
+                case R.id.timeline_other:
+                    PopupMenu popup = new PopupMenu(TimeLineFragment.this.getContext(), view12);
+                    //if(ismaster)
+                    TimeLineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
+                    popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
 //                                case R.id.menu_post_normal_report:
 //                                    break;
 
-                                    case R.id.menu_post_master_revise:
-                                        Intent intent = new Intent(TimeLineFragment.this.getContext(), RevisePostActivity.class);
-                                        intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
-                                                .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
-                                                .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
-                                        startActivity(intent);
+                                case R.id.menu_post_master_revise:
+                                    Intent intent = new Intent(TimeLineFragment.this.getContext(), RevisePostActivity.class);
+                                    intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
+                                            .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
+                                            .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
+                                    startActivity(intent);
 
-                                        break;
-                                    case R.id.menu_post_master_delete:
-                                        AlertDialog.Builder builder = new AlertDialog.Builder(TimeLineFragment.this.getContext());
-                                        builder.setMessage("삭제하시겠습니까?")
-                                                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        baseQuickAdapter.getData().remove(i);
-                                                        baseQuickAdapter.notifyItemRemoved(i);
-                                                        dialog.dismiss();
-                                                    }
-                                                })
-                                                .setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        dialog.dismiss();
-                                                    }
-                                                })
-                                                .show();
-                                        break;
-                                }
-                                return false;
+                                    break;
+                                case R.id.menu_post_master_delete:
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(TimeLineFragment.this.getContext());
+                                    builder.setMessage("삭제하시겠습니까?")
+                                            .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    baseQuickAdapter.getData().remove(i);
+                                                    baseQuickAdapter.notifyItemRemoved(i);
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+                                                    dialog.dismiss();
+                                                }
+                                            })
+                                            .show();
+                                    break;
                             }
-                        });
-                        popup.show();
-                        break;
+                            return false;
+                        }
+                    });
+                    popup.show();
+                    break;
 
-                    case R.id.timeline_user_layout:
-                        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                        try {
-                            if (mSharedPreferences.getBoolean(Preferences.SHAREDPREFERENCE_AUTOLOGIN, false) &&
-                                    ((Post) baseQuickAdapter.getData().get(i)).getUserID().equals(new JSONObject(mSharedPreferences.getString(Preferences.SHAREDPREFERENCE_USERINFO, null)).getString("USER_ID"))) {
+                case R.id.timeline_user_layout:
+                    SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    try {
+                        if (mSharedPreferences.getBoolean(Preferences.SHAREDPREFERENCE_AUTOLOGIN, false) &&
+                                ((Post) baseQuickAdapter.getData().get(i)).getUserID().equals(new JSONObject(mSharedPreferences.getString(Preferences.SHAREDPREFERENCE_USERINFO, null)).getString("USER_ID"))) {
 
-                                Intent intent = new Intent(getContext(), MyHomeActivity.class);
-                                startActivity(intent);
+                            Intent intent = new Intent(getContext(), MyHomeActivity.class);
+                            startActivity(intent);
 
-                            } else {
-                                Intent intent = new Intent(getContext(), UserHomeActivity.class);
-                                intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
-                                startActivity(intent);
-                            }
-                        } catch (JSONException e) {
+                        } else {
                             Intent intent = new Intent(getContext(), UserHomeActivity.class);
                             intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                             startActivity(intent);
                         }
-                        break;
-                }
+                    } catch (JSONException e) {
+                        Intent intent = new Intent(getContext(), UserHomeActivity.class);
+                        intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
+                        startActivity(intent);
+                    }
+                    break;
             }
         });
 

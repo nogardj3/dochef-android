@@ -102,7 +102,7 @@ public class FollowingListActivity extends BaseActivity {
         private final RequestManager requestManager;
 
         UserListAdapter(RequestManager requestManager) {
-            super(R.layout.li_following);
+            super(R.layout.li_follow);
             this.requestManager = requestManager;
         }
 
@@ -114,7 +114,7 @@ public class FollowingListActivity extends BaseActivity {
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).circleCrop())
                     .into((AppCompatImageView) helper.getView(R.id.li_following_userimg));
 
-            helper.setText(R.id.li_following_nickname, item.getNickname());
+            helper.setText(R.id.li_follow_nickname, item.getNickname());
         }
     }
 }

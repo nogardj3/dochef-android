@@ -102,7 +102,7 @@ public class FollowerListActivity extends BaseActivity {
         private final RequestManager requestManager;
 
         UserListAdapter(RequestManager requestManager) {
-            super(R.layout.li_follower);
+            super(R.layout.li_follow);
             this.requestManager = requestManager;
         }
 
@@ -112,9 +112,9 @@ public class FollowerListActivity extends BaseActivity {
 //                    .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + item.getUserImg())
                     .load(Integer.valueOf(item.getUserImg()))
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).circleCrop())
-                    .into((AppCompatImageView) helper.getView(R.id.li_follower_userimg));
+                    .into((AppCompatImageView) helper.getView(R.id.li_follow_userimg));
 
-            helper.setText(R.id.li_follower_nickname, item.getNickname());
+            helper.setText(R.id.li_follow_nickname, item.getNickname());
         }
     }
 }

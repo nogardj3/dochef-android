@@ -10,9 +10,10 @@
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="5dp">
 
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/li_f_myrecipe_recipeimg"
@@ -21,52 +22,46 @@
             android:scaleType="centerCrop"
             tools:src="@drawable/tempimg_recipe1" />
 
-        <androidx.percentlayout.widget.PercentRelativeLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
+            android:layout_height="0dp"
             android:background="@drawable/background_gradient"
-            android:padding="6dp">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/li_f_myrecipe_recipetitle" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/li_f_myrecipe_recipetitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="5dp"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                tools:text="recipetitle" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/li_f_myrecipe_recipetitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/li_f_myrecipe_nickname"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="recipetitle" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/li_f_myrecipe_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/li_f_myrecipe_recipetitle"
-                android:layout_centerHorizontal="true"
-                android:textColor="@color/white"
-                tools:text="nickname" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/li_f_myrecipe_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            tools:text="nickname" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/li_f_myrecipe_nickname"
-                android:layout_alignParentEnd="true"
-                android:orientation="horizontal"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp">
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/li_f_myrecipe_new"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/li_f_myrecipe_nickname"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@drawable/ic_fiber_new_black_24dp" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/li_f_myrecipe_new"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:tint="@color/white"
-                    app:srcCompat="@drawable/ic_fiber_new_black_24dp" />
-            </LinearLayout>
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-    </androidx.percentlayout.widget.PercentRelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -18,6 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never"
-        tools:listitem="@layout/li_following" />
+        tools:listitem="@layout/li_follow" />
 
 </LinearLayout>

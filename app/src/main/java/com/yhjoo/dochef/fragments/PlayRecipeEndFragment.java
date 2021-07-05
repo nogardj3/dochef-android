@@ -32,7 +32,7 @@ public class PlayRecipeEndFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_playrecipe_end, container, false);
+        View view = inflater.inflate(R.layout.f_playrecipe_item, container, false);
         ButterKnife.bind(this, view);
 
         RecipeItem recipeItem = (RecipeItem) getArguments().getSerializable("item");

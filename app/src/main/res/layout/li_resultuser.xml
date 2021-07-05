@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="60dp"
@@ -11,22 +12,25 @@
         android:layout_height="40dp"
         android:layout_margin="10dp"
         android:background="@drawable/background_round"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_person_black_24dp" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_resultuser_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
         android:layout_marginStart="6dp"
-        android:layout_toEndOf="@+id/li_resultuser_userimg"
         android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/li_resultuser_userimg"
+        app:layout_constraintLeft_toRightOf="@+id/li_resultuser_userimg"
+        app:layout_constraintTop_toTopOf="@+id/li_resultuser_userimg"
         tools:text="nickname" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_alignParentBottom="true"
-        android:background="@color/grey" />
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

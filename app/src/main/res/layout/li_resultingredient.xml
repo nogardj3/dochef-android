@@ -8,53 +8,49 @@
     android:foreground="?attr/selectableItemBackground"
     app:cardCornerRadius="5dp">
 
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/li_resultingredient_recipeimg"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:scaleType="centerCrop"
-            app:layout_heightPercent="150%"
-            app:layout_widthPercent="100%"
-            tools:src="@drawable/tempimg_recipe1" />
-
-        <androidx.percentlayout.widget.PercentRelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignEnd="@+id/li_resultingredient_recipeimg"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:background="@drawable/background_translucent"
-            android:padding="10dp">
+            android:foreground="@drawable/background_translucent"
+            android:scaleType="centerCrop"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/tempimg_recipe1" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/li_resultingredient_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                tools:text="recipetitle" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/li_resultingredient_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="recipetitle" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/li_resultingredient_nickname"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/li_resultingredient_title"
-                android:textColor="@color/white"
-                tools:text="nickname" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/li_resultingredient_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toLeftOf="@+id/li_resultingredient_title"
+            app:layout_constraintTop_toBottomOf="@+id/li_resultingredient_title"
+            tools:text="nickname" />
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/li_resultingredient_ingredients"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                app:alignItems="flex_start"
-                app:flexWrap="wrap" />
+        <com.google.android.flexbox.FlexboxLayout
+            android:id="@+id/li_resultingredient_ingredients"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:alignItems="flex_start"
+            app:flexWrap="wrap"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
 
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-    </androidx.percentlayout.widget.PercentRelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

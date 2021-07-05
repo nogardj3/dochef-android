@@ -83,28 +83,25 @@ public class ResultFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(resultListAdapter);
         resultListAdapter.setEmptyView(R.layout.rv_search, (ViewGroup) recyclerView.getParent());
-        resultListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                switch (adapter.getItemViewType(position)) {
-                    case VIEWHOLDER_ITEM_RECIPE:
-                        Intent intent1 = new Intent(getContext(), RecipeActivity.class);
-                        startActivity(intent1);
-                        break;
-                    case VIEWHOLDER_ITEM_USER:
-                        Intent intent2 = new Intent(getContext(), UserHomeActivity.class);
-                        intent2.putExtra("UserID", ((UserList) ((ResultItem) adapter.getData().get(position)).getContent()).getUserID());
-                        startActivity(intent2);
-                        break;
-                    case VIEWHOLDER_ITEM_INGREDIENT:
-                        Intent intent3 = new Intent(getContext(), RecipeActivity.class);
-                        startActivity(intent3);
-                        break;
-                    case VIEWHOLDER_ITEM_TAG:
-                        Intent intent4 = new Intent(getContext(), RecipeActivity.class);
-                        startActivity(intent4);
-                        break;
-                }
+        resultListAdapter.setOnItemClickListener((adapter, view1, position) -> {
+            switch (adapter.getItemViewType(position)) {
+                case VIEWHOLDER_ITEM_RECIPE:
+                    Intent intent1 = new Intent(getContext(), RecipeActivity.class);
+                    startActivity(intent1);
+                    break;
+                case VIEWHOLDER_ITEM_USER:
+                    Intent intent2 = new Intent(getContext(), UserHomeActivity.class);
+                    intent2.putExtra("UserID", ((UserList) ((ResultItem) adapter.getData().get(position)).getContent()).getUserID());
+                    startActivity(intent2);
+                    break;
+                case VIEWHOLDER_ITEM_INGREDIENT:
+                    Intent intent3 = new Intent(getContext(), RecipeActivity.class);
+                    startActivity(intent3);
+                    break;
+                case VIEWHOLDER_ITEM_TAG:
+                    Intent intent4 = new Intent(getContext(), RecipeActivity.class);
+                    startActivity(intent4);
+                    break;
             }
         });
 

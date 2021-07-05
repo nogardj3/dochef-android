@@ -2,7 +2,6 @@ package com.yhjoo.dochef.views;
 
 
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
-
 import com.yhjoo.dochef.R;
 
 public final class CustomLoadMoreView extends LoadMoreView {
@@ -14,7 +13,7 @@ public final class CustomLoadMoreView extends LoadMoreView {
 
     @Override
     protected int getLoadingViewId() {
-        return R.id.loadmore_loading;
+        return R.id.loading_progress_group;
     }
 
     @Override
