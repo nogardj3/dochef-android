@@ -146,7 +146,7 @@ public class RecipeListActivity extends BaseActivity {
         private final RequestManager requestManager;
 
         RecipeListAdapter(RequestManager requestManager) {
-            super(R.layout.li_a_myrecipe, recipeListItems);
+            super(R.layout.li_recipelist, recipeListItems);
             this.requestManager = requestManager;
         }
 

@@ -13,19 +13,19 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/li_recipegrid_recipeimg"
+            android:id="@+id/li_recipetheme_img"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="5dp"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toTopOf="@+id/li_recipegrid_title"
+            app:layout_constraintBottom_toTopOf="@+id/li_recipetheme_title"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@raw/dummy_recipe_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/li_recipegrid_title"
+            android:id="@+id/li_recipetheme_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
@@ -33,11 +33,11 @@
             android:textSize="20sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/li_recipegrid_recipeimg"
+            app:layout_constraintTop_toBottomOf="@+id/li_recipetheme_img"
             tools:text="레시피" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/li_recipegrid_nickname"
+            android:id="@+id/li_recipetheme_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/li_recipegrid_title"
+            app:layout_constraintTop_toBottomOf="@+id/li_recipetheme_title"
             tools:text="닉네임" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

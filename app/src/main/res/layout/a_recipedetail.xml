@@ -251,43 +251,6 @@
                     android:textSize="16sp" />
             </androidx.percentlayout.widget.PercentRelativeLayout>
 
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/recipedetail_theme_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="3dp"
-                    android:layout_marginBottom="5dp"
-                    android:text="비슷한 요리"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recipedetail_theme_recycler"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/recipedetail_theme_text"
-                    android:layout_marginBottom="5dp"
-                    android:overScrollMode="never" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/recipedetail_theme_more"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/recipedetail_theme_recycler"
-                    android:layout_alignParentEnd="true"
-                    android:layout_gravity="end"
-                    android:layout_marginBottom="8dp"
-                    android:padding="2dp"
-                    android:text="더보기"
-                    android:textColor="@color/colorPrimary"
-                    android:textSize="16sp" />
-
-            </androidx.percentlayout.widget.PercentRelativeLayout>
         </LinearLayout>
     </androidx.percentlayout.widget.PercentRelativeLayout>
 </ScrollView>

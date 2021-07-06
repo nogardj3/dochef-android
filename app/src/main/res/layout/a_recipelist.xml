@@ -37,6 +37,6 @@
         android:paddingEnd="5dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipelist_toolbar"
-        tools:listitem="@layout/li_a_myrecipe" />
+        tools:listitem="@layout/li_recipelist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

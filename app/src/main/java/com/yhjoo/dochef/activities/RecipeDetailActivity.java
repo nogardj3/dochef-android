@@ -147,17 +147,6 @@ public class RecipeDetailActivity extends BaseActivity {
             ((RecyclerView) findViewById(R.id.recipedetail_review_recycler)).setLayoutManager(new LinearLayoutManager(this));
             ((RecyclerView) findViewById(R.id.recipedetail_review_recycler)).setAdapter(reviewListAdapter);
 
-
-            RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recipedetail_theme_recycler);
-
-            ArrayList<RecipeListItem> recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
-
-            recyclerView.setLayoutManager(new LinearLayoutManager(RecipeDetailActivity.this, LinearLayoutManager.HORIZONTAL, false));
-            RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, Glide.with(this));
-            recyclerView.setAdapter(recommendAdapter);
-            recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(RecipeDetailActivity.this, RecipeThemeActivity.class)));
-
-            findViewById(R.id.recipedetail_theme_more).setOnClickListener(v -> startActivity(new Intent(RecipeDetailActivity.this, RecipeThemeActivity.class)));
         } catch (JSONException e) {
             e.printStackTrace();
         }

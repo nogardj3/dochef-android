@@ -31,10 +31,10 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.fragments.MainFragment;
-import com.yhjoo.dochef.fragments.RecipeMainFragment;
-import com.yhjoo.dochef.fragments.RecipeMyFragment;
-import com.yhjoo.dochef.fragments.TimeLineFragment;
+import com.yhjoo.dochef.fragments.MainInitFragment;
+import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
+import com.yhjoo.dochef.fragments.MainRecipesFragment;
+import com.yhjoo.dochef.fragments.MainTimelineFragment;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -99,7 +99,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainFragment(), new RecipeMainFragment(), new RecipeMyFragment(), new TimeLineFragment())));
+        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainInitFragment(), new MainRecipesFragment(), new MainMyRecipeFragment(), new MainTimelineFragment())));
         viewPager.setAdapter(tabPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
 
@@ -262,11 +262,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (viewPager.getCurrentItem()) {
             case 1:
                 if (v.getId() == R.id.fam_recent) {
-                    if (((RecipeMainFragment) tabPagerAdapter.getItem(1)).getAlignMode() != RecipeMainFragment.mode_Recent)
-                        ((RecipeMainFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
+                    if (((MainRecipesFragment) tabPagerAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Recent)
+                        ((MainRecipesFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
                 } else if (v.getId() == R.id.fam_popular) {
-                    if (((RecipeMainFragment) tabPagerAdapter.getItem(1)).getAlignMode() != RecipeMainFragment.mode_Popular)
-                        ((RecipeMainFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
+                    if (((MainRecipesFragment) tabPagerAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Popular)
+                        ((MainRecipesFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
                 }
                 floatingActionMenu.close(true);
 

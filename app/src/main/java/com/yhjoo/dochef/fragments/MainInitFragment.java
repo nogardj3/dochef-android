@@ -21,6 +21,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.viewpagerindicator.CirclePageIndicator;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
@@ -35,25 +36,28 @@ import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
-public class MainFragment extends Fragment {
+public class MainInitFragment extends Fragment {
     @BindView(R.id.main_adviewpager)
     ViewPager viewPager;
 
+    ArrayList<RecipeListItem> recipeListItems;
+
     /*
         TODO
-        1. 밑에 뭘 넣으면 좋을까
+        1. 급상승 retrofit 구현
+        2. 밑에 뭘 넣으면 좋을까
     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_main, container, false);
+        View view = inflater.inflate(R.layout.f_main_init, container, false);
         ButterKnife.bind(this, view);
 
         ArrayList<Integer> imgs = new ArrayList<>();
         imgs.add(R.drawable.ad_temp_0);
         imgs.add(R.drawable.ad_temp_1);
 
-        viewPager.setAdapter(new ImagePagerAdapter(MainFragment.this.getContext(), imgs, Glide.with(getContext())));
+        viewPager.setAdapter(new ImagePagerAdapter(MainInitFragment.this.getContext(), imgs, Glide.with(getContext())));
         ((CirclePageIndicator) view.findViewById(R.id.main_adviewpager_indicator)).setViewPager(((ViewPager) viewPager));
 
         Observable.interval(5, TimeUnit.SECONDS)
@@ -63,13 +67,17 @@ public class MainFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.main_recommend_recyclerview);
 
-        ArrayList<RecipeListItem> recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        if(App.isServerAlive()){
+
+        }
+        else
+            recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, Glide.with(getContext()));
         recyclerView.setAdapter(recommendAdapter);
-        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainFragment.this.getActivity(), RecipeDetailActivity.class)));
-        view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainFragment.this.getActivity(), RecipeThemeActivity.class)));
+        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeDetailActivity.class)));
+        view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeThemeActivity.class)));
 
         return view;
     }
@@ -126,10 +134,17 @@ public class MainFragment extends Fragment {
 
         @Override
         protected void convert(BaseViewHolder helper, RecipeListItem item) {
-            requestManager
-                    .load(item.getRecipeImg())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+            if(App.isServerAlive())
+                requestManager
+                        .load(item.getRecipeImg())
+                        .apply(RequestOptions.centerCropTransform())
+                        .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+            else
+                requestManager
+                        .load(Integer.parseInt(item.getRecipeImg()))
+                        .apply(RequestOptions.centerCropTransform())
+                        .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+
             helper.setText(R.id.li_recommend_title, item.getTitle());
             helper.setText(R.id.li_recommend_nickname, "By - " + item.getNickName());
         }

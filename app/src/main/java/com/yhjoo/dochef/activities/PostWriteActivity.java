@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PostWriteActivity extends BaseActivity {
-    @BindView(R.id.postwrite_toolbar)
+    @BindView(R.id.postwrite_postimg)
     AppCompatImageView postimg;
     @BindView(R.id.postwrite_contents)
     AppCompatEditText contents;

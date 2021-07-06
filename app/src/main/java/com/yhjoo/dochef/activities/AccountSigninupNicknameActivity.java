@@ -39,7 +39,7 @@ public class AccountSigninupNicknameActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_signup);
+        setContentView(R.layout.a_account_signup);
         ButterKnife.bind(this);
 
         mProgressDialog = new ProgressDialog(this);

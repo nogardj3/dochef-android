@@ -45,7 +45,7 @@ public class ReviewWriteActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_writereview);
+        setContentView(R.layout.a_reviewwrite);
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.reviewwrite_toolbar);

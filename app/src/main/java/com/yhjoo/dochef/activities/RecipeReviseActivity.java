@@ -15,6 +15,6 @@ public class RecipeReviseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_reviserecipe);
+        setContentView(R.layout.a_recipemake_revise);
     }
 }

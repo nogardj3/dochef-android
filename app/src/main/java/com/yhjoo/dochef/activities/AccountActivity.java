@@ -64,7 +64,7 @@ public class AccountActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_login);
+        setContentView(R.layout.a_account);
         ButterKnife.bind(this);
 
         mProgressDialog = new ProgressDialog(this);

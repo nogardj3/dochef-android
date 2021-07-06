@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/theme_toolbar"
+        android:id="@+id/recipetheme_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
@@ -14,12 +14,12 @@
         app:title="테마 - 추천" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/theme_recycler"
+        android:id="@+id/recipetheme_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/theme_toolbar"
-        tools:listitem="@layout/li_recipe_grid" />
+        app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
+        tools:listitem="@layout/li_recipetheme" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

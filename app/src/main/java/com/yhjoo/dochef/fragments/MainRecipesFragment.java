@@ -41,7 +41,7 @@ import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
-public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.f_recipe_swipe)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.f_recipe_recycler)
@@ -67,7 +67,7 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_recipe, container, false);
+        View view = inflater.inflate(R.layout.f_main_recipes, container, false);
         ButterKnife.bind(this, view);
 
         ArrayList<RecipeListItem> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
@@ -86,7 +86,7 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
         }
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary,null));
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
         recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(getContext()));
         recipeListAdapter.setOnLoadMoreListener(this, recyclerView);
         recipeListAdapter.setLoadMoreView(new CustomLoadMoreView());
@@ -94,7 +94,7 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
         recyclerView.setAdapter(recipeListAdapter);
         recipeListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM)
-                startActivity(new Intent(RecipeMainFragment.this.getActivity(), RecipeDetailActivity.class));
+                startActivity(new Intent(MainRecipesFragment.this.getActivity(), RecipeDetailActivity.class));
         });
         recipeListAdapter.setEnableLoadMore(true);
 
@@ -202,10 +202,17 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
         protected void convert(BaseViewHolder helper, RecipeItem item) {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM:
-                    requestManager
-                            .load(item.getContent().getRecipeImg())
-                            .apply(RequestOptions.centerCropTransform())
-                            .into((AppCompatImageView) helper.getView(R.id.li_recipe_recipeimg));
+                    if (App.isServerAlive())
+                        requestManager
+                                .load(item.getContent().getRecipeImg())
+                                .apply(RequestOptions.centerCropTransform())
+                                .into((AppCompatImageView) helper.getView(R.id.li_recipe_recipeimg));
+                    else
+                        requestManager
+                                .load(Integer.parseInt(item.getContent().getRecipeImg()))
+                                .apply(RequestOptions.centerCropTransform())
+                                .into((AppCompatImageView) helper.getView(R.id.li_recipe_recipeimg));
+
                     helper.setText(R.id.li_recipe_title, item.getContent().getTitle());
                     helper.setText(R.id.li_recipe_nickname, Html.fromHtml("By - <b>" + item.getContent().getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
                     helper.setText(R.id.li_recipe_viewscount, String.valueOf(item.getContent().getViewsCount()));
@@ -214,7 +221,7 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
 
                 case VIEWHOLDER_PAGER:
                     helper.setText(R.id.recommend_title, item.getPager_title());
-                    helper.getView(R.id.recommend_more).setOnClickListener(v -> startActivity(new Intent(RecipeMainFragment.this.getActivity(), RecipeThemeActivity.class)));
+                    helper.getView(R.id.recommend_more).setOnClickListener(v -> startActivity(new Intent(MainRecipesFragment.this.getActivity(), RecipeThemeActivity.class)));
 
                     recyclerView = (RecyclerView) helper.getView(R.id.recommend_recyclerview);
 
@@ -223,7 +230,7 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
                     recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                     RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems);
                     recyclerView.setAdapter(recommendAdapter);
-                    recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(RecipeMainFragment.this.getActivity(), RecipeDetailActivity.class)));
+                    recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(MainRecipesFragment.this.getActivity(), RecipeDetailActivity.class)));
 
                     break;
 
@@ -242,10 +249,17 @@ public class RecipeMainFragment extends Fragment implements BaseQuickAdapter.Req
 
             @Override
             protected void convert(BaseViewHolder helper, RecipeListItem item) {
-                requestManager
-                        .load(item.getRecipeImg())
-                        .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+                if (App.isServerAlive())
+                    requestManager
+                            .load(item.getRecipeImg())
+                            .apply(RequestOptions.centerCropTransform())
+                            .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+                else
+                    requestManager
+                            .load(Integer.parseInt(item.getRecipeImg()))
+                            .apply(RequestOptions.centerCropTransform())
+                            .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+
                 helper.setText(R.id.li_recommend_title, item.getTitle());
                 helper.setText(R.id.li_recommend_nickname, "By - " + item.getNickName());
             }

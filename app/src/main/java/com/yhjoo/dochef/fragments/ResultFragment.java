@@ -128,7 +128,7 @@ public class ResultFragment extends Fragment {
             case VIEWHOLDER_ITEM_RECIPE:
                 ArrayList<ResultItem> resultItems = new ArrayList<>();
 
-                for (int i = 0; i <= recipeListItems.size(); i++) {
+                for (int i = 0; i < recipeListItems.size(); i++) {
                     resultItems.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, recipeListItems.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
@@ -167,7 +167,7 @@ public class ResultFragment extends Fragment {
             case VIEWHOLDER_ITEM_INGREDIENT:
                 ArrayList<ResultItem> resultItems2 = new ArrayList<>();
 
-                for (int i = 0; i <= recipeListItems.size(); i++) {
+                for (int i = 0; i < recipeListItems.size(); i++) {
                     resultItems2.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, recipeListItems.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
@@ -182,7 +182,7 @@ public class ResultFragment extends Fragment {
             case VIEWHOLDER_ITEM_TAG:
                 ArrayList<ResultItem> resultItems3 = new ArrayList<>();
 
-                for (int i = 0; i <= recipeListItems.size(); i++) {
+                for (int i = 0; i < recipeListItems.size(); i++) {
                     resultItems3.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, recipeListItems.get(i)));
 
                     if (i != 0 && i % 4 == 0) {

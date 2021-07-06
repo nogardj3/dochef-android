@@ -17,9 +17,9 @@ public class RecipeMakeActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_makerecipe);
+        setContentView(R.layout.a_recipemake);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.makerecipe_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.recipemake_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }

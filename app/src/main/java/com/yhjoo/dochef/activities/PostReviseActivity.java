@@ -46,7 +46,7 @@ public class PostReviseActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_revisepost);
+        setContentView(R.layout.a_postwrite_revise);
         ButterKnife.bind(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.revisepost_toolbar);

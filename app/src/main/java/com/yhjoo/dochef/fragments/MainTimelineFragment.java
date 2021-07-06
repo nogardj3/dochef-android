@@ -51,7 +51,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class TimeLineFragment extends Fragment implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.timeline_swipe)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.timeline_recycler)
@@ -61,9 +61,14 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
     private RetrofitServices.TimeLineService timeLineService;
     private List<Post> postList = new ArrayList<>();
 
+    /*
+        TODO
+        1. 타임 컨버터 적용 -> 시간 적용
+    */
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_timeline, container, false);
+        View view = inflater.inflate(R.layout.f_main_timeline, container, false);
         ButterKnife.bind(this, view);
 
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -75,7 +80,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         recyclerView.setAdapter(postListAdapter);
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
         postListAdapter.setOnItemClickListener((adapter, view1, position) -> {
-            Intent intent = new Intent(TimeLineFragment.this.getContext(), PostDetailActivity.class);
+            Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
             intent.putExtra("post", (Post) adapter.getData().get(position));
             startActivity(intent);
         });
@@ -85,17 +90,17 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
                     App.getAppInstance().showToast("좋아요");
                     break;
                 case R.id.timeline_comment:
-                    startActivity(new Intent(TimeLineFragment.this.getContext(), CommentActivity.class));
+                    startActivity(new Intent(MainTimelineFragment.this.getContext(), CommentActivity.class));
                     break;
 
                 case R.id.timeline_other:
-                    PopupMenu popup = new PopupMenu(TimeLineFragment.this.getContext(), view12);
+                    PopupMenu popup = new PopupMenu(MainTimelineFragment.this.getContext(), view12);
                     //if(ismaster)
-                    TimeLineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
+                    MainTimelineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
                     popup.setOnMenuItemClickListener(item -> {
                         switch (item.getItemId()) {
                             case R.id.menu_post_master_revise:
-                                Intent intent = new Intent(TimeLineFragment.this.getContext(), PostReviseActivity.class);
+                                Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostReviseActivity.class);
                                 intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
                                         .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
                                         .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
@@ -103,7 +108,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
 
                                 break;
                             case R.id.menu_post_master_delete:
-                                AlertDialog.Builder builder = new AlertDialog.Builder(TimeLineFragment.this.getContext());
+                                AlertDialog.Builder builder = new AlertDialog.Builder(MainTimelineFragment.this.getContext());
                                 builder.setMessage("삭제하시겠습니까?")
                                         .setPositiveButton("확인", (dialog, which) -> {
                                             baseQuickAdapter.getData().remove(i);

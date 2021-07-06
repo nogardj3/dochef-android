@@ -32,22 +32,22 @@ public class RecipeThemeActivity extends BaseActivity {
     private final int VIEWHOLDER_AD = 1;
     private final int VIEWHOLDER_ITEM = 2;
     private final ArrayList<ThemeItem> recipeListItems = new ArrayList<>();
-    @BindView(R.id.theme_recycler)
+    @BindView(R.id.recipetheme_recycler)
     RecyclerView recyclerView;
 
     /*
         TODO
-        recipelistactivity에 합쳐짐
+        1. 이건 그리드이기 때문에 뷰가 다르므로 안합친다
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_theme);
+        setContentView(R.layout.a_recipetheme);
         ButterKnife.bind(this);
         MobileAds.initialize(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.theme_toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.recipetheme_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -108,7 +108,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
         RecipeListAdapter(List<ThemeItem> data, RequestManager requestManager) {
             super(data);
-            addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_grid);
+            addItemType(VIEWHOLDER_ITEM, R.layout.li_recipetheme);
             addItemType(VIEWHOLDER_AD, R.layout.li_tempadview);
             this.requestManager = requestManager;
         }
@@ -120,9 +120,9 @@ public class RecipeThemeActivity extends BaseActivity {
                     requestManager
                             .load(item.getContent().getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
-                            .into((AppCompatImageView) helper.getView(R.id.li_recipegrid_recipeimg));
-                    helper.setText(R.id.li_recipegrid_title, item.getContent().getTitle());
-                    helper.setText(R.id.li_recipegrid_nickname, "By - " + item.getContent().getNickName());
+                            .into((AppCompatImageView) helper.getView(R.id.li_recipetheme_img));
+                    helper.setText(R.id.li_recipetheme_title, item.getContent().getTitle());
+                    helper.setText(R.id.li_recipetheme_nickname, "By - " + item.getContent().getNickName());
                     break;
                 case VIEWHOLDER_AD:
                     AdView mAdview = helper.getView(R.id.tempadview);
