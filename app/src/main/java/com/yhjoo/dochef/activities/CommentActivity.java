@@ -22,21 +22,21 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Comment;
-
-import java.util.ArrayList;
+import com.yhjoo.dochef.utils.DummyMaker;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CommentActivity extends BaseActivity {
+    private final MODE current_mode = MODE.DEFAULT;
+    private final boolean is_mine = false;
     @BindView(R.id.comment_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.footer_comment_edittext)
     AppCompatEditText editText;
     @BindView(R.id.footer_comment_clear)
     AppCompatImageView clearimageview;
-
     private CommentListAdapter commentListAdapter;
 
     @Override
@@ -49,6 +49,7 @@ public class CommentActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+
         commentListAdapter = new CommentListAdapter();
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(commentListAdapter);
@@ -56,14 +57,15 @@ public class CommentActivity extends BaseActivity {
         commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
         commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
             PopupMenu popup = new PopupMenu(CommentActivity.this, view);
-//                    if(ismaster)
-            CommentActivity.this.getMenuInflater().inflate(R.menu.menu_comment_master, popup.getMenu());
+//                    if(is_mine)
+            getMenuInflater().inflate(R.menu.menu_comment_master, popup.getMenu());
             popup.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
-//                                case R.id.menu_comment_user_revise:
-//                                    break;
-//                                case R.id.menu_comment_user_delete:
-//                                    break;
+//                    case R.id.menu_comment_user_revise:
+//                        current_mode = MODE.REVISE;
+//                        break;
+//                    case R.id.menu_comment_user_delete:
+//                        break;
 
                     case R.id.menu_comment_master_delete:
                         AlertDialog.Builder builder = new AlertDialog.Builder(CommentActivity.this);
@@ -82,22 +84,17 @@ public class CommentActivity extends BaseActivity {
             popup.show();
         });
 
+        // SERVER DATA
+        if (App.isServerAlive()) {
 
-        ArrayList<Comment> comments = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            comments.add(new Comment("유져" + i, "내용" + i + "\n", "1일전"));
-            comments.add(new Comment("유져" + i, "내용" + i + "\n", "1일전"));
-            comments.add(new Comment("유져" + i, "내용" + i + "\n", "1일전"));
-            comments.add(new Comment("유져" + i, "내용" + i + "\n", "1일전"));
-            comments.add(new Comment("유져" + i, "내용" + i + "\n", "1일전"));
-            comments.add(new Comment("유져" + i, "내용" + i + "\n", "1일전"));
         }
+        // DUMMY DATA
+        else
+            commentListAdapter.setNewData(DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS)));
 
-        commentListAdapter.setNewData(comments);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -107,10 +104,18 @@ public class CommentActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
     }
+
+    /*
+        TODO
+        1. is_mine -> 뷰 보이거나 기능 열거나
+        2. 타임 컨버터
+        3. revise 기능
+        4. delete 기능
+        5. retrofit 정리
+    */
 
     @OnClick({R.id.footer_comment_ok, R.id.footer_comment_clear})
     void aa(View v) {
@@ -120,18 +125,20 @@ public class CommentActivity extends BaseActivity {
                 break;
             case R.id.footer_comment_ok:
                 if (!editText.getText().toString().equals("")) {
-                    commentListAdapter.addData(new Comment("나", editText.getText().toString(), "방금"));
                     commentListAdapter.notifyItemInserted(commentListAdapter.getData().size() - 1);
+
                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
                     recyclerView.getLayoutManager().scrollToPosition(commentListAdapter.getData().size() - 1);
                     editText.setText("");
-                } else {
+                } else
                     App.getAppInstance().showToast("댓글을 입력 해 주세요");
-                }
                 break;
         }
     }
+
+    enum MODE {DEFAULT, REVISE}
 
     private class CommentListAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
         CommentListAdapter() {
@@ -142,7 +149,7 @@ public class CommentActivity extends BaseActivity {
         protected void convert(BaseViewHolder helper, Comment item) {
             helper.setText(R.id.li_comment_nickname, item.getNickName());
             helper.setText(R.id.li_comment_contents, item.getContents());
-            helper.setText(R.id.li_comment_date, item.getDate());
+            helper.setText(R.id.li_comment_date, item.getDateTime());
             helper.addOnClickListener(R.id.li_comment_other);
         }
     }

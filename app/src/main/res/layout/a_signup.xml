@@ -14,7 +14,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent="50%"
+        app:layout_constraintWidth_percent="0.5"
         app:srcCompat="@drawable/logo_red" />
 
     <androidx.constraintlayout.widget.Group
@@ -47,8 +47,7 @@
         android:background="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="@+id/signup_email"
         app:layout_constraintRight_toRightOf="@+id/signup_email"
-        app:layout_constraintTop_toBottomOf="@+id/signup_email"
-        app:layout_widthPercent="69%" />
+        app:layout_constraintTop_toBottomOf="@+id/signup_email"/>
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/signup_password"
@@ -100,10 +99,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        app:constraint_referenced_ids="signupnick_email, signupnick_divider0, signupnick_hurry, signupnick_ok" />
+        app:constraint_referenced_ids="signupnick_nickname, signupnick_divider0, signupnick_hurry, signupnick_ok" />
 
     <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/signupnick_email"
+        android:id="@+id/signupnick_nickname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -124,10 +123,9 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:background="@color/colorPrimary"
-        app:layout_constraintLeft_toLeftOf="@+id/signupnick_email"
-        app:layout_constraintRight_toRightOf="@+id/signupnick_email"
-        app:layout_constraintTop_toBottomOf="@+id/signupnick_email"
-        app:layout_widthPercent="69%" />
+        app:layout_constraintLeft_toLeftOf="@+id/signupnick_nickname"
+        app:layout_constraintRight_toRightOf="@+id/signupnick_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/signupnick_nickname"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/signupnick_hurry"
@@ -137,8 +135,8 @@
         android:text="- 닉네임을 입력 해 주세요."
         android:textColor="@color/grey_text"
         android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="@+id/signupnick_email"
-        app:layout_constraintRight_toRightOf="@+id/signupnick_email"
+        app:layout_constraintLeft_toLeftOf="@+id/signupnick_nickname"
+        app:layout_constraintRight_toRightOf="@+id/signupnick_nickname"
         app:layout_constraintTop_toBottomOf="@+id/signupnick_divider0" />
 
     <androidx.appcompat.widget.AppCompatButton
@@ -153,8 +151,8 @@
         android:textColor="@color/white"
         android:textSize="16sp"
         app:backgroundTint="@color/colorPrimary"
-        app:layout_constraintLeft_toLeftOf="@+id/signupnick_email"
-        app:layout_constraintRight_toRightOf="@+id/signupnick_email"
+        app:layout_constraintLeft_toLeftOf="@+id/signupnick_nickname"
+        app:layout_constraintRight_toRightOf="@+id/signupnick_nickname"
         app:layout_constraintTop_toBottomOf="@+id/signupnick_hurry" />
 
 

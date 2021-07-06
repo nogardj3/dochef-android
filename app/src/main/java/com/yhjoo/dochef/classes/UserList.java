@@ -4,27 +4,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserList {
     @SerializedName("USER_ID")
-    private final String UserID;
+    private final String userID;
     @SerializedName("PROFILE_IMAGE")
-    private final String UserImg;
+    private final String userImg;
     @SerializedName("NICKNAME")
-    private final String Nickname;
+    private final String nickname;
 
     public UserList(String userID, String userImg, String nickname) {
-        UserID = userID;
-        UserImg = userImg;
-        Nickname = nickname;
+        this.userID = userID;
+        this.userImg = userImg;
+        this.nickname = nickname;
     }
 
     public String getUserID() {
-        return UserID;
+        return userID;
     }
 
     public String getUserImg() {
-        return UserImg;
+        return userImg;
     }
 
     public String getNickname() {
-        return Nickname;
+        return nickname;
     }
 }

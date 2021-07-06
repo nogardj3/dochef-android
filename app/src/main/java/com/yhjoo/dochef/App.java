@@ -11,10 +11,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 public class App extends Application {
     private static App appInstance;
+    private static boolean isServerAlive;
     private Toast toast;
 
     public static App getAppInstance() {
         return appInstance;
+    }
+
+    public static boolean isServerAlive() {
+        return isServerAlive;
     }
 
     @SuppressLint("ShowToast")

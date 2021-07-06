@@ -3,85 +3,85 @@ package com.yhjoo.dochef.classes;
 import java.util.ArrayList;
 
 public class RecipeListItem {
-    private String Title;
-    private String NickName;
-    private String Explain;
-    private int ViewsCount;
-    private String RecipeImg;
-    private ArrayList<String> Ingredients;
-    private ArrayList<String> Tags;
+    private String title;
+    private String nickName;
+    private String explain;
+    private int viewsCount;
+    private String recipeImg;
+    private ArrayList<String> ingredients;
+    private ArrayList<String> tags;
 
     public RecipeListItem(String title, String nickName, String explain, int viewsCount, String recipeImg, ArrayList<String> ingredients, ArrayList<String> tags) {
-        Title = title;
-        NickName = nickName;
-        Explain = explain;
-        ViewsCount = viewsCount;
-        RecipeImg = recipeImg;
-        Ingredients = ingredients;
-        Tags = tags;
+        this.title = title;
+        this.nickName = nickName;
+        this.explain = explain;
+        this.viewsCount = viewsCount;
+        this.recipeImg = recipeImg;
+        this.ingredients = ingredients;
+        this.tags = tags;
     }
 
     public RecipeListItem(String title, String nickName, String explain, int viewsCount, String recipeImg) {
-        Title = title;
-        NickName = nickName;
-        Explain = explain;
-        ViewsCount = viewsCount;
-        RecipeImg = recipeImg;
+        this.title = title;
+        this.nickName = nickName;
+        this.explain = explain;
+        this.viewsCount = viewsCount;
+        this.recipeImg = recipeImg;
     }
 
     public ArrayList<String> getIngredients() {
-        return Ingredients;
+        return ingredients;
     }
 
     public void setIngredients(ArrayList<String> ingredients) {
-        Ingredients = ingredients;
+        this.ingredients = ingredients;
     }
 
     public ArrayList<String> getTags() {
-        return Tags;
+        return tags;
     }
 
     public void setTags(ArrayList<String> tags) {
-        Tags = tags;
+        this.tags = tags;
     }
 
     public String getTitle() {
-        return Title;
+        return title;
     }
 
     public void setTitle(String title) {
-        Title = title;
+        this.title = title;
     }
 
     public String getNickName() {
-        return NickName;
+        return nickName;
     }
 
     public void setNickName(String nickName) {
-        NickName = nickName;
+        this.nickName = nickName;
     }
 
     public String getExplain() {
-        return Explain;
+        return explain;
     }
 
     public void setExplain(String explain) {
-        Explain = explain;
+        this.explain = explain;
     }
 
     public int getViewsCount() {
-        return ViewsCount;
+        return viewsCount;
     }
 
     public void setViewsCount(int viewsCount) {
-        ViewsCount = viewsCount;
+        this.viewsCount = viewsCount;
     }
 
     public String getRecipeImg() {
-        return RecipeImg;
+        return recipeImg;
     }
 
     public void setRecipeImg(String recipeImg) {
-        RecipeImg = recipeImg;
+        this.recipeImg = recipeImg;
     }
 }

@@ -16,11 +16,11 @@
             android:id="@+id/li_resulttag_recipeimg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/background_translucent"
+            android:foreground="@drawable/bg_translucent"
             android:scaleType="centerCrop"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/tempimg_recipe1" />
+            tools:src="@raw/dummy_recipe_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/li_resulttag_title"

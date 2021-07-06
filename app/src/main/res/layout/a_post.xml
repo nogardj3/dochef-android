@@ -31,7 +31,7 @@
                 android:scaleType="centerCrop"
                 app:layout_aspectRatio="100%"
                 app:layout_widthPercent="100%"
-                tools:src="@drawable/tempimg_post1" />
+                tools:src="@raw/dummy_post" />
 
             <androidx.percentlayout.widget.PercentRelativeLayout
                 android:id="@+id/post_user_layout"
@@ -44,7 +44,7 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
-                    android:background="@drawable/background_round"
+                    android:background="@drawable/bg_round"
                     tools:src="@drawable/ic_person_black_24dp" />
 
                 <androidx.appcompat.widget.AppCompatTextView

@@ -17,26 +17,31 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.Notification;
+import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.yhjoo.dochef.Preferences.tempprofile;
-
 public class NotificationActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
-    private final ArrayList<Notification> notifications = new ArrayList<>();
     @BindView(R.id.notification_swipe)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.notification_recycler)
     RecyclerView recyclerView;
+
+    private ArrayList<Notification> notifications = new ArrayList<>();
     private NotificationListAdapter notificationListAdapter;
+
+    /*
+        TODO
+        1. firebase auth로 사용자 확인 하고, 쏠 수 있다면 FCM으로 날리기
+        2. 서버에 저장할 필요는 없고, SQLITE에 저장
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,15 +53,7 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        for (int i = 0; i < 3; i++) {
-            Random r = new Random();
-
-            notifications.add(new Notification(Preferences.NOTIFICATION_TYPE_1, Integer.toString(tempprofile[r.nextInt(6)]), "xx", null, "12:00"));
-            notifications.add(new Notification(Preferences.NOTIFICATION_TYPE_2, Integer.toString(tempprofile[r.nextInt(6)]), null, "밥", "8시간 전"));
-            notifications.add(new Notification(Preferences.NOTIFICATION_TYPE_3, Integer.toString(tempprofile[r.nextInt(6)]), "yy", "개밥", "4월 14일"));
-            notifications.add(new Notification(Preferences.NOTIFICATION_TYPE_4, Integer.toString(tempprofile[r.nextInt(6)]), "yy", "개밥", "4월 14일"));
-            notifications.add(new Notification(Preferences.NOTIFICATION_TYPE_5, Integer.toString(tempprofile[r.nextInt(6)]), "yy", "개밥", "4월 14일"));
-        }
+        notifications = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTIFICATION));
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(this.getColor(R.color.colorPrimary));
@@ -66,10 +63,10 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(notificationListAdapter);
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (notifications.get(position).getType() != Preferences.NOTIFICATION_TYPE_2)
-                startActivity(new Intent(NotificationActivity.this, RecipeActivity.class));
+            if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2))
+                startActivity(new Intent(NotificationActivity.this, RecipeDetailActivity.class));
             else
-                startActivity(new Intent(NotificationActivity.this, UserHomeActivity.class));
+                startActivity(new Intent(NotificationActivity.this, HomeUserActivity.class));
         });
         notificationListAdapter.setNewData(notifications);
         notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
@@ -94,41 +91,6 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         }, 1000);
     }
 
-    private class Notification {
-        private final int Type;
-        private final String UserImg;
-        private final String UserName;
-        private final String RecipeName;
-        private final String Time;
-
-        Notification(int type, String userImg, String userName, String recipeName, String time) {
-            Type = type;
-            UserImg = userImg;
-            UserName = userName;
-            RecipeName = recipeName;
-            Time = time;
-        }
-
-        private int getType() {
-            return Type;
-        }
-
-        private String getUserImg() {
-            return UserImg;
-        }
-
-        private String getUserName() {
-            return UserName;
-        }
-
-        private String getRecipeName() {
-            return RecipeName;
-        }
-
-        private String getTime() {
-            return Time;
-        }
-    }
 
     private class NotificationListAdapter extends BaseQuickAdapter<Notification, BaseViewHolder> {
         private final RequestManager requestManager;
@@ -145,17 +107,17 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
                     .apply(RequestOptions.circleCropTransform())
                     .into((AppCompatImageView) helper.getView(R.id.li_notification_userimg));
 
-            if (item.getType() == Preferences.NOTIFICATION_TYPE_1)
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype1, item.getUserName())));
-            else if (item.getType() == Preferences.NOTIFICATION_TYPE_2)
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype2, item.getRecipeName())));
-            else if (item.getType() == Preferences.NOTIFICATION_TYPE_3)
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype3, item.getUserName(), item.getRecipeName())));
-            else if (item.getType() == Preferences.NOTIFICATION_TYPE_4)
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype4, item.getUserName(), item.getRecipeName())));
-            else if (item.getType() == Preferences.NOTIFICATION_TYPE_5)
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype5, item.getUserName(), item.getRecipeName())));
-            helper.setText(R.id.li_notification_date, item.getTime());
+            if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_1))
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype1, item.getUserName()),Html.FROM_HTML_MODE_LEGACY));
+            else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_2))
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype2, item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+            else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_3))
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype3, item.getUserName(), item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+            else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_4))
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype4, item.getUserName(), item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+            else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_5))
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype5, item.getUserName(), item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+            helper.setText(R.id.li_notification_date, item.getDateTime());
         }
     }
 }

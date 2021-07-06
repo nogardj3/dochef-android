@@ -19,21 +19,23 @@ import com.github.clans.fab.FloatingActionButton;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Review;
+import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static com.yhjoo.dochef.Preferences.tempprofile;
-import static com.yhjoo.dochef.Preferences.temprecipes;
 
 public class ReviewActivity extends BaseActivity {
     @BindView(R.id.review_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.review_fab)
     FloatingActionButton floatingActionButton;
+
+    /*
+        TODO
+        1. retrofit 구현
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,20 +60,10 @@ public class ReviewActivity extends BaseActivity {
         });
 
         floatingActionButton.setImageResource(R.drawable.ic_create_white_24dp);
-        floatingActionButton.setOnClickListener(v -> startActivity(new Intent(ReviewActivity.this, WriteReviewActivity.class)));
+        floatingActionButton.setOnClickListener(v -> startActivity(new Intent(ReviewActivity.this, ReviewWriteActivity.class)));
 
 
-        ArrayList<Review> reviews = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            Random r = new Random();
-
-            reviews.add(new Review(Integer.toString(temprecipes[r.nextInt(6)]), "userid", Integer.toString(tempprofile[r.nextInt(6)]), "유저1", "내용\n내용", 0, r.nextInt(6)));
-            reviews.add(new Review(Integer.toString(temprecipes[r.nextInt(6)]), "userid", Integer.toString(tempprofile[r.nextInt(6)]), "유저1", "내용\n내용", 0, r.nextInt(6)));
-            reviews.add(new Review("", "userid", Integer.toString(tempprofile[r.nextInt(6)]), "유저1", "내용\n내용", 0, r.nextInt(6)));
-            reviews.add(new Review(Integer.toString(temprecipes[r.nextInt(6)]), "userid", Integer.toString(tempprofile[r.nextInt(6)]), "유저1", "내용\n내용", 0, r.nextInt(6)));
-            reviews.add(new Review(Integer.toString(temprecipes[r.nextInt(6)]), "userid", Integer.toString(tempprofile[r.nextInt(6)]), "유저1", "내용\n내용", 0, r.nextInt(6)));
-            reviews.add(new Review(Integer.toString(temprecipes[r.nextInt(6)]), "userid", Integer.toString(tempprofile[r.nextInt(6)]), "유저1", "내용\n내용", 0, r.nextInt(6)));
-        }
+        ArrayList<Review> reviews = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
 
         reviewListAdapter.setNewData(reviews);
     }

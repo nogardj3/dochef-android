@@ -27,15 +27,15 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.CommentActivity;
-import com.yhjoo.dochef.activities.MyHomeActivity;
-import com.yhjoo.dochef.activities.PostActivity;
-import com.yhjoo.dochef.activities.RevisePostActivity;
-import com.yhjoo.dochef.activities.UserHomeActivity;
+import com.yhjoo.dochef.activities.HomeActivity;
+import com.yhjoo.dochef.activities.HomeUserActivity;
+import com.yhjoo.dochef.activities.PostDetailActivity;
+import com.yhjoo.dochef.activities.PostReviseActivity;
 import com.yhjoo.dochef.classes.Post;
 import com.yhjoo.dochef.classes.PostComment;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.views.CustomLoadMoreView;
 
@@ -47,12 +47,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
 
 public class TimeLineFragment extends Fragment implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.timeline_swipe)
@@ -61,7 +58,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
     RecyclerView recyclerView;
 
     private PostListAdapter postListAdapter;
-    private TimeLineService timeLineService;
+    private RetrofitServices.TimeLineService timeLineService;
     private List<Post> postList = new ArrayList<>();
 
     @Override
@@ -70,7 +67,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         ButterKnife.bind(this, view);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary));
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary,null));
         postListAdapter = new PostListAdapter(Glide.with(getContext()));
         postListAdapter.setOnLoadMoreListener(this, recyclerView);
         postListAdapter.setLoadMoreView(new CustomLoadMoreView());
@@ -78,7 +75,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         recyclerView.setAdapter(postListAdapter);
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
         postListAdapter.setOnItemClickListener((adapter, view1, position) -> {
-            Intent intent = new Intent(TimeLineFragment.this.getContext(), PostActivity.class);
+            Intent intent = new Intent(TimeLineFragment.this.getContext(), PostDetailActivity.class);
             intent.putExtra("post", (Post) adapter.getData().get(position));
             startActivity(intent);
         });
@@ -97,11 +94,8 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
                     TimeLineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
                     popup.setOnMenuItemClickListener(item -> {
                         switch (item.getItemId()) {
-//                                case R.id.menu_post_normal_report:
-//                                    break;
-
                             case R.id.menu_post_master_revise:
-                                Intent intent = new Intent(TimeLineFragment.this.getContext(), RevisePostActivity.class);
+                                Intent intent = new Intent(TimeLineFragment.this.getContext(), PostReviseActivity.class);
                                 intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
                                         .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
                                         .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
@@ -125,22 +119,22 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
                     popup.show();
                     break;
 
-                case R.id.timeline_user_layout:
+                case R.id.timeline_user_group:
                     SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                     try {
-                        if (mSharedPreferences.getBoolean(Preferences.SHAREDPREFERENCE_AUTOLOGIN, false) &&
-                                ((Post) baseQuickAdapter.getData().get(i)).getUserID().equals(new JSONObject(mSharedPreferences.getString(Preferences.SHAREDPREFERENCE_USERINFO, null)).getString("USER_ID"))) {
+                        if (mSharedPreferences.getBoolean(getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false) &&
+                                ((Post) baseQuickAdapter.getData().get(i)).getUserID().equals(new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null)).getString("USER_ID"))) {
 
-                            Intent intent = new Intent(getContext(), MyHomeActivity.class);
+                            Intent intent = new Intent(getContext(), HomeActivity.class);
                             startActivity(intent);
 
                         } else {
-                            Intent intent = new Intent(getContext(), UserHomeActivity.class);
+                            Intent intent = new Intent(getContext(), HomeUserActivity.class);
                             intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                             startActivity(intent);
                         }
                     } catch (JSONException e) {
-                        Intent intent = new Intent(getContext(), UserHomeActivity.class);
+                        Intent intent = new Intent(getContext(), HomeUserActivity.class);
                         intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                         startActivity(intent);
                     }
@@ -151,7 +145,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         timeLineService = new Retrofit.Builder()
                 .baseUrl(getString(R.string.server_url))
                 .addConverterFactory(GsonConverterFactory.create())
-                .build().create(TimeLineService.class);
+                .build().create(RetrofitServices.TimeLineService.class);
         postListAdapter.setEnableLoadMore(true);
 
         return view;
@@ -194,10 +188,6 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         }
     }
 
-    private interface TimeLineService {
-        @GET("post/timeline.php")
-        Call<ArrayList<Post>> GetPostCall(@Query("last") int last);
-    }
 
     private class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         private final RequestManager requestManager;
@@ -211,7 +201,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
         protected void convert(BaseViewHolder helper, Post item) {
             requestManager
                     .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + item.getUserImg())
-                    .apply(RequestOptions.placeholderOf(R.drawable.tempimg_profile1).centerCrop())
+//                    .apply(RequestOptions.placeholderOf(getContext().getDrawable(R.raw.dummy_profile_0)).centerCrop())
                     .into((AppCompatImageView) helper.getView(R.id.timeline_userimg));
 
             requestManager
@@ -219,22 +209,22 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
                     .apply(RequestOptions.centerCropTransform())
                     .into((AppCompatImageView) helper.itemView.findViewById(R.id.timeline_postimg));
 
-            helper.setText(R.id.timeline_nickname, item.getNickname());
+            helper.setText(R.id.timeline_nickname, item.getNickName());
             helper.setText(R.id.timeline_likecount, "0");
             helper.setText(R.id.timeline_contents, " " + item.getContents());
             helper.setText(R.id.timeline_time, "1일전");
             helper.addOnClickListener(R.id.timeline_like);
             helper.addOnClickListener(R.id.timeline_comment);
             helper.addOnClickListener(R.id.timeline_other);
-            helper.addOnClickListener(R.id.timeline_user_layout);
+            helper.addOnClickListener(R.id.timeline_user_group);
 
             ((FlexboxLayout) helper.getView(R.id.timeline_tags)).removeAllViews();
             String[] tags = {"tag1", "tag2", "tag3", "tag4"};
 
             for (String tag : tags) {
-                AppCompatTextView textView = new AppCompatTextView(TimeLineFragment.this.getContext());
+                AppCompatTextView textView = new AppCompatTextView(getContext());
                 textView.setText("#" + tag + " ");
-                textView.setTextColor(getResources().getColor(R.color.colorPrimary));
+                textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
 
                 ((FlexboxLayout) helper.getView(R.id.timeline_tags)).addView(textView);
             }
@@ -244,7 +234,7 @@ public class TimeLineFragment extends Fragment implements BaseQuickAdapter.Reque
             PostComment bb = new PostComment();
             bb.setNickName("유저1");
             bb.setContents("댓글1\n댓글1\n댓글1\n댓글1");
-            bb.setDate(0);
+            bb.setDateTime(0);
 
             aa.add(bb);
             aa.add(bb);

@@ -4,45 +4,45 @@ import com.google.gson.annotations.SerializedName;
 
 public class PostComment {
     @SerializedName("COMMENT_ID")
-    private int CommentID;
+    private int commentID;
     @SerializedName("POST_ID")
-    private int ReciepeID;
+    private int reciepeID;
     @SerializedName("USER_ID")
-    private String UserID;
+    private String userID;
     @SerializedName("NICKNAME")
-    private String NickName;
+    private String nickName;
     @SerializedName("PROFILE_IMAGE")
-    private String UserImg;
+    private String userImg;
     @SerializedName("COMMENT")
-    private String Contents;
+    private String contents;
     @SerializedName("COMMENT_TIME")
-    private long Date;
+    private long dateTime;
 
     public String getUserID() {
-        return UserID;
+        return userID;
     }
 
     public String getNickName() {
-        return NickName;
+        return nickName;
     }
 
     public void setNickName(String nickName) {
-        NickName = nickName;
+        this.nickName = nickName;
     }
 
     public String getContents() {
-        return Contents;
+        return contents;
     }
 
     public void setContents(String contents) {
-        Contents = contents;
+        this.contents = contents;
     }
 
-    public long getDate() {
-        return Date;
+    public long getDateTime() {
+        return dateTime;
     }
 
-    public void setDate(long date) {
-        Date = date;
+    public void setDateTime(long dateTime) {
+        this.dateTime = dateTime;
     }
 }

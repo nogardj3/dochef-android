@@ -24,27 +24,23 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.RecipeActivity;
+import com.yhjoo.dochef.activities.HomeUserActivity;
+import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.SearchActivity;
-import com.yhjoo.dochef.activities.UserHomeActivity;
 import com.yhjoo.dochef.classes.RecipeListItem;
 import com.yhjoo.dochef.classes.UserList;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.views.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-
-import static com.yhjoo.dochef.Preferences.temprecipes;
 
 public class ResultFragment extends Fragment {
     private final int VIEWHOLDER_AD = 0;
@@ -55,7 +51,7 @@ public class ResultFragment extends Fragment {
     @BindView(R.id.result_recycler)
     RecyclerView recyclerView;
     private ResultListAdapter resultListAdapter;
-    private SearchUserService searchUserService;
+    private RetrofitServices.SearchUserService searchUserService;
     private String keyword;
     private int type;
 
@@ -69,7 +65,7 @@ public class ResultFragment extends Fragment {
         if (type == VIEWHOLDER_ITEM_RECIPE)
             resultListAdapter = new ResultListAdapter(new ArrayList<>(), R.layout.li_resultrecipe, Glide.with(getContext()));
         else if (type == VIEWHOLDER_ITEM_USER) {
-            searchUserService = RetrofitBuilder.create(getContext(), SearchUserService.class, false);
+            searchUserService = RetrofitBuilder.create(getContext(), RetrofitServices.SearchUserService.class, false);
 
             resultListAdapter = new ResultListAdapter(new ArrayList<>(), R.layout.li_resultuser, Glide.with(getContext()));
         } else if (type == VIEWHOLDER_ITEM_INGREDIENT)
@@ -85,21 +81,15 @@ public class ResultFragment extends Fragment {
         resultListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             switch (adapter.getItemViewType(position)) {
                 case VIEWHOLDER_ITEM_RECIPE:
-                    Intent intent1 = new Intent(getContext(), RecipeActivity.class);
+                case VIEWHOLDER_ITEM_INGREDIENT:
+                case VIEWHOLDER_ITEM_TAG:
+                    Intent intent1 = new Intent(getContext(), RecipeDetailActivity.class);
                     startActivity(intent1);
                     break;
                 case VIEWHOLDER_ITEM_USER:
-                    Intent intent2 = new Intent(getContext(), UserHomeActivity.class);
+                    Intent intent2 = new Intent(getContext(), HomeUserActivity.class);
                     intent2.putExtra("UserID", ((UserList) ((ResultItem) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
-                    break;
-                case VIEWHOLDER_ITEM_INGREDIENT:
-                    Intent intent3 = new Intent(getContext(), RecipeActivity.class);
-                    startActivity(intent3);
-                    break;
-                case VIEWHOLDER_ITEM_TAG:
-                    Intent intent4 = new Intent(getContext(), RecipeActivity.class);
-                    startActivity(intent4);
                     break;
             }
         });
@@ -131,22 +121,22 @@ public class ResultFragment extends Fragment {
 
     private void loadList(final int lastID) {
         resultListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
+        ArrayList<RecipeListItem> recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+
 
         switch (type) {
             case VIEWHOLDER_ITEM_RECIPE:
-                List<ResultItem> aa = new ArrayList<>();
-                for (int i = 0; i <= 3; i++) {
-                    Random r = new Random();
+                ArrayList<ResultItem> resultItems = new ArrayList<>();
 
-                    aa.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, new RecipeListItem("요리" + i, "만든이" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]))));
-                    aa.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, new RecipeListItem("요리" + i, "만든이" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]))));
-                    aa.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, new RecipeListItem("요리" + i, "만든이" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]))));
-                    aa.add(new ResultItem<>(VIEWHOLDER_AD));
-                    aa.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, new RecipeListItem("요리" + i, "만든이" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]))));
-                    aa.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, new RecipeListItem("요리" + i, "만든이" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]))));
-                    aa.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, new RecipeListItem("요리" + i, "만든이" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]))));
+                for (int i = 0; i <= recipeListItems.size(); i++) {
+                    resultItems.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, recipeListItems.get(i)));
+
+                    if (i != 0 && i % 4 == 0) {
+                        resultItems.add(new ResultItem<>(VIEWHOLDER_AD));
+                    }
                 }
-                resultListAdapter.setNewData(aa);
+
+                resultListAdapter.setNewData(resultItems);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
                 break;
             case VIEWHOLDER_ITEM_USER:
@@ -175,88 +165,37 @@ public class ResultFragment extends Fragment {
                         });
                 break;
             case VIEWHOLDER_ITEM_INGREDIENT:
-                ArrayList<ResultItem> bb = new ArrayList<>();
-                for (int i = 0; i <= 3; i++) {
-                    Random r = new Random();
+                ArrayList<ResultItem> resultItems2 = new ArrayList<>();
 
-                    bb.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<String>() {{
-                        add("재료1");
-                        add("재료1");
-                        add("재료1");
-                    }}, new ArrayList<>())));
-                    bb.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<String>() {{
-                        add("재료1");
-                        add("재료1");
-                        add("재료1");
-                    }}, new ArrayList<>())));
-                    bb.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<String>() {{
-                        add("재료1");
-                        add("재료1");
-                        add("재료1");
-                    }}, new ArrayList<>())));
-                    bb.add(new ResultItem<>(VIEWHOLDER_AD));
-                    bb.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<String>() {{
-                        add("재료1");
-                        add("재료1");
-                        add("재료1");
-                    }}, new ArrayList<>())));
-                    bb.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<String>() {{
-                        add("재료1");
-                        add("재료1");
-                        add("재료1");
-                    }}, new ArrayList<>())));
-                    bb.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<String>() {{
-                        add("재료1");
-                        add("재료1");
-                        add("재료1");
-                    }}, new ArrayList<>())));
+                for (int i = 0; i <= recipeListItems.size(); i++) {
+                    resultItems2.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, recipeListItems.get(i)));
+
+                    if (i != 0 && i % 4 == 0) {
+                        resultItems2.add(new ResultItem<>(VIEWHOLDER_AD));
+                    }
                 }
-                resultListAdapter.setNewData(bb);
+
+                resultListAdapter.setNewData(resultItems2);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
                 break;
 
             case VIEWHOLDER_ITEM_TAG:
-                ArrayList<ResultItem> cc = new ArrayList<>();
+                ArrayList<ResultItem> resultItems3 = new ArrayList<>();
 
-                for (int i = 0; i <= 3; i++) {
-                    Random r = new Random();
+                for (int i = 0; i <= recipeListItems.size(); i++) {
+                    resultItems3.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, recipeListItems.get(i)));
 
-                    cc.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<String>() {{
-                        add("태그1");
-                        add("태그1");
-                    }})));
-                    cc.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<String>() {{
-                        add("태그1");
-                        add("태그1");
-                    }})));
-                    cc.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<String>() {{
-                        add("태그1");
-                        add("태그1");
-                    }})));
-                    cc.add(new ResultItem<>(VIEWHOLDER_AD));
-                    cc.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<String>() {{
-                        add("태그1");
-                        add("태그1");
-                    }})));
-                    cc.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<String>() {{
-                        add("태그1");
-                        add("태그1");
-                    }})));
-                    cc.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, new RecipeListItem("요리" + i, "몽브셰" + i, "메세지" + i, 30, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<String>() {{
-                        add("태그1");
-                        add("태그1");
-                    }})));
+                    if (i != 0 && i % 4 == 0) {
+                        resultItems3.add(new ResultItem<>(VIEWHOLDER_AD));
+                    }
                 }
-                resultListAdapter.setNewData(cc);
+
+                resultListAdapter.setNewData(resultItems3);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
                 break;
         }
     }
 
-    private interface SearchUserService {
-        @GET("search/user.php")
-        Call<List<UserList>> SearchUserCall(@Query("keyword") String keyword, @Query("last") int last);
-    }
 
     private class ResultItem<T> implements MultiItemEntity {
         private final int itemType;
@@ -296,7 +235,7 @@ public class ResultFragment extends Fragment {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM_RECIPE:
                     requestManager
-                            .load(Integer.valueOf(((RecipeListItem) item.getContent()).getRecipeImg()))
+                            .load(((RecipeListItem) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resultrecipe_recipeimg));
                     helper.setText(R.id.li_resultrecipe_title, ((RecipeListItem) item.getContent()).getTitle());
@@ -313,7 +252,7 @@ public class ResultFragment extends Fragment {
 
                 case VIEWHOLDER_ITEM_INGREDIENT:
                     requestManager
-                            .load(Integer.valueOf(((RecipeListItem) item.getContent()).getRecipeImg()))
+                            .load(((RecipeListItem) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resultingredient_recipeimg));
                     helper.setText(R.id.li_resultingredient_title, ((RecipeListItem) item.getContent()).getTitle());
@@ -324,7 +263,7 @@ public class ResultFragment extends Fragment {
                     for (int i = 0; i < ingredients.size(); i++) {
                         CustomTextView ingredienttext = new CustomTextView(mContext);
                         ingredienttext.setText(ingredients.get(i));
-                        ingredienttext.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+                        ingredienttext.setTextColor(mContext.getResources().getColor(R.color.colorPrimary,null));
                         ingredienttext.setTypeface(ingredienttext.getTypeface(), Typeface.BOLD);
                         ((FlexboxLayout) helper.getView(R.id.li_resultingredient_ingredients)).addView(ingredienttext);
                     }
@@ -332,7 +271,7 @@ public class ResultFragment extends Fragment {
 
                 case VIEWHOLDER_ITEM_TAG:
                     requestManager
-                            .load(Integer.valueOf(((RecipeListItem) item.getContent()).getRecipeImg()))
+                            .load(((RecipeListItem) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resulttag_recipeimg));
                     helper.setText(R.id.li_resulttag_title, ((RecipeListItem) item.getContent()).getTitle());
@@ -343,7 +282,7 @@ public class ResultFragment extends Fragment {
                     for (int i = 0; i < tags.size(); i++) {
                         CustomTextView tagstext = new CustomTextView(mContext);
                         tagstext.setText(tags.get(i));
-                        tagstext.setTextColor(mContext.getResources().getColor(R.color.colorPrimary));
+                        tagstext.setTextColor(mContext.getResources().getColor(R.color.colorPrimary,null));
                         tagstext.setTypeface(tagstext.getTypeface(), Typeface.BOLD);
                         ((FlexboxLayout) helper.getView(R.id.li_resulttag_tags)).addView(tagstext);
                     }

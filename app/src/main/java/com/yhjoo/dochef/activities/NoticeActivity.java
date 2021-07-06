@@ -10,8 +10,11 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.classes.Notice;
+import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +29,12 @@ public class NoticeActivity extends BaseActivity {
     @BindView(R.id.notice_recycler)
     RecyclerView recyclerView;
 
+    /*
+        TODO
+        1. retrofit 구현
+        2. expandable 클래스로 빼보기
+    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,10 +45,14 @@ public class NoticeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        for (int i = 0; i < 10; i++) {
-            Title Title = new Title("공지사항" + i);
-            Title.addSubItem(new Contents("공\n지\n사\n항" + i));
-            announces.add(Title);
+        if (App.isServerAlive()) {
+        } else {
+            ArrayList<Notice> response = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
+            for (Notice item : response) {
+                Title Title = new Title(item.title);
+                Title.addSubItem(new Contents(item.contents));
+                announces.add(Title);
+            }
         }
 
         NoticeListAdapter noticeListAdapter = new NoticeListAdapter(announces);
@@ -93,7 +106,7 @@ public class NoticeActivity extends BaseActivity {
                     helper.setText(R.id.exp_d0_title, lv0.title)
                             .setImageResource(R.id.exp_d0_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
                     helper.itemView.setOnClickListener(v -> {
-                        int pos = helper.getAdapterPosition();
+                        int pos = helper.getAbsoluteAdapterPosition();
                         if (lv0.isExpanded()) {
                             collapse(pos);
                         } else {

@@ -11,6 +11,12 @@
         android:layout_height="match_parent"
         android:overScrollMode="never" />
 
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/playrecipe_timer_group"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="playrecipe_timer_fab,playrecipe_timer_text" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_timer_text"
         android:layout_width="wrap_content"

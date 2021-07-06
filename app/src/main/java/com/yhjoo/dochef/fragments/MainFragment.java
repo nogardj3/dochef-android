@@ -22,12 +22,12 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.viewpagerindicator.CirclePageIndicator;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.RecipeActivity;
-import com.yhjoo.dochef.activities.ThemeActivity;
+import com.yhjoo.dochef.activities.RecipeDetailActivity;
+import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -35,12 +35,14 @@ import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
-import static com.yhjoo.dochef.Preferences.temprecipes;
-
 public class MainFragment extends Fragment {
     @BindView(R.id.main_adviewpager)
     ViewPager viewPager;
 
+    /*
+        TODO
+        1. 밑에 뭘 넣으면 좋을까
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,31 +50,26 @@ public class MainFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         ArrayList<Integer> imgs = new ArrayList<>();
-        imgs.add(R.drawable.temp_ad);
-        imgs.add(R.drawable.temp_ad2);
+        imgs.add(R.drawable.ad_temp_0);
+        imgs.add(R.drawable.ad_temp_1);
 
         viewPager.setAdapter(new ImagePagerAdapter(MainFragment.this.getContext(), imgs, Glide.with(getContext())));
         ((CirclePageIndicator) view.findViewById(R.id.main_adviewpager_indicator)).setViewPager(((ViewPager) viewPager));
 
-        Observable.interval(2, TimeUnit.SECONDS)
+        Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(count -> viewPager.setCurrentItem(viewPager.getCurrentItem() == imgs.size() - 1 ? 0 : viewPager.getCurrentItem() + 1));
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.main_recommend_recyclerview);
 
-        ArrayList<RecipeListItem> recipeListItems = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            Random r = new Random();
-            recipeListItems.add(new RecipeListItem("추천" + i, "만든이" + i, "메세지" + i, 20, Integer.toString(temprecipes[r.nextInt(6)]), new ArrayList<>(), new ArrayList<>()));
-        }
+        ArrayList<RecipeListItem> recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, Glide.with(getContext()));
         recyclerView.setAdapter(recommendAdapter);
-        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainFragment.this.getActivity(), RecipeActivity.class)));
-        view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainFragment.this.getActivity(), ThemeActivity.class)));
-
+        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainFragment.this.getActivity(), RecipeDetailActivity.class)));
+        view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainFragment.this.getActivity(), RecipeThemeActivity.class)));
 
         return view;
     }
@@ -95,7 +92,7 @@ public class MainFragment extends Fragment {
             aa.setLayoutParams(lp);
             requestManager
                     .load(imgids.get(position))
-                    .apply(RequestOptions.centerCropTransform())
+                    .apply(RequestOptions.centerInsideTransform())
                     .into(aa);
 
             collection.addView(aa);
@@ -130,7 +127,7 @@ public class MainFragment extends Fragment {
         @Override
         protected void convert(BaseViewHolder helper, RecipeListItem item) {
             requestManager
-                    .load(Integer.valueOf(item.getRecipeImg()))
+                    .load(item.getRecipeImg())
                     .apply(RequestOptions.centerCropTransform())
                     .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
             helper.setText(R.id.li_recommend_title, item.getTitle());

@@ -14,7 +14,7 @@
         android:layout_height="90dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/background_round"
+        android:background="@drawable/bg_round"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/ic_person_black_24dp" />
@@ -23,7 +23,7 @@
         android:id="@+id/home_userimg_revise"
         android:layout_width="24dp"
         android:layout_height="24dp"
-        android:background="@drawable/background_round2"
+        android:background="@drawable/bg_round2"
         android:padding="5dp"
         android:tint="@color/white"
         android:visibility="gone"
@@ -116,7 +116,6 @@
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:text="팔로잉"
             android:textColor="@color/black" />
 
@@ -160,7 +159,7 @@
         android:id="@+id/home_nickname_revise"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="@drawable/background_round2"
+        android:background="@drawable/bg_round2"
         android:padding="5dp"
         android:tint="@color/white"
         android:visibility="gone"
@@ -189,7 +188,7 @@
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:layout_marginEnd="10dp"
-        android:background="@drawable/background_round2"
+        android:background="@drawable/bg_round2"
         android:padding="5dp"
         android:tint="@color/white"
         android:visibility="gone"

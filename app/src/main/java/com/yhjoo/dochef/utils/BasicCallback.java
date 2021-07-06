@@ -16,7 +16,7 @@ public abstract class BasicCallback<T> implements Callback<T> {
     public void onResponse(Call<T> call, Response<T> response) {
         Headers headers = response.headers();
         if (headers.get("err") != null) {
-            switch (Integer.valueOf(headers.get("err"))) {
+            switch (Integer.parseInt(headers.get("err"))) {
                 case 110:
                     //DoChef.getAppInstance().showToast();
                     onFailure();
@@ -37,7 +37,7 @@ public abstract class BasicCallback<T> implements Callback<T> {
                     onFailure();
                     break;
                 default:
-                    onResponse(response, Integer.valueOf(headers.get("err")));
+                    onResponse(response, Integer.parseInt(headers.get("err")));
                     break;
             }
         } else {

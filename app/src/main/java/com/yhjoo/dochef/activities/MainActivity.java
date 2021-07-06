@@ -29,12 +29,11 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.yhjoo.dochef.Preferences;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.fragments.MainFragment;
-import com.yhjoo.dochef.fragments.MyRecipeFragment;
-import com.yhjoo.dochef.fragments.RecipeFragment;
+import com.yhjoo.dochef.fragments.RecipeMainFragment;
+import com.yhjoo.dochef.fragments.RecipeMyFragment;
 import com.yhjoo.dochef.fragments.TimeLineFragment;
 
 import org.json.JSONException;
@@ -64,12 +63,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     @BindView(R.id.main_fab)
     FloatingActionButton floatingActionButton;
 
-    private AppCompatTextView username;
+    private AppCompatTextView userName;
     private AppCompatImageView userImage;
 
     private TabPagerAdapter tabPagerAdapter;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    /*
+        TODO
+        1. floating action menu 버튼 못바꾸나
+        2. 마지막에 정리할거임
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,14 +99,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainFragment(), new RecipeFragment(), new MyRecipeFragment(), new TimeLineFragment())));
+        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainFragment(), new RecipeMainFragment(), new RecipeMyFragment(), new TimeLineFragment())));
         viewPager.setAdapter(tabPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
 
-        tabLayout.addTab(tabLayout.newTab().setText("메인"));
-        tabLayout.addTab(tabLayout.newTab().setText("레시피"));
-        tabLayout.addTab(tabLayout.newTab().setText("내 레시피"));
-        tabLayout.addTab(tabLayout.newTab().setText("타임라인"));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[0]));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[1]));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[2]));
+        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[3]));
 
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
         viewPager.setPageMargin(15);
@@ -147,7 +152,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-        username = (AppCompatTextView) navigationView.getHeaderView(0).findViewById(R.id.navheader_nickname);
+        userName = (AppCompatTextView) navigationView.getHeaderView(0).findViewById(R.id.navheader_nickname);
         userImage = (AppCompatImageView) navigationView.getHeaderView(0).findViewById(R.id.navheader_userimg);
     }
 
@@ -157,13 +162,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
-        if (mSharedPreferences.getBoolean(Preferences.SHAREDPREFERENCE_AUTOLOGIN, false)) {
-            username.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, MyHomeActivity.class)));
+
+        if (mSharedPreferences.getBoolean(getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false)) {
+            userName.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, HomeActivity.class)));
 
             try {
-                JSONObject userInfo = new JSONObject(mSharedPreferences.getString(Preferences.SHAREDPREFERENCE_USERINFO, null));
+                JSONObject userInfo = new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null));
 
-                username.setText(userInfo.getString("NICKNAME"));
+                userName.setText(userInfo.getString("NICKNAME"));
 
                 Glide.with(this)
                         .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userInfo.get("PROFILE_IMAGE"))
@@ -183,9 +189,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     .apply(RequestOptions.circleCropTransform())
                     .into(userImage);
 
-            userImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SigninActivity.class)));
-            username.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SigninActivity.class)));
-            username.setText("가나다라마바");
+            userImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AccountActivity.class)));
+            userName.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AccountActivity.class)));
+            userName.setText("가나다라마바");
 
             navigationView.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
             navigationView.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(false);
@@ -237,9 +243,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.main_nav_myhome) {
-            startActivity(new Intent(MainActivity.this, MyHomeActivity.class));
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
         } else if (id == R.id.main_nav_myrecipe) {
-            startActivity(new Intent(MainActivity.this, MyRecipeActivity.class));
+            startActivity(new Intent(MainActivity.this, RecipeListActivity.class));
         } else if (id == R.id.main_nav_notification) {
             startActivity(new Intent(MainActivity.this, NotificationActivity.class));
         } else if (id == R.id.main_nav_setting) {
@@ -256,20 +262,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (viewPager.getCurrentItem()) {
             case 1:
                 if (v.getId() == R.id.fam_recent) {
-                    if (((RecipeFragment) tabPagerAdapter.getItem(1)).getAlignMode() != RecipeFragment.mode_Recent)
-                        ((RecipeFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
+                    if (((RecipeMainFragment) tabPagerAdapter.getItem(1)).getAlignMode() != RecipeMainFragment.mode_Recent)
+                        ((RecipeMainFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
                 } else if (v.getId() == R.id.fam_popular) {
-                    if (((RecipeFragment) tabPagerAdapter.getItem(1)).getAlignMode() != RecipeFragment.mode_Popular)
-                        ((RecipeFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
+                    if (((RecipeMainFragment) tabPagerAdapter.getItem(1)).getAlignMode() != RecipeMainFragment.mode_Popular)
+                        ((RecipeMainFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
                 }
                 floatingActionMenu.close(true);
 
                 break;
             case 2:
-                startActivity(new Intent(MainActivity.this, MakeRecipeActivity.class));
+                startActivity(new Intent(MainActivity.this, RecipeMakeActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(MainActivity.this, WritePostActivity.class));
+                startActivity(new Intent(MainActivity.this, PostWriteActivity.class));
                 break;
         }
     }

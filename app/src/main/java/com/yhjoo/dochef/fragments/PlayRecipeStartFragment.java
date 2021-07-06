@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.percentlayout.widget.PercentRelativeLayout;
 
@@ -31,6 +32,10 @@ public class PlayRecipeStartFragment extends Fragment {
     @BindView(R.id.playrecipe_start_ingredients)
     FlexboxLayout recipeIngredients;
 
+    /*
+        TODO
+    */
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.f_playrecipe_start, container, false);
@@ -48,12 +53,12 @@ public class PlayRecipeStartFragment extends Fragment {
 
         recipeIngredients.removeAllViews();
         for (int i = 0; i < recipeItem.getIngredients().length; i++) {
-            @SuppressLint("InflateParams") PercentRelativeLayout motherview = (PercentRelativeLayout) getActivity().getLayoutInflater().inflate(R.layout.li_ingredient, null);
+            ConstraintLayout motherview = (ConstraintLayout) getActivity().getLayoutInflater().inflate(R.layout.li_ingredient, null);
             AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_product));
-            view1.setTextColor(getResources().getColor(R.color.white));
+            view1.setTextColor(getResources().getColor(R.color.white,null));
             view1.setText(recipeItem.getIngredients()[i]);
             AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_quantity));
-            view2.setTextColor(getResources().getColor(R.color.white));
+            view2.setTextColor(getResources().getColor(R.color.white,null));
             view2.setText(recipeItem.getIngredients()[i]);
 
             recipeIngredients.addView(motherview);

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    android:background="@drawable/background_stroke_2dp"
+    android:background="@drawable/bg_stroke_2dp"
     android:foreground="?attr/selectableItemBackground"
     android:padding="2dp">
 
@@ -17,7 +17,7 @@
         android:scaleType="centerCrop"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/tempimg_recipe1" />
+        tools:src="@raw/dummy_recipe_1" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/reviewbrief_userimg"
@@ -25,7 +25,7 @@
         android:layout_height="30dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="5dp"
-        android:background="@drawable/background_round"
+        android:background="@drawable/bg_round"
         app:layout_constraintLeft_toRightOf="@+id/reviewbrief_recipeimg"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_person_black_24dp" />

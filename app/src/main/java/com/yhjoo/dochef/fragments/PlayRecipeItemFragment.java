@@ -28,6 +28,10 @@ public class PlayRecipeItemFragment extends Fragment {
     @BindView(R.id.playrecipe_item_explain)
     AppCompatTextView recipeExplain;
 
+    /*
+        TODO
+    */
+
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.f_playrecipe_item, container, false);

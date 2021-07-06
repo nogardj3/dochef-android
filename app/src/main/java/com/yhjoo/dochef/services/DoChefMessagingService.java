@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -15,11 +14,9 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.SplashActivity;
+import com.yhjoo.dochef.utils.Utils;
 
 public class DoChefMessagingService extends FirebaseMessagingService {
-
-    private static final String TAG = "MyFirebaseMsgService";
-
     /**
      * Called when message is received.
      *
@@ -39,11 +36,11 @@ public class DoChefMessagingService extends FirebaseMessagingService {
         // [END_EXCLUDE]
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Utils.log("From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
+            Utils.log("Message data payload: " + remoteMessage.getData());
 
             if (/* Check if data needs to be processed by long running job */ true) {
                 // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
@@ -57,7 +54,8 @@ public class DoChefMessagingService extends FirebaseMessagingService {
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            Utils.log("Message Notification Body: " + remoteMessage.getNotification().getBody());
+
             sendNotification(remoteMessage.getData().get("message"));
         }
 
@@ -84,7 +82,7 @@ public class DoChefMessagingService extends FirebaseMessagingService {
      * Handle time allotted to BroadcastReceivers.
      */
     private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
+        Utils.log("Short lived task is done.");
     }
 
     /**

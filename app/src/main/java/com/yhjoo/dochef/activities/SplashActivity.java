@@ -6,14 +6,12 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.percentlayout.widget.PercentRelativeLayout;
 
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.utils.Utils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,10 +21,14 @@ public class SplashActivity extends BaseActivity {
     AppCompatImageView logo;
     @BindView(R.id.splash_logo2)
     AppCompatImageView logo2;
-    @BindView(R.id.splash_root)
-    PercentRelativeLayout root;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    /*
+        TODO
+        1. 서버 상태 확인하기
+        2. 로그인 여부 확인
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +53,6 @@ public class SplashActivity extends BaseActivity {
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_start));
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle);
-
-        Utils.showSnackbar(root, "hello~!@");
 
         ViewAnimator.animate(logo)
                 .alpha(0.0f, 1.0f)
@@ -81,7 +81,7 @@ public class SplashActivity extends BaseActivity {
             finish();
         } else {
             Snackbar.make(getWindow().getDecorView().getRootView(), "네트워크 연결을 확인 해 주세요.", Snackbar.LENGTH_INDEFINITE)
-                    .setActionTextColor(getResources().getColor(R.color.colorPrimary))
+                    .setActionTextColor(getResources().getColor(R.color.colorPrimary,null))
                     .setAction("재시도", v -> checkInternet()).show();
         }
     }

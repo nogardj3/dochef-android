@@ -6,27 +6,27 @@ import java.io.Serializable;
 
 public class Post implements Serializable {
     @SerializedName("NICKNAME")
-    private final String Nickname;
+    private final String nickName;
     @SerializedName("PROFILE_IMAGE")
-    private final String UserImg;
+    private final String userImg;
     @SerializedName("IMAGE")
-    private final String PostImg;
+    private final String postImg;
     @SerializedName("SUBSTANCE")
-    private final String Contents;
-    private final int LikeCount;
-    private final String[] Tags;
+    private final String contents;
+    private final int likeCount;
+    private final String[] tags;
     @SerializedName("POST_ID")
     private int postID;
     @SerializedName("USER_ID")
     private String UserID;
 
     public Post(String nickname, String userImg, String postImg, int likeCount, String contents, String[] tags) {
-        Nickname = nickname;
-        UserImg = userImg;
-        PostImg = postImg;
-        LikeCount = likeCount;
-        Contents = contents;
-        Tags = tags;
+        this.nickName = nickname;
+        this.userImg = userImg;
+        this.postImg = postImg;
+        this.likeCount = likeCount;
+        this.contents = contents;
+        this.tags = tags;
     }
 
     public int getPostID() {
@@ -37,27 +37,27 @@ public class Post implements Serializable {
         return UserID;
     }
 
-    public String getNickname() {
-        return Nickname;
+    public String getNickName() {
+        return nickName;
     }
 
     public String getUserImg() {
-        return UserImg;
+        return userImg;
     }
 
     public String getPostImg() {
-        return PostImg;
+        return postImg;
     }
 
     public int getLikeCount() {
-        return LikeCount;
+        return likeCount;
     }
 
     public String getContents() {
-        return Contents;
+        return contents;
     }
 
     public String[] getTags() {
-        return Tags;
+        return tags;
     }
 }

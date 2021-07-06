@@ -12,7 +12,7 @@
         android:id="@+id/li_comment_userimg"
         android:layout_width="30dp"
         android:layout_height="30dp"
-        android:background="@drawable/background_round"
+        android:background="@drawable/bg_round"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"

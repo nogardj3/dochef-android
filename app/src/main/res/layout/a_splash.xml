@@ -2,15 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/splash_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/tempimg_background">
+    android:background="@drawable/bg_splash">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/background_translucent" />
+        android:foreground="@drawable/bg_translucent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/splash_logo"

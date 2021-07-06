@@ -20,15 +20,20 @@
             app:layout_constraintDimensionRatio="width,1:1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="100%"
-            tools:src="@drawable/tempimg_post1" />
+            app:layout_constraintWidth_percent="1"
+            tools:src="@raw/dummy_post" />
 
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/timeline_user_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:constraint_referenced_ids="timeline_userimg, timeline_nickname"/>
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/timeline_userimg"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
-            android:background="@drawable/background_round"
+            android:background="@drawable/bg_round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timeline_postimg"
             tools:src="@drawable/ic_person_black_24dp" />

@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">DoChef</string>
 
+    <string name="SHAREDPREFERENCE_AUTOLOGIN">AutoLogin</string>
+    <string name="SHAREDPREFERENCE_USERINFO">UserInfo</string>
+
     <!-- server-->
     <string name="server_url">http://localhost:4000/chef/</string>
 

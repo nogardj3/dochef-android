@@ -15,7 +15,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.WriteReviewActivity;
+import com.yhjoo.dochef.activities.ReviewWriteActivity;
 import com.yhjoo.dochef.classes.RecipeItem;
 
 import butterknife.BindView;
@@ -23,12 +23,17 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class PlayRecipeEndFragment extends Fragment {
-    @BindView(R.id.playrecipe_end_img)
+    @BindView(R.id.playrecipe_item_img)
     AppCompatImageView recipeImage;
-    @BindView(R.id.playrecipe_end_explain)
+    @BindView(R.id.playrecipe_item_explain)
     AppCompatTextView recipeExplain;
     @BindView(R.id.playrecipe_end_tags)
     FlexboxLayout recipeTags;
+
+    /*
+        TODO
+        1. 분기 - end용 처리하기
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,7 +53,7 @@ public class PlayRecipeEndFragment extends Fragment {
         for (int i = 0; i < recipeItem.getTags().length; i++) {
             AppCompatTextView textView = new AppCompatTextView(getContext());
             textView.setText("#" + recipeItem.getTags()[i] + " ");
-            textView.setTextColor(getResources().getColor(R.color.colorPrimary));
+            textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
 
             recipeTags.addView(textView);
         }
@@ -60,7 +65,7 @@ public class PlayRecipeEndFragment extends Fragment {
     void oc(View v) {
         switch (v.getId()) {
             case R.id.playrecipe_end_review:
-                startActivity(new Intent(PlayRecipeEndFragment.this.getContext(), WriteReviewActivity.class));
+                startActivity(new Intent(PlayRecipeEndFragment.this.getContext(), ReviewWriteActivity.class));
                 break;
         }
     }

@@ -1,49 +1,49 @@
 package com.yhjoo.dochef.classes;
 
 public class Review {
-    private final String ImageURL;
-    private final String UserID;
-    private final String UserImg;
-    private final String Nickname;
-    private final String Contents;
-    private final long Date;
-    private final int Rating;
+    private final String imageURL;
+    private final String userID;
+    private final String userImg;
+    private final String nickname;
+    private final String contents;
+    private final long dateTime;
+    private final int rating;
 
-    public Review(String imageURL, String userID, String userImg, String nickname, String contents, long date, int rating) {
-        ImageURL = imageURL;
-        UserID = userID;
-        UserImg = userImg;
-        Nickname = nickname;
-        Contents = contents;
-        Date = date;
-        Rating = rating;
+    public Review(String imageURL, String userID, String userImg, String nickname, String contents, long dateTime, int rating) {
+        this.imageURL = imageURL;
+        this.userID = userID;
+        this.userImg = userImg;
+        this.nickname = nickname;
+        this.contents = contents;
+        this.dateTime = dateTime;
+        this.rating = rating;
     }
 
     public int getRating() {
-        return Rating;
+        return rating;
     }
 
     public String getImageURL() {
-        return ImageURL;
+        return imageURL;
     }
 
     public String getUserID() {
-        return UserID;
+        return userID;
     }
 
     public String getUserImg() {
-        return UserImg;
+        return userImg;
     }
 
     public String getNickname() {
-        return Nickname;
+        return nickname;
     }
 
     public String getContents() {
-        return Contents;
+        return contents;
     }
 
-    public long getDate() {
-        return Date;
+    public long getDateTime() {
+        return dateTime;
     }
 }

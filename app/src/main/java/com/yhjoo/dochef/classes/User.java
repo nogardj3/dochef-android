@@ -7,76 +7,76 @@ import org.json.JSONObject;
 
 public class User {
     @SerializedName("USER_ID")
-    private String UserID;
+    private String userID;
     @SerializedName("RECIPE_COUNT")
-    private int RecipeCount;
+    private int recipeCount;
     @SerializedName("FOLLOWER_COUNT")
-    private int FollowerCount;
+    private int followerCount;
     @SerializedName("FOLLOWING_COUNT")
-    private int FollowingCount;
+    private int followingCount;
     @SerializedName("IS_FOLLOWING")
-    private int FollowingButton;
+    private int is_following;
     @SerializedName("NICKNAME")
-    private String Nickname;
+    private String nickname;
     @SerializedName("INTRODUCTION")
-    private String ProfileText;
+    private String profileText;
     @SerializedName("PROFILE_IMAGE")
-    private String UserImg;
+    private String userImg;
 
-    public User(String userID, int recipeCount, int followerCount, int followingCount, int followingButton, String nickname, String profileText) {
-        UserID = userID;
-        RecipeCount = recipeCount;
-        FollowerCount = followerCount;
-        FollowingCount = followingCount;
-        FollowingButton = followingButton;
-        Nickname = nickname;
-        ProfileText = profileText;
+    public User(String userID, int recipeCount, int followerCount, int followingCount, int isfollowing, String nickname, String profileText) {
+        this.userID = userID;
+        this.recipeCount = recipeCount;
+        this.followerCount = followerCount;
+        this.followingCount = followingCount;
+        is_following = isfollowing;
+        this.nickname = nickname;
+        this.profileText = profileText;
     }
 
     public User(JSONObject userInfo) {
         try {
-            UserID = userInfo.getString("USER_ID");
-            Nickname = userInfo.getString("NICKNAME");
-            ProfileText = userInfo.getString("INTRODUCTION");
-            UserImg = userInfo.getString("PROFILE_IMAGE");
+            userID = userInfo.getString("USER_ID");
+            nickname = userInfo.getString("NICKNAME");
+            profileText = userInfo.getString("INTRODUCTION");
+            userImg = userInfo.getString("PROFILE_IMAGE");
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     public String getUserID() {
-        return UserID;
+        return userID;
     }
 
     public int getRecipeCount() {
-        return RecipeCount;
+        return recipeCount;
     }
 
     public int getFollowerCount() {
-        return FollowerCount;
+        return followerCount;
     }
 
     public int getFollowingCount() {
-        return FollowingCount;
+        return followingCount;
     }
 
-    public int getFollowingButton() {
-        return FollowingButton;
+    public int getIs_following() {
+        return is_following;
     }
 
-    public void setFollowingButton(int followingButton) {
-        FollowingButton = followingButton;
+    public void setIs_following(int is_following) {
+        this.is_following = is_following;
     }
 
     public String getNickname() {
-        return Nickname;
+        return nickname;
     }
 
     public String getProfileText() {
-        return ProfileText;
+        return profileText;
     }
 
     public String getUserImg() {
-        return UserImg;
+        return userImg;
     }
 }

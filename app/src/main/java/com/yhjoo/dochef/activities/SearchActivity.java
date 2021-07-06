@@ -41,6 +41,12 @@ public class SearchActivity extends BaseActivity {
     private SearchViewPagerAdapter viewPagerAdapter;
     private String keyword;
 
+    /*
+        TODO
+        1. search type 개선
+        2. 홈버튼 뭐지
+    */
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,8 +60,10 @@ public class SearchActivity extends BaseActivity {
         Types.add(new SearchType(3, "재료"));
         Types.add(new SearchType(4, "태그"));
 
-        for (int i = 0; i < Types.size(); i++)
+        for (int i = 0; i < Types.size(); i++) {
             viewPagerAdapter.addFragment(Types.get(i).fragment, Types.get(i).title);
+        }
+
 
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.setOffscreenPageLimit(4);

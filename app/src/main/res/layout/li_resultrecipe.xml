@@ -16,9 +16,9 @@
             android:id="@+id/li_resultrecipe_recipeimg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:foreground="@drawable/background_translucent"
+            android:foreground="@drawable/bg_translucent"
             android:scaleType="centerCrop"
-            tools:src="@drawable/tempimg_recipe1" />
+            tools:src="@raw/dummy_recipe_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/li_resultrecipe_title"

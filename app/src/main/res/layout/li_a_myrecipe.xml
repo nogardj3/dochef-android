@@ -16,12 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            tools:src="@drawable/tempimg_recipe1" />
+            tools:src="@raw/dummy_recipe_1" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="@drawable/background_gradient"
+            android:background="@drawable/bg_gradient"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/li_a_myrecipe_recipetitle" />
 
@@ -65,7 +65,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_toStartOf="@+id/li_a_myrecipe_delete"
-            android:background="@drawable/background_round2"
+            android:background="@drawable/bg_round2"
             android:padding="5dp"
             android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/li_a_myrecipe_nickname"
@@ -79,7 +79,7 @@
             android:layout_alignBottom="@+id/li_a_myrecipe_nickname"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
-            android:background="@drawable/background_round2"
+            android:background="@drawable/bg_round2"
             android:padding="5dp"
             android:tint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="@+id/li_a_myrecipe_nickname"
@@ -93,7 +93,7 @@
             android:layout_alignBottom="@+id/li_a_myrecipe_nickname"
             android:layout_alignParentEnd="true"
             android:layout_marginTop="5dp"
-            android:background="@drawable/background_round2"
+            android:background="@drawable/bg_round2"
             android:padding="5dp"
             android:tint="@color/colorPrimary"
             android:visibility="gone"
