@@ -70,13 +70,14 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/account_signin_ok"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:text="로그인"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:layout_constraintLeft_toLeftOf="@+id/account_signin_email"
         app:layout_constraintRight_toRightOf="@+id/account_signin_email"
         app:layout_constraintTop_toBottomOf="@+id/account_signin_password" />
@@ -84,13 +85,13 @@
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/account_signin_google"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:scaleType="fitXY"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:layout_constraintLeft_toLeftOf="@+id/account_signin_email"
         app:layout_constraintRight_toRightOf="@+id/account_signin_email"
         app:layout_constraintTop_toBottomOf="@+id/account_signin_ok"
-        app:srcCompat="@drawable/selector_login_gg" />
+        app:srcCompat="@drawable/selector_btn_google" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/account_signin_signup"
@@ -164,12 +165,13 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/account_findpw_ok"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
         android:gravity="center"
         android:text="비밀번호 찾기"
         android:textColor="@color/white"
         android:textSize="16sp"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="@+id/account_findpw_email"
         app:layout_constraintRight_toRightOf="@+id/account_findpw_email"
@@ -238,10 +240,11 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/account_signup_ok"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:text="로그인"
+        android:text="회원 가입"
         android:textAllCaps="false"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:backgroundTint="@color/colorPrimary"
@@ -303,6 +306,7 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:backgroundTint="@color/colorPrimary"
         app:layout_constraintLeft_toLeftOf="@+id/account_signupnick_nickname"
         app:layout_constraintRight_toRightOf="@+id/account_signupnick_nickname"

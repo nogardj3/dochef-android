@@ -84,7 +84,7 @@ public class HomeActivity extends BaseActivity {
         postListAdapter = new PostListAdapter(Glide.with(this));
 
         try {
-            userInfoJson = new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null));
+            userInfoJson = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
             userDetailInfo = new UserDetail(userInfoJson);
             postListAdapter.setHeaderView(setheaderview());
         } catch (JSONException e) {
@@ -191,7 +191,7 @@ public class HomeActivity extends BaseActivity {
                                 userInfoJson.put("INTRODUCTION", userDetailInfo.getProfileText());
 
                                 SharedPreferences.Editor editor = mSharedPreferences.edit();
-                                editor.putString(getString(R.string.SHAREDPREFERENCE_USERINFO), userInfoJson.toString());
+                                editor.putString(getString(R.string.SP_USERINFO), userInfoJson.toString());
                                 editor.apply();
 
                             } catch (JSONException e) {

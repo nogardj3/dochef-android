@@ -11,24 +11,27 @@ public class ChefAuth {
     private static FirebaseAuth mAuth;
 
     public static void LogOut(Context context) {
-        mAuth = FirebaseAuth.getInstance();
-        mAuth.signOut();
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean(context.getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false);
-        editor.remove(context.getString(R.string.SHAREDPREFERENCE_USERINFO));
+        editor.putBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false);
+        editor.remove(context.getString(R.string.SP_USERINFO));
         editor.apply();
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuth.signOut();
     }
 
     public static boolean isLogIn(Context context) {
+        mAuth = FirebaseAuth.getInstance();
+
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-        if (sharedPreferences.getBoolean(context.getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false)
+        if (sharedPreferences.getBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false)
                 && mAuth.getCurrentUser() != null) {
             return true;
         } else {
-            if (sharedPreferences.getBoolean(context.getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false)) {
+            if (sharedPreferences.getBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false)) {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean(context.getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false);
+                editor.putBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false);
                 editor.apply();
             } else if (mAuth.getCurrentUser() != null) {
                 mAuth.signOut();

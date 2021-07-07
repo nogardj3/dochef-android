@@ -4,6 +4,10 @@
 
 ## How to use
 
-어떻게 쓸까요???
+1. apikey.properties 생성 샘플보고 생성하기
+
+2. google-services.json 파일 넣기
+
+3. strings.yaml에 서버 url 넣기
 
 ## APIs

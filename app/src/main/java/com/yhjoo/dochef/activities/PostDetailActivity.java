@@ -155,20 +155,21 @@ public class PostDetailActivity extends BaseActivity {
             popup.show();
         });
 
-        findViewById(R.id.post_user_layout).setOnClickListener(v -> {
+        findViewById(R.id.post_user_group).setOnClickListener(v -> {
             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             try {
-                if (mSharedPreferences.getBoolean(getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false) &&
-                        post.getUserID().equals(new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null)).getString("USER_ID"))) {
 
-                    Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class);
-                    startActivity(intent);
+                String item_userid = post.getUserID();
+                String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("USER_ID");
 
-                } else {
-                    Intent intent = new Intent(PostDetailActivity.this, HomeUserActivity.class);
+                Intent intent;
+                if (item_userid.equals(active_userid))
+                    intent = new Intent(PostDetailActivity.this, HomeActivity.class);
+                else {
+                    intent = new Intent(PostDetailActivity.this, HomeUserActivity.class);
                     intent.putExtra("UserID", post.getUserID());
-                    startActivity(intent);
                 }
+                startActivity(intent);
             } catch (JSONException e) {
                 Intent intent = new Intent(PostDetailActivity.this, HomeUserActivity.class);
                 intent.putExtra("UserID", post.getUserID());
@@ -199,7 +200,7 @@ public class PostDetailActivity extends BaseActivity {
         aa.add(bb);
 
         if (aa.size() != 0) {
-            findViewById(R.id.post_comment_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.post_commentdetail).setVisibility(View.VISIBLE);
             for (int i = 0; i < aa.size(); i++) {
                 @SuppressLint("InflateParams") LinearLayout motherview = (LinearLayout) getLayoutInflater().inflate(R.layout.li_comment_brief, null);
                 AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_comment_brief_nickname));
@@ -213,7 +214,7 @@ public class PostDetailActivity extends BaseActivity {
                 ((FlexboxLayout) findViewById(R.id.post_commentdetail)).addView(motherview);
             }
         } else {
-            findViewById(R.id.post_comment_layout).setVisibility(View.GONE);
+            findViewById(R.id.post_commentdetail).setVisibility(View.GONE);
         }
     }
 

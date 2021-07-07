@@ -51,7 +51,7 @@ public class TOSActivity extends BaseActivity {
             });
         } else {
             ((AppCompatTextView) findViewById(R.id.tos_text)).setText(
-                    Html.fromHtml(getString(R.string.tos_text), Html.FROM_HTML_MODE_LEGACY));
+                    Html.fromHtml(getString(R.string.tos_text_dummy), Html.FROM_HTML_MODE_LEGACY));
         }
     }
 }

@@ -37,7 +37,6 @@ import com.yhjoo.dochef.classes.Post;
 import com.yhjoo.dochef.classes.PostComment;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,7 +74,6 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary,null));
         postListAdapter = new PostListAdapter(Glide.with(getContext()));
         postListAdapter.setOnLoadMoreListener(this, recyclerView);
-        postListAdapter.setLoadMoreView(new CustomLoadMoreView());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(postListAdapter);
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
@@ -127,9 +125,10 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                 case R.id.timeline_user_group:
                     SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                     try {
-                        if (mSharedPreferences.getBoolean(getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false) &&
-                                ((Post) baseQuickAdapter.getData().get(i)).getUserID().equals(new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null)).getString("USER_ID"))) {
+                        String item_userid = ((Post) baseQuickAdapter.getData().get(i)).getUserID();
+                        String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("USER_ID");
 
+                        if (item_userid.equals(active_userid)) {
                             Intent intent = new Intent(getContext(), HomeActivity.class);
                             startActivity(intent);
 

@@ -22,6 +22,10 @@ public class App extends Application {
         return isServerAlive;
     }
 
+    public static void setIsServerAlive(boolean isServerAlive) {
+        App.isServerAlive = isServerAlive;
+    }
+
     @SuppressLint("ShowToast")
     @Override
     public void onCreate() {

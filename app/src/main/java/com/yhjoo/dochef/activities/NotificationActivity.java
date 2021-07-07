@@ -21,7 +21,6 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Notification;
 import com.yhjoo.dochef.utils.DummyMaker;
-import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import java.util.ArrayList;
 
@@ -70,7 +69,6 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         });
         notificationListAdapter.setNewData(notifications);
         notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
-        notificationListAdapter.setLoadMoreView(new CustomLoadMoreView());
         notificationListAdapter.setEnableLoadMore(true);
     }
 

@@ -30,7 +30,6 @@ import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
-import com.yhjoo.dochef.views.CustomLoadMoreView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,7 +88,6 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
         recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(getContext()));
         recipeListAdapter.setOnLoadMoreListener(this, recyclerView);
-        recipeListAdapter.setLoadMoreView(new CustomLoadMoreView());
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(recipeListAdapter);
         recipeListAdapter.setOnItemClickListener((adapter, view1, position) -> {

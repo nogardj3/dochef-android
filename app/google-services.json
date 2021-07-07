@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "227618773978-khka1lbekklitjr6ukscbiqtbkpfg4lu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.yhjoo.dochef",
+            "certificate_hash": "6823b84388879970d936990df6f2c193aa4dcccb"
+          }
+        },
+        {
           "client_id": "227618773978-c5ptgsjltcrv8hl1dmgci6rnedd8ene9.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -32,7 +40,8 @@
             }
           ]
         }
-      }
+      },
+      "admob_app_id": "ca-app-pub-2434314226925480~8023298125"
     }
   ],
   "configuration_version": "1"

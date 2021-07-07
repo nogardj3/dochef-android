@@ -106,16 +106,6 @@
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity
-            android:name="com.yhjoo.dochef.activities.AccountSigninupActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name="com.yhjoo.dochef.activities.AccountSigninupNicknameActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustPan" />
-
         <activity android:name="com.yhjoo.dochef.activities.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

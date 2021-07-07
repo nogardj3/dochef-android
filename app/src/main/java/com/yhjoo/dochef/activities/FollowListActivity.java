@@ -34,8 +34,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FollowListActivity extends BaseActivity {
     @BindView(R.id.followlist_recycler)
     RecyclerView recyclerView;
-    MODE current_mode = MODE.FOLLOWER;
+
+    public enum MODE {FOLLOWER, FOLLOWING}
+
     private UserListAdapter userListAdapter;
+
+    MODE current_mode = MODE.FOLLOWER;
+
+    /*
+        TODO
+        1. retrofit 구현
+        2. follower, following 모드에 따라 다른 기능 구현
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,25 +108,15 @@ public class FollowListActivity extends BaseActivity {
         } else {
             if (current_mode == MODE.FOLLOWER) {
                 toolbar.setTitle("팔로워");
-                userListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
                 ArrayList<UserList> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_PROFILE));
                 userListAdapter.setNewData(data);
             } else if (current_mode == MODE.FOLLOWING) {
                 toolbar.setTitle("팔로잉");
-                userListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
                 ArrayList<UserList> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_PROFILE));
                 userListAdapter.setNewData(data);
             }
         }
     }
-
-    /*
-        TODO
-        1. retrofit 구현
-        2. follower, following 모드에 따라 다른 기능 구현
-    */
-
-    public enum MODE {FOLLOWER, FOLLOWING}
 
     private class UserListAdapter extends BaseQuickAdapter<UserList, BaseViewHolder> {
         private final RequestManager requestManager;

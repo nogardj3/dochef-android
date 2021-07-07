@@ -39,6 +39,11 @@
                 app:layout_constraintWidth_percent="1"
                 tools:src="@raw/dummy_post" />
 
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/post_user_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:constraint_referenced_ids="post_nickname, post_userimg"/>
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/post_userimg"

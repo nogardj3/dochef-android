@@ -21,6 +21,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.PostThumbnail;
@@ -106,7 +107,7 @@ public class HomeUserActivity extends BaseActivity {
         getBasicOptionMap.put("User_ID", UserID);
 
         try {
-            getBasicOptionMap.put("myID", new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null)).getString("USER_ID"));
+            getBasicOptionMap.put("myID", new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("USER_ID"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -159,7 +160,7 @@ public class HomeUserActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        if (mSharedPreferences.getBoolean(getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false)) {
+        if (App.isServerAlive()) {
             if (userDetailInfo.getIs_following() == 0 || userDetailInfo.getIs_following() == 1) {
                 AppCompatButton followingButton = ((AppCompatButton) itemView.findViewById(R.id.home_button));
                 followingButton.setText(userDetailInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");

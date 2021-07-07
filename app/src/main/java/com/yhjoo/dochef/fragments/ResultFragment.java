@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,7 +34,7 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
-import com.yhjoo.dochef.views.CustomTextView;
+import com.yhjoo.dochef.view.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -261,10 +262,8 @@ public class ResultFragment extends Fragment {
                     ((FlexboxLayout) helper.getView(R.id.li_resultingredient_ingredients)).removeAllViews();
                     ArrayList<String> ingredients = ((Recipe) item.getContent()).getIngredients();
                     for (int i = 0; i < ingredients.size(); i++) {
-                        CustomTextView ingredienttext = new CustomTextView(mContext);
+                        CustomTextView ingredienttext = new CustomTextView(mContext,getResources().getColor(R.color.colorPrimary));
                         ingredienttext.setText(ingredients.get(i));
-                        ingredienttext.setTextColor(mContext.getResources().getColor(R.color.colorPrimary,null));
-                        ingredienttext.setTypeface(ingredienttext.getTypeface(), Typeface.BOLD);
                         ((FlexboxLayout) helper.getView(R.id.li_resultingredient_ingredients)).addView(ingredienttext);
                     }
                     break;
@@ -280,10 +279,8 @@ public class ResultFragment extends Fragment {
                     ((FlexboxLayout) helper.getView(R.id.li_resulttag_tags)).removeAllViews();
                     ArrayList<String> tags = ((Recipe) item.getContent()).getTags();
                     for (int i = 0; i < tags.size(); i++) {
-                        CustomTextView tagstext = new CustomTextView(mContext);
+                        CustomTextView tagstext = new CustomTextView(mContext,getResources().getColor(R.color.colorPrimary));
                         tagstext.setText(tags.get(i));
-                        tagstext.setTextColor(mContext.getResources().getColor(R.color.colorPrimary,null));
-                        tagstext.setTypeface(tagstext.getTypeface(), Typeface.BOLD);
                         ((FlexboxLayout) helper.getView(R.id.li_resulttag_tags)).addView(tagstext);
                     }
 
