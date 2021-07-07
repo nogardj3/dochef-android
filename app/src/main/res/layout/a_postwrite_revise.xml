@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="수정하기">
+        app:title="글 수정">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/revisepost_ok"
@@ -58,6 +58,8 @@
                 android:background="@null"
                 android:gravity="top"
                 android:hint="입력해 보세요"
+                android:paddingTop="4dp"
+                android:paddingLeft="4dp"
                 android:maxLines="4"
                 android:theme="@style/BaseTheme.EditTextStyle"
                 app:layout_constraintBottom_toBottomOf="parent"

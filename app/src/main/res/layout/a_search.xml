@@ -73,7 +73,6 @@
                 android:id="@+id/search_tablayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/search_header"
                 android:background="@color/white"
                 app:tabGravity="fill"
                 app:tabIndicatorColor="@color/colorPrimary"
@@ -85,7 +84,6 @@
             android:id="@+id/search_viewpager"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/search_appbar"
             android:overScrollMode="never"
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 

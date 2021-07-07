@@ -1,182 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    android:overScrollMode="never"
-    android:scrollbars="none">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/post_toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:theme="@style/BaseTheme.Toolbar"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="글 보기" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/post_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:theme="@style/BaseTheme.Toolbar"
-            app:title="글 보기" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:overScrollMode="never"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_toolbar">
 
-        <androidx.percentlayout.widget.PercentRelativeLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp">
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/post_postimg"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                app:layout_aspectRatio="100%"
-                app:layout_widthPercent="100%"
+                app:layout_constraintDimensionRatio="w,1:1"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="1"
                 tools:src="@raw/dummy_post" />
 
-            <androidx.percentlayout.widget.PercentRelativeLayout
-                android:id="@+id/post_user_layout"
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/post_userimg"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_round"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_postimg"
+                tools:src="@drawable/ic_person_black_24dp" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/post_postimg">
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toEndOf="@+id/post_userimg"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/post_userimg"
+                app:layout_constraintLeft_toRightOf="@+id/post_userimg"
+                app:layout_constraintTop_toTopOf="@+id/post_userimg"
+                tools:text="닉네임" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/post_userimg"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_margin="10dp"
-                    android:background="@drawable/bg_round"
-                    tools:src="@drawable/ic_person_black_24dp" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/post_nickname"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_toEndOf="@+id/post_userimg"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    tools:text="nickname" />
-            </androidx.percentlayout.widget.PercentRelativeLayout>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_contents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:maxLines="4"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
+                app:layout_constraintTop_toBottomOf="@+id/post_userimg"
+                tools:text="내용" />
 
-            <androidx.percentlayout.widget.PercentRelativeLayout
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/post_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/post_user_layout"
-                android:layout_alignParentStart="true"
-                android:paddingStart="10dp"
-                android:paddingTop="5dp"
-                android:paddingEnd="10dp"
-                android:paddingBottom="5dp">
+                app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
+                app:layout_constraintTop_toBottomOf="@+id/post_contents" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/post_contents"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
-                    android:maxLines="4"
-                    android:textSize="16sp"
-                    tools:text="contents\ncontents\ncontents\ncontents" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
+                android:maxLines="1"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_tags"
+                tools:text="시간" />
 
-                <com.google.android.flexbox.FlexboxLayout
-                    android:id="@+id/post_tags"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/post_contents" />
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/post_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/post_tags"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="5dp"
-                    android:maxLines="1"
-                    tools:text="time" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_likecount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="좋아요"
+                app:layout_constraintBottom_toBottomOf="@+id/post_other"
+                app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
+                app:layout_constraintTop_toTopOf="@+id/post_other" />
 
-                <LinearLayout
-                    android:id="@+id/post_layout2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/post_time"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center_vertical">
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_likecount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/post_other"
+                app:layout_constraintLeft_toRightOf="@+id/post_likecount_text"
+                app:layout_constraintTop_toTopOf="@+id/post_other"
+                tools:text="0" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="좋아요" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_commentcount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:text="댓글"
+                app:layout_constraintBottom_toBottomOf="@+id/post_other"
+                app:layout_constraintLeft_toRightOf="@+id/post_likecount"
+                app:layout_constraintTop_toTopOf="@+id/post_other" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/post_likecount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        tools:text="0" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/post_commentcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/post_other"
+                app:layout_constraintLeft_toRightOf="@+id/post_commentcount_text"
+                app:layout_constraintTop_toTopOf="@+id/post_other"
+                tools:text="0" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="7dp"
-                        android:text="댓글" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/post_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/post_other"
+                app:layout_constraintRight_toLeftOf="@+id/post_comment"
+                app:layout_constraintTop_toTopOf="@+id/post_other"
+                app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/post_commentcount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="3dp"
-                        tools:text="0" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/post_comment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/post_other"
+                app:layout_constraintRight_toLeftOf="@+id/post_other"
+                app:layout_constraintTop_toTopOf="@+id/post_other"
+                app:srcCompat="@drawable/ic_comment_black_24dp" />
 
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_vertical|end">
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/post_other"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                app:layout_constraintRight_toRightOf="@+id/post_time"
+                app:layout_constraintTop_toBottomOf="@+id/post_time"
+                app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/post_like"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/post_commentdetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                app:flexDirection="column"
+                app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
+                app:layout_constraintRight_toRightOf="@id/post_time"
+                app:layout_constraintTop_toBottomOf="@+id/post_other" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/post_comment"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="10dp"
-                            app:srcCompat="@drawable/ic_comment_black_24dp" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:background="@color/grey"
+                app:layout_constraintTop_toBottomOf="@+id/post_commentdetail" />
 
-                        <androidx.appcompat.widget.AppCompatImageView
-                            android:id="@+id/post_other"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/post_comment_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/post_layout2"
-                    android:orientation="vertical">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"
-                        android:background="@color/grey" />
-
-                    <com.google.android.flexbox.FlexboxLayout
-                        android:id="@+id/post_commentdetail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:flexDirection="column" />
-                </LinearLayout>
-            </androidx.percentlayout.widget.PercentRelativeLayout>
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-    </LinearLayout>
-</ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

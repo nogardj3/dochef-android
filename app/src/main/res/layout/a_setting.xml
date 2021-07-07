@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.percentlayout.widget.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <include
@@ -10,287 +11,241 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_notice"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/base_toolbar"
-        android:layout_alignParentStart="true"
-        android:background="?attr/selectableItemBackground"
-        app:layout_heightPercent="8%">
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:text="공지사항 / 이벤트"
-            android:textColor="@color/grey_text" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_arrow" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/grey" />
-
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/setting_noti"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/setting_notice"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="공지사항 / 이벤트"
+        android:textColor="@color/grey_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/base_toolbar"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/grey" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="10dp"
+        android:tint="@color/colorPrimary"
+        app:layout_constraintTop_toTopOf="@+id/setting_notice"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_notice"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@drawable/ic_arrow" />
 
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:id="@+id/setting_noti_all_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_notice"/>
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="알림"
-                android:textColor="@color/grey_text" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/setting_notification_all_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
+        android:text="알림"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setting_notice"
 
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/setting_noti_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:clickable="false"
-                app:buttonTint="@color/colorPrimary" />
+        android:textColor="@color/grey_text" />
 
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-
-        <androidx.percentlayout.widget.PercentRelativeLayout
-            android:id="@+id/setting_noti1_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:paddingStart="20dp"
-            android:paddingEnd="10dp">
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="옵션1"
-                android:textColor="@color/grey_text" />
-
-            <androidx.appcompat.widget.AppCompatCheckBox
-                android:id="@+id/setting_noti1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@null"
-                android:clickable="false"
-                app:buttonTint="@color/colorPrimary" />
-
-        </androidx.percentlayout.widget.PercentRelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/grey" />
-
-    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/setting_notification_all_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@null"
+        android:clickable="false"
+        app:layout_constraintTop_toTopOf="@+id/setting_notification_all_text"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_notification_all_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:buttonTint="@color/colorPrimary" />
 
 
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/setting_notification_1_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:paddingRight="12dp"
+        android:paddingVertical="12dp"
+        android:paddingLeft="18dp"
+        android:text="옵션1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/setting_notification_all_text"
+        android:textColor="@color/grey_text" />
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/setting_notification_1_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:background="@null"
+        android:clickable="false"
+        app:layout_constraintTop_toTopOf="@+id/setting_notification_1_text"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_notification_1_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:buttonTint="@color/colorPrimary" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_notification_1_text"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/setting_version_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
+        android:background="?attr/selectableItemBackground"
+        android:text="버전"
+        app:layout_constraintTop_toBottomOf="@+id/setting_notification_1_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="@color/grey_text" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_version"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setting_version_text"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_version_text"
+        android:textColor="@color/grey_text"
+        tools:text="1.0.0"/>
+
+    <View
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/setting_noti"
-        android:layout_marginTop="10dp"
-        android:background="?attr/selectableItemBackground"
-        app:layout_heightPercent="8%">
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_version_text"
+        android:background="@color/grey" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/grey" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:text="버전"
-            android:textColor="@color/grey_text" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/setting_version_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="15dp"
-            android:textColor="@color/grey_text" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/grey" />
-
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_faq"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/setting_version"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
         android:background="?attr/selectableItemBackground"
-        app:layout_heightPercent="8%">
+        app:layout_constraintTop_toBottomOf="@+id/setting_version_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="FAQ"
+        android:textColor="@color/grey_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:text="FAQ"
-            android:textColor="@color/grey_text" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setting_faq"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_faq"
+        android:tint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_arrow" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_arrow" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/grey" />
-
-    </androidx.percentlayout.widget.PercentRelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_faq"
+        android:background="@color/grey" />
 
 
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_review"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/setting_faq"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
         android:background="?attr/selectableItemBackground"
-        app:layout_heightPercent="8%">
+        app:layout_constraintTop_toBottomOf="@+id/setting_faq"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="리뷰 작성"
+        android:textColor="@color/grey_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:text="리뷰 작성하기"
-            android:textColor="@color/grey_text" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setting_review"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_review"
+        android:tint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_arrow" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_arrow" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_review"
+        android:background="@color/grey" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/grey" />
 
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_tos"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/setting_review"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
         android:background="?attr/selectableItemBackground"
-        app:layout_heightPercent="8%">
+        app:layout_constraintTop_toBottomOf="@+id/setting_review"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="이용약관"
+        android:textColor="@color/grey_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:text="이용약관"
-            android:textColor="@color/grey_text" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setting_tos"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_tos"
+        android:tint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_arrow" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_arrow" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_tos"
+        android:background="@color/grey" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/grey" />
-
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-
-    <androidx.percentlayout.widget.PercentRelativeLayout
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_logout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_below="@+id/setting_tos"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingVertical="18dp"
         android:background="?attr/selectableItemBackground"
-        app:layout_heightPercent="8%">
+        app:layout_constraintTop_toBottomOf="@+id/setting_tos"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:text="로그아웃"
+        android:textColor="@color/grey_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:text="로그아웃 / 탈퇴"
-            android:textColor="@color/grey_text" />
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/setting_logout"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_logout"
+        android:tint="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_arrow" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
-            android:tint="@color/colorPrimary"
-            app:srcCompat="@drawable/ic_arrow" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/setting_logout"
+        android:background="@color/grey" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/grey" />
 
-    </androidx.percentlayout.widget.PercentRelativeLayout>
-
-</androidx.percentlayout.widget.PercentRelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

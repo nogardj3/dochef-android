@@ -10,6 +10,6 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="수정하기" />
+        app:title="레시피 수정" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

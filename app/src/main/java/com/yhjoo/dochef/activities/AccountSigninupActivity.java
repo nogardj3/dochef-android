@@ -28,9 +28,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AccountSigninupActivity extends BaseActivity {
-    @BindView(R.id.signup_email)
+    @BindView(R.id.account_signup_email)
     AppCompatEditText editText_email;
-    @BindView(R.id.signup_password)
+    @BindView(R.id.account_signup_password)
     AppCompatEditText editText_pw;
 
     private ProgressDialog mProgressDialog;
@@ -45,7 +45,7 @@ public class AccountSigninupActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_account_signup);
+        setContentView(R.layout.a_account);
         ButterKnife.bind(this);
 
         mAuth = FirebaseAuth.getInstance();
@@ -65,7 +65,7 @@ public class AccountSigninupActivity extends BaseActivity {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle);
     }
 
-    @OnClick(R.id.signup_ok)
+    @OnClick(R.id.account_signup_ok)
     void oc() {
         if (editText_email.getText().length() == 0 && editText_pw.getText().length() == 0) {
             App.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");

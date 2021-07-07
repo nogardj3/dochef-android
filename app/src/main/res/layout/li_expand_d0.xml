@@ -28,7 +28,6 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_below="@+id/exp_d0_icon"
         android:background="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent" />
 

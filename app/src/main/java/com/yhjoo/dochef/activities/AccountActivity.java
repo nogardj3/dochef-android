@@ -42,21 +42,24 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AccountActivity extends BaseActivity {
     private final int RC_SIGN_IN = 6006;
-    @BindView(R.id.login_email)
+    @BindView(R.id.account_signin_email)
     AppCompatEditText editText_id;
-    @BindView(R.id.login_password)
+    @BindView(R.id.account_signin_password)
     AppCompatEditText editText_pw;
+
+    enum Mode {SIGNIN, SIGNUP, SIGNUPNICK, FINDPW}
 
     private ProgressDialog mProgressDialog;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
     private FirebaseAnalytics mFirebaseAnalytics;
-
     private RetrofitServices.LoginService loginService;
+
+    Mode current_mode = Mode.SIGNIN;
 
     /*
         TODO
-        1. Signin, Signup, SignupNick, FindPW -> Acoount
+        1. Signin, Signup, SignupNick, FindPW 등등 기능 구현
         2. 가르기 힘들면 Fragment 분기
         3. retrofit 구현
     */
@@ -130,10 +133,10 @@ public class AccountActivity extends BaseActivity {
         progressOFF();
     }
 
-    @OnClick({R.id.login_ok, R.id.login_signup, R.id.login_findpw, R.id.login_google})
+    @OnClick({R.id.account_signin_ok, R.id.account_signin_signup, R.id.account_signin_findpw, R.id.account_signin_google})
     void oc(View v) {
         switch (v.getId()) {
-            case R.id.login_ok:
+            case R.id.account_signin_ok:
 //              TODO textwatcher로 바꾸기
                 if (mAuth.getCurrentUser() != null) {
                     //DoChef.getAppInstance().showToast(getString(R.string.signin_err_wronginput));
@@ -154,13 +157,13 @@ public class AccountActivity extends BaseActivity {
                     App.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");
                 }
                 break;
-            case R.id.login_signup:
+            case R.id.account_signin_signup:
                 startActivity(new Intent(AccountActivity.this, AccountSigninupActivity.class));
                 break;
-            case R.id.login_findpw:
+            case R.id.account_signin_findpw:
 //                startActivity(new Intent(AccountActivity.this, FindPWActivity.class));
                 break;
-            case R.id.login_google:
+            case R.id.account_signin_google:
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                     int requestCode = result.getResultCode();

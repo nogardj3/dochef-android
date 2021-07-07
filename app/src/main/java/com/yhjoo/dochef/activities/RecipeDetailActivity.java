@@ -122,7 +122,6 @@ public class RecipeDetailActivity extends BaseActivity {
             }
 
             findViewById(R.id.recipedetail_startrecipe).setOnClickListener((v) -> startActivity(new Intent(this, PlayRecipeActivity.class)));
-//            findViewById(R.id.recipedetail_startrecipe).setOnClickListener((v) -> startActivity(new Intent(this, TempActivity.class)));
 
             ((FlexboxLayout) findViewById(R.id.recipedetail_ingredients)).removeAllViews();
 
@@ -195,24 +194,6 @@ public class RecipeDetailActivity extends BaseActivity {
         }
     }
 
-    private class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        RecommendAdapter(ArrayList<Recipe> recipe, RequestManager requestManager) {
-            super(R.layout.li_recommend, recipe);
-            this.requestManager = requestManager;
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Recipe item) {
-            requestManager.load(item.getRecipeImg())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
-            helper.setText(R.id.li_recommend_title, item.getTitle());
-            helper.setText(R.id.li_recommend_nickname, "By - " + item.getNickName());
-        }
-    }
-
     private class ReviewListAdapter extends BaseQuickAdapter<Review, BaseViewHolder> {
         private final RequestManager requestManager;
 
@@ -223,16 +204,6 @@ public class RecipeDetailActivity extends BaseActivity {
 
         @Override
         protected void convert(BaseViewHolder helper, Review item) {
-            requestManager
-                    .load(Integer.valueOf(item.getImageURL()))
-                    .apply(RequestOptions.centerCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.reviewbrief_recipeimg));
-
-            requestManager
-                    .load(Integer.valueOf(item.getUserImg()))
-                    .apply(RequestOptions.circleCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.reviewbrief_userimg));
-
             helper.setRating(R.id.reviewbrief_rating, item.getRating());
             helper.setText(R.id.reviewbrief_nickname, item.getNickname());
             helper.setText(R.id.reviewbrief_contents, item.getContents());

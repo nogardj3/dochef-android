@@ -52,12 +52,6 @@ public class ReviewActivity extends BaseActivity {
         recyclerView.setAdapter(reviewListAdapter);
 
         reviewListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        reviewListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, i) -> {
-            if (baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).getVisibility() == View.VISIBLE)
-                baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).setVisibility(View.GONE);
-            else
-                baseQuickAdapter.getViewByPosition(recyclerView, i, R.id.review_comment_container).setVisibility(View.VISIBLE);
-        });
 
         floatingActionButton.setImageResource(R.drawable.ic_create_white_24dp);
         floatingActionButton.setOnClickListener(v -> startActivity(new Intent(ReviewActivity.this, ReviewWriteActivity.class)));
@@ -95,7 +89,6 @@ public class ReviewActivity extends BaseActivity {
             helper.setText(R.id.review_nickname, item.getNickname());
             helper.setText(R.id.review_contents, item.getContents());
             helper.setText(R.id.review_date, "1일전");
-            helper.addOnClickListener(R.id.review_comment_write);
         }
     }
 }

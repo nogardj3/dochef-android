@@ -24,7 +24,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AccountSigninupNicknameActivity extends BaseActivity {
     public static final String ACCESS_TOKEN = "AccessToken";
-    @BindView(R.id.signupnick_nickname)
+    @BindView(R.id.account_signupnick_nickname)
     AppCompatEditText editText_nickname;
     private String AccessToken;
     private boolean signupSuccess = false;
@@ -39,7 +39,7 @@ public class AccountSigninupNicknameActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_account_signup);
+        setContentView(R.layout.a_account);
         ButterKnife.bind(this);
 
         mProgressDialog = new ProgressDialog(this);
@@ -58,7 +58,7 @@ public class AccountSigninupNicknameActivity extends BaseActivity {
             FirebaseAuth.getInstance().signOut();
     }
 
-    @OnClick(R.id.signupnick_ok)
+    @OnClick(R.id.account_signupnick_ok)
     public void signUp() {
         String nickname = editText_nickname.getText().toString();
 

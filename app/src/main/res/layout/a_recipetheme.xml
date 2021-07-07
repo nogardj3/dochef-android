@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="테마 - 추천" />
+        app:title="추천" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipetheme_recycler"

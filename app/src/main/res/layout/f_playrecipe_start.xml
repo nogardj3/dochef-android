@@ -53,7 +53,6 @@
         android:id="@+id/playrecipe_start_ingredients"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playrecipe_start_ingredienttext"
         android:layout_marginBottom="5dp"
         app:flexDirection="column"
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"

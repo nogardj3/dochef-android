@@ -41,7 +41,7 @@ public class SettingActivity extends BaseActivity {
         ((AppCompatTextView) findViewById(R.id.setting_version_text)).setText(BuildConfig.VERSION_NAME);
     }
 
-    @OnClick({R.id.setting_notice, R.id.setting_faq, R.id.setting_tos, R.id.setting_noti_all_layout, R.id.setting_noti1_layout,  R.id.setting_logout, R.id.setting_review})
+    @OnClick({R.id.setting_notice, R.id.setting_faq, R.id.setting_tos, R.id.setting_notification_all_text, R.id.setting_notification_1_text,  R.id.setting_logout, R.id.setting_review})
     void oc(View v) {
         switch (v.getId()) {
             case R.id.setting_notice:
@@ -53,11 +53,11 @@ public class SettingActivity extends BaseActivity {
             case R.id.setting_tos:
                 startActivity(new Intent(SettingActivity.this, TOSActivity.class));
                 break;
-            case R.id.setting_noti_all_layout:
-                ((AppCompatCheckBox) findViewById(R.id.setting_noti_all)).toggle();
+            case R.id.setting_notification_all_text:
+                ((AppCompatCheckBox) findViewById(R.id.setting_notification_all_check)).toggle();
                 break;
-            case R.id.setting_noti1_layout:
-                ((AppCompatCheckBox) findViewById(R.id.setting_noti1)).toggle();
+            case R.id.setting_notification_1_text:
+                ((AppCompatCheckBox) findViewById(R.id.setting_notification_1_check)).toggle();
                 break;
             case R.id.setting_review:
                 Intent intent = new Intent(Intent.ACTION_VIEW);
