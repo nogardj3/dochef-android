@@ -14,24 +14,31 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.FAQ;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FAQActivity extends BaseActivity {
-    private final int FAQ_DEPTH_0 = 0;
-    private final int FAQ_CONTENTS = 1;
     @BindView(R.id.faq_recycler)
     RecyclerView recyclerView;
 
+    private final int FAQ_DEPTH_0 = 0;
+    private final int FAQ_CONTENTS = 1;
+
+    FAQListAdapter FAQListAdapter;
+    ArrayList<MultiItemEntity> faqList = new ArrayList<>();
+
     /*
         TODO
-        1. retrofit 구현
-        2. expandable 클래스로 빼보기
      */
 
     @Override
@@ -44,20 +51,47 @@ public class FAQActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ArrayList<MultiItemEntity> faqItems = new ArrayList<>();
-        if (App.isServerAlive()) {
-        } else {
-            ArrayList<FAQ> faqs = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
-            for (FAQ item : faqs) {
-                Title Title = new Title(item.title);
-                Title.addSubItem(new Contents(item.contents));
-                faqItems.add(Title);
-            }
-        }
-
-        FAQListAdapter FAQListAdapter = new FAQListAdapter(faqItems);
+        FAQListAdapter = new FAQListAdapter(faqList);
         recyclerView.setAdapter(FAQListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (App.isServerAlive())
+            getListFromServer();
+        else
+            getListFromLocal();
+    }
+
+    private void getListFromServer() {
+        RetrofitServices.BasicService basicService =
+                RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
+
+        basicService.getFAQ().enqueue(new Callback<ArrayList<FAQ>>() {
+            @Override
+            public void onResponse(Call<ArrayList<FAQ>> call, Response<ArrayList<FAQ>> res) {
+                ArrayList<FAQ> resList = res.body();
+                for (FAQ item : resList) {
+                    Title title = new Title(item.title);
+                    title.addSubItem(new Contents(item.contents));
+                    faqList.add(title);
+                }
+                FAQListAdapter.setNewData(faqList);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<FAQ>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void getListFromLocal() {
+        ArrayList<FAQ> faqs = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
+        for (FAQ item : faqs) {
+            Title Title = new Title(item.title);
+            Title.addSubItem(new Contents(item.contents));
+            faqList.add(Title);
+        }
+        FAQListAdapter.setNewData(faqList);
     }
 
     private class Title extends AbstractExpandableItem<Contents> implements MultiItemEntity {

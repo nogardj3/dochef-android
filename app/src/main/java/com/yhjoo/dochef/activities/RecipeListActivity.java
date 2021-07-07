@@ -22,7 +22,7 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Recipe;
 
 import java.util.ArrayList;
 
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RecipeListActivity extends BaseActivity {
-    private final ArrayList<RecipeListItem> recipeListItems = new ArrayList<>();
+    private final ArrayList<Recipe> recipes = new ArrayList<>();
     public OPERATION currentOperation = OPERATION.VIEW;
     @BindView(R.id.recipelist_recycler)
     RecyclerView recyclerView;
@@ -142,16 +142,16 @@ public class RecipeListActivity extends BaseActivity {
     }
 
 
-    private class RecipeListAdapter extends BaseItemDraggableAdapter<RecipeListItem, BaseViewHolder> {
+    private class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseViewHolder> {
         private final RequestManager requestManager;
 
         RecipeListAdapter(RequestManager requestManager) {
-            super(R.layout.li_recipelist, recipeListItems);
+            super(R.layout.li_recipelist, recipes);
             this.requestManager = requestManager;
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, RecipeListItem item) {
+        protected void convert(BaseViewHolder helper, Recipe item) {
             requestManager
                     .load(item.getRecipeImg())
                     .apply(RequestOptions.centerCropTransform())

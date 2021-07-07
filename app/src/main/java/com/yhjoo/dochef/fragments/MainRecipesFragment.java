@@ -28,7 +28,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.views.CustomLoadMoreView;
 
@@ -70,7 +70,7 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
         View view = inflater.inflate(R.layout.f_main_recipes, container, false);
         ButterKnife.bind(this, view);
 
-        ArrayList<RecipeListItem> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
         for (int i = 0; i < temp.size(); i++) {
             recipeListItems.add(new RecipeItem(VIEWHOLDER_ITEM, temp.get(i)));
@@ -156,10 +156,10 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
 
     private class RecipeItem implements MultiItemEntity {
         private final int itemType;
-        private RecipeListItem content;
+        private Recipe content;
         private String pager_title;
 
-        RecipeItem(int itemType, RecipeListItem content) {
+        RecipeItem(int itemType, Recipe content) {
             this.itemType = itemType;
             this.content = content;
         }
@@ -173,7 +173,7 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
             this.itemType = itemType;
         }
 
-        private RecipeListItem getContent() {
+        private Recipe getContent() {
             return content;
         }
 
@@ -225,10 +225,10 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
 
                     recyclerView = (RecyclerView) helper.getView(R.id.recommend_recyclerview);
 
-                    ArrayList<RecipeListItem> recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+                    ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
                     recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                    RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems);
+                    RecommendAdapter recommendAdapter = new RecommendAdapter(recipes);
                     recyclerView.setAdapter(recommendAdapter);
                     recommendAdapter.setOnItemClickListener((adapter, view, position) -> startActivity(new Intent(MainRecipesFragment.this.getActivity(), RecipeDetailActivity.class)));
 
@@ -242,13 +242,13 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
             }
         }
 
-        private class RecommendAdapter extends BaseQuickAdapter<RecipeListItem, BaseViewHolder> {
-            RecommendAdapter(ArrayList<RecipeListItem> recipeListItem) {
-                super(R.layout.li_recommend, recipeListItem);
+        private class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
+            RecommendAdapter(ArrayList<Recipe> recipe) {
+                super(R.layout.li_recommend, recipe);
             }
 
             @Override
-            protected void convert(BaseViewHolder helper, RecipeListItem item) {
+            protected void convert(BaseViewHolder helper, Recipe item) {
                 if (App.isServerAlive())
                     requestManager
                             .load(item.getRecipeImg())

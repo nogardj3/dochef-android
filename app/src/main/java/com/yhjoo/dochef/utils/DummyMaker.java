@@ -8,7 +8,7 @@ import com.yhjoo.dochef.classes.FAQ;
 import com.yhjoo.dochef.classes.Notice;
 import com.yhjoo.dochef.classes.Notification;
 import com.yhjoo.dochef.classes.PostThumbnail;
-import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.classes.Review;
 import com.yhjoo.dochef.classes.UserList;
 
@@ -52,7 +52,7 @@ public class DummyMaker {
 
             return (T) arrayList;
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPIES)) {
-            ArrayList<RecipeListItem> arrayList = new ArrayList<>();
+            ArrayList<Recipe> arrayList = new ArrayList<>();
 
             int[] img_recipies = {R.raw.dummy_recipe_0, R.raw.dummy_recipe_1, R.raw.dummy_recipe_2};
 
@@ -66,14 +66,14 @@ public class DummyMaker {
             for (int i = 1; i < 20; i ++) {
                 Random r = new Random();
 
-                arrayList.add(new RecipeListItem("요리" + i,
+                arrayList.add(new Recipe("요리" + i,
                         "요리사" + i,
                         "메세지" + i,
                         r.nextInt(1000),
                         Integer.toString(img_recipies[r.nextInt(3)]),
                         ingredients,
                         tags));
-                arrayList.add(new RecipeListItem("요리" + (i + 1),
+                arrayList.add(new Recipe("요리" + (i + 1),
                         "나",
                         "메세지" + (i + 1),
                         r.nextInt(1000),

@@ -128,17 +128,17 @@ public class PostDetailActivity extends BaseActivity {
         findViewById(R.id.post_other).setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(PostDetailActivity.this, v);
             // if(ismaster)
-            PostDetailActivity.this.getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
+            PostDetailActivity.this.getMenuInflater().inflate(R.menu.menu_post_owner, popup.getMenu());
             popup.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
-                    case R.id.menu_post_master_revise:
+                    case R.id.menu_post_owner_revise:
                         Intent intent = new Intent(PostDetailActivity.this, PostReviseActivity.class);
                         intent.putExtra("postid", post.getPostID())
                                 .putExtra("contents", post.getContents())
                                 .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + post.getPostImg());
                         startActivity(intent);
                         break;
-                    case R.id.menu_post_master_delete:
+                    case R.id.menu_post_owner_delete:
                         App.getAppInstance().showToast("삭제");
                         AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
                         builder.setMessage("삭제하시겠습니까?")

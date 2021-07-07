@@ -27,7 +27,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.HomeUserActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.SearchActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.classes.UserList;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
@@ -121,15 +121,15 @@ public class ResultFragment extends Fragment {
 
     private void loadList(final int lastID) {
         resultListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        ArrayList<RecipeListItem> recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
 
         switch (type) {
             case VIEWHOLDER_ITEM_RECIPE:
                 ArrayList<ResultItem> resultItems = new ArrayList<>();
 
-                for (int i = 0; i < recipeListItems.size(); i++) {
-                    resultItems.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, recipeListItems.get(i)));
+                for (int i = 0; i < recipes.size(); i++) {
+                    resultItems.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
                         resultItems.add(new ResultItem<>(VIEWHOLDER_AD));
@@ -167,8 +167,8 @@ public class ResultFragment extends Fragment {
             case VIEWHOLDER_ITEM_INGREDIENT:
                 ArrayList<ResultItem> resultItems2 = new ArrayList<>();
 
-                for (int i = 0; i < recipeListItems.size(); i++) {
-                    resultItems2.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, recipeListItems.get(i)));
+                for (int i = 0; i < recipes.size(); i++) {
+                    resultItems2.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
                         resultItems2.add(new ResultItem<>(VIEWHOLDER_AD));
@@ -182,8 +182,8 @@ public class ResultFragment extends Fragment {
             case VIEWHOLDER_ITEM_TAG:
                 ArrayList<ResultItem> resultItems3 = new ArrayList<>();
 
-                for (int i = 0; i < recipeListItems.size(); i++) {
-                    resultItems3.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, recipeListItems.get(i)));
+                for (int i = 0; i < recipes.size(); i++) {
+                    resultItems3.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
                         resultItems3.add(new ResultItem<>(VIEWHOLDER_AD));
@@ -235,11 +235,11 @@ public class ResultFragment extends Fragment {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM_RECIPE:
                     requestManager
-                            .load(((RecipeListItem) item.getContent()).getRecipeImg())
+                            .load(((Recipe) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resultrecipe_recipeimg));
-                    helper.setText(R.id.li_resultrecipe_title, ((RecipeListItem) item.getContent()).getTitle());
-                    helper.setText(R.id.li_resultrecipe_nickname, "By - " + ((RecipeListItem) item.getContent()).getNickName());
+                    helper.setText(R.id.li_resultrecipe_title, ((Recipe) item.getContent()).getTitle());
+                    helper.setText(R.id.li_resultrecipe_nickname, "By - " + ((Recipe) item.getContent()).getNickName());
                     break;
 
                 case VIEWHOLDER_ITEM_USER:
@@ -252,14 +252,14 @@ public class ResultFragment extends Fragment {
 
                 case VIEWHOLDER_ITEM_INGREDIENT:
                     requestManager
-                            .load(((RecipeListItem) item.getContent()).getRecipeImg())
+                            .load(((Recipe) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resultingredient_recipeimg));
-                    helper.setText(R.id.li_resultingredient_title, ((RecipeListItem) item.getContent()).getTitle());
-                    helper.setText(R.id.li_resultingredient_nickname, "By - " + ((RecipeListItem) item.getContent()).getNickName());
+                    helper.setText(R.id.li_resultingredient_title, ((Recipe) item.getContent()).getTitle());
+                    helper.setText(R.id.li_resultingredient_nickname, "By - " + ((Recipe) item.getContent()).getNickName());
 
                     ((FlexboxLayout) helper.getView(R.id.li_resultingredient_ingredients)).removeAllViews();
-                    ArrayList<String> ingredients = ((RecipeListItem) item.getContent()).getIngredients();
+                    ArrayList<String> ingredients = ((Recipe) item.getContent()).getIngredients();
                     for (int i = 0; i < ingredients.size(); i++) {
                         CustomTextView ingredienttext = new CustomTextView(mContext);
                         ingredienttext.setText(ingredients.get(i));
@@ -271,14 +271,14 @@ public class ResultFragment extends Fragment {
 
                 case VIEWHOLDER_ITEM_TAG:
                     requestManager
-                            .load(((RecipeListItem) item.getContent()).getRecipeImg())
+                            .load(((Recipe) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resulttag_recipeimg));
-                    helper.setText(R.id.li_resulttag_title, ((RecipeListItem) item.getContent()).getTitle());
-                    helper.setText(R.id.li_resulttag_nickname, "By - " + ((RecipeListItem) item.getContent()).getNickName());
+                    helper.setText(R.id.li_resulttag_title, ((Recipe) item.getContent()).getTitle());
+                    helper.setText(R.id.li_resulttag_nickname, "By - " + ((Recipe) item.getContent()).getNickName());
 
                     ((FlexboxLayout) helper.getView(R.id.li_resulttag_tags)).removeAllViews();
-                    ArrayList<String> tags = ((RecipeListItem) item.getContent()).getTags();
+                    ArrayList<String> tags = ((Recipe) item.getContent()).getTags();
                     for (int i = 0; i < tags.size(); i++) {
                         CustomTextView tagstext = new CustomTextView(mContext);
                         tagstext.setText(tags.get(i));

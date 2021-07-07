@@ -9,6 +9,9 @@ public class UserList {
     private final String userImg;
     @SerializedName("NICKNAME")
     private final String nickname;
+    /*
+
+     */
 
     public UserList(String userID, String userImg, String nickname) {
         this.userID = userID;

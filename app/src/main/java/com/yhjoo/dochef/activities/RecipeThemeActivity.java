@@ -19,7 +19,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class RecipeThemeActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-        ArrayList<RecipeListItem> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        ArrayList<Recipe> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
         for (int i = 0; i < arrayList.size(); i++) {
             recipeListItems.add(new ThemeItem(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
@@ -76,9 +76,9 @@ public class RecipeThemeActivity extends BaseActivity {
         private final int itemType;
         private final int spanSize;
 
-        private RecipeListItem content;
+        private Recipe content;
 
-        ThemeItem(int itemType, int spanSize, RecipeListItem content) {
+        ThemeItem(int itemType, int spanSize, Recipe content) {
             this.itemType = itemType;
             this.spanSize = spanSize;
             this.content = content;
@@ -93,7 +93,7 @@ public class RecipeThemeActivity extends BaseActivity {
             return spanSize;
         }
 
-        private RecipeListItem getContent() {
+        private Recipe getContent() {
             return content;
         }
 

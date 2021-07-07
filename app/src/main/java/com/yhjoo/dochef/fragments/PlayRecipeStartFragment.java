@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.fragments;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +10,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.percentlayout.widget.PercentRelativeLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.classes.RecipeItem;
+import com.yhjoo.dochef.classes.RecipeDetailPlay;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,25 +39,25 @@ public class PlayRecipeStartFragment extends Fragment {
         View view = inflater.inflate(R.layout.f_playrecipe_start, container, false);
         ButterKnife.bind(this, view);
 
-        RecipeItem recipeItem = (RecipeItem) getArguments().getSerializable("item");
+        RecipeDetailPlay recipeDetailPlay = (RecipeDetailPlay) getArguments().getSerializable("item");
 
         Glide.with(getContext())
-                .load(recipeItem.getRecipeImg())
+                .load(recipeDetailPlay.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
                 .into(recipeImage);
 
-        recipeTitle.setText(recipeItem.getTitle());
-        recipeExplain.setText(recipeItem.getExplain());
+        recipeTitle.setText(recipeDetailPlay.getTitle());
+        recipeExplain.setText(recipeDetailPlay.getExplain());
 
         recipeIngredients.removeAllViews();
-        for (int i = 0; i < recipeItem.getIngredients().length; i++) {
+        for (int i = 0; i < recipeDetailPlay.getIngredients().length; i++) {
             ConstraintLayout motherview = (ConstraintLayout) getActivity().getLayoutInflater().inflate(R.layout.li_ingredient, null);
             AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_product));
             view1.setTextColor(getResources().getColor(R.color.white,null));
-            view1.setText(recipeItem.getIngredients()[i]);
+            view1.setText(recipeDetailPlay.getIngredients()[i]);
             AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_quantity));
             view2.setTextColor(getResources().getColor(R.color.white,null));
-            view2.setText(recipeItem.getIngredients()[i]);
+            view2.setText(recipeDetailPlay.getIngredients()[i]);
 
             recipeIngredients.addView(motherview);
         }

@@ -2,7 +2,7 @@ package com.yhjoo.dochef.classes;
 
 import java.util.ArrayList;
 
-public class RecipeListItem {
+public class Recipe {
     private String title;
     private String nickName;
     private String explain;
@@ -11,7 +11,7 @@ public class RecipeListItem {
     private ArrayList<String> ingredients;
     private ArrayList<String> tags;
 
-    public RecipeListItem(String title, String nickName, String explain, int viewsCount, String recipeImg, ArrayList<String> ingredients, ArrayList<String> tags) {
+    public Recipe(String title, String nickName, String explain, int viewsCount, String recipeImg, ArrayList<String> ingredients, ArrayList<String> tags) {
         this.title = title;
         this.nickName = nickName;
         this.explain = explain;
@@ -21,7 +21,7 @@ public class RecipeListItem {
         this.tags = tags;
     }
 
-    public RecipeListItem(String title, String nickName, String explain, int viewsCount, String recipeImg) {
+    public Recipe(String title, String nickName, String explain, int viewsCount, String recipeImg) {
         this.title = title;
         this.nickName = nickName;
         this.explain = explain;

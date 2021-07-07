@@ -29,15 +29,27 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CommentActivity extends BaseActivity {
-    private final MODE current_mode = MODE.DEFAULT;
-    private final boolean is_mine = false;
     @BindView(R.id.comment_recycler)
     RecyclerView recyclerView;
     @BindView(R.id.footer_comment_edittext)
     AppCompatEditText editText;
     @BindView(R.id.footer_comment_clear)
     AppCompatImageView clearimageview;
+
+    enum MODE {DEFAULT, REVISE}
+
+    private final MODE current_mode = MODE.DEFAULT;
+    private final boolean is_mine = false;
     private CommentListAdapter commentListAdapter;
+
+    /*
+        TODO
+        1. is_mine -> 뷰 보이거나 기능 열거나
+        2. 타임 컨버터
+        3. revise 기능
+        4. delete 기능
+        5. retrofit 정리
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +70,7 @@ public class CommentActivity extends BaseActivity {
         commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
             PopupMenu popup = new PopupMenu(CommentActivity.this, view);
 //                    if(is_mine)
-            getMenuInflater().inflate(R.menu.menu_comment_master, popup.getMenu());
+            getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
             popup.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
 //                    case R.id.menu_comment_user_revise:
@@ -67,7 +79,7 @@ public class CommentActivity extends BaseActivity {
 //                    case R.id.menu_comment_user_delete:
 //                        break;
 
-                    case R.id.menu_comment_master_delete:
+                    case R.id.menu_comment_owner_delete:
                         AlertDialog.Builder builder = new AlertDialog.Builder(CommentActivity.this);
                         builder.setMessage("삭제하시겠습니까?")
                                 .setPositiveButton("확인", (dialog, which) -> {
@@ -108,14 +120,6 @@ public class CommentActivity extends BaseActivity {
         });
     }
 
-    /*
-        TODO
-        1. is_mine -> 뷰 보이거나 기능 열거나
-        2. 타임 컨버터
-        3. revise 기능
-        4. delete 기능
-        5. retrofit 정리
-    */
 
     @OnClick({R.id.footer_comment_ok, R.id.footer_comment_clear})
     void aa(View v) {
@@ -137,8 +141,6 @@ public class CommentActivity extends BaseActivity {
                 break;
         }
     }
-
-    enum MODE {DEFAULT, REVISE}
 
     private class CommentListAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
         CommentListAdapter() {

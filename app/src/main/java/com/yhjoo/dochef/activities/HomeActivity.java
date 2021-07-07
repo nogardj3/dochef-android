@@ -34,7 +34,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.PostThumbnail;
-import com.yhjoo.dochef.classes.User;
+import com.yhjoo.dochef.classes.UserDetail;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.ChefAuth;
@@ -66,7 +66,7 @@ public class HomeActivity extends BaseActivity {
     private SharedPreferences mSharedPreferences;
     private RetrofitServices.MyHomeService myHomeService;
     private JSONObject userInfoJson;
-    private User userInfo;
+    private UserDetail userDetailInfo;
     private Uri mImageUri;
 
     @Override
@@ -85,7 +85,7 @@ public class HomeActivity extends BaseActivity {
 
         try {
             userInfoJson = new JSONObject(mSharedPreferences.getString(getString(R.string.SHAREDPREFERENCE_USERINFO), null));
-            userInfo = new User(userInfoJson);
+            userDetailInfo = new UserDetail(userInfoJson);
             postListAdapter.setHeaderView(setheaderview());
         } catch (JSONException e) {
             e.printStackTrace();
@@ -175,20 +175,20 @@ public class HomeActivity extends BaseActivity {
     }
 
     private void setInfo() {
-        myHomeService.GetBasicInfoCall(userInfo.getUserID())
-                .enqueue(new BasicCallback<User>(HomeActivity.this) {
+        myHomeService.GetBasicInfoCall(userDetailInfo.getUserID())
+                .enqueue(new BasicCallback<UserDetail>(HomeActivity.this) {
                     @Override
-                    public void onResponse(Response<User> response) {
-                        userInfo = response.body();
+                    public void onResponse(Response<UserDetail> response) {
+                        userDetailInfo = response.body();
 
-                        if (userInfo != null) {
+                        if (userDetailInfo != null) {
                             postListAdapter.setHeaderView(setheaderview());
                             postListAdapter.setHeaderAndEmpty(true);
 
                             try {
-                                userInfoJson.put("NICKNAME", userInfo.getNickname());
-                                userInfoJson.put("PROFILE_IMAGE", userInfo.getUserImg());
-                                userInfoJson.put("INTRODUCTION", userInfo.getProfileText());
+                                userInfoJson.put("NICKNAME", userDetailInfo.getNickname());
+                                userInfoJson.put("PROFILE_IMAGE", userDetailInfo.getUserImg());
+                                userInfoJson.put("INTRODUCTION", userDetailInfo.getProfileText());
 
                                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                                 editor.putString(getString(R.string.SHAREDPREFERENCE_USERINFO), userInfoJson.toString());
@@ -210,15 +210,15 @@ public class HomeActivity extends BaseActivity {
 
         userimg = (AppCompatImageView) itemView.findViewById(R.id.home_userimg);
         Glide.with(HomeActivity.this)
-                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userInfo.getUserImg())
+                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userDetailInfo.getUserImg())
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).error(R.drawable.ic_person_black_24dp).circleCrop())
                 .into(userimg);
 
-        ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(userInfo.getNickname());
-        ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(userInfo.getProfileText());
-        ((AppCompatTextView) itemView.findViewById(R.id.home_recipecount)).setText(String.valueOf(userInfo.getRecipeCount()));
-        ((AppCompatTextView) itemView.findViewById(R.id.home_followercount)).setText(String.valueOf(userInfo.getFollowerCount()));
-        ((AppCompatTextView) itemView.findViewById(R.id.home_followingcount)).setText(String.valueOf(userInfo.getFollowingCount()));
+        ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(userDetailInfo.getNickname());
+        ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(userDetailInfo.getProfileText());
+        ((AppCompatTextView) itemView.findViewById(R.id.home_recipecount)).setText(String.valueOf(userDetailInfo.getRecipeCount()));
+        ((AppCompatTextView) itemView.findViewById(R.id.home_followercount)).setText(String.valueOf(userDetailInfo.getFollowerCount()));
+        ((AppCompatTextView) itemView.findViewById(R.id.home_followingcount)).setText(String.valueOf(userDetailInfo.getFollowingCount()));
         ((AppCompatButton) itemView.findViewById(R.id.home_button)).setText("프로필 수정");
         revise_Icons.add(itemView.findViewById(R.id.home_userimg_revise));
         revise_Icons.add(itemView.findViewById(R.id.home_nickname_revise));
@@ -286,19 +286,19 @@ public class HomeActivity extends BaseActivity {
 
         itemView.findViewById(R.id.home_recipelayout).setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, RecipeListActivity.class);
-            intent.putExtra("UserID", userInfo.getUserID());
+            intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
         itemView.findViewById(R.id.home_followerlayout).setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class);
             intent.putExtra("mode", FollowListActivity.MODE.FOLLOWER);
-            intent.putExtra("UserID", userInfo.getUserID());
+            intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
         itemView.findViewById(R.id.home_followinglayout).setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class);
             intent.putExtra("mode", FollowListActivity.MODE.FOLLOWING);
-            intent.putExtra("UserID", userInfo.getUserID());
+            intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
 

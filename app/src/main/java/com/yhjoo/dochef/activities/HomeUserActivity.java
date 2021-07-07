@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.PostThumbnail;
-import com.yhjoo.dochef.classes.User;
+import com.yhjoo.dochef.classes.UserDetail;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.ChefAuth;
@@ -112,9 +112,9 @@ public class HomeUserActivity extends BaseActivity {
         }
 
         userHomeService.GetBasicInfoCall(getBasicOptionMap)
-                .enqueue(new BasicCallback<User>(HomeUserActivity.this) {
+                .enqueue(new BasicCallback<UserDetail>(HomeUserActivity.this) {
                     @Override
-                    public void onResponse(Response<User> response) {
+                    public void onResponse(Response<UserDetail> response) {
                         postListAdapter.setHeaderView(setheaderview(response.body()));
                         postListAdapter.setHeaderAndEmpty(true);
 
@@ -126,60 +126,60 @@ public class HomeUserActivity extends BaseActivity {
                 });
     }
 
-    View setheaderview(User userInfo) {
+    View setheaderview(UserDetail userDetailInfo) {
         View itemView = getLayoutInflater().inflate(R.layout.h_home, (ViewGroup) recyclerView.getParent(), false);
 
         Glide.with(HomeUserActivity.this)
-                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userInfo.getUserImg())
+                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userDetailInfo.getUserImg())
                 .apply(RequestOptions.circleCropTransform())
                 .into((AppCompatImageView) itemView.findViewById(R.id.home_userimg));
 
-        ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(userInfo.getNickname());
-        getSupportActionBar().setTitle(userInfo.getNickname());
-        ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(userInfo.getProfileText());
-        ((AppCompatTextView) itemView.findViewById(R.id.home_recipecount)).setText(String.valueOf(userInfo.getRecipeCount()));
-        ((AppCompatTextView) itemView.findViewById(R.id.home_followercount)).setText(String.valueOf(userInfo.getFollowerCount()));
-        ((AppCompatTextView) itemView.findViewById(R.id.home_followingcount)).setText(String.valueOf(userInfo.getFollowingCount()));
+        ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(userDetailInfo.getNickname());
+        getSupportActionBar().setTitle(userDetailInfo.getNickname());
+        ((AppCompatTextView) itemView.findViewById(R.id.home_profiletext)).setText(userDetailInfo.getProfileText());
+        ((AppCompatTextView) itemView.findViewById(R.id.home_recipecount)).setText(String.valueOf(userDetailInfo.getRecipeCount()));
+        ((AppCompatTextView) itemView.findViewById(R.id.home_followercount)).setText(String.valueOf(userDetailInfo.getFollowerCount()));
+        ((AppCompatTextView) itemView.findViewById(R.id.home_followingcount)).setText(String.valueOf(userDetailInfo.getFollowingCount()));
 
         itemView.findViewById(R.id.home_recipelayout).setOnClickListener(v -> {
             Intent intent = new Intent(HomeUserActivity.this, RecipeListActivity.class);
-            intent.putExtra("UserID", userInfo.getUserID());
+            intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         });
         itemView.findViewById(R.id.home_followerlayout).setOnClickListener(v -> {
             Intent intent = new Intent(HomeUserActivity.this, FollowListActivity.class);
             intent.putExtra("mode", FollowListActivity.MODE.FOLLOWER);
-            intent.putExtra("UserID", userInfo.getUserID());
+            intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         });
         itemView.findViewById(R.id.home_followinglayout).setOnClickListener(v -> {
             Intent intent = new Intent(HomeUserActivity.this, FollowListActivity.class);
             intent.putExtra("mode", FollowListActivity.MODE.FOLLOWING);
-            intent.putExtra("UserID", userInfo.getUserID());
+            intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         });
 
         if (mSharedPreferences.getBoolean(getString(R.string.SHAREDPREFERENCE_AUTOLOGIN), false)) {
-            if (userInfo.getIs_following() == 0 || userInfo.getIs_following() == 1) {
+            if (userDetailInfo.getIs_following() == 0 || userDetailInfo.getIs_following() == 1) {
                 AppCompatButton followingButton = ((AppCompatButton) itemView.findViewById(R.id.home_button));
-                followingButton.setText(userInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");
+                followingButton.setText(userDetailInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");
                 followingButton.setVisibility(View.VISIBLE);
 
                 followingButton.setOnClickListener(v -> {
 
-                    int follow = userInfo.getIs_following();
+                    int follow = userDetailInfo.getIs_following();
 
-                    userInfo.setIs_following(userInfo.getIs_following() >= 1 ? 0 : 1);
+                    userDetailInfo.setIs_following(userDetailInfo.getIs_following() >= 1 ? 0 : 1);
 
-                    followingButton.setText(userInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");
+                    followingButton.setText(userDetailInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");
 
                     userHomeService.FollowCall(UserID, follow)
                             .enqueue(new BasicCallback<JSONObject>(HomeUserActivity.this) {
                                 @Override
                                 public void onResponse(Response<JSONObject> response) {
                                     try {
-                                        userInfo.setIs_following(response.body().getInt("follow"));
-                                        followingButton.setText(userInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");
+                                        userDetailInfo.setIs_following(response.body().getInt("follow"));
+                                        followingButton.setText(userDetailInfo.getIs_following() == 1 ? "팔로ing 누르면 언팔" : "팔로우하기");
                                     } catch (JSONException e) {
                                         e.printStackTrace();
                                     }

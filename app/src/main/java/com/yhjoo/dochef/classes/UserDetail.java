@@ -5,9 +5,15 @@ import com.google.gson.annotations.SerializedName;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class User {
+public class UserDetail {
     @SerializedName("USER_ID")
     private String userID;
+    @SerializedName("PROFILE_IMAGE")
+    private String userImg;
+    @SerializedName("NICKNAME")
+    private String nickname;
+    @SerializedName("INTRODUCTION")
+    private String profileText;
     @SerializedName("RECIPE_COUNT")
     private int recipeCount;
     @SerializedName("FOLLOWER_COUNT")
@@ -16,14 +22,17 @@ public class User {
     private int followingCount;
     @SerializedName("IS_FOLLOWING")
     private int is_following;
-    @SerializedName("NICKNAME")
-    private String nickname;
-    @SerializedName("INTRODUCTION")
-    private String profileText;
-    @SerializedName("PROFILE_IMAGE")
-    private String userImg;
 
-    public User(String userID, int recipeCount, int followerCount, int followingCount, int isfollowing, String nickname, String profileText) {
+    /*
+    token
+    userEmail
+    nickName
+    user_image_url
+    introduction
+    followers
+     */
+
+    public UserDetail(String userID, int recipeCount, int followerCount, int followingCount, int isfollowing, String nickname, String profileText) {
         this.userID = userID;
         this.recipeCount = recipeCount;
         this.followerCount = followerCount;
@@ -33,7 +42,7 @@ public class User {
         this.profileText = profileText;
     }
 
-    public User(JSONObject userInfo) {
+    public UserDetail(JSONObject userInfo) {
         try {
             userID = userInfo.getString("USER_ID");
             nickname = userInfo.getString("NICKNAME");

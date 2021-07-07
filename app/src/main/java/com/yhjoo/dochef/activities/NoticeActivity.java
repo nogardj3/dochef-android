@@ -14,25 +14,31 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Notice;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class NoticeActivity extends BaseActivity {
-    private final int NOTICE_DEPTH_0 = 0;
-    private final int NOTICE_CONTENTS = 1;
-    private final ArrayList<MultiItemEntity> announces = new ArrayList<>();
     @BindView(R.id.notice_recycler)
     RecyclerView recyclerView;
 
+    private final int NOTICE_DEPTH_0 = 0;
+    private final int NOTICE_CONTENTS = 1;
+
+    private final ArrayList<MultiItemEntity> noticeList = new ArrayList<>();
+    private NoticeListAdapter noticeListAdapter;
+
     /*
         TODO
-        1. retrofit 구현
-        2. expandable 클래스로 빼보기
     */
 
     @Override
@@ -45,19 +51,48 @@ public class NoticeActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (App.isServerAlive()) {
-        } else {
-            ArrayList<Notice> response = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
-            for (Notice item : response) {
-                Title Title = new Title(item.title);
-                Title.addSubItem(new Contents(item.contents));
-                announces.add(Title);
-            }
-        }
-
-        NoticeListAdapter noticeListAdapter = new NoticeListAdapter(announces);
+        noticeListAdapter = new NoticeListAdapter(noticeList);
         recyclerView.setAdapter(noticeListAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (App.isServerAlive())
+            getListFromServer();
+        else
+            getListFromDummy();
+    }
+
+    private void getListFromServer() {
+        RetrofitServices.BasicService basicService =
+                RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
+
+        basicService.getNotice().enqueue(new Callback<ArrayList<Notice>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Notice>> call, Response<ArrayList<Notice>> res) {
+                ArrayList<Notice> resList = res.body();
+                for (Notice item : resList) {
+                    Title title = new Title(item.title);
+                    title.addSubItem(new Contents(item.contents));
+                    noticeList.add(title);
+                }
+
+                noticeListAdapter.setNewData(noticeList);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Notice>> call, Throwable t) {
+                t.printStackTrace();
+            }
+        });
+    }
+
+    private void getListFromDummy(){
+        ArrayList<Notice> response = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
+        for (Notice item : response) {
+            Title title = new Title(item.title);
+            title.addSubItem(new Contents(item.contents));
+            noticeList.add(title);
+        }
+        noticeListAdapter.setNewData(noticeList);
     }
 
     private class Title extends AbstractExpandableItem<Contents> implements MultiItemEntity {

@@ -5,7 +5,7 @@
     <string name="SHAREDPREFERENCE_USERINFO">UserInfo</string>
 
     <!-- server-->
-    <string name="server_url">http://localhost:4000/chef/</string>
+    <string name="server_url">http://10.0.2.2:4000/chef/</string>
 
     <!-- admob-->
     <string name="admob_app_id">ca-app-pub-2434314226925480~8023298125</string>

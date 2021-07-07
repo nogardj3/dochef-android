@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.ReviewWriteActivity;
-import com.yhjoo.dochef.classes.RecipeItem;
+import com.yhjoo.dochef.classes.RecipeDetailPlay;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,19 +40,19 @@ public class PlayRecipeEndFragment extends Fragment {
         View view = inflater.inflate(R.layout.f_playrecipe_item, container, false);
         ButterKnife.bind(this, view);
 
-        RecipeItem recipeItem = (RecipeItem) getArguments().getSerializable("item");
+        RecipeDetailPlay recipeDetailPlay = (RecipeDetailPlay) getArguments().getSerializable("item");
 
         Glide.with(getContext())
-                .load(recipeItem.getRecipeImg())
+                .load(recipeDetailPlay.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
                 .into(recipeImage);
 
-        recipeExplain.setText(recipeItem.getExplain());
+        recipeExplain.setText(recipeDetailPlay.getExplain());
 
         recipeTags.removeAllViews();
-        for (int i = 0; i < recipeItem.getTags().length; i++) {
+        for (int i = 0; i < recipeDetailPlay.getTags().length; i++) {
             AppCompatTextView textView = new AppCompatTextView(getContext());
-            textView.setText("#" + recipeItem.getTags()[i] + " ");
+            textView.setText("#" + recipeDetailPlay.getTags()[i] + " ");
             textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
 
             recipeTags.addView(textView);

@@ -96,10 +96,10 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                 case R.id.timeline_other:
                     PopupMenu popup = new PopupMenu(MainTimelineFragment.this.getContext(), view12);
                     //if(ismaster)
-                    MainTimelineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_master, popup.getMenu());
+                    MainTimelineFragment.this.getActivity().getMenuInflater().inflate(R.menu.menu_post_owner, popup.getMenu());
                     popup.setOnMenuItemClickListener(item -> {
                         switch (item.getItemId()) {
-                            case R.id.menu_post_master_revise:
+                            case R.id.menu_post_owner_revise:
                                 Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostReviseActivity.class);
                                 intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
                                         .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
@@ -107,7 +107,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                                 startActivity(intent);
 
                                 break;
-                            case R.id.menu_post_master_delete:
+                            case R.id.menu_post_owner_delete:
                                 AlertDialog.Builder builder = new AlertDialog.Builder(MainTimelineFragment.this.getContext());
                                 builder.setMessage("삭제하시겠습니까?")
                                         .setPositiveButton("확인", (dialog, which) -> {

@@ -12,7 +12,7 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="도움말" />
+        app:title="FAQ" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/faq_recycler"

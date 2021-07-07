@@ -4,25 +4,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tos_toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:theme="@style/BaseTheme.Toolbar"
-        app:layout_constraintTop_toTopOf="parent"
-        app:title="이용약관" />
+    <include
+        layout="@layout/m_toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tos_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/base_toolbar">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tos_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" />
     </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

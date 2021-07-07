@@ -23,7 +23,6 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -35,7 +34,7 @@ import com.github.florent37.viewanimator.ViewAnimator;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.RecipeItem;
+import com.yhjoo.dochef.classes.RecipeDetailPlay;
 import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeStartFragment;
@@ -67,7 +66,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     @BindView(R.id.playrecipe_tts)
     AppCompatTextView tts;
 
-    private ArrayList<RecipeItem> recipeItems;
+    private ArrayList<RecipeDetailPlay> recipeDetailPlays;
     private TextToSpeech textToSpeech;
     private SensorManager m_clsSensorManager;
     private Sensor m_clsSensor;
@@ -96,69 +95,69 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         String[] tags = {"태그1", "태그2", "태그3", "태그4", "태그5"};
         timerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
 
-        recipeItems = new ArrayList<>(Arrays.asList(
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_START),
+        recipeDetailPlays = new ArrayList<>(Arrays.asList(
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_START),
                         R.drawable.tempimg_playrecipestart,
                         "치즈김치볶음밥!! / 백종원 김치볶음밥, 묵은지해결",
                         ingredients,
                         "김치는\n미리\n썰어요\n",
                         0, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe1,
                         null,
                         ingredients,
                         "햄과\n 대파1줄을\n 총총\n 썰어주세요",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe2,
                         null,
                         ingredients,
                         "팬에 기름을 넉넉히 두르신후 파를 넣고 볶아서 파기름을 내주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe3,
                         null,
                         ingredients,
                         "파기름을 냈으면 김치를 넣고 볶아주신뒤, 고추장1큰술을 넣고 잘 섞어주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
 
-                new RecipeItem(getResources().getInteger(R.integer.RECIPEITEM_TYPE_FINISH),
+                new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_FINISH),
                         R.drawable.tempimg_playrecipefinish,
                         null,
                         ingredients,
@@ -168,13 +167,13 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
         RecipeViewPagerAdapter recipeViewPagerAdapter = new RecipeViewPagerAdapter(getSupportFragmentManager());
 
-        for (int i = 0; i < recipeItems.size(); i++) {
+        for (int i = 0; i < recipeDetailPlays.size(); i++) {
             if (i == 0)
-                recipeViewPagerAdapter.addFragment(new PlayRecipeStartFragment(), recipeItems.get(i));
-            else if (i == recipeItems.size() - 1)
-                recipeViewPagerAdapter.addFragment(new PlayRecipeEndFragment(), recipeItems.get(i));
+                recipeViewPagerAdapter.addFragment(new PlayRecipeStartFragment(), recipeDetailPlays.get(i));
+            else if (i == recipeDetailPlays.size() - 1)
+                recipeViewPagerAdapter.addFragment(new PlayRecipeEndFragment(), recipeDetailPlays.get(i));
             else
-                recipeViewPagerAdapter.addFragment(new PlayRecipeItemFragment(), recipeItems.get(i));
+                recipeViewPagerAdapter.addFragment(new PlayRecipeItemFragment(), recipeDetailPlays.get(i));
         }
 
 
@@ -197,7 +196,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
             @Override
             public void onPageSelected(int position) {
-                timerGroup.setVisibility(position == 0 || position == recipeItems.size() - 1 ? View.GONE : View.VISIBLE);
+                timerGroup.setVisibility(position == 0 || position == recipeDetailPlays.size() - 1 ? View.GONE : View.VISIBLE);
 
                 if (timerSet) {
                     timerSet = false;
@@ -213,13 +212,13 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         });
 
         PodSlider podSlider = (PodSlider) findViewById(R.id.playrecipe_podslider);
-        podSlider.setNumberOfPods(recipeItems.size());
+        podSlider.setNumberOfPods(recipeDetailPlays.size());
         podSlider.setUpWithViewPager(viewpager);
         ArrayList<String> arrayList = new ArrayList<>();
-        for (int i = 0; i < recipeItems.size(); i++) {
+        for (int i = 0; i < recipeDetailPlays.size(); i++) {
             if (i == 0)
                 arrayList.add("S");
-            else if (i == recipeItems.size() - 1)
+            else if (i == recipeDetailPlays.size() - 1)
                 arrayList.add("E");
             else
                 arrayList.add(String.valueOf(i));
@@ -380,7 +379,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
                             switch (rs[0]) {
                                 case "다음":
-                                    if (viewpager.getCurrentItem() != recipeItems.size() - 1)
+                                    if (viewpager.getCurrentItem() != recipeDetailPlays.size() - 1)
                                         viewpager.setCurrentItem(viewpager.getCurrentItem() + 1);
                                     break;
                                 case "이전":
@@ -388,15 +387,15 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                                         viewpager.setCurrentItem(viewpager.getCurrentItem() - 1);
                                     break;
                                 case "재료":
-                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeItems.size() - 1) {
+                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeDetailPlays.size() - 1) {
                                         String temp = "";
-                                        for (int i = 0; i < recipeItems.get(viewpager.getCurrentItem()).getIngredients().length; i++)
-                                            temp += (recipeItems.get(viewpager.getCurrentItem()).getIngredients()[i] + " ");
+                                        for (int i = 0; i < recipeDetailPlays.get(viewpager.getCurrentItem()).getIngredients().length; i++)
+                                            temp += (recipeDetailPlays.get(viewpager.getCurrentItem()).getIngredients()[i] + " ");
                                         textToSpeech.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
                                     }
                                     break;
                                 case "시작":
-                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeItems.size() - 1)
+                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeDetailPlays.size() - 1)
                                         starttimer();
                                     break;
                             }
@@ -432,7 +431,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
             super(Fm);
         }
 
-        private void addFragment(Fragment fragment, RecipeItem item) {
+        private void addFragment(Fragment fragment, RecipeDetailPlay item) {
             Bundle b = new Bundle();
             b.putSerializable("item", item);
             fragment.setArguments(b);

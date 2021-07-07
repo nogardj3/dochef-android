@@ -1,8 +1,13 @@
 package com.yhjoo.dochef.classes;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Notice {
+    @SerializedName("title")
     public final String title;
+    @SerializedName("contents")
     public final String contents;
+    @SerializedName("datetime")
     public final long dateTime;
 
     public Notice(String title, String contents, long dateTime) {

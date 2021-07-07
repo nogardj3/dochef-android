@@ -25,7 +25,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.classes.RecipeListItem;
+import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ public class MainInitFragment extends Fragment {
     @BindView(R.id.main_adviewpager)
     ViewPager viewPager;
 
-    ArrayList<RecipeListItem> recipeListItems;
+    ArrayList<Recipe> recipes;
 
     /*
         TODO
@@ -71,10 +71,10 @@ public class MainInitFragment extends Fragment {
 
         }
         else
-            recipeListItems = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+            recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        RecommendAdapter recommendAdapter = new RecommendAdapter(recipeListItems, Glide.with(getContext()));
+        RecommendAdapter recommendAdapter = new RecommendAdapter(recipes, Glide.with(getContext()));
         recyclerView.setAdapter(recommendAdapter);
         recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeDetailActivity.class)));
         view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeThemeActivity.class)));
@@ -124,16 +124,16 @@ public class MainInitFragment extends Fragment {
         }
     }
 
-    private class RecommendAdapter extends BaseQuickAdapter<RecipeListItem, BaseViewHolder> {
+    private class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
         private final RequestManager requestManager;
 
-        RecommendAdapter(ArrayList<RecipeListItem> recipeListItem, RequestManager requestManager) {
-            super(R.layout.li_recommend, recipeListItem);
+        RecommendAdapter(ArrayList<Recipe> recipe, RequestManager requestManager) {
+            super(R.layout.li_recommend, recipe);
             this.requestManager = requestManager;
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, RecipeListItem item) {
+        protected void convert(BaseViewHolder helper, Recipe item) {
             if(App.isServerAlive())
                 requestManager
                         .load(item.getRecipeImg())

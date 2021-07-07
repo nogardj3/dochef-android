@@ -2,7 +2,7 @@ package com.yhjoo.dochef.classes;
 
 import com.google.gson.annotations.SerializedName;
 
-public class RecipeOverview {
+public class RecipeDetail {
     @SerializedName("RECIPE_ID")
     private int recipeID;
     @SerializedName("USER_ID")

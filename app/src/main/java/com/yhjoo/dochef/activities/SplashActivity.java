@@ -28,6 +28,7 @@ public class SplashActivity extends BaseActivity {
         TODO
         1. 서버 상태 확인하기
         2. 로그인 여부 확인
+        3. 애니메이션 다시
     */
 
     @Override
@@ -38,10 +39,38 @@ public class SplashActivity extends BaseActivity {
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+//        Retrofit retrofit = new Retrofit.Builder()
+//                .baseUrl(getString(R.string.server_url))
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build();
+//
+//        RetrofitServices.BasicService basicService = retrofit.create(RetrofitServices.BasicService.class);
+//
+//        basicService.getNotice().enqueue(new Callback<ArrayList<Notice>>() {
+//            @Override
+//            public void onResponse(Call<ArrayList<Notice>> call, Response<ArrayList<Notice>> res) {
+//                ArrayList<Notice> aa = res.body();
+//                for (Notice item :
+//                        aa) {
+//                    Utils.log(item.getContents(), item.getTitle(), Long.toString(item.getDateTime()));
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ArrayList<Notice>> call, Throwable t) {
+//                t.printStackTrace();
+//            }
+//        });
+
+
+
 //        Observable.timer(2, TimeUnit.SECONDS)
 //                .subscribeOn(AndroidSchedulers.mainThread())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(count -> checkInternet());
+
+
+
     }
 
     @Override
@@ -56,20 +85,20 @@ public class SplashActivity extends BaseActivity {
 
         ViewAnimator.animate(logo)
                 .alpha(0.0f, 1.0f)
-                .duration(500)
+                .duration(100)
                 .andAnimate(logo)
                 .translationY(-1000, 0)
-                .duration(800)
+                .duration(100)
                 .decelerate()
                 .thenAnimate(logo)
                 .swing()
-                .duration(600)
+                .duration(100)
                 .thenAnimate(logo2)
                 .alpha(0.0f, 1.0f)
                 .accelerate()
-                .duration(400)
+                .duration(100)
                 .thenAnimate(logo2)
-                .duration(200)
+                .duration(100)
                 .onStop(this::checkInternet)
                 .start();
     }

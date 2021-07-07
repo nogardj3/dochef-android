@@ -24,8 +24,8 @@ import com.viewpagerindicator.CirclePageIndicator;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Comment;
-import com.yhjoo.dochef.classes.RecipeListItem;
-import com.yhjoo.dochef.classes.RecipeOverview;
+import com.yhjoo.dochef.classes.Recipe;
+import com.yhjoo.dochef.classes.RecipeDetail;
 import com.yhjoo.dochef.classes.Review;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
@@ -45,7 +45,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecipeDetailActivity extends BaseActivity {
     private final int RecipeID = 1;
-    private RecipeOverview recipeOverview;
+    private RecipeDetail recipeDetail;
 
     /*
         TODO
@@ -65,10 +65,10 @@ public class RecipeDetailActivity extends BaseActivity {
 
         RetrofitServices.OverViewService overViewService = retrofit.create(RetrofitServices.OverViewService.class);
 
-        overViewService.LoadOverViewCall(RecipeID).enqueue(new Callback<RecipeOverview>() {
+        overViewService.LoadOverViewCall(RecipeID).enqueue(new Callback<RecipeDetail>() {
             @Override
-            public void onResponse(Call<RecipeOverview> call, Response<RecipeOverview> response1) {
-                recipeOverview = response1.body();
+            public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response1) {
+                recipeDetail = response1.body();
                 overViewService.LoadCommentCall(RecipeID)
                         .enqueue(new Callback<ArrayList<Comment>>() {
                             @Override
@@ -88,7 +88,7 @@ public class RecipeDetailActivity extends BaseActivity {
             }
 
             @Override
-            public void onFailure(Call<RecipeOverview> call, Throwable t) {
+            public void onFailure(Call<RecipeDetail> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -100,18 +100,18 @@ public class RecipeDetailActivity extends BaseActivity {
                     new ArrayList<>(Arrays.asList(R.drawable.tempimg_playrecipestart, R.drawable.tempimg_playrecipe1, R.drawable.tempimg_playrecipe2, R.drawable.tempimg_playrecipe3, R.drawable.tempimg_playrecipe4, R.drawable.tempimg_playrecipefinish)), Glide.with(this)));
             ((CirclePageIndicator) findViewById(R.id.recipedetail_recipeimgs_indicator)).setViewPager(((ViewPager) findViewById(R.id.recipedetail_recipeimgs)));
 
-            ((AppCompatTextView) findViewById(R.id.recipedetail_recipetitle)).setText(recipeOverview.getTitle());
+            ((AppCompatTextView) findViewById(R.id.recipedetail_recipetitle)).setText(recipeDetail.getTitle());
 
             Glide.with(this)
-                    .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + recipeOverview.getProducerID())
+                    .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + recipeDetail.getProducerID())
                     .apply(RequestOptions.circleCropTransform())
                     .into((AppCompatImageView) findViewById(R.id.recipedetail_userimg));
 
-            ((AppCompatTextView) findViewById(R.id.recipedetail_nickname)).setText(recipeOverview.getProducerName());
+            ((AppCompatTextView) findViewById(R.id.recipedetail_nickname)).setText(recipeDetail.getProducerName());
 
-            ((AppCompatTextView) findViewById(R.id.recipedetail_explain)).setText(recipeOverview.getSubstance());
+            ((AppCompatTextView) findViewById(R.id.recipedetail_explain)).setText(recipeDetail.getSubstance());
 
-            JSONArray tagsArray = new JSONArray(recipeOverview.getTag());
+            JSONArray tagsArray = new JSONArray(recipeDetail.getTag());
 
             for (int i = 0; i < tagsArray.length(); i++) {
                 AppCompatTextView textView = new AppCompatTextView(this);
@@ -126,7 +126,7 @@ public class RecipeDetailActivity extends BaseActivity {
 
             ((FlexboxLayout) findViewById(R.id.recipedetail_ingredients)).removeAllViews();
 
-            JSONArray aa = new JSONArray(recipeOverview.getIngredients());
+            JSONArray aa = new JSONArray(recipeDetail.getIngredients());
             for (int i = 0; i < aa.length(); i++) {
                 ViewGroup motherview = (ViewGroup) getLayoutInflater().inflate(R.layout.li_ingredient, null);
                 AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_product));
@@ -195,16 +195,16 @@ public class RecipeDetailActivity extends BaseActivity {
         }
     }
 
-    private class RecommendAdapter extends BaseQuickAdapter<RecipeListItem, BaseViewHolder> {
+    private class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
         private final RequestManager requestManager;
 
-        RecommendAdapter(ArrayList<RecipeListItem> recipeListItem, RequestManager requestManager) {
-            super(R.layout.li_recommend, recipeListItem);
+        RecommendAdapter(ArrayList<Recipe> recipe, RequestManager requestManager) {
+            super(R.layout.li_recommend, recipe);
             this.requestManager = requestManager;
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, RecipeListItem item) {
+        protected void convert(BaseViewHolder helper, Recipe item) {
             requestManager.load(item.getRecipeImg())
                     .apply(RequestOptions.centerCropTransform())
                     .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
