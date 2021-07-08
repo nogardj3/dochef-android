@@ -18,26 +18,13 @@ public abstract class BasicCallback<T> implements Callback<T> {
         if (headers.get("err") != null) {
             switch (Integer.parseInt(headers.get("err"))) {
                 case 110:
-                    //DoChef.getAppInstance().showToast();
-                    onFailure();
-                    break;
                 case 111:
-                    //DoChef.getAppInstance().showToast(context.getString(R.string.failed_loginfirst));
-                    onFailure();
-                    break;
                 case 801:
-                    onFailure();
-                    break;
                 case 828:
-                    //DoChef.getAppInstance().showToast(context.getString(R.string.auth_err1));
-                    onFailure();
-                    break;
                 case 999:
-                    //DoChef.getAppInstance().showToast(context.getString(R.string.failed_login_unknown));
                     onFailure();
                     break;
                 default:
-                    onResponse(response, Integer.parseInt(headers.get("err")));
                     break;
             }
         } else {
@@ -48,7 +35,6 @@ public abstract class BasicCallback<T> implements Callback<T> {
     @Override
     public void onFailure(Call<T> call, Throwable t) {
         t.printStackTrace();
-        //DoChef.getAppInstance().showToast(context.getString(R.string.failed_connection));
         onFailure();
     }
 

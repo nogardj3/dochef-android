@@ -30,7 +30,6 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.CommentActivity;
 import com.yhjoo.dochef.activities.HomeActivity;
-import com.yhjoo.dochef.activities.HomeUserActivity;
 import com.yhjoo.dochef.activities.PostDetailActivity;
 import com.yhjoo.dochef.activities.PostReviseActivity;
 import com.yhjoo.dochef.classes.Post;
@@ -202,7 +201,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
         @Override
         protected void convert(BaseViewHolder helper, Post item) {
             requestManager
-                    .load("getString(R.string.profile_image_storage_url)" + item.getUserImg())
+                    .load(getString(R.string.storage_image_url_profile) + item.getUserImg())
 //                    .apply(RequestOptions.placeholderOf(getContext().getDrawable(R.raw.dummy_profile_0)).centerCrop())
                     .into((AppCompatImageView) helper.getView(R.id.timeline_userimg));
 

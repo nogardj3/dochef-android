@@ -44,6 +44,12 @@ public class BaseActivity extends AppCompatActivity {
         return ret;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        progressOFF();
+    }
+
     public void progressON(Activity activity) {
 
         if (activity == null || activity.isFinishing()) {

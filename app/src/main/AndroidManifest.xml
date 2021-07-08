@@ -125,11 +125,6 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.HomeUserActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
             android:name="com.yhjoo.dochef.activities.PostWriteActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />

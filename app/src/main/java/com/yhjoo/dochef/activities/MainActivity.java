@@ -163,7 +163,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onResume();
 
         if (App.isServerAlive()) {
-            userName.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, HomeActivity.class)));
+            userName.setOnClickListener(v -> {
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                intent.putExtra("MODE",HomeActivity.MODE.MY);
+                startActivity(intent);
+            });
 
             try {
                 SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -174,7 +178,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 userName.setText(userInfo.getString("nickname"));
 
                 Glide.with(this)
-                        .load("getString(R.string.profile_image_storage_url)" + userInfo.get("profile_image_url"))
+                        .load(getString(R.string.storage_image_url_profile) + userInfo.get("profile_image_url"))
                         .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile))
                         .into(userImage);
 
@@ -245,7 +249,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.main_nav_myhome) {
-            startActivity(new Intent(MainActivity.this, HomeActivity.class));
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            intent.putExtra("MODE",HomeActivity.MODE.MY);
+            startActivity(intent);
         } else if (id == R.id.main_nav_myrecipe) {
             startActivity(new Intent(MainActivity.this, RecipeListActivity.class));
         } else if (id == R.id.main_nav_notification) {

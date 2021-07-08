@@ -38,7 +38,7 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MainInitFragment extends Fragment {
-    private FMainInitBinding binding;
+    FMainInitBinding binding;
 
     @BindView(R.id.main_adviewpager)
     ViewPager viewPager;

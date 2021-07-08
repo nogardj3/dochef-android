@@ -79,7 +79,7 @@ public class Utils {
         else if (diff_sec / 60 / 60 / 24 < 7)
             return (diff_sec / 60 / 60 / 24) + "일 전";
         else{
-            SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             return formatter.format(new Date(millis));
         }
     }

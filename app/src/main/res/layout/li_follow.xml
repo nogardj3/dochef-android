@@ -24,20 +24,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="10dp"
         android:textStyle="bold"
         app:layout_constraintLeft_toRightOf="@+id/li_follow_userimg"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         tools:text="닉네임" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/li_follow_recipecount"
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/li_followcancel_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintLeft_toLeftOf="@+id/li_follow_nickname"
-        app:layout_constraintTop_toBottomOf="@+id/li_follow_nickname"
-        tools:text="레시피 : 10" />
+        android:layout_marginEnd="10dp"
+        android:text="팔로우"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/li_follow_btn"
@@ -45,9 +52,10 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:text="팔로우"
-        android:textColor="@color/white"
+        android:textColor="@color/grey_text"
         android:textStyle="bold"
-        app:backgroundTint="@color/colorPrimary"
+        android:visibility="gone"
+        app:backgroundTint="@color/grey"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

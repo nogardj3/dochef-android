@@ -51,9 +51,7 @@ public class AccountActivity extends BaseActivity {
 
     /*
         TODO
-        1. Signin, Signup, SignupNick, FindPW 등등 기능 구현
-        2. 서버 데이터 추가 및 기능 구현
-        3. retrofit 구현
+        1. FindPW 기능 구현
     */
 
     @Override
@@ -62,16 +60,9 @@ public class AccountActivity extends BaseActivity {
         binding = AAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        mAuth = FirebaseAuth.getInstance();
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-
-        accountService = new Retrofit.Builder()
-                .baseUrl(getString(R.string.server_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(RetrofitServices.AccountService.class);
+        mAuth = FirebaseAuth.getInstance();
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -80,17 +71,15 @@ public class AccountActivity extends BaseActivity {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        if (mAuth.getCurrentUser() != null)
-            System.out.println(mAuth.getCurrentUser());
+        accountService = new Retrofit.Builder()
+                .baseUrl(getString(R.string.server_url))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build().create(RetrofitServices.AccountService.class);
 
         binding.accountSigninOk.setOnClickListener(this::signIn);
         binding.accountSigninGoogle.setOnClickListener(this::tryGoogleSignIn);
-        binding.accountSigninSignup.setOnClickListener(v->{
-            startMode(Mode.SIGNUP,"");
-        });
-        binding.accountSigninFindpw.setOnClickListener(v->{
-            startMode(Mode.FINDPW,"");
-        });
+        binding.accountSigninSignup.setOnClickListener(v -> startMode(Mode.SIGNUP, ""));
+        binding.accountSigninFindpw.setOnClickListener(v -> startMode(Mode.FINDPW, ""));
         binding.accountSignupOk.setOnClickListener(this::signUpWithEmailPW);
         binding.accountSignupnickOk.setOnClickListener(this::signUp);
     }
@@ -98,6 +87,7 @@ public class AccountActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         Bundle bundle = new Bundle();
         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_signin));
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_signin));
@@ -122,18 +112,12 @@ public class AccountActivity extends BaseActivity {
                 progressOFF();
             }
         } else {
-            Utils.log("Something wrong?");
+            Utils.log("Something wrong");
             progressOFF();
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        progressOFF();
-    }
-
-    void signIn(View v){
+    void signIn(View v) {
         String signin_email = binding.accountSigninEmail.getText().toString();
         String signin_pw = binding.accountSigninPassword.getText().toString();
 
@@ -169,14 +153,14 @@ public class AccountActivity extends BaseActivity {
                             } else
                                 App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
                             progressOFF();
-                        } else{
+                        } else {
                             authTask.getResult().getUser().getIdToken(true)
-                                    .addOnCompleteListener(tt -> {
-                                        if (!tt.isSuccessful()) {
+                                    .addOnCompleteListener(task -> {
+                                        if (!task.isSuccessful()) {
                                             progressOFF();
-                                            App.getAppInstance().showToast("알 수 없는 오류가 발생. 다시 시도해 주세요");
+                                            App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요");
                                         } else {
-                                            idToken = tt.getResult().getToken();
+                                            idToken = task.getResult().getToken();
                                             checkUserInfo(idToken);
                                         }
                                     });
@@ -185,7 +169,7 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    void tryGoogleSignIn(View v){
+    void tryGoogleSignIn(View v) {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -216,7 +200,7 @@ public class AccountActivity extends BaseActivity {
                 });
     }
 
-    void signUpWithEmailPW(View v){
+    void signUpWithEmailPW(View v) {
         String email = binding.accountSignupEmail.getText().toString();
         String pw = binding.accountSignupPassword.getText().toString();
 
@@ -237,14 +221,10 @@ public class AccountActivity extends BaseActivity {
                             Exception e = authTask.getException();
                             if (e instanceof FirebaseAuthException) {
                                 String fbae = ((FirebaseAuthException) e).getErrorCode();
-                                switch (fbae) {
-                                    case "ERROR_EMAIL_ALREADY_IN_USE":
-                                        App.getAppInstance().showToast("이미 가입되있는 이메일입니다.");
-                                        break;
-                                    default:
-                                        App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
-                                        break;
-                                }
+                                if ("ERROR_EMAIL_ALREADY_IN_USE".equals(fbae))
+                                    App.getAppInstance().showToast("이미 가입되있는 이메일입니다.");
+                                else
+                                    App.getAppInstance().showToast("알 수 없는 오류 발생. 다시 시도해 주세요.");
                             } else if (e instanceof FirebaseNetworkException) {
                                 App.getAppInstance().showToast("네트워크 상태를 확인해주세요.");
                             } else {
@@ -266,7 +246,7 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    void signUp(View v){
+    void signUp(View v) {
         String nickname = binding.accountSignupnickNickname.getText().toString();
 
         if (Utils.nicknameValidate(nickname) == Utils.NICKNAME_VALIDATE.NODATA)
@@ -278,7 +258,8 @@ public class AccountActivity extends BaseActivity {
             App.getAppInstance().showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.");
         else {
             progressON(AccountActivity.this);
-            accountService.createUser(idToken,mAuth.getUid(),nickname)
+            accountService
+                    .createUser(idToken, mAuth.getUid(), nickname)
                     .enqueue(new BasicCallback<JsonObject>(AccountActivity.this) {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -288,7 +269,7 @@ public class AccountActivity extends BaseActivity {
                             if (response.code() == 403)
                                 App.getAppInstance().showToast("이미 존재하는 닉네임입니다.");
                             else {
-                                App.getAppInstance().showToast("회원가입되었습니다.");
+                                App.getAppInstance().showToast("회원 가입 되었습니다.");
                                 startMain(response.body().toString());
                             }
                         }
@@ -306,29 +287,25 @@ public class AccountActivity extends BaseActivity {
 
     public void checkUserInfo(String idToken) {
         accountService
-                .checkUser(idToken,mAuth.getUid())
+                .checkUser(idToken, mAuth.getUid())
                 .enqueue(new BasicCallback<JsonObject>(AccountActivity.this) {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         super.onResponse(call, response);
-
                         progressOFF();
-                        Utils.log(response+"", response.body().toString());
-                        switch (response.code()) {
-                            // 가입 정보 없음
-                            case 404:
-                                App.getAppInstance().showToast("닉네임을 입력해주세요.");
-                                startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
-                                break;
-                            // 가입 정보 있음
-                            case 200:
-                                startMain(response.body().toString());
-                                break;
-                        }
+
+                        if (response.code() == 404) {
+                            App.getAppInstance().showToast("닉네임을 입력해주세요.");
+                            startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
+                        } else
+                            startMain(response.body().toString());
                     }
 
                     @Override
-                    public void onFailure() {
+                    public void onFailure(Call<JsonObject> call, Throwable t) {
+                        super.onFailure(call, t);
+                        Utils.log(t.toString());
+
                         progressOFF();
                     }
                 });
@@ -340,9 +317,7 @@ public class AccountActivity extends BaseActivity {
         binding.accountSignupnickGroup.setVisibility(View.GONE);
         binding.accountFindpwGroup.setVisibility(View.GONE);
 
-        if (mode == Mode.SIGNIN) {
-
-        } else if (mode == Mode.SIGNUP) {
+        if (mode == Mode.SIGNUP) {
             current_mode = Mode.SIGNUP;
             binding.accountSignupGroup.setVisibility(View.VISIBLE);
 
@@ -358,9 +333,9 @@ public class AccountActivity extends BaseActivity {
         } else if (mode == Mode.FINDPW) {
             current_mode = Mode.FINDPW;
             binding.accountFindpwGroup.setVisibility(View.VISIBLE);
-
         }
     }
+
     public void startMain(String userinfo) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();

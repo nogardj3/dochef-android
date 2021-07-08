@@ -10,7 +10,7 @@ import com.yhjoo.dochef.classes.Notification;
 import com.yhjoo.dochef.classes.PostThumbnail;
 import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.classes.Review;
-import com.yhjoo.dochef.classes.UserList;
+import com.yhjoo.dochef.classes.UserBreif;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -19,15 +19,15 @@ import java.util.Random;
 public class DummyMaker {
     public static <T> T make(Resources resources, int type) {
         if (type == resources.getInteger(R.integer.DUMMY_TYPE_PROFILE)) {
-            ArrayList<UserList> arrayList = new ArrayList<>();
+            ArrayList<UserBreif> arrayList = new ArrayList<>();
             int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
 
             for (int i = 0; i < 5; i++) {
                 Random r = new Random();
 
-                arrayList.add(new UserList("유저 " + i,
+                arrayList.add(new UserBreif("유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(3)]),
-                        "더미 유저 " + i));
+                        "더미 유저 " + i,0));
             }
 
             return (T) arrayList;

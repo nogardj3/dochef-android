@@ -7,13 +7,10 @@ import android.text.Html;
 import android.view.ViewGroup;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -21,13 +18,9 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Notification;
 import com.yhjoo.dochef.databinding.ANotificationBinding;
-import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class NotificationActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
     ANotificationBinding binding;
@@ -59,10 +52,14 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());
         notificationListAdapter.setOnLoadMoreListener(this, binding.notificationRecycler);
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2))
+            if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2)){
                 startActivity(new Intent(NotificationActivity.this, RecipeDetailActivity.class));
-            else
-                startActivity(new Intent(NotificationActivity.this, HomeUserActivity.class));
+            }
+            else{
+                Intent intent =new Intent(NotificationActivity.this, HomeActivity.class);
+//                intent.putExtra("userID", );
+                startActivity(intent);
+            }
         });
         notificationListAdapter.setNewData(notifications);
         notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.notificationRecycler.getParent());

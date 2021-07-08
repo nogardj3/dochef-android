@@ -23,11 +23,11 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.HomeUserActivity;
+import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.SearchActivity;
 import com.yhjoo.dochef.classes.Recipe;
-import com.yhjoo.dochef.classes.UserList;
+import com.yhjoo.dochef.classes.UserBreif;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
@@ -86,8 +86,8 @@ public class ResultFragment extends Fragment {
                     startActivity(intent1);
                     break;
                 case VIEWHOLDER_ITEM_USER:
-                    Intent intent2 = new Intent(getContext(), HomeUserActivity.class);
-                    intent2.putExtra("UserID", ((UserList) ((ResultItem) adapter.getData().get(position)).getContent()).getUserID());
+                    Intent intent2 = new Intent(getContext(), HomeActivity.class);
+                    intent2.putExtra("userID", ((UserBreif) ((ResultItem) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
@@ -140,17 +140,17 @@ public class ResultFragment extends Fragment {
                 break;
             case VIEWHOLDER_ITEM_USER:
                 searchUserService.SearchUserCall(keyword, lastID)
-                        .enqueue(new BasicCallback<List<UserList>>(getContext()) {
+                        .enqueue(new BasicCallback<List<UserBreif>>(getContext()) {
                             @Override
-                            public void onResponse(Response<List<UserList>> response) {
-                                List<UserList> userList = response.body();
+                            public void onResponse(Response<List<UserBreif>> response) {
+                                List<UserBreif> userBreif = response.body();
                                 ArrayList<ResultItem> userListItem = new ArrayList<>();
 
-                                for (int i = 0; i < userList.size(); i++) {
+                                for (int i = 0; i < userBreif.size(); i++) {
                                     if (i % 5 != 4)
-                                        userListItem.add(new ResultItem<>(type, userList.get(i)));
+                                        userListItem.add(new ResultItem<>(type, userBreif.get(i)));
                                     else {
-                                        userListItem.add(new ResultItem<>(type, userList.get(i)));
+                                        userListItem.add(new ResultItem<>(type, userBreif.get(i)));
                                         userListItem.add(new ResultItem<>(VIEWHOLDER_AD));
                                     }
                                 }
@@ -243,10 +243,10 @@ public class ResultFragment extends Fragment {
 
                 case VIEWHOLDER_ITEM_USER:
                     requestManager
-                            .load("getString(R.string.profile_image_storage_url)" + ((UserList) item.getContent()).getUserImg())
+                            .load(getString(R.string.storage_image_url_profile) + ((UserBreif) item.getContent()).getUserImg())
                             .apply(RequestOptions.circleCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resultuser_userimg));
-                    helper.setText(R.id.li_resultuser_nickname, ((UserList) item.getContent()).getNickname());
+                    helper.setText(R.id.li_resultuser_nickname, ((UserBreif) item.getContent()).getNickname());
                     break;
 
                 case VIEWHOLDER_ITEM_INGREDIENT:

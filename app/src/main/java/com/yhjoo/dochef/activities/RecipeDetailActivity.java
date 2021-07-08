@@ -86,7 +86,7 @@ public class RecipeDetailActivity extends BaseActivity {
             binding.recipedetailRecipetitle.setText(recipeDetail.getTitle());
 
             Glide.with(this)
-                    .load("getString(R.string.profile_image_storage_url)" + recipeDetail.getProducerID())
+                    .load(getString(R.string.storage_image_url_profile) + recipeDetail.getProducerID())
                     .apply(RequestOptions.circleCropTransform())
                     .into(binding.recipedetailUserimg);
 

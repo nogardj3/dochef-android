@@ -63,10 +63,7 @@ public class PlayRecipeEndFragment extends Fragment {
 
     @OnClick({R.id.playrecipe_end_review})
     void oc(View v) {
-        switch (v.getId()) {
-            case R.id.playrecipe_end_review:
-                startActivity(new Intent(PlayRecipeEndFragment.this.getContext(), ReviewWriteActivity.class));
-                break;
-        }
+        if (v.getId() == R.id.playrecipe_end_review)
+            startActivity(new Intent(PlayRecipeEndFragment.this.getContext(), ReviewWriteActivity.class));
     }
 }

@@ -69,13 +69,11 @@ public class SearchActivity extends BaseActivity {
         viewPager.setOffscreenPageLimit(4);
 
         searchview.setOnEditorActionListener((v, actionId, event) -> {
-            switch (actionId) {
-                case EditorInfo.IME_ACTION_SEARCH:
-                    keyword = searchview.getText().toString();
-                    ((ResultFragment) viewPagerAdapter.getItem(viewPager.getCurrentItem())).search();
-                    InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(searchview.getWindowToken(), 0);
-                    break;
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                keyword = searchview.getText().toString();
+                ((ResultFragment) viewPagerAdapter.getItem(viewPager.getCurrentItem())).search();
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchview.getWindowToken(), 0);
             }
             return true;
         });

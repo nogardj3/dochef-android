@@ -17,32 +17,24 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.PostThumbnail;
 import com.yhjoo.dochef.classes.UserDetail;
 import com.yhjoo.dochef.databinding.AHomeBinding;
-import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.ChefAuth;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.PermissionUtil;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,8 +42,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
@@ -82,7 +72,7 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
-        1. userHome과 합침 - MODE, OPERATION 두개로 구분 - 많이 다르면 Fragment로 가르기
+        1. userHome과 합침 - MODE, OPERATION 두개로 구분
         2. chefauth에 firebaseuser 기능으로 합치기
         3. retrofit 구현
     */
@@ -220,7 +210,7 @@ public class HomeActivity extends BaseActivity {
 
         userimg = (AppCompatImageView) itemView.findViewById(R.id.home_userimg);
         Glide.with(HomeActivity.this)
-                .load("getString(R.string.profile_image_storage_url)" + userDetailInfo.getUserImg())
+                .load(getString(R.string.storage_image_url_profile) + userDetailInfo.getUserImg())
                 .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile))
                 .into(userimg);
 

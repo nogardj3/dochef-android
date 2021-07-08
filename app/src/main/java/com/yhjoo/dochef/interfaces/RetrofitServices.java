@@ -10,14 +10,11 @@ import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.classes.RecipeDetail;
 import com.yhjoo.dochef.classes.RecipeDetailPlay;
 import com.yhjoo.dochef.classes.Review;
+import com.yhjoo.dochef.classes.UserBreif;
 import com.yhjoo.dochef.classes.UserDetail;
-import com.yhjoo.dochef.classes.UserList;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Field;
@@ -25,7 +22,6 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
-import retrofit2.http.QueryMap;
 
 public class RetrofitServices {
     public interface BasicService {
@@ -35,6 +31,24 @@ public class RetrofitServices {
         Call<ArrayList<FAQ>> getFAQ();
         @GET("tos")
         Call<String> getTOS();
+    }
+
+    public interface AccountService {
+        @FormUrlEncoded
+        @POST("user/check/")
+        Call<JsonObject> checkUser(@Field("user_token") String token, @Field("user_id") String uid);
+        @FormUrlEncoded
+        @POST("user/signup")
+        Call<JsonObject> createUser(@Field("user_token") String token, @Field("user_id") String uid, @Field("nickname") String nickname);
+    }
+
+    public interface UserService {
+        @GET("user/follower")
+        Call<List<UserBreif>> getFollowers(@Query("user_id") String user_id,@Query("target_id") String target_id);
+        @GET("user/following")
+        Call<List<UserBreif>> getFollowings(@Query("user_id") String user_id,@Query("target_id") String target_id);
+        @GET("user/detail")
+        Call<List<UserDetail>> getUserDetail(@Query("user_id") String user_id);
     }
 
     public interface RecipeService {
@@ -57,28 +71,8 @@ public class RetrofitServices {
         Call<ArrayList<Review>> getReview(@Query("recipe_id") int recipeId);
     }
 
-    public interface AccountService {
-        @FormUrlEncoded
-        @POST("user/check/")
-        Call<JsonObject> checkUser(@Field("user_token") String token, @Field("user_id") String uid);
-        @FormUrlEncoded
-        @POST("user/signup")
-        Call<JsonObject> createUser(@Field("user_token") String token, @Field("user_id") String uid, @Field("nickname") String nickname);
-    }
-
-    public interface UserService {
-        @GET("user/follower")
-        Call<List<UserList>> getFollowers(@Query("nickname") String nickname, @Query("index") int index);
-        @GET("user/following")
-        Call<List<UserList>> getFollowings(@Query("nickname") String nickname, @Query("index") int index);
-        @GET("user/detail")
-        Call<List<UserDetail>> getUserDetail(@Query("nickname") String nickname);
-        @GET("user/")
-        Call<List<UserList>> getUserLists(@Query("nickname") String nickname);
-    }
-
     public interface PostService {
-        @GET("post/timeline.php")
+        @GET("post/")
         Call<ArrayList<Post>> getPost(@Query("last") int last);
     }
 
@@ -88,37 +82,17 @@ public class RetrofitServices {
     }
 
 
+
     //-------------USERINFO
-    public interface FollowerService {
-        @GET("user/follow/followerlist.php")
-        Call<List<UserList>> GetFollowerCall(@Query("UserID") String userID, @Query("last") int last);
-    }
-
-    public interface FollowingService {
-        @GET("user/follow/followinglist.php")
-        Call<List<UserList>> GetFollowingCall(@Query("UserID") String userID, @Query("last") int last);
-    }
-
     public interface MyHomeService {
         @GET("user/info/home.php")
         Call<UserDetail> GetBasicInfoCall(@Query("User_ID") String id);
     }
 
-    public interface UserHomeService {
-        @GET("user/info/home.php")
-        Call<UserDetail> GetBasicInfoCall(@QueryMap Map<String, String> option);
-
-        @FormUrlEncoded
-        @POST("user/follow/follow.php")
-        Call<JSONObject> FollowCall(@Field("User_ID") String userID, @Field("follow") int follow);
-    }
-
     public interface SearchUserService {
         @GET("search/user.php")
-        Call<List<UserList>> SearchUserCall(@Query("keyword") String keyword, @Query("last") int last);
+        Call<List<UserBreif>> SearchUserCall(@Query("keyword") String keyword, @Query("last") int last);
     }
-
-    //-------------ACCOUNT
 
     //-------------POST
 

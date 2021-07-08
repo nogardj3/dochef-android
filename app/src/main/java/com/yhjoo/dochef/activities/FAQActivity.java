@@ -2,9 +2,7 @@ package com.yhjoo.dochef.activities;
 
 import android.os.Bundle;
 
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -15,7 +13,6 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.FAQ;
 import com.yhjoo.dochef.databinding.AFaqBinding;
-import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -23,8 +20,6 @@ import com.yhjoo.dochef.utils.RetrofitBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -70,6 +65,7 @@ public class FAQActivity extends BaseActivity {
                     title.addSubItem(new Contents(item.contents));
                     faqList.add(title);
                 }
+
                 FAQListAdapter.setNewData(faqList);
             }
 
