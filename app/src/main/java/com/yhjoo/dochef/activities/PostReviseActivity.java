@@ -32,11 +32,13 @@ import butterknife.OnClick;
 public class PostReviseActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
     private final int EXTRA_RQ_PICKFROMGALLERY = 200;
+
     @BindView(R.id.revisepost_postimg)
     AppCompatImageView postimg;
     @BindView(R.id.revisepost_contents)
     AppCompatEditText contents;
-    private Uri mImageUri;
+
+    Uri mImageUri;
 
     /*
         TODO

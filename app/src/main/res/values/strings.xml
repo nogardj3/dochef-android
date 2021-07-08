@@ -6,6 +6,10 @@
 
     <!-- local server-->
     <string name="server_url">http://10.0.2.2:4000/chef/</string>
+    <string name="storage_image_url_profile">gs://dochef-e255c.appspot.com/profile/</string>
+    <string name="storage_image_url_recipe">gs://dochef-e255c.appspot.com/recipe/</string>
+    <string name="storage_image_url_post">gs://dochef-e255c.appspot.com/post/</string>
+    <string name="storage_image_url_review">gs://dochef-e255c.appspot.com/review/</string>
 
     <!-- admob 테스트용-->
     <string name="admob_banner_id_test">ca-app-pub-3940256099942544/6300978111</string>

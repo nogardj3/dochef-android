@@ -59,14 +59,11 @@ public class RetrofitServices {
 
     public interface AccountService {
         @FormUrlEncoded
-        @POST("user/check/token")
-        Call<JsonObject> checkToken(@Field("token") String token);
+        @POST("user/check/")
+        Call<JsonObject> checkUser(@Field("user_token") String token, @Field("user_id") String uid);
         @FormUrlEncoded
-        @POST("user/check/nickname")
-        Call<JsonObject> checkNickname(@Field("nickname") String nickname);
-        @FormUrlEncoded
-        @POST("user/signup/")
-        Call<JsonObject> signUp(@Field("token") String token, @Field("nickname") String nickname);
+        @POST("user/signup")
+        Call<JsonObject> createUser(@Field("user_token") String token, @Field("user_id") String uid, @Field("nickname") String nickname);
     }
 
     public interface UserService {
@@ -123,27 +120,11 @@ public class RetrofitServices {
 
     //-------------ACCOUNT
 
-    public interface LoginService {
-        @FormUrlEncoded
-        @POST("user/token/check.php")
-        Call<JsonObject> CheckTokenCall(@Field("token") String token);
-    }
-
-
     //-------------POST
 
     public interface PostActivityService {
         @GET("post/commentlist.php")
         Call<ArrayList<PostComment>> GetCommentCall(@Query("PostID") int postID);
-    }
-
-    public interface SignUpService {
-        @FormUrlEncoded
-        @POST("user/token/check.php")
-        Call<JsonObject> CheckTokenCall(@Field("token") String token);
-        @FormUrlEncoded
-        @POST("user/sign/signup.php")
-        Call<JsonObject> SignupCall(@Field("token") String token, @Field("Nickname") String Nickname);
     }
 
     public interface TimeLineService {

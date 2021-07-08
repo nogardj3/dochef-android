@@ -35,6 +35,8 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.PostThumbnail;
 import com.yhjoo.dochef.classes.UserDetail;
+import com.yhjoo.dochef.databinding.AHomeBinding;
+import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.ChefAuth;
@@ -55,33 +57,49 @@ import retrofit2.Response;
 public class HomeActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
     private final int EXTRA_RQ_PICKFROMGALLERY = 200;
-    private final ArrayList<View> revise_Icons = new ArrayList<>();
-    private final ArrayList<PostThumbnail> postItems = new ArrayList<>();
-    @BindView(R.id.home_recycler)
-    RecyclerView recyclerView;
+
+    public enum MODE {MY, USER}
+
+    enum OPERATION {VIEW, REVISE}
+
+    AHomeBinding binding;
+
+    ArrayList<View> revise_Icons = new ArrayList<>();
+    ArrayList<PostThumbnail> postItems = new ArrayList<>();
+
     AppCompatButton appCompatButton;
     AppCompatImageView userimg;
+    PostListAdapter postListAdapter;
+    SharedPreferences mSharedPreferences;
+    RetrofitServices.MyHomeService myHomeService;
+    JSONObject userInfoJson;
+    UserDetail userDetailInfo;
+    Uri mImageUri;
+
+    MODE currentMode = MODE.MY;
     OPERATION currentOperation = OPERATION.VIEW;
-    private PostListAdapter postListAdapter;
-    private SharedPreferences mSharedPreferences;
-    private RetrofitServices.MyHomeService myHomeService;
-    private JSONObject userInfoJson;
-    private UserDetail userDetailInfo;
-    private Uri mImageUri;
+
+
+    /*
+        TODO
+        1. userHome과 합침 - MODE, OPERATION 두개로 구분 - 많이 다르면 Fragment로 가르기
+        2. chefauth에 firebaseuser 기능으로 합치기
+        3. retrofit 구현
+    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_home);
-        ButterKnife.bind(this);
+        binding = AHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.home_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.homeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        currentMode = (MODE) getIntent().getSerializableExtra("MODE");
 
-        postListAdapter = new PostListAdapter(Glide.with(this));
+
+        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
         try {
             userInfoJson = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
@@ -91,33 +109,32 @@ public class HomeActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        recyclerView.setLayoutManager(new GridLayoutManager(HomeActivity.this, 3));
-        recyclerView.setAdapter(postListAdapter);
-        postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
+        postListAdapter = new PostListAdapter(Glide.with(this));
+        postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.homeRecycler.getParent());
         postListAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (postItems.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_PHOTO))
                 startActivity(new Intent(HomeActivity.this, PostDetailActivity.class));
             else if (postItems.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE))
                 startActivity(new Intent(HomeActivity.this, RecipeDetailActivity.class));
         });
+        binding.homeRecycler.setLayoutManager(new GridLayoutManager(HomeActivity.this, 3));
+        binding.homeRecycler.setAdapter(postListAdapter);
 
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (ChefAuth.isLogIn(HomeActivity.this)) {
-            user.getIdToken(true)
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful())
-                            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, true, task.getResult().getToken());
-                        else
-                            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, false);
-                        setInfo();
-                    });
-        } else {
-            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, false);
-            setInfo();
-        }
-
-
+//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+//        if (ChefAuth.isLogIn(HomeActivity.this)) {
+//            user.getIdToken(true)
+//                    .addOnCompleteListener(task -> {
+//                        if (task.isSuccessful())
+//                            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, true, task.getResult().getToken());
+//                        else
+//                            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, false);
+//                        setInfo();
+//                    });
+//        } else {
+//            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, false);
+//            setInfo();
+//        }
     }
 
     @Override
@@ -127,17 +144,10 @@ public class HomeActivity extends BaseActivity {
             if (data != null) {
                 Glide.with(this)
                         .load(mImageUri != null ? mImageUri : data.getData())
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).error(R.drawable.ic_person_black_24dp).circleCrop().diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true))
+                        .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile))
                         .into(userimg);
             }
     }
-
-    /*
-        TODO
-        1. userHome과 합침 - MODE, OPERATION 두개로 구분 - 많이 다르면 Fragment로 가르기
-        2. chefauth에 firebaseuser 기능으로 합치기
-        3. retrofit 구현
-    */
 
     @Override
     public void onBackPressed() {
@@ -174,7 +184,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    private void setInfo() {
+    void setInfo() {
         myHomeService.GetBasicInfoCall(userDetailInfo.getUserID())
                 .enqueue(new BasicCallback<UserDetail>(HomeActivity.this) {
                     @Override
@@ -200,18 +210,18 @@ public class HomeActivity extends BaseActivity {
                         }
 
                         postListAdapter.setNewData(DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_GRID)));
-                        postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
+                        postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.homeRecycler.getParent());
                     }
                 });
     }
 
     View setheaderview() {
-        View itemView = getLayoutInflater().inflate(R.layout.h_home, (ViewGroup) recyclerView.getParent(), false);
+        View itemView = getLayoutInflater().inflate(R.layout.h_home, (ViewGroup) binding.homeRecycler.getParent(), false);
 
         userimg = (AppCompatImageView) itemView.findViewById(R.id.home_userimg);
         Glide.with(HomeActivity.this)
-                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userDetailInfo.getUserImg())
-                .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).error(R.drawable.ic_person_black_24dp).circleCrop())
+                .load("getString(R.string.profile_image_storage_url)" + userDetailInfo.getUserImg())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile))
                 .into(userimg);
 
         ((AppCompatTextView) itemView.findViewById(R.id.home_nickname)).setText(userDetailInfo.getNickname());
@@ -321,10 +331,6 @@ public class HomeActivity extends BaseActivity {
         return itemView;
     }
 
-    enum MODE {MY, USER}
-
-    enum OPERATION {VIEW, REVISE}
-
     private class PostListAdapter extends BaseQuickAdapter<PostThumbnail, BaseViewHolder> {
         private final RequestManager requestManager;
 
@@ -337,8 +343,8 @@ public class HomeActivity extends BaseActivity {
         protected void convert(BaseViewHolder helper, PostThumbnail item) {
             ViewGroup.LayoutParams lp = helper.itemView.findViewById(R.id.li_homegrid_recipeimg).getLayoutParams();
 
-            lp.width = recyclerView.getMeasuredWidth() / 3;
-            lp.height = recyclerView.getMeasuredWidth() / 3;
+            lp.width = binding.homeRecycler.getMeasuredWidth() / 3;
+            lp.height = binding.homeRecycler.getMeasuredWidth() / 3;
             helper.itemView.findViewById(R.id.li_homegrid_recipeimg).setLayoutParams(lp);
 
 

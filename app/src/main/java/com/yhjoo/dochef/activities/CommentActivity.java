@@ -22,6 +22,8 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Comment;
+import com.yhjoo.dochef.databinding.ACommentBinding;
+import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import butterknife.BindView;
@@ -29,18 +31,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class CommentActivity extends BaseActivity {
-    @BindView(R.id.comment_recycler)
-    RecyclerView recyclerView;
-    @BindView(R.id.footer_comment_edittext)
-    AppCompatEditText editText;
-    @BindView(R.id.footer_comment_clear)
-    AppCompatImageView clearimageview;
+    private final MODE current_mode = MODE.DEFAULT;
 
     enum MODE {DEFAULT, REVISE}
 
-    private final MODE current_mode = MODE.DEFAULT;
-    private final boolean is_mine = false;
-    private CommentListAdapter commentListAdapter;
+    ACommentBinding binding;
+
+    CommentListAdapter commentListAdapter;
+    final boolean is_mine = false;
 
     /*
         TODO
@@ -54,19 +52,15 @@ public class CommentActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_comment);
-        ButterKnife.bind(this);
+        binding = ACommentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.comment_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.commentToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         commentListAdapter = new CommentListAdapter();
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(commentListAdapter);
-
-        commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
+        commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.commentRecycler.getParent());
         commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
             PopupMenu popup = new PopupMenu(CommentActivity.this, view);
 //                    if(is_mine)
@@ -95,6 +89,8 @@ public class CommentActivity extends BaseActivity {
             });
             popup.show();
         });
+        binding.commentRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.commentRecycler.setAdapter(commentListAdapter);
 
         // SERVER DATA
         if (App.isServerAlive()) {
@@ -104,45 +100,43 @@ public class CommentActivity extends BaseActivity {
         else
             commentListAdapter.setNewData(DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS)));
 
-        editText.addTextChangedListener(new TextWatcher() {
+        binding.footerCommentEdittext.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                clearimageview.setVisibility(count == 0 ? View.GONE : View.VISIBLE);
+                binding.footerCommentClear.setVisibility(count == 0 ? View.GONE : View.VISIBLE);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
             }
         });
+
+        binding.footerCommentOk.setOnClickListener(this::writeComment);
+        binding.footerCommentClear.setOnClickListener(this::clearText);
     }
 
+    void writeComment(View v){
+        if (!binding.footerCommentEdittext.getText().toString().equals("")) {
+            commentListAdapter.notifyItemInserted(commentListAdapter.getData().size() - 1);
 
-    @OnClick({R.id.footer_comment_ok, R.id.footer_comment_clear})
-    void aa(View v) {
-        switch (v.getId()) {
-            case R.id.footer_comment_clear:
-                editText.setText("");
-                break;
-            case R.id.footer_comment_ok:
-                if (!editText.getText().toString().equals("")) {
-                    commentListAdapter.notifyItemInserted(commentListAdapter.getData().size() - 1);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(binding.footerCommentEdittext.getWindowToken(), 0);
 
-                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-
-                    recyclerView.getLayoutManager().scrollToPosition(commentListAdapter.getData().size() - 1);
-                    editText.setText("");
-                } else
-                    App.getAppInstance().showToast("댓글을 입력 해 주세요");
-                break;
-        }
+            binding.commentRecycler.getLayoutManager().scrollToPosition(commentListAdapter.getData().size() - 1);
+            binding.footerCommentEdittext.setText("");
+        } else
+            App.getAppInstance().showToast("댓글을 입력 해 주세요");
     }
 
-    private class CommentListAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
+    void clearText(View v) {
+        binding.footerCommentEdittext.setText("");
+    }
+
+    class CommentListAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
         CommentListAdapter() {
             super(R.layout.li_comment);
         }

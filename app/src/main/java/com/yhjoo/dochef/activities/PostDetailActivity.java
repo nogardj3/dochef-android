@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,21 +8,21 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
-import androidx.appcompat.widget.Toolbar;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Post;
 import com.yhjoo.dochef.classes.PostComment;
+import com.yhjoo.dochef.databinding.APostdetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,50 +30,43 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.ButterKnife;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PostDetailActivity extends BaseActivity {
-    private Post post;
-
     enum OPERATION {VIEW, REVISE}
+
+    APostdetailBinding binding;
+
+    Post post;
 
     /*
         TODO
-        1. OPERATION 분기
+        1. 서버 데이터 추가 및 기능 구현
+        2. retrofit 구현
+        3. REVISE 기능 추가
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_post);
-        ButterKnife.bind(this);
+        binding = APostdetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.post_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.postToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        RetrofitServices.TimeLineService timeLineService =
+                RetrofitBuilder.create(this, RetrofitServices.TimeLineService.class);
+        RetrofitServices.PostActivityService postActivityService =
+                RetrofitBuilder.create(this, RetrofitServices.PostActivityService.class);
+
         post = (Post) getIntent().getSerializableExtra("post");
-
-        //temp
         if (post == null) {
-            RetrofitServices.TimeLineService timeLineService = new Retrofit.Builder()
-                    .baseUrl(getString(R.string.server_url))
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(RetrofitServices.TimeLineService.class);
-
             timeLineService.GetPostCall(0)
                     .enqueue(new BasicCallback<ArrayList<Post>>(PostDetailActivity.this) {
                         @Override
                         public void onResponse(Response<ArrayList<Post>> response) {
                             post = response.body().get(0);
-
-                            RetrofitServices.PostActivityService postActivityService = new Retrofit.Builder()
-                                    .baseUrl(getString(R.string.server_url))
-                                    .addConverterFactory(GsonConverterFactory.create())
-                                    .build().create(RetrofitServices.PostActivityService.class);
 
                             postActivityService.GetCommentCall(post.getPostID())
                                     .enqueue(new BasicCallback<ArrayList<PostComment>>(PostDetailActivity.this) {
@@ -86,11 +78,6 @@ public class PostDetailActivity extends BaseActivity {
                         }
                     });
         } else {
-            RetrofitServices.PostActivityService postActivityService = new Retrofit.Builder()
-                    .baseUrl(getString(R.string.server_url))
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build().create(RetrofitServices.PostActivityService.class);
-
             postActivityService.GetCommentCall(post.getPostID())
                     .enqueue(new BasicCallback<ArrayList<PostComment>>(PostDetailActivity.this) {
                         @Override
@@ -101,31 +88,25 @@ public class PostDetailActivity extends BaseActivity {
         }
     }
 
-    /*
-        TODO
-        1. 더미 만들기
-        2. retrofit 구현
-    */
-
-    private void setheaderfooter() {
+    void setheaderfooter() {
         Glide.with(this)
-                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + post.getPostImg())
+                .load(getString(R.string.storage_image_url_post) + post.getPostImg())
                 .apply(RequestOptions.centerCropTransform())
-                .into((AppCompatImageView) findViewById(R.id.post_postimg));
+                .into(binding.postPostimg);
 
         Glide.with(this)
-                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + post.getUserImg())
-                .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).circleCrop())
-                .into((AppCompatImageView) findViewById(R.id.post_userimg));
+                .load(getString(R.string.storage_image_url_profile) + post.getUserImg())
+                .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile).circleCrop())
+                .into(binding.postUserimg);
 
-        ((AppCompatTextView) findViewById(R.id.post_nickname)).setText(post.getNickName());
-        ((AppCompatTextView) findViewById(R.id.post_likecount)).setText("1623");
-        ((AppCompatTextView) findViewById(R.id.post_contents)).setText(post.getContents());
-        ((AppCompatTextView) findViewById(R.id.post_time)).setText("1일전");
+        binding.postNickname.setText(post.getNickName());
+        binding.postLikecount.setText("1623");
+        binding.postContents.setText(post.getContents());
+        binding.postTime.setText("1일전");
 
-        findViewById(R.id.post_like).setOnClickListener(v -> App.getAppInstance().showToast("좋아요"));
-        findViewById(R.id.post_comment).setOnClickListener(v -> startActivity(new Intent(PostDetailActivity.this, CommentActivity.class)));
-        findViewById(R.id.post_other).setOnClickListener(v -> {
+        binding.postLike.setOnClickListener(v -> App.getAppInstance().showToast("좋아요"));
+        binding.postComment.setOnClickListener(v -> startActivity(new Intent(PostDetailActivity.this, CommentActivity.class)));
+        binding.postOther.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(PostDetailActivity.this, v);
             // if(ismaster)
             PostDetailActivity.this.getMenuInflater().inflate(R.menu.menu_post_owner, popup.getMenu());
@@ -135,7 +116,7 @@ public class PostDetailActivity extends BaseActivity {
                         Intent intent = new Intent(PostDetailActivity.this, PostReviseActivity.class);
                         intent.putExtra("postid", post.getPostID())
                                 .putExtra("contents", post.getContents())
-                                .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + post.getPostImg());
+                                .putExtra("postimg", getString(R.string.storage_image_url_post) + post.getPostImg());
                         startActivity(intent);
                         break;
                     case R.id.menu_post_owner_delete:
@@ -155,29 +136,25 @@ public class PostDetailActivity extends BaseActivity {
             popup.show();
         });
 
-        findViewById(R.id.post_user_group).setOnClickListener(v -> {
+        binding.postUserGroup.setOnClickListener(v -> {
             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             try {
-
                 String item_userid = post.getUserID();
-                String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("USER_ID");
+                String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("user_id");
 
-                Intent intent;
+                Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class);
                 if (item_userid.equals(active_userid))
-                    intent = new Intent(PostDetailActivity.this, HomeActivity.class);
+                    intent.putExtra("MODE",HomeActivity.MODE.MY);
                 else {
-                    intent = new Intent(PostDetailActivity.this, HomeUserActivity.class);
-                    intent.putExtra("UserID", post.getUserID());
+                    intent.putExtra("MODE",HomeActivity.MODE.USER);
+                    intent.putExtra("UserID", item_userid);
                 }
                 startActivity(intent);
             } catch (JSONException e) {
-                Intent intent = new Intent(PostDetailActivity.this, HomeUserActivity.class);
-                intent.putExtra("UserID", post.getUserID());
-                startActivity(intent);
+                Utils.log(e.toString());
             }
         });
 
-        ((FlexboxLayout) findViewById(R.id.post_tags)).removeAllViews();
         String[] tags = {"tag1", "tag2", "tag3", "tag4"};
 
         for (String tag : tags) {
@@ -185,11 +162,10 @@ public class PostDetailActivity extends BaseActivity {
             textView.setText("#" + tag + " ");
             textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
 
-            ((FlexboxLayout) findViewById(R.id.post_tags)).addView(textView);
+            binding.postTags.addView(textView);
         }
 
 
-        ((FlexboxLayout) findViewById(R.id.post_commentdetail)).removeAllViews();
         List<PostComment> aa = new ArrayList<>();
         PostComment bb = new PostComment();
         bb.setNickName("유저1");
@@ -200,9 +176,9 @@ public class PostDetailActivity extends BaseActivity {
         aa.add(bb);
 
         if (aa.size() != 0) {
-            findViewById(R.id.post_commentdetail).setVisibility(View.VISIBLE);
+            binding.postCommentdetail.setVisibility(View.VISIBLE);
             for (int i = 0; i < aa.size(); i++) {
-                @SuppressLint("InflateParams") LinearLayout motherview = (LinearLayout) getLayoutInflater().inflate(R.layout.li_comment_brief, null);
+                LinearLayout motherview = (LinearLayout) getLayoutInflater().inflate(R.layout.li_comment_brief, null);
                 AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_comment_brief_nickname));
                 view1.setText(aa.get(i).getNickName());
                 AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_comment_brief_contents));
@@ -211,11 +187,9 @@ public class PostDetailActivity extends BaseActivity {
                 view3.setText("1일전");
                 motherview.setOnClickListener(v -> startActivity(new Intent(PostDetailActivity.this, CommentActivity.class)));
 
-                ((FlexboxLayout) findViewById(R.id.post_commentdetail)).addView(motherview);
+                binding.postCommentdetail.addView(motherview);
             }
-        } else {
-            findViewById(R.id.post_commentdetail).setVisibility(View.GONE);
-        }
+        } else
+            binding.postCommentdetail.setVisibility(View.GONE);
     }
-
 }

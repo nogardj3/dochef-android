@@ -6,7 +6,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UserDetail {
-    @SerializedName("USER_ID")
+    @SerializedName("user_id")
     private String userID;
     @SerializedName("PROFILE_IMAGE")
     private String userImg;
@@ -22,15 +22,6 @@ public class UserDetail {
     private int followingCount;
     @SerializedName("IS_FOLLOWING")
     private int is_following;
-
-    /*
-    token
-    userEmail
-    nickName
-    user_image_url
-    introduction
-    followers
-     */
 
     public UserDetail(String userID, int recipeCount, int followerCount, int followingCount, int isfollowing, String nickname, String profileText) {
         this.userID = userID;

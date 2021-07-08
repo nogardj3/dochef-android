@@ -20,8 +20,6 @@ import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -29,12 +27,12 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bhargavms.podslider.PodSlider;
-import com.github.clans.fab.FloatingActionButton;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.RecipeDetailPlay;
+import com.yhjoo.dochef.databinding.APlayrecipeBinding;
 import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeStartFragment;
@@ -48,52 +46,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class PlayRecipeActivity extends BaseActivity implements SensorEventListener {
-    @BindView(R.id.playrecipe_viewpager)
-    ViewPager viewpager;
-    @BindView(R.id.playrecipe_timer_group)
-    Group timerGroup;
-    @BindView(R.id.playrecipe_timer_text)
-    AppCompatTextView countdowntext;
-    @BindView(R.id.playrecipe_timer_fab)
-    FloatingActionButton timerFab;
-    @BindView(R.id.playrecipe_tts)
-    AppCompatTextView tts;
+    APlayrecipeBinding binding;
 
-    private ArrayList<RecipeDetailPlay> recipeDetailPlays;
-    private TextToSpeech textToSpeech;
-    private SensorManager m_clsSensorManager;
-    private Sensor m_clsSensor;
-    private SpeechRecognizer mRecognizer;
-    private CountDownTimer countDownTimer;
-    private MediaPlayer player;
+    ArrayList<RecipeDetailPlay> recipeDetailPlays;
+    TextToSpeech textToSpeech;
+    SensorManager m_clsSensorManager;
+    Sensor m_clsSensor;
+    SpeechRecognizer mRecognizer;
+    CountDownTimer countDownTimer;
+    MediaPlayer player;
 
-    private boolean timerSet = false;
+    boolean timerSet = false;
 
     /*
         TODO
         1. TTS, sensor등 확인
-        2. recipe detail - retrofit 구현
+        2. 서버 데이터 추가 및 기능 구현
+        3. retrofit 구현
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_playrecipe);
-        ButterKnife.bind(this);
+        binding = APlayrecipeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         textToSpeech = new TextToSpeech(this, status -> {
         });
 
         String[] ingredients = {"김치1", "김치2"};
         String[] tags = {"태그1", "태그2", "태그3", "태그4", "태그5"};
-        timerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
+        binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
 
         recipeDetailPlays = new ArrayList<>(Arrays.asList(
                 new RecipeDetailPlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_START),
@@ -187,8 +174,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         m_clsSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         m_clsSensor = m_clsSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
-        viewpager.setAdapter(recipeViewPagerAdapter);
-        viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        binding.playrecipeViewpager.setAdapter(recipeViewPagerAdapter);
+        binding.playrecipeViewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -196,12 +183,13 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
             @Override
             public void onPageSelected(int position) {
-                timerGroup.setVisibility(position == 0 || position == recipeDetailPlays.size() - 1 ? View.GONE : View.VISIBLE);
+                binding.playrecipeTimerGroup.setVisibility(position == 0
+                        || position == recipeDetailPlays.size() - 1 ? View.GONE : View.VISIBLE);
 
                 if (timerSet) {
                     timerSet = false;
-                    timerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
-                    timerFab.setColorNormal(getResources().getColor(R.color.colorPrimary,null));
+                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
+                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
                 }
             }
 
@@ -213,7 +201,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
         PodSlider podSlider = (PodSlider) findViewById(R.id.playrecipe_podslider);
         podSlider.setNumberOfPods(recipeDetailPlays.size());
-        podSlider.setUpWithViewPager(viewpager);
+        podSlider.setUpWithViewPager(binding.playrecipeViewpager);
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < recipeDetailPlays.size(); i++) {
             if (i == 0)
@@ -225,15 +213,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         }
 
         podSlider.setPodTexts(arrayList.toArray(new String[0]));
-    }
 
-    @OnClick(R.id.playrecipe_timer_fab)
-    void oc() {
-        if (timerSet) {
-            stoptimer();
-        } else {
-            starttimer();
-        }
+        binding.playrecipeTimerFab.setOnClickListener(this::toggleFab);
     }
 
     @Override
@@ -243,7 +224,22 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        textToSpeech.shutdown();
+        m_clsSensorManager.unregisterListener(this);
+    }
+
+    @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
+    }
+
+    void toggleFab(View v) {
+        if (timerSet) {
+            stoptimer();
+        } else {
+            starttimer();
+        }
     }
 
     @Override
@@ -272,7 +268,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
                     @Override
                     public void onError(String utteranceId) {
-
                     }
                 });
                 textToSpeech.speak("알림이 울린 후 말하세요.", TextToSpeech.QUEUE_FLUSH, map);
@@ -280,16 +275,16 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         }
     }
 
-    private void starttimer() {
+    void starttimer() {
         timerSet = true;
-        ViewAnimator.animate(timerFab)
-                .onStart(() -> timerFab.setClickable(false))
+        ViewAnimator.animate(binding.playrecipeTimerFab)
+                .onStart(() -> binding.playrecipeTimerFab.setClickable(false))
                 .wobble()
                 .duration(500)
                 .onStop(() -> {
-                    timerFab.setClickable(true);
-                    timerFab.setImageResource(R.drawable.ic_alarm_off_black_24dp);
-                    timerFab.setColorNormal(getResources().getColor(R.color.colorSecondary,null));
+                    binding.playrecipeTimerFab.setClickable(true);
+                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorSecondary, null));
                 })
                 .start();
         countDownTimer = new CountDownTimer(5000, 1000) {
@@ -299,11 +294,11 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 long min = (millisUntilFinished / 60000) % 60;
                 long sec = (millisUntilFinished / 1000) % 60;
 
-                countdowntext.setText(f.format(min) + ":" + f.format(sec));
+                binding.playrecipeTimerText.setText(f.format(min) + ":" + f.format(sec));
             }
 
             public void onFinish() {
-                countdowntext.setText("00:00");
+                binding.playrecipeTimerText.setText("00:00");
                 Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
                 player = MediaPlayer.create(PlayRecipeActivity.this, notification);
                 player.setLooping(true);
@@ -312,27 +307,26 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         }.start();
     }
 
-    private void stoptimer() {
+    void stoptimer() {
         timerSet = false;
-        ViewAnimator.animate(timerFab)
-                .onStart(() -> timerFab.setClickable(false))
+        ViewAnimator.animate(binding.playrecipeTimerFab)
+                .onStart(() -> binding.playrecipeTimerFab.setClickable(false))
                 .tada()
                 .duration(500)
                 .onStop(() -> {
-                    timerFab.setClickable(true);
-                    timerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
-                    timerFab.setColorNormal(getResources().getColor(R.color.colorPrimary,null));
+                    binding.playrecipeTimerFab.setClickable(true);
+                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
+                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
                 })
                 .start();
 
-        countdowntext.setText("00:00");
+        binding.playrecipeTimerText.setText("00:00");
         countDownTimer.cancel();
         if (player != null && player.isPlaying())
             player.stop();
     }
 
-
-    private void startlistening() {
+    void startlistening() {
         Observable.timer(10, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -375,27 +369,27 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                             String[] rs = new String[mResult.size()];
                             mResult.toArray(rs);
                             Log.w("dd", rs[0]);
-                            tts.setText(rs[0]);
+                            binding.playrecipeTts.setText(rs[0]);
 
                             switch (rs[0]) {
                                 case "다음":
-                                    if (viewpager.getCurrentItem() != recipeDetailPlays.size() - 1)
-                                        viewpager.setCurrentItem(viewpager.getCurrentItem() + 1);
+                                    if (binding.playrecipeViewpager.getCurrentItem() != recipeDetailPlays.size() - 1)
+                                        binding.playrecipeViewpager.setCurrentItem(binding.playrecipeViewpager.getCurrentItem() + 1);
                                     break;
                                 case "이전":
-                                    if (viewpager.getCurrentItem() != 0)
-                                        viewpager.setCurrentItem(viewpager.getCurrentItem() - 1);
+                                    if (binding.playrecipeViewpager.getCurrentItem() != 0)
+                                        binding.playrecipeViewpager.setCurrentItem(binding.playrecipeViewpager.getCurrentItem() - 1);
                                     break;
                                 case "재료":
-                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeDetailPlays.size() - 1) {
+                                    if (binding.playrecipeViewpager.getCurrentItem() != 0 || binding.playrecipeViewpager.getCurrentItem() != recipeDetailPlays.size() - 1) {
                                         String temp = "";
-                                        for (int i = 0; i < recipeDetailPlays.get(viewpager.getCurrentItem()).getIngredients().length; i++)
-                                            temp += (recipeDetailPlays.get(viewpager.getCurrentItem()).getIngredients()[i] + " ");
+                                        for (int i = 0; i < recipeDetailPlays.get(binding.playrecipeViewpager.getCurrentItem()).getIngredients().length; i++)
+                                            temp += (recipeDetailPlays.get(binding.playrecipeViewpager.getCurrentItem()).getIngredients()[i] + " ");
                                         textToSpeech.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
                                     }
                                     break;
                                 case "시작":
-                                    if (viewpager.getCurrentItem() != 0 || viewpager.getCurrentItem() != recipeDetailPlays.size() - 1)
+                                    if (binding.playrecipeViewpager.getCurrentItem() != 0 || binding.playrecipeViewpager.getCurrentItem() != recipeDetailPlays.size() - 1)
                                         starttimer();
                                     break;
                             }
@@ -417,14 +411,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        textToSpeech.shutdown();
-        m_clsSensorManager.unregisterListener(this);
-    }
-
-    private class RecipeViewPagerAdapter extends FragmentPagerAdapter {
+    class RecipeViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> fragments = new ArrayList<>();
 
         private RecipeViewPagerAdapter(FragmentManager Fm) {

@@ -54,7 +54,7 @@
             android:background="@drawable/bg_round"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_recipetitle"
             app:layout_constraintRight_toLeftOf="@+id/recipedetail_nickname"
-            tools:src="@drawable/ic_person_black_24dp" />
+            app:srcCompat="@drawable/ic_default_profile"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipedetail_nickname"

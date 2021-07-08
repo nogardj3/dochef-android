@@ -53,7 +53,7 @@
                 android:background="@drawable/bg_round"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_postimg"
-                tools:src="@drawable/ic_person_black_24dp" />
+                app:srcCompat="@drawable/ic_default_profile"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_nickname"

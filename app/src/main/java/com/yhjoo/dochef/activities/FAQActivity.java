@@ -14,6 +14,8 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.FAQ;
+import com.yhjoo.dochef.databinding.AFaqBinding;
+import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -28,32 +30,26 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FAQActivity extends BaseActivity {
-    @BindView(R.id.faq_recycler)
-    RecyclerView recyclerView;
-
     private final int FAQ_DEPTH_0 = 0;
     private final int FAQ_CONTENTS = 1;
+
+    AFaqBinding binding;
 
     FAQListAdapter FAQListAdapter;
     ArrayList<MultiItemEntity> faqList = new ArrayList<>();
 
-    /*
-        TODO
-     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_faq);
-        ButterKnife.bind(this);
+        binding = AFaqBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.faq_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.faqToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         FAQListAdapter = new FAQListAdapter(faqList);
-        recyclerView.setAdapter(FAQListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        binding.faqRecycler.setAdapter(FAQListAdapter);
+        binding.faqRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         if (App.isServerAlive())
             getListFromServer();
@@ -61,7 +57,7 @@ public class FAQActivity extends BaseActivity {
             getListFromLocal();
     }
 
-    private void getListFromServer() {
+    void getListFromServer() {
         RetrofitServices.BasicService basicService =
                 RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
 
@@ -84,7 +80,7 @@ public class FAQActivity extends BaseActivity {
         });
     }
 
-    private void getListFromLocal() {
+    void getListFromLocal() {
         ArrayList<FAQ> faqs = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
         for (FAQ item : faqs) {
             Title Title = new Title(item.title);

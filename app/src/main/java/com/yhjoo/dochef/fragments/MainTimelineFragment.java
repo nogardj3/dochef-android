@@ -37,6 +37,7 @@ import com.yhjoo.dochef.classes.Post;
 import com.yhjoo.dochef.classes.PostComment;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -101,7 +102,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                                 Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostReviseActivity.class);
                                 intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
                                         .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
-                                        .putExtra("postimg", "https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
+                                        .putExtra("postimg", getString(R.string.storage_image_url_post) + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
                                 startActivity(intent);
 
                                 break;
@@ -126,21 +127,18 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                     SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                     try {
                         String item_userid = ((Post) baseQuickAdapter.getData().get(i)).getUserID();
-                        String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("USER_ID");
+                        String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("user_id");
 
-                        if (item_userid.equals(active_userid)) {
-                            Intent intent = new Intent(getContext(), HomeActivity.class);
-                            startActivity(intent);
-
-                        } else {
-                            Intent intent = new Intent(getContext(), HomeUserActivity.class);
+                        Intent intent = new Intent(getContext(), HomeActivity.class);
+                        if (item_userid.equals(active_userid))
+                            intent.putExtra("MODE",HomeActivity.MODE.MY);
+                        else {
+                            intent.putExtra("MODE",HomeActivity.MODE.USER);
                             intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
-                            startActivity(intent);
                         }
-                    } catch (JSONException e) {
-                        Intent intent = new Intent(getContext(), HomeUserActivity.class);
-                        intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                         startActivity(intent);
+                    } catch (JSONException e) {
+                        Utils.log(e.toString());
                     }
                     break;
             }
@@ -204,12 +202,12 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
         @Override
         protected void convert(BaseViewHolder helper, Post item) {
             requestManager
-                    .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + item.getUserImg())
+                    .load("getString(R.string.profile_image_storage_url)" + item.getUserImg())
 //                    .apply(RequestOptions.placeholderOf(getContext().getDrawable(R.raw.dummy_profile_0)).centerCrop())
                     .into((AppCompatImageView) helper.getView(R.id.timeline_userimg));
 
             requestManager
-                    .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/postImage/" + item.getPostImg())
+                    .load(getString(R.string.storage_image_url_post) + item.getPostImg())
                     .apply(RequestOptions.centerCropTransform())
                     .into((AppCompatImageView) helper.itemView.findViewById(R.id.timeline_postimg));
 

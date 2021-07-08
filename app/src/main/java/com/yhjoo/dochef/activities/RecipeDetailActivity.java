@@ -6,29 +6,24 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.google.android.flexbox.FlexboxLayout;
-import com.viewpagerindicator.CirclePageIndicator;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Comment;
-import com.yhjoo.dochef.classes.Recipe;
 import com.yhjoo.dochef.classes.RecipeDetail;
 import com.yhjoo.dochef.classes.Review;
+import com.yhjoo.dochef.databinding.ARecipedetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,55 +31,37 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RecipeDetailActivity extends BaseActivity {
-    private final int RecipeID = 1;
-    private RecipeDetail recipeDetail;
+    ARecipedetailBinding binding;
 
     /*
         TODO
-        1. retrofit 구현
+        1. 서버 데이터 추가 및 기능 구현 (recipedetail, review)
+        2. retrofit 구현
+        3. 뷰들이 이상하다
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_recipedetail);
-        ButterKnife.bind(this);
+        binding = ARecipedetailBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getString(R.string.server_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+        RetrofitServices.OverViewService overViewService = RetrofitBuilder.create(this,RetrofitServices.OverViewService.class);
 
-        RetrofitServices.OverViewService overViewService = retrofit.create(RetrofitServices.OverViewService.class);
-
-        overViewService.LoadOverViewCall(RecipeID).enqueue(new Callback<RecipeDetail>() {
+        int recipdID = 1;
+        overViewService.LoadOverViewCall(recipdID).enqueue(new Callback<RecipeDetail>() {
             @Override
-            public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response1) {
-                recipeDetail = response1.body();
-                overViewService.LoadCommentCall(RecipeID)
-                        .enqueue(new Callback<ArrayList<Comment>>() {
-                            @Override
-                            public void onResponse(Call<ArrayList<Comment>> call, Response<ArrayList<Comment>> response) {
-                                try {
-                                    setheaderview();
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<ArrayList<Comment>> call, Throwable t) {
-
-                            }
-                        });
+            public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response) {
+                try {
+                    setheaderview(response.body());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -94,22 +71,27 @@ public class RecipeDetailActivity extends BaseActivity {
         });
     }
 
-    void setheaderview() {
+    void setheaderview(RecipeDetail recipeDetail) {
         try {
-            ((ViewPager) findViewById(R.id.recipedetail_recipeimgs)).setAdapter(new ImagePagerAdapter(RecipeDetailActivity.this,
-                    new ArrayList<>(Arrays.asList(R.drawable.tempimg_playrecipestart, R.drawable.tempimg_playrecipe1, R.drawable.tempimg_playrecipe2, R.drawable.tempimg_playrecipe3, R.drawable.tempimg_playrecipe4, R.drawable.tempimg_playrecipefinish)), Glide.with(this)));
-            ((CirclePageIndicator) findViewById(R.id.recipedetail_recipeimgs_indicator)).setViewPager(((ViewPager) findViewById(R.id.recipedetail_recipeimgs)));
+            ArrayList<Integer> recipies = new ArrayList<>(
+                    Arrays.asList(R.drawable.tempimg_playrecipestart,
+                    R.drawable.tempimg_playrecipe1,
+                    R.drawable.tempimg_playrecipe2,
+                    R.drawable.tempimg_playrecipe3,
+                    R.drawable.tempimg_playrecipe4,
+                    R.drawable.tempimg_playrecipefinish));
 
-            ((AppCompatTextView) findViewById(R.id.recipedetail_recipetitle)).setText(recipeDetail.getTitle());
+            binding.recipedetailRecipeimgs.setAdapter(new ImagePagerAdapter(RecipeDetailActivity.this, recipies));
+            binding.recipedetailRecipeimgsIndicator.setViewPager(((ViewPager) findViewById(R.id.recipedetail_recipeimgs)));
+            binding.recipedetailRecipetitle.setText(recipeDetail.getTitle());
 
             Glide.with(this)
-                    .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + recipeDetail.getProducerID())
+                    .load("getString(R.string.profile_image_storage_url)" + recipeDetail.getProducerID())
                     .apply(RequestOptions.circleCropTransform())
-                    .into((AppCompatImageView) findViewById(R.id.recipedetail_userimg));
+                    .into(binding.recipedetailUserimg);
 
-            ((AppCompatTextView) findViewById(R.id.recipedetail_nickname)).setText(recipeDetail.getProducerName());
-
-            ((AppCompatTextView) findViewById(R.id.recipedetail_explain)).setText(recipeDetail.getSubstance());
+            binding.recipedetailNickname.setText(recipeDetail.getProducerName());
+            binding.recipedetailExplain.setText(recipeDetail.getSubstance());
 
             JSONArray tagsArray = new JSONArray(recipeDetail.getTag());
 
@@ -118,12 +100,11 @@ public class RecipeDetailActivity extends BaseActivity {
                 textView.setText(tagsArray.getString(i));
                 textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
 
-                ((FlexboxLayout) findViewById(R.id.recipedetail_tags)).addView(textView);
+                binding.recipedetailTags.addView(textView);
             }
 
-            findViewById(R.id.recipedetail_startrecipe).setOnClickListener((v) -> startActivity(new Intent(this, PlayRecipeActivity.class)));
-
-            ((FlexboxLayout) findViewById(R.id.recipedetail_ingredients)).removeAllViews();
+            binding.recipedetailStartrecipe.setOnClickListener((v) ->
+                    startActivity(new Intent(this, PlayRecipeActivity.class)));
 
             JSONArray aa = new JSONArray(recipeDetail.getIngredients());
             for (int i = 0; i < aa.length(); i++) {
@@ -133,34 +114,33 @@ public class RecipeDetailActivity extends BaseActivity {
                 AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_quantity));
                 view2.setText(aa.getJSONObject(i).getString("amount"));
 
-                ((FlexboxLayout) findViewById(R.id.recipedetail_ingredients)).addView(motherview);
+                binding.recipedetailIngredients.addView(motherview);
             }
 
             ArrayList<Review> bb = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
 
-            findViewById(R.id.recipedetail_review_more).setVisibility(bb.size() >= 2 ? View.VISIBLE : View.GONE);
-            findViewById(R.id.recipedetail_review_more).setOnClickListener((v) -> startActivity(new Intent(this, ReviewActivity.class)));
+            binding.recipedetailReviewMore.setVisibility(bb.size() >= 2 ? View.VISIBLE : View.GONE);
+            binding.recipedetailReviewMore.setOnClickListener((v) -> startActivity(new Intent(this, ReviewActivity.class)));
 
-            ReviewListAdapter reviewListAdapter = new ReviewListAdapter(bb, Glide.with(this));
-            reviewListAdapter.setOnItemClickListener((baseQuickAdapter, view, i) -> startActivity(new Intent(RecipeDetailActivity.this, ReviewActivity.class)));
-            ((RecyclerView) findViewById(R.id.recipedetail_review_recycler)).setLayoutManager(new LinearLayoutManager(this));
-            ((RecyclerView) findViewById(R.id.recipedetail_review_recycler)).setAdapter(reviewListAdapter);
-
+            ReviewListAdapter reviewListAdapter = new ReviewListAdapter();
+            reviewListAdapter.setOnItemClickListener((baseQuickAdapter, view, i) ->
+                    startActivity(new Intent(RecipeDetailActivity.this, ReviewActivity.class)));
+            binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this));
+            binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
+            reviewListAdapter.setNewData(bb);
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
 
-    public class ImagePagerAdapter extends PagerAdapter {
-        private final Context mContext;
-        private final ArrayList<Integer> imgids;
-        private final RequestManager requestManager;
+    class ImagePagerAdapter extends PagerAdapter {
+        Context mContext;
+        ArrayList<Integer> imgids;
 
-        public ImagePagerAdapter(Context context, ArrayList<Integer> imgids, RequestManager requestManager) {
+        ImagePagerAdapter(Context context, ArrayList<Integer> imgids) {
             this.mContext = context;
             this.imgids = imgids;
-            this.requestManager = requestManager;
         }
 
         @Override
@@ -169,7 +149,8 @@ public class RecipeDetailActivity extends BaseActivity {
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             aa.setLayoutParams(lp);
 
-            requestManager.load(imgids.get(position))
+            Glide.with(mContext)
+                    .load(imgids.get(position))
                     .apply(RequestOptions.centerCropTransform())
                     .into(aa);
 
@@ -194,12 +175,9 @@ public class RecipeDetailActivity extends BaseActivity {
         }
     }
 
-    private class ReviewListAdapter extends BaseQuickAdapter<Review, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        ReviewListAdapter(@Nullable ArrayList<Review> data, RequestManager requestManager) {
-            super(R.layout.li_reviewbrief, data);
-            this.requestManager = requestManager;
+    class ReviewListAdapter extends BaseQuickAdapter<Review, BaseViewHolder> {
+        ReviewListAdapter() {
+            super(R.layout.li_reviewbrief);
         }
 
         @Override
@@ -207,7 +185,7 @@ public class RecipeDetailActivity extends BaseActivity {
             helper.setRating(R.id.reviewbrief_rating, item.getRating());
             helper.setText(R.id.reviewbrief_nickname, item.getNickname());
             helper.setText(R.id.reviewbrief_contents, item.getContents());
-            helper.setText(R.id.reviewbrief_date, "1일전");
+            helper.setText(R.id.reviewbrief_datetext, "1일전");
         }
     }
 }

@@ -9,48 +9,43 @@ import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.databinding.AReviewwriteBinding;
 import com.yhjoo.dochef.utils.PermissionUtil;
 
 import java.io.File;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class ReviewWriteActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
     private final int EXTRA_RQ_PICKFROMGALLERY = 200;
-    @BindView(R.id.reviewwrite_reviewimg)
-    AppCompatImageView postimg;
-    @BindView(R.id.reviewwrite_contents)
-    AppCompatEditText contents;
-    private Uri mImageUri;
+
+    AReviewwriteBinding binding;
+
+    Uri mImageUri;
 
     /*
         TODO
-        1. retrofit 구현
+        1. 서버 데이터 추가 및 기능 구현
+        2. retrofit 구현
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_reviewwrite);
-        ButterKnife.bind(this);
+        binding = AReviewwriteBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.reviewwrite_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.reviewwriteToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        binding.reviewwriteReviewimgAdd.setOnClickListener(this::startImageAdd);
+        binding.reviewwriteReviewimgAdd.setOnClickListener(this::uploadReview);
     }
 
     @Override
@@ -58,11 +53,11 @@ public class ReviewWriteActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
             if (data != null) {
-                postimg.setVisibility(View.VISIBLE);
+                binding.reviewwriteReviewimg.setVisibility(View.VISIBLE);
                 Glide.with(this)
                         .load(mImageUri != null ? mImageUri : data.getData())
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
-                        .into(postimg);
+                        .into(binding.reviewwriteReviewimg);
             }
     }
 
@@ -89,33 +84,28 @@ public class ReviewWriteActivity extends BaseActivity {
         }
     }
 
-    @OnClick({R.id.reviewwrite_reviewimg_add, R.id.reviewwrite_ok})
-    void ok(View v) {
-        switch (v.getId()) {
-            case R.id.reviewwrite_reviewimg_add:
-                final String[] permissions = {
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                };
+    void startImageAdd(View v){
+        final String[] permissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        };
 
-                if (PermissionUtil.checkPermission(this, permissions)) {
-                    mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
+        if (PermissionUtil.checkPermission(this, permissions)) {
+            mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
 
-                    Intent intent = new Intent(Intent.ACTION_PICK)
-                            .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                            .putExtra("crop", "true")
-                            .putExtra("aspectX", 3)
-                            .putExtra("aspectY", 2)
-                            .putExtra("scale", true)
-                            .putExtra("output", mImageUri);
-                    startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
-                } else
-                    ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
+            Intent intent = new Intent(Intent.ACTION_PICK)
+                    .setType(MediaStore.Images.Media.CONTENT_TYPE)
+                    .putExtra("crop", "true")
+                    .putExtra("aspectX", 3)
+                    .putExtra("aspectY", 2)
+                    .putExtra("scale", true)
+                    .putExtra("output", mImageUri);
+            startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
+        } else
+            ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
+    }
 
-                break;
-            case R.id.reviewwrite_ok:
-                App.getAppInstance().showToast("리뷰가 등록되었습니다.");
-                finish();
-                break;
-        }
+    void uploadReview(View v){
+        App.getAppInstance().showToast("리뷰가 등록되었습니다.");
+        finish();
     }
 }

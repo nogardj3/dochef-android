@@ -12,9 +12,9 @@
         android:layout_height="40dp"
         android:layout_margin="10dp"
         android:background="@drawable/bg_round"
+        app:srcCompat="@drawable/ic_default_profile"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:src="@drawable/ic_person_black_24dp" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/li_resultuser_nickname"

@@ -20,6 +20,8 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Notification;
+import com.yhjoo.dochef.databinding.ANotificationBinding;
+import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -28,13 +30,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class NotificationActivity extends BaseActivity implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
-    @BindView(R.id.notification_swipe)
-    SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.notification_recycler)
-    RecyclerView recyclerView;
+    ANotificationBinding binding;
 
-    private ArrayList<Notification> notifications = new ArrayList<>();
-    private NotificationListAdapter notificationListAdapter;
+    ArrayList<Notification> notifications = new ArrayList<>();
+    NotificationListAdapter notificationListAdapter;
 
     /*
         TODO
@@ -45,22 +44,20 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_notification);
-        ButterKnife.bind(this);
+        binding = ANotificationBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.notification_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.notificationToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        binding.notificationSwipe.setOnRefreshListener(this);
+        binding.notificationSwipe.setColorSchemeColors(this.getColor(R.color.colorPrimary));
 
         notifications = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTIFICATION));
 
-        swipeRefreshLayout.setOnRefreshListener(this);
-        swipeRefreshLayout.setColorSchemeColors(this.getColor(R.color.colorPrimary));
-        notificationListAdapter = new NotificationListAdapter(Glide.with(this));
-        notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        notificationListAdapter.setOnLoadMoreListener(this, recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(notificationListAdapter);
+        notificationListAdapter = new NotificationListAdapter();
+        notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());
+        notificationListAdapter.setOnLoadMoreListener(this, binding.notificationRecycler);
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2))
                 startActivity(new Intent(NotificationActivity.this, RecipeDetailActivity.class));
@@ -68,15 +65,18 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
                 startActivity(new Intent(NotificationActivity.this, HomeUserActivity.class));
         });
         notificationListAdapter.setNewData(notifications);
-        notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
+        notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.notificationRecycler.getParent());
         notificationListAdapter.setEnableLoadMore(true);
+
+        binding.notificationRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.notificationRecycler.setAdapter(notificationListAdapter);
     }
 
     @Override
     public void onLoadMoreRequested() {
-        swipeRefreshLayout.setEnabled(false);
+        binding.notificationSwipe.setEnabled(false);
         notificationListAdapter.loadMoreEnd(true);
-        swipeRefreshLayout.setEnabled(true);
+        binding.notificationSwipe.setEnabled(true);
     }
 
     @Override
@@ -84,23 +84,20 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         notificationListAdapter.setEnableLoadMore(false);
         new Handler().postDelayed(() -> {
             notificationListAdapter.setNewData(notifications);
-            swipeRefreshLayout.setRefreshing(false);
+            binding.notificationSwipe.setRefreshing(false);
             notificationListAdapter.setEnableLoadMore(true);
         }, 1000);
     }
 
 
-    private class NotificationListAdapter extends BaseQuickAdapter<Notification, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        NotificationListAdapter(RequestManager requestManager) {
+    class NotificationListAdapter extends BaseQuickAdapter<Notification, BaseViewHolder> {
+        NotificationListAdapter() {
             super(R.layout.li_notification);
-            this.requestManager = requestManager;
         }
 
         @Override
         protected void convert(BaseViewHolder helper, Notification item) {
-            requestManager
+            Glide.with(mContext)
                     .load(Integer.valueOf(item.getUserImg()))
                     .apply(RequestOptions.circleCropTransform())
                     .into((AppCompatImageView) helper.getView(R.id.li_notification_userimg));

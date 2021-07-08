@@ -1,14 +1,12 @@
 package com.yhjoo.dochef.fragments;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -227,7 +225,7 @@ public class ResultFragment extends Fragment {
         ResultListAdapter(List<ResultItem> data, int layoutResId, RequestManager requestManager) {
             super(data);
             addItemType(type, layoutResId);
-            addItemType(VIEWHOLDER_AD, R.layout.li_tempadview);
+            addItemType(VIEWHOLDER_AD, R.layout.li_adview);
             this.requestManager = requestManager;
         }
 
@@ -245,7 +243,7 @@ public class ResultFragment extends Fragment {
 
                 case VIEWHOLDER_ITEM_USER:
                     requestManager
-                            .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + ((UserList) item.getContent()).getUserImg())
+                            .load("getString(R.string.profile_image_storage_url)" + ((UserList) item.getContent()).getUserImg())
                             .apply(RequestOptions.circleCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_resultuser_userimg));
                     helper.setText(R.id.li_resultuser_nickname, ((UserList) item.getContent()).getNickname());

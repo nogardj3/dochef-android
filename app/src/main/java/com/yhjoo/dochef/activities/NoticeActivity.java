@@ -14,6 +14,8 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Notice;
+import com.yhjoo.dochef.databinding.ANoticeBinding;
+import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -28,32 +30,33 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NoticeActivity extends BaseActivity {
-    @BindView(R.id.notice_recycler)
-    RecyclerView recyclerView;
-
     private final int NOTICE_DEPTH_0 = 0;
     private final int NOTICE_CONTENTS = 1;
 
-    private final ArrayList<MultiItemEntity> noticeList = new ArrayList<>();
-    private NoticeListAdapter noticeListAdapter;
+    ANoticeBinding binding;
+
+    ArrayList<MultiItemEntity> noticeList = new ArrayList<>();
+    NoticeListAdapter noticeListAdapter;
 
     /*
         TODO
+        1. 서버 데이터 추가 및 기능 구현
+        2. retrofit 구현
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_notice);
-        ButterKnife.bind(this);
+        binding = ANoticeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.notice_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.noticeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         noticeListAdapter = new NoticeListAdapter(noticeList);
-        recyclerView.setAdapter(noticeListAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        binding.noticeRecycler.setAdapter(noticeListAdapter);
+        binding.noticeRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         if (App.isServerAlive())
             getListFromServer();
@@ -61,7 +64,7 @@ public class NoticeActivity extends BaseActivity {
             getListFromDummy();
     }
 
-    private void getListFromServer() {
+    void getListFromServer() {
         RetrofitServices.BasicService basicService =
                 RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
 
@@ -85,7 +88,7 @@ public class NoticeActivity extends BaseActivity {
         });
     }
 
-    private void getListFromDummy(){
+    void getListFromDummy(){
         ArrayList<Notice> response = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
         for (Notice item : response) {
             Title title = new Title(item.title);
@@ -95,7 +98,7 @@ public class NoticeActivity extends BaseActivity {
         noticeListAdapter.setNewData(noticeList);
     }
 
-    private class Title extends AbstractExpandableItem<Contents> implements MultiItemEntity {
+    class Title extends AbstractExpandableItem<Contents> implements MultiItemEntity {
         public String title;
 
         Title(String title) {
@@ -113,7 +116,7 @@ public class NoticeActivity extends BaseActivity {
         }
     }
 
-    private class Contents implements MultiItemEntity {
+    class Contents implements MultiItemEntity {
         public String text;
 
         Contents(String text) {
@@ -126,7 +129,7 @@ public class NoticeActivity extends BaseActivity {
         }
     }
 
-    private class NoticeListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
+    class NoticeListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity, BaseViewHolder> {
         NoticeListAdapter(List<MultiItemEntity> data) {
             super(data);
             addItemType(NOTICE_DEPTH_0, R.layout.li_expand_d0);

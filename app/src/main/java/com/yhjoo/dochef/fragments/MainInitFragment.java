@@ -26,6 +26,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.classes.Recipe;
+import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MainInitFragment extends Fragment {
+    private FMainInitBinding binding;
+
     @BindView(R.id.main_adviewpager)
     ViewPager viewPager;
 
@@ -50,7 +53,10 @@ public class MainInitFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_main_init, container, false);
+        binding = FMainInitBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
+//        View view = inflater.inflate(R.layout.f_main_init, container, false);
         ButterKnife.bind(this, view);
 
         ArrayList<Integer> imgs = new ArrayList<>();

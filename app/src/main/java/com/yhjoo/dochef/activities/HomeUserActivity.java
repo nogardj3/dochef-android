@@ -131,7 +131,7 @@ public class HomeUserActivity extends BaseActivity {
         View itemView = getLayoutInflater().inflate(R.layout.h_home, (ViewGroup) recyclerView.getParent(), false);
 
         Glide.with(HomeUserActivity.this)
-                .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userDetailInfo.getUserImg())
+                .load("getString(R.string.profile_image_storage_url)" + userDetailInfo.getUserImg())
                 .apply(RequestOptions.circleCropTransform())
                 .into((AppCompatImageView) itemView.findViewById(R.id.home_userimg));
 

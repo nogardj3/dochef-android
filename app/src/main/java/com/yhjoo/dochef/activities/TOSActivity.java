@@ -3,12 +3,10 @@ package com.yhjoo.dochef.activities;
 import android.os.Bundle;
 import android.text.Html;
 
-import androidx.appcompat.widget.AppCompatTextView;
-import androidx.appcompat.widget.Toolbar;
-
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
+import com.yhjoo.dochef.databinding.ATosBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
@@ -17,19 +15,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TOSActivity extends BaseActivity {
-
-    /*
-        TODO
-    */
+    ATosBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_tos);
+        binding = ATosBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.base_toolbar);
-        toolbar.setTitle("이용약관");
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (App.isServerAlive()) {
@@ -40,8 +34,7 @@ public class TOSActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call<String> call, Response<String> res) {
                     String tos_text = res.body();
-                    ((AppCompatTextView) findViewById(R.id.tos_text)).setText(
-                            Html.fromHtml(tos_text, Html.FROM_HTML_MODE_LEGACY));
+                    binding.tosText.setText(Html.fromHtml(tos_text, Html.FROM_HTML_MODE_LEGACY));
                 }
 
                 @Override
@@ -50,8 +43,7 @@ public class TOSActivity extends BaseActivity {
                 }
             });
         } else {
-            ((AppCompatTextView) findViewById(R.id.tos_text)).setText(
-                    Html.fromHtml(getString(R.string.tos_text_dummy), Html.FROM_HTML_MODE_LEGACY));
+            binding.tosText.setText(Html.fromHtml(getString(R.string.tos_text_dummy), Html.FROM_HTML_MODE_LEGACY));
         }
     }
 }

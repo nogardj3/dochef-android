@@ -8,13 +8,11 @@ import android.view.ViewGroup;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -23,51 +21,57 @@ import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Recipe;
+import com.yhjoo.dochef.databinding.ARecipelistBinding;
 
 import java.util.ArrayList;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class RecipeListActivity extends BaseActivity {
-    private final ArrayList<Recipe> recipes = new ArrayList<>();
-    public OPERATION currentOperation = OPERATION.VIEW;
-    @BindView(R.id.recipelist_recycler)
-    RecyclerView recyclerView;
-    @BindView(R.id.recipelist_alignbutton)
-    AppCompatImageView alignModeIcon;
+    private enum OPERATION {VIEW, ALIGN}
 
-    enum MODE {MY, THEME}
+    ARecipelistBinding binding;
 
-    enum OPERATION {VIEW, ALIGN}
+    ArrayList<Recipe> recipes = new ArrayList<>();
+    RecipeListAdapter recipeListAdapter;
+    ItemTouchHelper dragitemTouchHelper;
 
-    private RecipeListAdapter recipeListAdapter;
-    private ItemTouchHelper dragitemTouchHelper;
+    OPERATION currentOperation = OPERATION.VIEW;
 
     /*
         TODO
-        1. retrofit 구현
+        1. 서버 데이터 추가 및 기능 구현
+        2. retrofit 구현
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_recipelist);
-        ButterKnife.bind(this);
+        binding = ARecipelistBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.recipelist_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.recipelistToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        recipeListAdapter = new RecipeListAdapter(Glide.with(this));
-        recipeListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
-        recyclerView.setAdapter(recipeListAdapter);
+        recipeListAdapter = new RecipeListAdapter();
+        recipeListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
+        recipeListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            if (view.getId() == R.id.li_a_myrecipe_revise) {
+                startActivity(new Intent(new Intent(RecipeListActivity.this, RecipeReviseActivity.class)));
+            } else if (view.getId() == R.id.li_a_myrecipe_delete) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this);
+                builder.setMessage("삭제하시겠습니까?")
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            adapter.getData().remove(position);
+                            adapter.notifyItemRemoved(position);
+                            dialog.dismiss();
+                        })
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                        .show();
+            }
+        });
 
         ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(recipeListAdapter);
         dragitemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
-        dragitemTouchHelper.attachToRecyclerView(recyclerView);
+        dragitemTouchHelper.attachToRecyclerView(binding.recipelistRecycler);
         recipeListAdapter.setOnItemDragListener(new OnItemDragListener() {
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
@@ -86,22 +90,10 @@ public class RecipeListActivity extends BaseActivity {
             }
         });
 
-        recipeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) recyclerView.getParent());
-        recipeListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.li_a_myrecipe_revise) {
-                startActivity(new Intent(new Intent(RecipeListActivity.this, RecipeReviseActivity.class)));
-            } else if (view.getId() == R.id.li_a_myrecipe_delete) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this);
-                builder.setMessage("삭제하시겠습니까?")
-                        .setPositiveButton("확인", (dialog, which) -> {
-                            adapter.getData().remove(position);
-                            adapter.notifyItemRemoved(position);
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
-                        .show();
-            }
-        });
+        binding.recipelistRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.recipelistRecycler.setAdapter(recipeListAdapter);
+
+        binding.recipelistAlignbutton.setOnClickListener(this::toggleAlignMode);
     }
 
     @Override
@@ -109,31 +101,29 @@ public class RecipeListActivity extends BaseActivity {
         if (currentOperation == OPERATION.VIEW) {
             super.onBackPressed();
         } else {
-            showConfirm();
+            showAlignConfirm();
         }
     }
 
-    @OnClick(R.id.recipelist_alignbutton)
-    public void Moveset(View v) {
+    void toggleAlignMode(View v) {
         if (currentOperation == OPERATION.VIEW) {
             recipeListAdapter.enableDragItem(dragitemTouchHelper);
             ((AppCompatImageView) v).setImageResource(R.drawable.ic_check_black_24dp);
             recipeListAdapter.notifyDataSetChanged();
-            recyclerView.getLayoutManager().scrollToPosition(0);
+            binding.recipelistRecycler.getLayoutManager().scrollToPosition(0);
             currentOperation = OPERATION.ALIGN;
-        } else {
-            showConfirm();
-        }
+        } else
+            showAlignConfirm();
     }
 
-    private void showConfirm() {
+    void showAlignConfirm() {
         AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this);
         builder.setMessage("적용하시겠습니까?")
                 .setPositiveButton("확인", (dialog, which) -> {
                     recipeListAdapter.disableDragItem();
                     ((AppCompatImageView) RecipeListActivity.this.findViewById(R.id.recipelist_alignbutton)).setImageResource(R.drawable.ic_low_priority_white_24dp);
                     recipeListAdapter.notifyDataSetChanged();
-                    recyclerView.getLayoutManager().scrollToPosition(0);
+                    binding.recipelistRecycler.getLayoutManager().scrollToPosition(0);
                     currentOperation = OPERATION.VIEW;
                     dialog.dismiss();
                 })
@@ -142,17 +132,14 @@ public class RecipeListActivity extends BaseActivity {
     }
 
 
-    private class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        RecipeListAdapter(RequestManager requestManager) {
+    class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseViewHolder> {
+        RecipeListAdapter() {
             super(R.layout.li_recipelist, recipes);
-            this.requestManager = requestManager;
         }
 
         @Override
         protected void convert(BaseViewHolder helper, Recipe item) {
-            requestManager
+            Glide.with(mContext)
                     .load(item.getRecipeImg())
                     .apply(RequestOptions.centerCropTransform())
                     .into((AppCompatImageView) helper.getView(R.id.li_a_myrecipe_recipeimg));

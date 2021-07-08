@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -86,7 +85,7 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
 
         swipeRefreshLayout.setOnRefreshListener(this);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
-        recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(getContext()));
+        recipeListAdapter = new RecipeListAdapter(recipeListItems);
         recipeListAdapter.setOnLoadMoreListener(this, recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(recipeListAdapter);
@@ -186,14 +185,11 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
     }
 
     private class RecipeListAdapter extends BaseMultiItemQuickAdapter<RecipeItem, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        RecipeListAdapter(List<RecipeItem> data, RequestManager requestManager) {
+        RecipeListAdapter(List<RecipeItem> data) {
             super(data);
-            addItemType(VIEWHOLDER_AD, R.layout.li_tempadview);
+            addItemType(VIEWHOLDER_AD, R.layout.li_adview);
             addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
             addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe);
-            this.requestManager = requestManager;
         }
 
         @Override
@@ -201,12 +197,12 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM:
                     if (App.isServerAlive())
-                        requestManager
+                        Glide.with(mContext)
                                 .load(item.getContent().getRecipeImg())
                                 .apply(RequestOptions.centerCropTransform())
                                 .into((AppCompatImageView) helper.getView(R.id.li_recipe_recipeimg));
                     else
-                        requestManager
+                        Glide.with(mContext)
                                 .load(Integer.parseInt(item.getContent().getRecipeImg()))
                                 .apply(RequestOptions.centerCropTransform())
                                 .into((AppCompatImageView) helper.getView(R.id.li_recipe_recipeimg));
@@ -248,12 +244,12 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
             @Override
             protected void convert(BaseViewHolder helper, Recipe item) {
                 if (App.isServerAlive())
-                    requestManager
+                    Glide.with(mContext)
                             .load(item.getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
                 else
-                    requestManager
+                    Glide.with(mContext)
                             .load(Integer.parseInt(item.getRecipeImg()))
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));

@@ -36,6 +36,7 @@ import com.yhjoo.dochef.fragments.MainInitFragment;
 import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
+import com.yhjoo.dochef.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -168,11 +169,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
                 JSONObject userInfo = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
 
-                userName.setText(userInfo.getString("NICKNAME"));
+                Utils.log(userInfo.toString());
+
+                userName.setText(userInfo.getString("nickname"));
 
                 Glide.with(this)
-                        .load("https://s3.ap-northeast-2.amazonaws.com/quvechefbucket/profile/" + userInfo.get("PROFILE_IMAGE"))
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_person_black_24dp).error(R.drawable.ic_person_black_24dp).circleCrop())
+                        .load("getString(R.string.profile_image_storage_url)" + userInfo.get("profile_image_url"))
+                        .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile))
                         .into(userImage);
 
             } catch (JSONException e) {
@@ -184,7 +187,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             navigationView.getMenu().findItem(R.id.main_nav_notification).setVisible(true);
         } else {
             Glide.with(this)
-                    .load(R.drawable.ic_person_black_24dp)
+                    .load(R.drawable.ic_default_profile)
                     .apply(RequestOptions.circleCropTransform())
                     .into(userImage);
 

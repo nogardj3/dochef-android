@@ -4,12 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
@@ -20,59 +17,57 @@ import com.google.android.gms.ads.MobileAds;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.classes.Recipe;
+import com.yhjoo.dochef.databinding.ARecipethemeBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class RecipeThemeActivity extends BaseActivity {
     private final int VIEWHOLDER_AD = 1;
     private final int VIEWHOLDER_ITEM = 2;
-    private final ArrayList<ThemeItem> recipeListItems = new ArrayList<>();
-    @BindView(R.id.recipetheme_recycler)
-    RecyclerView recyclerView;
 
+    ARecipethemeBinding binding;
+
+    ArrayList<ThemeItem> recipeListItems = new ArrayList<>();
+    
     /*
         TODO
-        1. 이건 그리드이기 때문에 뷰가 다르므로 안합친다
+        1. 서버 테마 데이터 추가
+        2. retrofit 구현
+        3. span size 뭐임
     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_recipetheme);
-        ButterKnife.bind(this);
-        MobileAds.initialize(this);
+        binding = ARecipethemeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.recipetheme_toolbar);
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.recipethemeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        MobileAds.initialize(this);
 
         ArrayList<Recipe> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
-
         for (int i = 0; i < arrayList.size(); i++) {
             recipeListItems.add(new ThemeItem(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
             if (i != 0 && i % 4 == 0)
                 recipeListItems.add(new ThemeItem(VIEWHOLDER_AD, 2));
         }
-
-        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(recipeListItems, Glide.with(this));
-        final GridLayoutManager manager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(manager);
+        RecipeListAdapter recipeListAdapter = new RecipeListAdapter(recipeListItems);
         recipeListAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
-        recyclerView.setAdapter(recipeListAdapter);
         recipeListAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
                 startActivity(new Intent(RecipeThemeActivity.this, RecipeDetailActivity.class));
             }
         });
+
+        binding.recipethemeRecycler.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.recipethemeRecycler.setAdapter(recipeListAdapter);
     }
 
-    private class ThemeItem implements MultiItemEntity {
+    class ThemeItem implements MultiItemEntity {
         private final int itemType;
         private final int spanSize;
 
@@ -103,27 +98,25 @@ public class RecipeThemeActivity extends BaseActivity {
         }
     }
 
-    private class RecipeListAdapter extends BaseMultiItemQuickAdapter<ThemeItem, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        RecipeListAdapter(List<ThemeItem> data, RequestManager requestManager) {
+    class RecipeListAdapter extends BaseMultiItemQuickAdapter<ThemeItem, BaseViewHolder> {
+        RecipeListAdapter(List<ThemeItem> data) {
             super(data);
             addItemType(VIEWHOLDER_ITEM, R.layout.li_recipetheme);
-            addItemType(VIEWHOLDER_AD, R.layout.li_tempadview);
-            this.requestManager = requestManager;
+            addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         }
 
         @Override
         protected void convert(BaseViewHolder helper, ThemeItem item) {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM:
-                    requestManager
+                    Glide.with(mContext)
                             .load(item.getContent().getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.li_recipetheme_img));
                     helper.setText(R.id.li_recipetheme_title, item.getContent().getTitle());
                     helper.setText(R.id.li_recipetheme_nickname, "By - " + item.getContent().getNickName());
                     break;
+
                 case VIEWHOLDER_AD:
                     AdView mAdview = helper.getView(R.id.tempadview);
                     AdRequest adRequest = new AdRequest.Builder().build();

@@ -259,7 +259,9 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="account_signupnick_nickname, account_signupnick_divider,
-        account_signupnick_notice, account_signupnick_ok" />
+        account_signupnick_notice, account_signupnick_ok"
+        tools:visibility="visible"
+        />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/account_signupnick_nickname"
@@ -300,9 +302,9 @@
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/account_signupnick_ok"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
-        android:text="로그인"
+        android:text="회원 가입"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"

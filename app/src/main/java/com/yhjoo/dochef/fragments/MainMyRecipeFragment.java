@@ -121,7 +121,7 @@ public class MainMyRecipeFragment extends Fragment {
 
         RecipeListAdapter(List<RecipeItem> data, RequestManager requestManager) {
             super(data);
-            addItemType(VIEWHOLDER_AD, R.layout.li_tempadview);
+            addItemType(VIEWHOLDER_AD, R.layout.li_adview);
             addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
             addItemType(VIEWHOLDER_ITEM, R.layout.li_f_myrecipe);
             this.requestManager = requestManager;

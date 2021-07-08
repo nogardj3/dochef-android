@@ -3,6 +3,8 @@ package com.yhjoo.dochef.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 import static android.util.Patterns.EMAIL_ADDRESS;
@@ -11,6 +13,7 @@ import static android.util.Patterns.EMAIL_ADDRESS;
 public class Utils {
     public static void log(String... msgs) {
         String msg = TextUtils.join("\n", msgs);
+        Log.d("YHJOO ", "-----------------");
         Log.d("YHJOO ", msg);
     }
 
@@ -59,5 +62,25 @@ public class Utils {
             return NICKNAME_VALIDATE.VALID;
         else
             return NICKNAME_VALIDATE.INVALID;
+    }
+
+    public static String convertMillisToText(long millis){
+        long current_millis = new Date().getTime();
+        long diff_sec = (current_millis - millis) / 1000;
+
+        log(current_millis+"", millis+"");
+
+        if(diff_sec < 60)
+            return "방금 전";
+        else if (diff_sec / 60 < 60)
+            return (diff_sec / 60) + "분 전";
+        else if (diff_sec / 60 / 60 < 24)
+            return (diff_sec / 60 / 60) + "시간 전";
+        else if (diff_sec / 60 / 60 / 24 < 7)
+            return (diff_sec / 60 / 60 / 24) + "일 전";
+        else{
+            SimpleDateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+            return formatter.format(new Date(millis));
+        }
     }
 }
