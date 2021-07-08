@@ -82,17 +82,7 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.ReviewActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name="com.yhjoo.dochef.activities.PostReviseActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name="com.yhjoo.dochef.activities.RecipeReviseActivity"
+            android:name="com.yhjoo.dochef.activities.ReviewDetailActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 

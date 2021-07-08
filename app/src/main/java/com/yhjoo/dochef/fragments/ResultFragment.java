@@ -47,8 +47,10 @@ public class ResultFragment extends Fragment {
     private final int VIEWHOLDER_ITEM_USER = 2;
     private final int VIEWHOLDER_ITEM_INGREDIENT = 3;
     private final int VIEWHOLDER_ITEM_TAG = 4;
+
     @BindView(R.id.result_recycler)
     RecyclerView recyclerView;
+
     private ResultListAdapter resultListAdapter;
     private RetrofitServices.SearchUserService searchUserService;
     private String keyword;
@@ -118,7 +120,7 @@ public class ResultFragment extends Fragment {
         }
     }
 
-    private void loadList(final int lastID) {
+    void loadList(final int lastID) {
         resultListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
         ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
@@ -195,8 +197,7 @@ public class ResultFragment extends Fragment {
         }
     }
 
-
-    private class ResultItem<T> implements MultiItemEntity {
+    class ResultItem<T> implements MultiItemEntity {
         private final int itemType;
         private T content;
 
@@ -219,7 +220,7 @@ public class ResultFragment extends Fragment {
         }
     }
 
-    private class ResultListAdapter extends BaseMultiItemQuickAdapter<ResultItem, BaseViewHolder> {
+    class ResultListAdapter extends BaseMultiItemQuickAdapter<ResultItem, BaseViewHolder> {
         private final RequestManager requestManager;
 
         ResultListAdapter(List<ResultItem> data, int layoutResId, RequestManager requestManager) {

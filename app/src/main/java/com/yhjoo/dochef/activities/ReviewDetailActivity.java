@@ -19,7 +19,7 @@ import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
 
-public class ReviewActivity extends BaseActivity {
+public class ReviewDetailActivity extends BaseActivity {
     AReviewBinding binding;
 
     /*
@@ -43,7 +43,7 @@ public class ReviewActivity extends BaseActivity {
         binding.reviewRecycler.setAdapter(reviewListAdapter);
 
         binding.reviewFab.setImageResource(R.drawable.ic_create_white_24dp);
-        binding.reviewFab.setOnClickListener(v -> startActivity(new Intent(ReviewActivity.this, ReviewWriteActivity.class)));
+        binding.reviewFab.setOnClickListener(v -> startActivity(new Intent(ReviewDetailActivity.this, ReviewWriteActivity.class)));
 
 
         ArrayList<Review> reviews = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));

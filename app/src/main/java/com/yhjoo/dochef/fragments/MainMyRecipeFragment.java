@@ -36,13 +36,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainMyRecipeFragment extends Fragment {
+    @BindView(R.id.f_myrecipe_recycler)
+    RecyclerView recyclerView;
+
     private final int VIEWHOLDER_AD = 1;
     private final int VIEWHOLDER_PAGER = 2;
     private final int VIEWHOLDER_ITEM = 3;
-    private final ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
     private final String[] aa = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
-    @BindView(R.id.f_myrecipe_recycler)
-    RecyclerView recyclerView;
+
+    ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
 
     /*
         TODO
@@ -83,7 +85,7 @@ public class MainMyRecipeFragment extends Fragment {
         return view;
     }
 
-    private class RecipeItem implements MultiItemEntity {
+    class RecipeItem implements MultiItemEntity {
         private final int itemType;
         private Recipe content;
         private String pager_title;
@@ -116,7 +118,7 @@ public class MainMyRecipeFragment extends Fragment {
         }
     }
 
-    private class RecipeListAdapter extends BaseMultiItemQuickAdapter<RecipeItem, BaseViewHolder> {
+    class RecipeListAdapter extends BaseMultiItemQuickAdapter<RecipeItem, BaseViewHolder> {
         private final RequestManager requestManager;
 
         RecipeListAdapter(List<RecipeItem> data, RequestManager requestManager) {

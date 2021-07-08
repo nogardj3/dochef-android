@@ -40,21 +40,22 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.RequestLoadMoreListener, SwipeRefreshLayout.OnRefreshListener {
+    public static final int mode_Recent = 1;
+    public static final int mode_Popular = 2;
+
+    private final int VIEWHOLDER_AD = 1;
+    private final int VIEWHOLDER_PAGER = 2;
+    private final int VIEWHOLDER_ITEM = 3;
+    private final String[] recommendTheme = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
+
     @BindView(R.id.f_recipe_swipe)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.f_recipe_recycler)
     RecyclerView recyclerView;
 
-    public static final int mode_Recent = 1;
-    public static final int mode_Popular = 2;
-    private final int VIEWHOLDER_AD = 1;
-    private final int VIEWHOLDER_PAGER = 2;
-    private final int VIEWHOLDER_ITEM = 3;
-
-    private final ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
-    private final String[] recommendTheme = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
-    private RecipeListAdapter recipeListAdapter;
-    private int currentMode = 1;
+    ArrayList<RecipeItem> recipeListItems = new ArrayList<>();
+    RecipeListAdapter recipeListAdapter;
+    int currentMode = 1;
 
     /*
         TODO
@@ -151,7 +152,7 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
         }
     }
 
-    private class RecipeItem implements MultiItemEntity {
+    class RecipeItem implements MultiItemEntity {
         private final int itemType;
         private Recipe content;
         private String pager_title;
@@ -184,7 +185,7 @@ public class MainRecipesFragment extends Fragment implements BaseQuickAdapter.Re
         }
     }
 
-    private class RecipeListAdapter extends BaseMultiItemQuickAdapter<RecipeItem, BaseViewHolder> {
+    class RecipeListAdapter extends BaseMultiItemQuickAdapter<RecipeItem, BaseViewHolder> {
         RecipeListAdapter(List<RecipeItem> data) {
             super(data);
             addItemType(VIEWHOLDER_AD, R.layout.li_adview);

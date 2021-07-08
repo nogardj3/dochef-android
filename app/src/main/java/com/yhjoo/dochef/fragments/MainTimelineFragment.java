@@ -31,7 +31,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.CommentActivity;
 import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.PostDetailActivity;
-import com.yhjoo.dochef.activities.PostReviseActivity;
+import com.yhjoo.dochef.activities.PostWriteActivity;
 import com.yhjoo.dochef.classes.Post;
 import com.yhjoo.dochef.classes.PostComment;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
@@ -58,6 +58,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
 
     private PostListAdapter postListAdapter;
     private RetrofitServices.TimeLineService timeLineService;
+
     private List<Post> postList = new ArrayList<>();
 
     /*
@@ -98,7 +99,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                     popup.setOnMenuItemClickListener(item -> {
                         switch (item.getItemId()) {
                             case R.id.menu_post_owner_revise:
-                                Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostReviseActivity.class);
+                                Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostWriteActivity.class);
                                 intent.putExtra("postid", ((Post) baseQuickAdapter.getData().get(i)).getPostID())
                                         .putExtra("contents", ((Post) baseQuickAdapter.getData().get(i)).getContents())
                                         .putExtra("postimg", getString(R.string.storage_image_url_post) + ((Post) baseQuickAdapter.getData().get(i)).getPostImg());
@@ -189,8 +190,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
         }
     }
 
-
-    private class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
+    class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         private final RequestManager requestManager;
 
         PostListAdapter(RequestManager requestManager) {

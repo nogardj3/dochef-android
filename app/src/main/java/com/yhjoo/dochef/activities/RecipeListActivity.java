@@ -55,7 +55,7 @@ public class RecipeListActivity extends BaseActivity {
         recipeListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
         recipeListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.li_a_myrecipe_revise) {
-                startActivity(new Intent(new Intent(RecipeListActivity.this, RecipeReviseActivity.class)));
+                startActivity(new Intent(new Intent(RecipeListActivity.this, RecipeMakeActivity.class)));
             } else if (view.getId() == R.id.li_a_myrecipe_delete) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this);
                 builder.setMessage("삭제하시겠습니까?")

@@ -120,11 +120,11 @@ public class RecipeDetailActivity extends BaseActivity {
             ArrayList<Review> bb = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
 
             binding.recipedetailReviewMore.setVisibility(bb.size() >= 2 ? View.VISIBLE : View.GONE);
-            binding.recipedetailReviewMore.setOnClickListener((v) -> startActivity(new Intent(this, ReviewActivity.class)));
+            binding.recipedetailReviewMore.setOnClickListener((v) -> startActivity(new Intent(this, ReviewDetailActivity.class)));
 
             ReviewListAdapter reviewListAdapter = new ReviewListAdapter();
             reviewListAdapter.setOnItemClickListener((baseQuickAdapter, view, i) ->
-                    startActivity(new Intent(RecipeDetailActivity.this, ReviewActivity.class)));
+                    startActivity(new Intent(RecipeDetailActivity.this, ReviewDetailActivity.class)));
             binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this));
             binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
             reviewListAdapter.setNewData(bb);

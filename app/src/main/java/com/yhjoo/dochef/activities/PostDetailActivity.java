@@ -33,6 +33,8 @@ import java.util.List;
 import retrofit2.Response;
 
 public class PostDetailActivity extends BaseActivity {
+    enum MODE {MY, USER}
+
     enum OPERATION {VIEW, REVISE}
 
     APostdetailBinding binding;
@@ -113,7 +115,7 @@ public class PostDetailActivity extends BaseActivity {
             popup.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.menu_post_owner_revise:
-                        Intent intent = new Intent(PostDetailActivity.this, PostReviseActivity.class);
+                        Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class);
                         intent.putExtra("postid", post.getPostID())
                                 .putExtra("contents", post.getContents())
                                 .putExtra("postimg", getString(R.string.storage_image_url_post) + post.getPostImg());

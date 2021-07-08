@@ -38,10 +38,10 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MainInitFragment extends Fragment {
-    FMainInitBinding binding;
-
     @BindView(R.id.main_adviewpager)
     ViewPager viewPager;
+
+    FMainInitBinding binding;
 
     ArrayList<Recipe> recipes;
 
@@ -88,7 +88,7 @@ public class MainInitFragment extends Fragment {
         return view;
     }
 
-    public class ImagePagerAdapter extends PagerAdapter {
+    class ImagePagerAdapter extends PagerAdapter {
         private final Context mContext;
         private final ArrayList<Integer> imgids;
         private final RequestManager requestManager;
@@ -130,7 +130,7 @@ public class MainInitFragment extends Fragment {
         }
     }
 
-    private class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
+    class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
         private final RequestManager requestManager;
 
         RecommendAdapter(ArrayList<Recipe> recipe, RequestManager requestManager) {

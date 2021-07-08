@@ -73,7 +73,10 @@ public class RetrofitServices {
 
     public interface PostService {
         @GET("post/")
-        Call<ArrayList<Post>> getPost(@Query("last") int last);
+        Call<ArrayList<Post>> getPost(@Query("user_id") String userID);
+
+        @GET("post/detail")
+        Call<ArrayList<Post>> getPostDetail(@Query("user_id") String userID);
     }
 
     public interface CommentService {
