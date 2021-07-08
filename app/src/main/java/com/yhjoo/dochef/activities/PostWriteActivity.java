@@ -43,9 +43,10 @@ public class PostWriteActivity extends BaseActivity {
 
     /*
         TODO
-        1. 서버 데이터 추가 및 기능 구현
-        2. retrofit 구현
-        3. REVISE 모드 추가
+        1. post revise랑 합침
+        2. 서버 데이터 추가 및 기능 구현
+        3. retrofit 구현
+        4. REVISE 모드 추가
     */
 
     @Override
