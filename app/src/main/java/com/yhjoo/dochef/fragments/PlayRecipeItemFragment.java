@@ -7,26 +7,17 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding;
 import com.yhjoo.dochef.model.RecipeDetailPlay;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
 public class PlayRecipeItemFragment extends Fragment {
-    @BindView(R.id.playrecipe_item_img)
-    AppCompatImageView recipeImage;
-    @BindView(R.id.playrecipe_item_ingredients)
-    TagView recipeIngredients;
-    @BindView(R.id.playrecipe_item_explain)
-    AppCompatTextView recipeExplain;
+    FPlayrecipeItemBinding binding;
 
     /*
         TODO
@@ -34,25 +25,25 @@ public class PlayRecipeItemFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.f_playrecipe_item, container, false);
-        ButterKnife.bind(this, view);
+        binding = FPlayrecipeItemBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         RecipeDetailPlay recipeDetailPlay = (RecipeDetailPlay) getArguments().getSerializable("item");
 
         Glide.with(getContext())
                 .load(recipeDetailPlay.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
-                .into(recipeImage);
+                .into(binding.playrecipeItemImg);
 
-        recipeIngredients.removeAllViews();
+        binding.playrecipeItemIngredients.removeAllViews();
         for (int i = 0; i < recipeDetailPlay.getIngredients().length; i++) {
             LinearLayout motherview = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.v_ingredient, null);
             ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_product)).setText(recipeDetailPlay.getIngredients()[i]);
             ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_quantity)).setText("0");
-            recipeIngredients.addView(motherview);
+            binding.playrecipeItemIngredients.addView(motherview);
         }
 
-        recipeExplain.setText(recipeDetailPlay.getExplain());
+        binding.playrecipeItemExplain.setText(recipeDetailPlay.getExplain());
 
         return view;
     }

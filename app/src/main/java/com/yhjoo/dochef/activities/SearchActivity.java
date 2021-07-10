@@ -5,27 +5,17 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
-import androidx.appcompat.widget.AppCompatEditText;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.material.tabs.TabLayout;
 import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.databinding.AFaqBinding;
 import com.yhjoo.dochef.databinding.ASearchBinding;
 import com.yhjoo.dochef.fragments.ResultFragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class SearchActivity extends BaseActivity {
     ASearchBinding binding;

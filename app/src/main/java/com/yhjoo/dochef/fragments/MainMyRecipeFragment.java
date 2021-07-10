@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -26,16 +25,12 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.databinding.FMainMyrecipeBinding;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
 
 public class MainMyRecipeFragment extends Fragment {
     private final int VIEWHOLDER_AD = 1;

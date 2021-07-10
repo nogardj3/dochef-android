@@ -27,7 +27,6 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.databinding.FMainRecipesBinding;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
@@ -36,8 +35,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
