@@ -15,10 +15,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.Post;
-import com.yhjoo.dochef.model.PostComment;
 import com.yhjoo.dochef.databinding.APostdetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.model.Comment;
+import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
@@ -70,9 +70,9 @@ public class PostDetailActivity extends BaseActivity {
                             post = response.body().get(0);
 
                             postActivityService.GetCommentCall(post.getPostID())
-                                    .enqueue(new BasicCallback<ArrayList<PostComment>>(PostDetailActivity.this) {
+                                    .enqueue(new BasicCallback<ArrayList<Comment>>(PostDetailActivity.this) {
                                         @Override
-                                        public void onResponse(Response<ArrayList<PostComment>> response) {
+                                        public void onResponse(Response<ArrayList<Comment>> response) {
                                             setheaderfooter();
                                         }
                                     });
@@ -80,9 +80,9 @@ public class PostDetailActivity extends BaseActivity {
                     });
         } else {
             postActivityService.GetCommentCall(post.getPostID())
-                    .enqueue(new BasicCallback<ArrayList<PostComment>>(PostDetailActivity.this) {
+                    .enqueue(new BasicCallback<ArrayList<Comment>>(PostDetailActivity.this) {
                         @Override
-                        public void onResponse(Response<ArrayList<PostComment>> response) {
+                        public void onResponse(Response<ArrayList<Comment>> response) {
                             setheaderfooter();
                         }
                     });
@@ -145,9 +145,9 @@ public class PostDetailActivity extends BaseActivity {
 
                 Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class);
                 if (item_userid.equals(active_userid))
-                    intent.putExtra("MODE",HomeActivity.MODE.MY);
+                    intent.putExtra("MODE", HomeActivity.MODE.MY);
                 else {
-                    intent.putExtra("MODE",HomeActivity.MODE.USER);
+                    intent.putExtra("MODE", HomeActivity.MODE.USER);
                     intent.putExtra("UserID", item_userid);
                 }
                 startActivity(intent);
@@ -161,17 +161,14 @@ public class PostDetailActivity extends BaseActivity {
         for (String tag : tags) {
             AppCompatTextView textView = new AppCompatTextView(PostDetailActivity.this);
             textView.setText("#" + tag + " ");
-            textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
+            textView.setTextColor(getResources().getColor(R.color.colorPrimary, null));
 
             binding.postTags.addView(textView);
         }
 
 
-        List<PostComment> aa = new ArrayList<>();
-        PostComment bb = new PostComment();
-        bb.setNickName("유저1");
-        bb.setContents("댓글1\n댓글1\n댓글1\n댓글1");
-        bb.setDateTime(0);
+        List<Comment> aa = new ArrayList<>();
+        Comment bb = new Comment("유저1", "댓글1\n댓글1\n댓글1\n댓글1", System.currentTimeMillis());
 
         aa.add(bb);
         aa.add(bb);

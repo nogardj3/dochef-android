@@ -23,7 +23,7 @@ import java.io.File;
 public class PostWriteActivity extends BaseActivity {
     final int CODE_PERMISSION = 22;
     final int EXTRA_RQ_PICKFROMGALLERY = 200;
-    
+
     enum MODE {WRITE, REVISE}
 
     APostwriteBinding binding;
@@ -89,7 +89,7 @@ public class PostWriteActivity extends BaseActivity {
         }
     }
 
-    void addImage(View v){
+    void addImage(View v) {
         final String[] permissions = {
                 Manifest.permission.READ_EXTERNAL_STORAGE
         };
@@ -109,7 +109,7 @@ public class PostWriteActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
     }
 
-    void writePost(View v){
+    void writePost(View v) {
         App.getAppInstance().showToast("글이 등록되었습니다.");
         finish();
     }

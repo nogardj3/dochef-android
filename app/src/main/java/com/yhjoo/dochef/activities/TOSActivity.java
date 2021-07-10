@@ -41,8 +41,7 @@ public class TOSActivity extends BaseActivity {
                     t.printStackTrace();
                 }
             });
-        } else {
+        } else
             binding.tosText.setText(Html.fromHtml(getString(R.string.tos_text_dummy), Html.FROM_HTML_MODE_LEGACY));
-        }
     }
 }

@@ -33,7 +33,7 @@ import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.PostDetailActivity;
 import com.yhjoo.dochef.activities.PostWriteActivity;
 import com.yhjoo.dochef.model.Post;
-import com.yhjoo.dochef.model.PostComment;
+import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.Utils;
@@ -231,8 +231,8 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
             }
 
             ((FlexboxLayout) helper.getView(R.id.timeline_commentdetail)).removeAllViews();
-            List<PostComment> aa = new ArrayList<>();
-            PostComment bb = new PostComment();
+            List<Comment> aa = new ArrayList<>();
+            Comment bb = new Comment();
             bb.setNickName("유저1");
             bb.setContents("댓글1\n댓글1\n댓글1\n댓글1");
             bb.setDateTime(0);

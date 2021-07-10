@@ -16,9 +16,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -31,6 +28,7 @@ import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.adapter.MainFragmentAdapter;
 import com.yhjoo.dochef.fragments.MainInitFragment;
 import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
@@ -42,7 +40,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,7 +64,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private AppCompatTextView userName;
     private AppCompatImageView userImage;
 
-    private TabPagerAdapter tabPagerAdapter;
+    private MainFragmentAdapter mainFragmentAdapter;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -100,8 +97,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainInitFragment(), new MainRecipesFragment(), new MainMyRecipeFragment(), new MainTimelineFragment())));
-        viewPager.setAdapter(tabPagerAdapter);
+        mainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainInitFragment(), new MainRecipesFragment(), new MainMyRecipeFragment(), new MainTimelineFragment())));
+        viewPager.setAdapter(mainFragmentAdapter);
         viewPager.setOffscreenPageLimit(3);
 
         tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[0]));
@@ -269,11 +266,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         switch (viewPager.getCurrentItem()) {
             case 1:
                 if (v.getId() == R.id.fam_recent) {
-                    if (((MainRecipesFragment) tabPagerAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Recent)
-                        ((MainRecipesFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
+                    if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Recent)
+                        ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
                 } else if (v.getId() == R.id.fam_popular) {
-                    if (((MainRecipesFragment) tabPagerAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Popular)
-                        ((MainRecipesFragment) tabPagerAdapter.getItem(1)).changeAlignMode();
+                    if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Popular)
+                        ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
                 }
                 floatingActionMenu.close(true);
 
@@ -287,22 +284,5 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         }
     }
 
-    private class TabPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> fragmentList;
 
-        private TabPagerAdapter(FragmentManager fm, List<Fragment> fragmentList) {
-            super(fm);
-            this.fragmentList = fragmentList;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragmentList.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragmentList.size();
-        }
-    }
 }

@@ -21,18 +21,14 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.PostThumbnail;
-import com.yhjoo.dochef.model.UserDetail;
+import com.yhjoo.dochef.adapter.RecipeGridAdapter;
 import com.yhjoo.dochef.databinding.AHomeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.model.PostThumbnail;
+import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.PermissionUtil;
 
 import org.json.JSONException;
@@ -40,8 +36,6 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-
-import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
@@ -52,28 +46,30 @@ public class HomeActivity extends BaseActivity {
     enum OPERATION {VIEW, REVISE}
 
     AHomeBinding binding;
+    RetrofitServices.UserService userService;
+    RetrofitServices.RecipeService recipeService;
+    SharedPreferences mSharedPreferences;
+    RecipeGridAdapter recipeGridAdapter;
 
     ArrayList<View> revise_Icons = new ArrayList<>();
     ArrayList<PostThumbnail> postItems = new ArrayList<>();
 
     AppCompatButton appCompatButton;
     AppCompatImageView userimg;
-    PostListAdapter postListAdapter;
-    SharedPreferences mSharedPreferences;
-    RetrofitServices.MyHomeService myHomeService;
     JSONObject userInfoJson;
     UserDetail userDetailInfo;
     Uri mImageUri;
 
+    String userID = "";
     MODE currentMode = MODE.MY;
     OPERATION currentOperation = OPERATION.VIEW;
-
 
     /*
         TODO
         1. userHome과 합침 - MODE, OPERATION 두개로 구분
-        2. chefauth에 firebaseuser 기능으로 합치기
-        3. retrofit 구현
+        2. UserService - headerview 꾸미기
+        3. RecipeService - recipe grid 꾸미기
+        4. 서버 작업 / retrofit 구현
     */
 
     @Override
@@ -89,41 +85,31 @@ public class HomeActivity extends BaseActivity {
 
 
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-
         try {
             userInfoJson = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
             userDetailInfo = new UserDetail(userInfoJson);
-            postListAdapter.setHeaderView(setheaderview());
+            userID = userInfoJson.getString("user_id");
+            getUserDetailInfo(userID);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        postListAdapter = new PostListAdapter(Glide.with(this));
-        postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.homeRecycler.getParent());
-        postListAdapter.setOnItemClickListener((adapter, view, position) -> {
+        recipeGridAdapter = new RecipeGridAdapter(binding.homeRecycler);
+        recipeGridAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.homeRecycler.getParent());
+        recipeGridAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (postItems.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_PHOTO))
                 startActivity(new Intent(HomeActivity.this, PostDetailActivity.class));
             else if (postItems.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE))
                 startActivity(new Intent(HomeActivity.this, RecipeDetailActivity.class));
         });
+
+//        if (App.isServerAlive())
+//            getListFromServer();
+//        else
+//            getListFromLocal();
+
         binding.homeRecycler.setLayoutManager(new GridLayoutManager(HomeActivity.this, 3));
-        binding.homeRecycler.setAdapter(postListAdapter);
-
-
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (ChefAuth.isLogIn(HomeActivity.this)) {
-//            user.getIdToken(true)
-//                    .addOnCompleteListener(task -> {
-//                        if (task.isSuccessful())
-//                            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, true, task.getResult().getToken());
-//                        else
-//                            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, false);
-//                        setInfo();
-//                    });
-//        } else {
-//            myHomeService = RetrofitBuilder.create(HomeActivity.this, RetrofitServices.MyHomeService.class, false);
-//            setInfo();
-//        }
+        binding.homeRecycler.setAdapter(recipeGridAdapter);
     }
 
     @Override
@@ -173,35 +159,40 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
+    void getUserDetailInfo(String userID) {
+        // 디테일 가져와서 헤더뷰 붙이기
+        recipeGridAdapter.setHeaderView(setheaderview());
+    }
+
     void setInfo() {
-        myHomeService.GetBasicInfoCall(userDetailInfo.getUserID())
-                .enqueue(new BasicCallback<UserDetail>(HomeActivity.this) {
-                    @Override
-                    public void onResponse(Response<UserDetail> response) {
-                        userDetailInfo = response.body();
-
-                        if (userDetailInfo != null) {
-                            postListAdapter.setHeaderView(setheaderview());
-                            postListAdapter.setHeaderAndEmpty(true);
-
-                            try {
-                                userInfoJson.put("NICKNAME", userDetailInfo.getNickname());
-                                userInfoJson.put("PROFILE_IMAGE", userDetailInfo.getUserImg());
-                                userInfoJson.put("INTRODUCTION", userDetailInfo.getProfileText());
-
-                                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                                editor.putString(getString(R.string.SP_USERINFO), userInfoJson.toString());
-                                editor.apply();
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                        postListAdapter.setNewData(DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_GRID)));
-                        postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.homeRecycler.getParent());
-                    }
-                });
+//        myHomeService.GetBasicInfoCall(userDetailInfo.getUserID())
+//                .enqueue(new BasicCallback<UserDetail>(HomeActivity.this) {
+//                    @Override
+//                    public void onResponse(Response<UserDetail> response) {
+//                        userDetailInfo = response.body();
+//
+//                        if (userDetailInfo != null) {
+//                            recipeGridAdapter.setHeaderView(setheaderview());
+//                            recipeGridAdapter.setHeaderAndEmpty(true);
+//
+//                            try {
+//                                userInfoJson.put("NICKNAME", userDetailInfo.getNickname());
+//                                userInfoJson.put("PROFILE_IMAGE", userDetailInfo.getUserImg());
+//                                userInfoJson.put("INTRODUCTION", userDetailInfo.getProfileText());
+//
+//                                SharedPreferences.Editor editor = mSharedPreferences.edit();
+//                                editor.putString(getString(R.string.SP_USERINFO), userInfoJson.toString());
+//                                editor.apply();
+//
+//                            } catch (JSONException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                        recipeGridAdapter.setNewData(DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_GRID)));
+//                        recipeGridAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.homeRecycler.getParent());
+//                    }
+//                });
     }
 
     View setheaderview() {
@@ -320,28 +311,11 @@ public class HomeActivity extends BaseActivity {
         return itemView;
     }
 
-    private class PostListAdapter extends BaseQuickAdapter<PostThumbnail, BaseViewHolder> {
-        private final RequestManager requestManager;
+    void getRecipeListFromServer(String userID) {
 
-        PostListAdapter(RequestManager requestManager) {
-            super(R.layout.li_homegrid);
-            this.requestManager = requestManager;
-        }
+    }
 
-        @Override
-        protected void convert(BaseViewHolder helper, PostThumbnail item) {
-            ViewGroup.LayoutParams lp = helper.itemView.findViewById(R.id.li_homegrid_recipeimg).getLayoutParams();
+    void getRecipeListFromLocal(String userID) {
 
-            lp.width = binding.homeRecycler.getMeasuredWidth() / 3;
-            lp.height = binding.homeRecycler.getMeasuredWidth() / 3;
-            helper.itemView.findViewById(R.id.li_homegrid_recipeimg).setLayoutParams(lp);
-
-
-            requestManager.load(Integer.valueOf(item.getImageUrl()))
-                    .into((AppCompatImageView) helper.getView(R.id.li_homegrid_recipeimg));
-
-            helper.setVisible(R.id.li_homegrid_type, item.getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE));
-            helper.setVisible(R.id.li_homegrid_new, item.getIsNew() == 1);
-        }
     }
 }

@@ -38,14 +38,12 @@ public class AccountActivity extends BaseActivity {
     enum Mode {SIGNIN, SIGNUP, SIGNUPNICK, FINDPW}
 
     AAccountBinding binding;
-
     FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAnalytics mFirebaseAnalytics;
     RetrofitServices.AccountService accountService;
 
     String idToken;
-
     Mode current_mode = Mode.SIGNIN;
 
     /*
@@ -58,6 +56,7 @@ public class AccountActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = AAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 

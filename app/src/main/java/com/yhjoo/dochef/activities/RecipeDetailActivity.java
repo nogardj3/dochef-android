@@ -17,10 +17,10 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.RecipeDetail;
-import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.databinding.ARecipedetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.model.RecipeDetail;
+import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
@@ -50,7 +50,7 @@ public class RecipeDetailActivity extends BaseActivity {
         binding = ARecipedetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        RetrofitServices.OverViewService overViewService = RetrofitBuilder.create(this,RetrofitServices.OverViewService.class);
+        RetrofitServices.OverViewService overViewService = RetrofitBuilder.create(this, RetrofitServices.OverViewService.class);
 
         int recipdID = 1;
         overViewService.LoadOverViewCall(recipdID).enqueue(new Callback<RecipeDetail>() {
@@ -74,11 +74,11 @@ public class RecipeDetailActivity extends BaseActivity {
         try {
             ArrayList<Integer> recipies = new ArrayList<>(
                     Arrays.asList(R.drawable.tempimg_playrecipestart,
-                    R.drawable.tempimg_playrecipe1,
-                    R.drawable.tempimg_playrecipe2,
-                    R.drawable.tempimg_playrecipe3,
-                    R.drawable.tempimg_playrecipe4,
-                    R.drawable.tempimg_playrecipefinish));
+                            R.drawable.tempimg_playrecipe1,
+                            R.drawable.tempimg_playrecipe2,
+                            R.drawable.tempimg_playrecipe3,
+                            R.drawable.tempimg_playrecipe4,
+                            R.drawable.tempimg_playrecipefinish));
 
             binding.recipedetailRecipeimgs.setAdapter(new ImagePagerAdapter(RecipeDetailActivity.this, recipies));
             binding.recipedetailRecipeimgsIndicator.setViewPager(((ViewPager) findViewById(R.id.recipedetail_recipeimgs)));
@@ -97,7 +97,7 @@ public class RecipeDetailActivity extends BaseActivity {
             for (int i = 0; i < tagsArray.length(); i++) {
                 AppCompatTextView textView = new AppCompatTextView(this);
                 textView.setText(tagsArray.getString(i));
-                textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
+                textView.setTextColor(getResources().getColor(R.color.colorPrimary, null));
 
                 binding.recipedetailTags.addView(textView);
             }

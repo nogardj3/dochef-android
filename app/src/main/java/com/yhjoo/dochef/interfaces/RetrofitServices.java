@@ -5,13 +5,15 @@ import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Post;
-import com.yhjoo.dochef.model.PostComment;
+import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.RecipeDetailPlay;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.model.UserDetail;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +49,12 @@ public class RetrofitServices {
         Call<List<UserBreif>> getFollowers(@Query("user_id") String user_id,@Query("target_id") String target_id);
         @GET("user/following")
         Call<List<UserBreif>> getFollowings(@Query("user_id") String user_id,@Query("target_id") String target_id);
+        @FormUrlEncoded
+        @POST("user/subscribe")
+        Call<List<UserBreif>> subscribeUser(@Query("user_id") String user_id,@Query("target_id") String target_id);
+        @FormUrlEncoded
+        @POST("user/unsubscribe")
+        Call<List<UserBreif>> unsubscribeUser(@Query("user_id") String user_id,@Query("target_id") String target_id);
         @GET("user/detail")
         Call<List<UserDetail>> getUserDetail(@Query("user_id") String user_id);
     }
@@ -56,32 +64,38 @@ public class RetrofitServices {
         Call<RecipeDetailPlay> getRecipeDetail(@Field("recipe_id") int recipeId);
         @GET("recipe/default")
         Call<RecipeDetail> getRecipe(@Field("recipe_id") int recipeId);
-        @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeListByNickname(@Field("nickname") String nickname);
-        @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeListByName(@Field("recipe_name") int recipeName);
-        @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeListByTag(@Field("tags") int tags);
-        @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeListByIngredient(@Field("ingredients") int ingredients);
     }
 
     public interface ReviewService {
         @GET("review/")
         Call<ArrayList<Review>> getReview(@Query("recipe_id") int recipeId);
+        @GET("comment/")
+        Call<ArrayList<Review>> createReview(@Query("recipe_id") int recipeId);
     }
 
     public interface PostService {
         @GET("post/")
         Call<ArrayList<Post>> getPost(@Query("user_id") String userID);
-
         @GET("post/detail")
         Call<ArrayList<Post>> getPostDetail(@Query("user_id") String userID);
+        @FormUrlEncoded
+        @POST("post/create")
+        Call<ArrayList<Post>> createPost(@Query("post_id") String userID);
+        @FormUrlEncoded
+        @POST("post/delete")
+        Call<ArrayList<Post>> deletePost(@Query("post_id") String userID);
     }
 
     public interface CommentService {
         @GET("comment/")
-        Call<ArrayList<PostComment>> getComment(@Query("post_id") int postId);
+        Call<ArrayList<Comment>> getComment(@Query("post_id") int postID);
+        @POST("comment/create")
+        Call<JsonObject> createComment(@Field("post_id") int postID,
+                                       @Field("user_id") String userID,
+                                       @Field("contents") String contents,
+                                       @Field("datetime") long dateTime);
+        @POST("comment/delete")
+        Call<JsonObject> deleteComment(@Field("comment_id") int commentID);
     }
 
 
@@ -101,7 +115,7 @@ public class RetrofitServices {
 
     public interface PostActivityService {
         @GET("post/commentlist.php")
-        Call<ArrayList<PostComment>> GetCommentCall(@Query("PostID") int postID);
+        Call<ArrayList<Comment>> GetCommentCall(@Query("PostID") int postID);
     }
 
     public interface TimeLineService {

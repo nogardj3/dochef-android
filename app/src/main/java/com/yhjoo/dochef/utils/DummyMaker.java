@@ -27,7 +27,7 @@ public class DummyMaker {
 
                 arrayList.add(new UserBreif("유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(3)]),
-                        "더미 유저 " + i,0));
+                        "더미 유저 " + i, 0));
             }
 
             return (T) arrayList;
@@ -63,7 +63,7 @@ public class DummyMaker {
             ingredients.add("태그1");
             ingredients.add("태그2");
 
-            for (int i = 1; i < 20; i ++) {
+            for (int i = 1; i < 20; i++) {
                 Random r = new Random();
 
                 arrayList.add(new Recipe("요리" + i,
@@ -86,7 +86,7 @@ public class DummyMaker {
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_GRID)) {
             ArrayList<Comment> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                arrayList.add(new Comment("1234", "유져" + i, "내용 " + i + "\n", i + "일전"));
+                arrayList.add(new Comment(1234, "유져" + i, "내용 " + i + "\n", System.currentTimeMillis()));
             }
 
             return (T) arrayList;

@@ -6,17 +6,14 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.adapter.FollowListAdapter;
 import com.yhjoo.dochef.databinding.AFollowlistBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -33,8 +30,8 @@ public class FollowListActivity extends BaseActivity {
     public enum MODE {FOLLOWER, FOLLOWING}
 
     AFollowlistBinding binding;
-
-    UserListAdapter userListAdapter;
+    RetrofitServices.UserService userService;
+    FollowListAdapter followListAdapter;
 
     String active_userid = "";
     String target_id = "";
@@ -55,6 +52,8 @@ public class FollowListActivity extends BaseActivity {
         setSupportActionBar(binding.followlistToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
+
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         try {
             active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("user_id");
@@ -65,78 +64,51 @@ public class FollowListActivity extends BaseActivity {
         target_id = getIntent().getStringExtra("userID");
         current_mode = (MODE) getIntent().getSerializableExtra("mode");
 
-        userListAdapter = new UserListAdapter();
-        userListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.followlistRecycler.getParent());
+        binding.followlistToolbar.setTitle(current_mode == MODE.FOLLOWER ? "팔로워" : "팔로잉");
 
-        if (current_mode == MODE.FOLLOWER)
-            binding.followlistToolbar.setTitle("팔로워");
-        else
-            binding.followlistToolbar.setTitle("팔로잉");
-
-        RetrofitServices.UserService userService =
-                RetrofitBuilder.create(this, RetrofitServices.UserService.class);
+        followListAdapter = new FollowListAdapter(active_userid);
+        followListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.followlistRecycler.getParent());
+        followListAdapter.setOnItemClickListener((adapter, view, position) -> {
+                    Intent intent = new Intent(FollowListActivity.this, HomeActivity.class);
+                    intent.putExtra("MODE", HomeActivity.MODE.USER);
+                    intent.putExtra("userID", ((UserBreif) adapter.getData().get(position)).getUserID());
+                    startActivity(intent);
+                }
+        );
 
         if (App.isServerAlive()) {
-            if (current_mode == MODE.FOLLOWER) {
-                userService.getFollowers(active_userid, target_id)
-                        .enqueue(new BasicCallback<List<UserBreif>>(FollowListActivity.this) {
-                            @Override
-                            public void onResponse(Response<List<UserBreif>> response) {
-                                userListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
-                                userListAdapter.setNewData(response.body());
-                            }
-                        });
-
-                userListAdapter.setOnItemClickListener((adapter, view, position) -> {
-                            Intent intent = new Intent(FollowListActivity.this, HomeActivity.class);
-                            intent.putExtra("MODE", HomeActivity.MODE.USER);
-                            intent.putExtra("userID", ((UserBreif) adapter.getData().get(position)).getUserID());
-                            startActivity(intent);
-                        }
-                );
-            } else if (current_mode == MODE.FOLLOWING) {
-                userService.getFollowings(active_userid, target_id)
-                        .enqueue(new BasicCallback<List<UserBreif>>(FollowListActivity.this) {
-                            @Override
-                            public void onResponse(Response<List<UserBreif>> response) {
-                                userListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
-                                userListAdapter.setNewData(response.body());
-                            }
-                        });
-            }
+            if (current_mode == MODE.FOLLOWER)
+                getFollower();
+            else if (current_mode == MODE.FOLLOWING)
+                getFollowing();
         } else {
             ArrayList<UserBreif> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_PROFILE));
-            userListAdapter.setNewData(data);
+            followListAdapter.setNewData(data);
         }
 
         binding.followlistRecycler.setLayoutManager(new LinearLayoutManager(this));
-        binding.followlistRecycler.setAdapter(userListAdapter);
+        binding.followlistRecycler.setAdapter(followListAdapter);
     }
 
-    class UserListAdapter extends BaseQuickAdapter<UserBreif, BaseViewHolder> {
-        UserListAdapter() {
-            super(R.layout.li_follow);
-        }
+    public void getFollower(){
+        userService.getFollowers(active_userid, target_id)
+                .enqueue(new BasicCallback<List<UserBreif>>(FollowListActivity.this) {
+                    @Override
+                    public void onResponse(Response<List<UserBreif>> response) {
+                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
+                        followListAdapter.setNewData(response.body());
+                    }
+                });
+    }
 
-        @Override
-        protected void convert(BaseViewHolder helper, UserBreif item) {
-            if (!item.getUserImg().equals("default")) {
-                Glide.with(mContext)
-                        .load(App.isServerAlive()
-                                ? getString(R.string.storage_image_url_profile) + item.getUserImg()
-                                : Integer.valueOf(item.getUserImg()))
-                        .into((AppCompatImageView) helper.getView(R.id.li_follow_userimg));
-            }
-
-            if(!item.getUserID().equals(active_userid)){
-                if(item.getIs_follow() == 1)
-                    helper.setVisible(R.id.li_followcancel_btn, true);
-                else
-                    helper.setVisible(R.id.li_follow_btn, true);
-            }
-
-
-            helper.setText(R.id.li_follow_nickname, item.getNickname());
-        }
+    public void getFollowing(){
+        userService.getFollowings(active_userid, target_id)
+                .enqueue(new BasicCallback<List<UserBreif>>(FollowListActivity.this) {
+                    @Override
+                    public void onResponse(Response<List<UserBreif>> response) {
+                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
+                        followListAdapter.setNewData(response.body());
+                    }
+                });
     }
 }

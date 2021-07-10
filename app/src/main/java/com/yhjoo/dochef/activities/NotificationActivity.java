@@ -15,8 +15,8 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.Notification;
 import com.yhjoo.dochef.databinding.ANotificationBinding;
+import com.yhjoo.dochef.model.Notification;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -51,11 +51,10 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());
         notificationListAdapter.setOnLoadMoreListener(this, binding.notificationRecycler);
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2)){
+            if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2)) {
                 startActivity(new Intent(NotificationActivity.this, RecipeDetailActivity.class));
-            }
-            else{
-                Intent intent =new Intent(NotificationActivity.this, HomeActivity.class);
+            } else {
+                Intent intent = new Intent(NotificationActivity.this, HomeActivity.class);
 //                intent.putExtra("userID", );
                 startActivity(intent);
             }
@@ -99,15 +98,15 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
                     .into((AppCompatImageView) helper.getView(R.id.li_notification_userimg));
 
             if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_1))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype1, item.getUserName()),Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype1, item.getUserName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_2))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype2, item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype2, item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_3))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype3, item.getUserName(), item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype3, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_4))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype4, item.getUserName(), item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype4, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_5))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype5, item.getUserName(), item.getRecipeName()),Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype5, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             helper.setText(R.id.li_notification_date, item.getDateTime());
         }
     }

@@ -19,9 +19,9 @@ public class Utils {
 
     public enum EMAIL_VALIDATE {VALID, NODATA, INVALID}
 
-    public enum PW_VALIDATE {VALID, NODATA, SHORT, LONG,INVALID}
+    public enum PW_VALIDATE {VALID, NODATA, SHORT, LONG, INVALID}
 
-    public enum NICKNAME_VALIDATE {VALID, NODATA, SHORT, LONG,INVALID}
+    public enum NICKNAME_VALIDATE {VALID, NODATA, SHORT, LONG, INVALID}
 
     public static EMAIL_VALIDATE emailValidation(String email) {
         if (email.length() == 0)
@@ -64,13 +64,13 @@ public class Utils {
             return NICKNAME_VALIDATE.INVALID;
     }
 
-    public static String convertMillisToText(long millis){
+    public static String convertMillisToText(long millis) {
         long current_millis = new Date().getTime();
         long diff_sec = (current_millis - millis) / 1000;
 
-        log(current_millis+"", millis+"");
+        log(current_millis + "", millis + "");
 
-        if(diff_sec < 60)
+        if (diff_sec < 60)
             return "방금 전";
         else if (diff_sec / 60 < 60)
             return (diff_sec / 60) + "분 전";
@@ -78,7 +78,7 @@ public class Utils {
             return (diff_sec / 60 / 60) + "시간 전";
         else if (diff_sec / 60 / 60 / 24 < 7)
             return (diff_sec / 60 / 60 / 24) + "일 전";
-        else{
+        else {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             return formatter.format(new Date(millis));
         }

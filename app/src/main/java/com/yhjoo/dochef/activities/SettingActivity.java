@@ -38,48 +38,47 @@ public class SettingActivity extends BaseActivity {
         binding.settingLogout.setOnClickListener(this::signOut);
     }
 
-    void startNotice(View view){
+    void startNotice(View view) {
         startActivity(new Intent(SettingActivity.this, NoticeActivity.class));
     }
 
-    void startFAQ(View view){
+    void startFAQ(View view) {
         startActivity(new Intent(SettingActivity.this, FAQActivity.class));
     }
 
-    void startTOS(View view){
+    void startTOS(View view) {
         startActivity(new Intent(SettingActivity.this, TOSActivity.class));
     }
 
-    void goReview(View view){
+    void goReview(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(
                 "https://play.google.com/store/apps/details?id=quvesoft.sprout"));
         intent.setPackage("com.android.vending");
-        try{
+        try {
             startActivity(intent);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             Utils.log(e.toString());
             App.getAppInstance().showToast("스토어 열기 실패");
         }
     }
 
-    void signOut(View view){
+    void signOut(View view) {
         App.getAppInstance().showToast("로그아웃");
         ChefAuth.LogOut(this);
 
-        Intent intent =new Intent(this, AccountActivity.class);
+        Intent intent = new Intent(this, AccountActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         finish();
     }
 
-    void toggleNotificationAll(View view){
+    void toggleNotificationAll(View view) {
         binding.settingNotificationAllCheck.toggle();
     }
 
-    void toggleNotificationItem(View view){
+    void toggleNotificationItem(View view) {
         binding.settingNotification1Check.toggle();
     }
 }

@@ -30,11 +30,11 @@ import com.bhargavms.podslider.PodSlider;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.RecipeDetailPlay;
 import com.yhjoo.dochef.databinding.APlayrecipeBinding;
 import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeStartFragment;
+import com.yhjoo.dochef.model.RecipeDetailPlay;
 import com.yhjoo.dochef.utils.PermissionUtil;
 
 import java.text.DecimalFormat;
