@@ -43,7 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/li_resulttag_title"
             tools:text="닉네임" />
 
-        <com.google.android.flexbox.FlexboxLayout
+        <com.skyhope.materialtagview.TagView
             android:id="@+id/li_resulttag_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -67,7 +67,7 @@ public class HomeActivity extends BaseActivity {
     /*
         TODO
         1. userHome과 합침 - MODE, OPERATION 두개로 구분
-        2. UserService - headerview 꾸미기
+        2. UserService - headerview - recycler로 말고 밖으로 빼기
         3. RecipeService - recipe grid 꾸미기
         4. 서버 작업 / retrofit 구현
     */

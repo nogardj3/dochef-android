@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.FlexboxLayout;
+import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.ReviewWriteActivity;
 import com.yhjoo.dochef.model.RecipeDetailPlay;
@@ -28,7 +28,7 @@ public class PlayRecipeEndFragment extends Fragment {
     @BindView(R.id.playrecipe_item_explain)
     AppCompatTextView recipeExplain;
     @BindView(R.id.playrecipe_end_tags)
-    FlexboxLayout recipeTags;
+    TagView recipeTags;
 
     /*
         TODO
@@ -51,9 +51,8 @@ public class PlayRecipeEndFragment extends Fragment {
 
         recipeTags.removeAllViews();
         for (int i = 0; i < recipeDetailPlay.getTags().length; i++) {
-            AppCompatTextView textView = new AppCompatTextView(getContext());
+            AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
             textView.setText("#" + recipeDetailPlay.getTags()[i] + " ");
-            textView.setTextColor(getResources().getColor(R.color.colorPrimary,null));
 
             recipeTags.addView(textView);
         }

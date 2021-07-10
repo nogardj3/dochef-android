@@ -101,6 +101,13 @@ public class RecipeDetailActivity extends BaseActivity {
 
                 binding.recipedetailTags.addView(textView);
             }
+//            recipeTags.removeAllViews();
+//            for (int i = 0; i < recipeDetailPlay.getTags().length; i++) {
+//                AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
+//                textView.setText("#" + recipeDetailPlay.getTags()[i] + " ");
+//
+//                recipeTags.addView(textView);
+//            }
 
             binding.recipedetailStartrecipe.setOnClickListener((v) ->
                     startActivity(new Intent(this, PlayRecipeActivity.class)));

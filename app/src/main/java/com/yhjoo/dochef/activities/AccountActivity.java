@@ -271,14 +271,6 @@ public class AccountActivity extends BaseActivity {
                                 startMain(response.body().toString());
                             }
                         }
-
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            super.onFailure(call, t);
-                            Utils.log(t.toString());
-
-                            progressOFF();
-                        }
                     });
         }
     }
@@ -297,14 +289,6 @@ public class AccountActivity extends BaseActivity {
                             startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
                         } else
                             startMain(response.body().toString());
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                        super.onFailure(call, t);
-                        Utils.log(t.toString());
-
-                        progressOFF();
                     }
                 });
     }

@@ -28,7 +28,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_img" />
 
-    <com.google.android.flexbox.FlexboxLayout
+    <com.skyhope.materialtagview.TagView
         android:id="@+id/playrecipe_item_ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -80,7 +80,7 @@
         tools:visibility="gone"
         />
 
-    <com.google.android.flexbox.FlexboxLayout
+    <com.skyhope.materialtagview.TagView
         android:id="@+id/playrecipe_end_tags"
         android:layout_width="0dp"
         android:layout_height="36dp"

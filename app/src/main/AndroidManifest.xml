@@ -17,11 +17,6 @@
         android:theme="@style/BaseTheme">
 
         <activity
-            android:name="com.yhjoo.dochef.activities.CommentActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name="com.yhjoo.dochef.activities.FollowListActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />

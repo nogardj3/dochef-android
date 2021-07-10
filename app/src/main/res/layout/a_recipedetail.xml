@@ -78,7 +78,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
             tools:text="내용" />
 
-        <com.google.android.flexbox.FlexboxLayout
+        <com.skyhope.materialtagview.TagView
             android:id="@+id/recipedetail_tags"
             android:layout_width="match_parent"
             android:layout_height="36sp"
@@ -190,7 +190,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <com.google.android.flexbox.FlexboxLayout
+        <com.skyhope.materialtagview.TagView
             android:id="@+id/recipedetail_ingredients"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

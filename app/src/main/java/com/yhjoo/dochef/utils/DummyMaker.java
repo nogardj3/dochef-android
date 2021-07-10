@@ -7,8 +7,8 @@ import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Notification;
-import com.yhjoo.dochef.model.RecipeThumbnail;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeThumbnail;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.model.UserBreif;
 

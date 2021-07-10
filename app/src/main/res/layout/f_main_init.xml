@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <androidx.viewpager.widget.ViewPager
@@ -58,6 +59,9 @@
         android:layout_height="190dp"
         android:layout_marginTop="8dp"
         android:overScrollMode="never"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:orientation="horizontal"
+        tools:listitem="@layout/li_recommend"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_recommend_text" />

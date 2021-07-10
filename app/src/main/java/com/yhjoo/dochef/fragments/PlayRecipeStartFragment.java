@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.flexbox.FlexboxLayout;
+import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.RecipeDetailPlay;
 
@@ -28,7 +28,7 @@ public class PlayRecipeStartFragment extends Fragment {
     @BindView(R.id.playrecipe_start_explain)
     AppCompatTextView recipeExplain;
     @BindView(R.id.playrecipe_start_ingredients)
-    FlexboxLayout recipeIngredients;
+    TagView recipeIngredients;
 
     /*
         TODO

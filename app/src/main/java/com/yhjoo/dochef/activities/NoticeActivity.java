@@ -4,26 +4,22 @@ import android.os.Bundle;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
-import com.chad.library.adapter.base.entity.AbstractExpandableItem;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.NoticeListAdapter;
+import com.yhjoo.dochef.databinding.ANoticeBinding;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.ExpandContents;
 import com.yhjoo.dochef.model.ExpandTitle;
 import com.yhjoo.dochef.model.Notice;
-import com.yhjoo.dochef.databinding.ANoticeBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class NoticeActivity extends BaseActivity {
@@ -57,7 +53,7 @@ public class NoticeActivity extends BaseActivity {
     }
 
     void getListFromServer() {
-        basicService.getNotice().enqueue(new Callback<ArrayList<Notice>>() {
+        basicService.getNotice().enqueue(new BasicCallback<ArrayList<Notice>>(this) {
             @Override
             public void onResponse(Call<ArrayList<Notice>> call, Response<ArrayList<Notice>> res) {
                 ArrayList<Notice> resList = res.body();
@@ -68,11 +64,6 @@ public class NoticeActivity extends BaseActivity {
                 }
 
                 noticeListAdapter.setNewData(noticeList);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Notice>> call, Throwable t) {
-                t.printStackTrace();
             }
         });
     }

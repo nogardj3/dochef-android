@@ -63,10 +63,12 @@
             app:layout_constraintTop_toBottomOf="@+id/timeline_userimg"
             tools:text="내용" />
 
-        <com.google.android.flexbox.FlexboxLayout
+        <com.skyhope.materialtagview.TagView
             android:id="@+id/timeline_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:tag_text_color="@color/white"
+            app:tag_background_color="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="@+id/timeline_contents"
             app:layout_constraintTop_toBottomOf="@+id/timeline_contents" />
 

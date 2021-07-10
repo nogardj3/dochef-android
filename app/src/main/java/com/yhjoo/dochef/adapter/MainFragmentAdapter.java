@@ -9,8 +9,8 @@ import java.util.List;
 public class MainFragmentAdapter extends FragmentPagerAdapter {
     private final List<Fragment> fragmentList;
 
-    public MainFragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
-        super(fm);
+    public MainFragmentAdapter(FragmentManager fm, int behavior, List<Fragment> fragmentList) {
+        super(fm, behavior);
         this.fragmentList = fragmentList;
     }
 

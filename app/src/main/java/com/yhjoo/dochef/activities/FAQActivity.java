@@ -13,13 +13,13 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.ExpandContents;
 import com.yhjoo.dochef.model.ExpandTitle;
 import com.yhjoo.dochef.model.FAQ;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FAQActivity extends BaseActivity {
@@ -54,7 +54,7 @@ public class FAQActivity extends BaseActivity {
 
     void getListFromServer() {
         basicService.getFAQ()
-                .enqueue(new Callback<ArrayList<FAQ>>() {
+                .enqueue(new BasicCallback<ArrayList<FAQ>>(this) {
                     @Override
                     public void onResponse(Call<ArrayList<FAQ>> call, Response<ArrayList<FAQ>> res) {
                         ArrayList<FAQ> resList = res.body();
@@ -65,11 +65,6 @@ public class FAQActivity extends BaseActivity {
                         }
 
                         FAQListAdapter.setNewData(faqList);
-                    }
-
-                    @Override
-                    public void onFailure(Call<ArrayList<FAQ>> call, Throwable t) {
-                        t.printStackTrace();
                     }
                 });
     }

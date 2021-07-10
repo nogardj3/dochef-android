@@ -10,26 +10,24 @@ public class Post implements Serializable {
     private int postID;
     @SerializedName("user_id")
     private String UserID;
-    @SerializedName("nickname")
-    private String nickname;
-    @SerializedName("profile_img_url")
-    private String userImg;
     @SerializedName("post_img")
-    private ArrayList<String> postImg;
-    @SerializedName("datetime")
-    private long dateTime;
+    private String postImg;
     @SerializedName("contents")
     private String contents;
+    @SerializedName("datetime")
+    private long dateTime;
     @SerializedName("tags")
     private ArrayList<String> tags;
     @SerializedName("comments")
     private ArrayList<Comment> comments;
-    @SerializedName("like_count")
-    private Integer like_count;
+    @SerializedName("likes")
+    private ArrayList<String> likes;
+    @SerializedName("nickname")
+    private String nickname;
+    @SerializedName("profile_img_url")
+    private String userImg;
 
-    // Detail
-
-    public Post(int postID, String userID, String nickname, String userImg, ArrayList<String> postImg, long dateTime, String contents, ArrayList<String> tags, ArrayList<Comment> comments, Integer like_count) {
+    public Post(int postID, String userID, String nickname, String userImg, String postImg, long dateTime, String contents, ArrayList<String> tags, ArrayList<Comment> comments, ArrayList<String> likes) {
         this.postID = postID;
         UserID = userID;
         this.nickname = nickname;
@@ -39,12 +37,8 @@ public class Post implements Serializable {
         this.contents = contents;
         this.tags = tags;
         this.comments = comments;
-        this.like_count = like_count;
+        this.likes = likes;
     }
-
-
-    // Dummy
-
 
     public int getPostID() {
         return postID;
@@ -62,7 +56,7 @@ public class Post implements Serializable {
         return userImg;
     }
 
-    public ArrayList<String> getPostImg() {
+    public String getPostImg() {
         return postImg;
     }
 
@@ -78,8 +72,8 @@ public class Post implements Serializable {
         return comments;
     }
 
-    public Integer getLike_count() {
-        return like_count;
+    public ArrayList<String> getLikes() {
+        return likes;
     }
 
     public ArrayList<String> getTags() {

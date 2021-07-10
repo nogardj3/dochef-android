@@ -61,9 +61,20 @@
                 android:paddingTop="4dp"
                 android:paddingLeft="4dp"
                 android:hint="입력해 보세요"
-                android:maxLines="4"
+                android:minLines="4"
                 android:theme="@style/BaseTheme.EditTextStyle"
                 app:layout_constraintTop_toBottomOf="@+id/postwrite_postimg" />
+
+            <com.skyhope.materialtagview.TagView
+                android:id="@+id/postwrite_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tag_text_color="@color/white"
+                app:tag_background_color="@color/colorPrimary"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postwrite_contents"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

@@ -6,11 +6,12 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -35,10 +36,6 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class PostDetailActivity extends BaseActivity {
-    enum MODE {MY, USER}
-
-    enum OPERATION {VIEW, REVISE}
-
     APostdetailBinding binding;
     RetrofitServices.PostService postService;
     RetrofitServices.CommentService commentService;
@@ -53,9 +50,7 @@ public class PostDetailActivity extends BaseActivity {
         postDetail = 수정 O, 댓글 많이, 댓글 작성 가능
         timeline   = 수정 X, 댓글 하나, 댓글 작성 불가
 
-        1. comment list, comment write 기능 추가, comment revise는 없음
-        2. post revise 기능 추가
-        3.
+        1. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -93,25 +88,21 @@ public class PostDetailActivity extends BaseActivity {
 
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
-                        } else
+                        } else {
                             App.getAppInstance().showToast("post detail 가져오기 성공");
-
-                        postInfo = response.body();
-                        setHeaderView();
-                    }
-
-                    @Override
-                    public void onFailure(Call<Post> call, Throwable t) {
-                        super.onFailure(call, t);
+                            setHeaderView(response.body());
+                        }
                     }
                 });
     }
 
-    void setHeaderView() {
-        Glide.with(this)
-                .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
-                .apply(RequestOptions.centerCropTransform())
-                .into(binding.postPostimg);
+    void setHeaderView(Post postInfo) {
+        if (!postInfo.getPostImg().equals("default")) {
+            Glide.with(this)
+                    .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
+                    .apply(RequestOptions.centerCropTransform())
+                    .into(binding.postPostimg);
+        }
 
         if (!postInfo.getUserImg().equals("default"))
             Glide.with(this)
@@ -130,15 +121,16 @@ public class PostDetailActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        binding.postLikecount.setText(postInfo.getLike_count());
+        binding.postLikecount.setText(postInfo.getLikes().size());
         binding.postContents.setText(postInfo.getContents());
         binding.postTime.setText(Utils.convertMillisToText(postInfo.getDateTime()));
 
-        // TODO
-        // POST Like SET
-        binding.postLike.setOnClickListener(v -> {
-            toggleLikePost(userID, postID);
-        });
+        if (postInfo.getLikes().contains(userID))
+            binding.postLike.setImageResource(R.drawable.ic_favorite_24dp);
+        else
+            binding.postLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+
+        binding.postLike.setOnClickListener(v -> toggleLikePost(userID, postID));
         binding.postOther.setVisibility(postInfo.getUserID().equals(userID) ? View.VISIBLE : View.GONE);
         binding.postOther.setOnClickListener(v -> {
             PopupMenu popup = new PopupMenu(PostDetailActivity.this, v);
@@ -147,9 +139,12 @@ public class PostDetailActivity extends BaseActivity {
                 switch (item.getItemId()) {
                     case R.id.menu_post_owner_revise:
                         Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class);
-                        intent.putExtra("postid", postInfo.getPostID())
+                        intent.putExtra("MODE", PostWriteActivity.MODE.REVISE)
+                                .putExtra("postID", postInfo.getPostID())
+                                .putExtra("postimg", getString(R.string.storage_image_url_post) + postInfo.getPostImg())
                                 .putExtra("contents", postInfo.getContents())
-                                .putExtra("postimg", getString(R.string.storage_image_url_post) + postInfo.getPostImg());
+                                .putExtra("tags", postInfo.getTags());
+
                         startActivity(intent);
                         break;
                     case R.id.menu_post_owner_delete:
@@ -170,57 +165,97 @@ public class PostDetailActivity extends BaseActivity {
             popup.show();
         });
 
+        binding.postTags.setTagList(postInfo.getTags());
 
-        // TODO
-        // tag xml로
-        for (String tag : postInfo.getTags()) {
-            AppCompatTextView textView = new AppCompatTextView(PostDetailActivity.this);
-            textView.setText("#" + tag + " ");
-            textView.setTextColor(getResources().getColor(R.color.colorPrimary, null));
-
-            binding.postTags.addView(textView);
-        }
+        binding.postCommentOk.setOnClickListener(this::writeComment);
     }
 
     void getCommentList(int postID) {
-        commentService.getComment(postID).enqueue(new BasicCallback<ArrayList<Comment>>(this) {
-            @Override
-            public void onResponse(Call<ArrayList<Comment>> call, Response<ArrayList<Comment>> response) {
-                super.onResponse(call, response);
+        commentService.getComment(postID)
+                .enqueue(new BasicCallback<ArrayList<Comment>>(this) {
+                    @Override
+                    public void onResponse(Call<ArrayList<Comment>> call, Response<ArrayList<Comment>> response) {
+                        super.onResponse(call, response);
 
-                if (response.code() == 500) {
-                    App.getAppInstance().showToast("comment 가져오기 실패");
-                } else {
-                    App.getAppInstance().showToast("comment 가져오기 성공");
-                    commentListAdapter.setNewData(response.body());
-
-                    setCommentView();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Comment>> call, Throwable t) {
-                super.onFailure(call, t);
-            }
-        });
+                        if (response.code() == 500) {
+                            App.getAppInstance().showToast("comment 가져오기 실패");
+                        } else {
+                            App.getAppInstance().showToast("comment 가져오기 성공");
+                            setCommentView(response.body());
+                        }
+                    }
+                });
     }
 
-    void setCommentView(){
+    void setCommentView(ArrayList<Comment> commentList) {
+        commentListAdapter = new CommentListAdapter(userID);
+        commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.postCommentRecycler.getParent());
+        commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
+            PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
+            getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
+                builder.setMessage("삭제 하시겠습니까?")
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            dialog.dismiss();
+                            removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID());
+                        })
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return false;
+            });
+            popup.show();
+        });
+        commentListAdapter.setNewData(commentList);
 
+        binding.postCommentRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.postCommentRecycler.setAdapter(commentListAdapter);
     }
 
     void toggleLikePost(String userID, int postID) {
+        int new_like;
+        if (postInfo.getLikes().contains(userID)) {
+            new_like = 1;
+            binding.postLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        } else {
+            new_like = 0;
+            binding.postLike.setImageResource(R.drawable.ic_favorite_24dp);
+        }
 
+        postService.likePost(userID, postID, new_like)
+                .enqueue(new BasicCallback<JsonObject>(this) {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        super.onResponse(call, response);
+                        progressOFF();
+
+                        if (response.code() == 500) {
+                            App.getAppInstance().showToast("like toggle 실패");
+                        } else
+                            App.getAppInstance().showToast("like toggle 성공");
+                    }
+                });
     }
 
     void deletePost(int postID) {
+        postService.deletePost(postID)
+                .enqueue(new BasicCallback<JsonObject>(this) {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        super.onResponse(call, response);
+                        progressOFF();
 
+                        if (response.code() == 500) {
+                            App.getAppInstance().showToast("delete post 실패");
+                        } else
+                            App.getAppInstance().showToast("delete post 성공");
+                    }
+                });
     }
 
     void writeComment(View v) {
-        progressON(this);
-
         if (!binding.postCommentEdittext.getText().toString().equals("")) {
+            progressON(this);
             commentService.createComment(postID, userID,
                     binding.postCommentEdittext.getText().toString(), System.currentTimeMillis())
                     .enqueue(new BasicCallback<JsonObject>(this) {
@@ -233,11 +268,6 @@ public class PostDetailActivity extends BaseActivity {
                                 App.getAppInstance().showToast("comment 생성 실패");
                             } else
                                 App.getAppInstance().showToast("comment 생성 성공");
-                        }
-
-                        @Override
-                        public void onFailure(Call<JsonObject> call, Throwable t) {
-                            super.onFailure(call, t);
                         }
                     });
 
@@ -264,11 +294,6 @@ public class PostDetailActivity extends BaseActivity {
                             App.getAppInstance().showToast("comment 삭제 실패");
                         } else
                             App.getAppInstance().showToast("comment 삭제 성공");
-                    }
-
-                    @Override
-                    public void onFailure(Call<JsonObject> call, Throwable t) {
-                        super.onFailure(call, t);
                     }
                 });
 

@@ -2,9 +2,11 @@ package com.yhjoo.dochef.activities;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 
@@ -14,11 +16,23 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.PermissionUtil;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class PostWriteActivity extends BaseActivity {
     final int CODE_PERMISSION = 22;
@@ -27,16 +41,18 @@ public class PostWriteActivity extends BaseActivity {
     enum MODE {WRITE, REVISE}
 
     APostwriteBinding binding;
+    RetrofitServices.PostService postService;
 
+    String userID;
+    int postID;
     Uri mImageUri;
     MODE current_mode = MODE.WRITE;
 
+
     /*
         TODO
-        1. post revise랑 합침
-        2. 서버 데이터 추가 및 기능 구현
-        3. retrofit 구현
-        4. REVISE 모드 추가
+        1. tags 추가 및 삭제 레이아웃
+        2. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -45,11 +61,38 @@ public class PostWriteActivity extends BaseActivity {
         binding = APostwriteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        try {
+            JSONObject userInfo = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
+            userID = userInfo.getString("user_id");
+        }
+        catch (JSONException e){
+            e.printStackTrace();
+        }
+
+        postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
+
+        current_mode = (PostWriteActivity.MODE) getIntent().getSerializableExtra("MODE");
+
+        if(current_mode == MODE.REVISE){
+            binding.postwriteToolbar.setTitle("수정");
+            postID = getIntent().getIntExtra("postID",-1);
+            binding.postwriteContents.setText(getIntent().getStringExtra("contents"));
+
+            if(getIntent().getStringExtra("postImg") != null)
+                Glide.with(this)
+                        .load(getIntent().getStringExtra("postImg"))
+                        .into(binding.postwritePostimg);
+
+            ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");
+            binding.postwriteTags.setTagList(tags);
+        }
         setSupportActionBar(binding.postwriteToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         binding.postwritePostimgAdd.setOnClickListener(this::addImage);
-        binding.postwritePostimgAdd.setOnClickListener(this::writePost);
+        binding.postwritePostimgAdd.setOnClickListener(this::createOrUpdatePost);
     }
 
     @Override
@@ -109,113 +152,53 @@ public class PostWriteActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
     }
 
-    void writePost(View v) {
-        App.getAppInstance().showToast("글이 등록되었습니다.");
-        finish();
+    void createOrUpdatePost(View v) {
+        ArrayList<String> tags = new ArrayList<>();
+        tags.add("tag1");
+        tags.add("tag2");
+
+        if(current_mode == MODE.WRITE){
+            postService.createPost(
+                    userID,
+                    mImageUri.toString(),
+                    binding.postwriteContents.getText().toString(),
+                    System.currentTimeMillis(),
+                    tags)
+                    .enqueue(new BasicCallback<JsonObject>(this) {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            super.onResponse(call, response);
+
+                            if (response.code() == 500) {
+                                App.getAppInstance().showToast("comment 가져오기 실패");
+                            } else {
+                                App.getAppInstance().showToast("글이 등록되었습니다.");
+                                finish();
+                            }
+                        }
+                    });
+        }
+        else{
+            postService.updatePost(
+                    postID,
+                    mImageUri.toString(),
+                    binding.postwriteContents.getText().toString(),
+                    System.currentTimeMillis(),
+                    tags)
+                    .enqueue(new BasicCallback<JsonObject>(this) {
+                        @Override
+                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                            super.onResponse(call, response);
+
+                            if (response.code() == 500) {
+                                App.getAppInstance().showToast("comment 가져오기 실패");
+                            } else {
+                                App.getAppInstance().showToast("업데이트 되었습니다.");
+                                finish();
+                            }
+                        }
+                    });
+
+        }
     }
 }
-
-//public class PostReviseActivity extends BaseActivity {
-//    private final int CODE_PERMISSION = 22;
-//    private final int EXTRA_RQ_PICKFROMGALLERY = 200;
-//
-//    @BindView(R.id.revisepost_postimg)
-//    AppCompatImageView postimg;
-//    @BindView(R.id.revisepost_contents)
-//    AppCompatEditText contents;
-//
-//    Uri mImageUri;
-//
-//    /*
-//        TODO
-//        이거 없어질것 PostWriteActivity에 합침
-//    */
-//
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.a_postwrite_revise);
-//        ButterKnife.bind(this);
-//
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.revisepost_toolbar);
-//        setSupportActionBar(toolbar);
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//
-////        getIntent().getIntExtra("postid",0);
-//        if (getIntent().getStringExtra("postimg") != null) {
-//            Log.w("dd", getIntent().getStringExtra("postimg"));
-//            postimg.setVisibility(View.VISIBLE);
-//            Glide.with(this)
-//                    .load(getIntent().getStringExtra("postimg"))
-//                    .apply(RequestOptions.errorOf(R.drawable.ic_mood_bad_black_24dp).centerCrop())
-//                    .into(postimg);
-//        }
-//
-//        contents.setText(getIntent().getStringExtra("contents"));
-//    }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
-//            if (data != null) {
-//                postimg.setVisibility(View.VISIBLE);
-//                Glide.with(this)
-//                        .load(mImageUri != null ? mImageUri : data.getData())
-//                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
-//                        .into(postimg);
-//            }
-//    }
-//
-//    @Override
-//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-//        if (requestCode == CODE_PERMISSION) {
-//            for (int result : grantResults) {
-//                if (result == PackageManager.PERMISSION_DENIED) {
-//                    App.getAppInstance().showToast("권한 거부");
-//                    return;
-//                }
-//            }
-//
-//            mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
-//
-//            Intent intent = new Intent(Intent.ACTION_PICK)
-//                    .setType(MediaStore.Images.Media.CONTENT_TYPE)
-//                    .putExtra("crop", "true")
-//                    .putExtra("aspectX", 3)
-//                    .putExtra("aspectY", 2)
-//                    .putExtra("scale", true)
-//                    .putExtra("output", mImageUri);
-//            startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
-//        }
-//    }
-//
-//    @OnClick({R.id.revisepost_postimg_add, R.id.revisepost_ok})
-//    void ok(View v) {
-//        switch (v.getId()) {
-//            case R.id.revisepost_postimg_add:
-//                final String[] permissions = {
-//                        Manifest.permission.READ_EXTERNAL_STORAGE
-//                };
-//
-//                if (PermissionUtil.checkPermission(this, permissions)) {
-//                    mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
-//
-//                    Intent intent = new Intent(Intent.ACTION_PICK)
-//                            .setType(MediaStore.Images.Media.CONTENT_TYPE)
-//                            .putExtra("crop", "true")
-//                            .putExtra("aspectX", 3)
-//                            .putExtra("aspectY", 2)
-//                            .putExtra("scale", true)
-//                            .putExtra("output", mImageUri);
-//                    startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
-//                } else
-//                    ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
-//                break;
-//            case R.id.revisepost_ok:
-//                App.getAppInstance().showToast("글이 등록되었습니다.");
-//                break;
-//        }
-//    }
-//}

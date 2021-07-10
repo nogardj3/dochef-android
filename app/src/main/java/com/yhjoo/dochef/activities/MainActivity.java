@@ -16,6 +16,8 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.bumptech.glide.Glide;
@@ -39,7 +41,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -97,7 +98,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         navigationView.setNavigationItemSelectedListener(this);
 
-        mainFragmentAdapter = new MainFragmentAdapter(getSupportFragmentManager(), new ArrayList<>(Arrays.asList(new MainInitFragment(), new MainRecipesFragment(), new MainMyRecipeFragment(), new MainTimelineFragment())));
+        ArrayList<Fragment> fragments = new ArrayList<>();
+        fragments.add(new MainInitFragment());
+        fragments.add(new MainRecipesFragment());
+        fragments.add(new MainMyRecipeFragment());
+        fragments.add(new MainTimelineFragment());
+
+        mainFragmentAdapter = new MainFragmentAdapter(
+                getSupportFragmentManager(),
+                FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
+                fragments);
+
         viewPager.setAdapter(mainFragmentAdapter);
         viewPager.setOffscreenPageLimit(3);
 

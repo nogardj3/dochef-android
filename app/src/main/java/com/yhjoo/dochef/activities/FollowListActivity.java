@@ -22,7 +22,6 @@ import com.yhjoo.dochef.utils.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import retrofit2.Response;
 
@@ -92,9 +91,9 @@ public class FollowListActivity extends BaseActivity {
 
     public void getFollower(){
         userService.getFollowers(active_userid, target_id)
-                .enqueue(new BasicCallback<List<UserBreif>>(FollowListActivity.this) {
+                .enqueue(new BasicCallback<ArrayList<UserBreif>>(FollowListActivity.this) {
                     @Override
-                    public void onResponse(Response<List<UserBreif>> response) {
+                    public void onResponse(Response<ArrayList<UserBreif>> response) {
                         followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                         followListAdapter.setNewData(response.body());
                     }
@@ -103,9 +102,9 @@ public class FollowListActivity extends BaseActivity {
 
     public void getFollowing(){
         userService.getFollowings(active_userid, target_id)
-                .enqueue(new BasicCallback<List<UserBreif>>(FollowListActivity.this) {
+                .enqueue(new BasicCallback<ArrayList<UserBreif>>(FollowListActivity.this) {
                     @Override
-                    public void onResponse(Response<List<UserBreif>> response) {
+                    public void onResponse(Response<ArrayList<UserBreif>> response) {
                         followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                         followListAdapter.setNewData(response.body());
                     }
