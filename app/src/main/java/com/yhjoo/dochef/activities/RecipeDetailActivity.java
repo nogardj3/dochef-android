@@ -95,19 +95,11 @@ public class RecipeDetailActivity extends BaseActivity {
             JSONArray tagsArray = new JSONArray(recipeDetail.getTag());
 
             for (int i = 0; i < tagsArray.length(); i++) {
-                AppCompatTextView textView = new AppCompatTextView(this);
-                textView.setText(tagsArray.getString(i));
-                textView.setTextColor(getResources().getColor(R.color.colorPrimary, null));
+                AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
+                textView.setText("#" + tagsArray.getString(i) + " ");
 
                 binding.recipedetailTags.addView(textView);
             }
-//            recipeTags.removeAllViews();
-//            for (int i = 0; i < recipeDetailPlay.getTags().length; i++) {
-//                AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
-//                textView.setText("#" + recipeDetailPlay.getTags()[i] + " ");
-//
-//                recipeTags.addView(textView);
-//            }
 
             binding.recipedetailStartrecipe.setOnClickListener((v) ->
                     startActivity(new Intent(this, PlayRecipeActivity.class)));
