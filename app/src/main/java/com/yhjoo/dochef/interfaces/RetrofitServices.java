@@ -75,15 +75,18 @@ public class RetrofitServices {
 
     public interface PostService {
         @GET("post/")
-        Call<ArrayList<Post>> getPost(@Query("user_id") String userID);
+        Call<ArrayList<Post>> getPostList(@Query("user_id") String userID);
         @GET("post/detail")
-        Call<ArrayList<Post>> getPostDetail(@Query("user_id") String userID);
+        Call<Post> getPost(@Query("post_id") int userID);
+        @FormUrlEncoded
+        @POST("post/like")
+        Call<JsonObject> likePost(@Field("user_id") int userID,@Field("post_id") int postID);
         @FormUrlEncoded
         @POST("post/create")
-        Call<ArrayList<Post>> createPost(@Query("post_id") String userID);
+        Call<JsonObject> createPost(@Field("post_id") int postID);
         @FormUrlEncoded
         @POST("post/delete")
-        Call<ArrayList<Post>> deletePost(@Query("post_id") String userID);
+        Call<JsonObject> deletePost(@Field("post_id") int postID);
     }
 
     public interface CommentService {

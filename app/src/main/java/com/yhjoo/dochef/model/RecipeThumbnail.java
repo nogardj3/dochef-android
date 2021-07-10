@@ -1,11 +1,11 @@
 package com.yhjoo.dochef.model;
 
-public class PostThumbnail {
+public class RecipeThumbnail {
     private final int thumbnail_type;
     private final String imageUrl;
     private final int isNew;
 
-    public PostThumbnail(int type, String imageUrl, int isNew) {
+    public RecipeThumbnail(int type, String imageUrl, int isNew) {
         this.thumbnail_type = type;
         this.imageUrl = imageUrl;
         this.isNew = isNew;

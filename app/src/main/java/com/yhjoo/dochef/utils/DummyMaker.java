@@ -7,7 +7,7 @@ import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Notification;
-import com.yhjoo.dochef.model.PostThumbnail;
+import com.yhjoo.dochef.model.RecipeThumbnail;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.model.UserBreif;
@@ -32,20 +32,20 @@ public class DummyMaker {
 
             return (T) arrayList;
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_GRID)) {
-            ArrayList<PostThumbnail> arrayList = new ArrayList<>();
+            ArrayList<RecipeThumbnail> arrayList = new ArrayList<>();
 
             int type_recipe = resources.getInteger(R.integer.HOMEITEM_TYPE_RECIPE);
             int type_photo = resources.getInteger(R.integer.HOMEITEM_TYPE_PHOTO);
             int[] img_grids = {R.raw.dummy_grid_0, R.raw.dummy_grid_1, R.raw.dummy_grid_2};
 
-            arrayList.add(new PostThumbnail(type_recipe, Integer.toString(img_grids[0]), 1));
+            arrayList.add(new RecipeThumbnail(type_recipe, Integer.toString(img_grids[0]), 1));
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
 
-                arrayList.add(new PostThumbnail(type_recipe,
+                arrayList.add(new RecipeThumbnail(type_recipe,
                         Integer.toString(img_grids[r.nextInt(3)]),
                         i == 0 ? 1 : 0));
-                arrayList.add(new PostThumbnail(type_photo,
+                arrayList.add(new RecipeThumbnail(type_photo,
                         Integer.toString(img_grids[r.nextInt(3)]),
                         i == 0 ? 1 : 0));
             }
@@ -86,7 +86,7 @@ public class DummyMaker {
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_GRID)) {
             ArrayList<Comment> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
-                arrayList.add(new Comment(1234, "유져" + i, "내용 " + i + "\n", System.currentTimeMillis()));
+                arrayList.add(new Comment("유져" + i, "내용 " + i + "\n", System.currentTimeMillis()));
             }
 
             return (T) arrayList;

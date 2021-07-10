@@ -121,54 +121,68 @@
             app:layout_constraintTop_toTopOf="@+id/timeline_liketext"
             tools:text="0" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/timeline_like"
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/timeline_comment_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/timeline_liketext"
-            app:layout_constraintRight_toLeftOf="@+id/timeline_comment"
-            app:layout_constraintTop_toTopOf="@+id/timeline_liketext"
-            app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+            android:visibility="gone"
+            tools:visibility="visible"
+            app:constraint_referenced_ids="timeline_comment_img,
+            timeline_comment_nickname,timeline_comment_contents,timeline_comment_date"/>
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/timeline_comment"
+            android:id="@+id/timeline_comment_img"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/timeline_liketext"
-            app:layout_constraintRight_toLeftOf="@+id/timeline_other"
-            app:layout_constraintTop_toTopOf="@+id/timeline_liketext"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/timeline_userimg"
+            app:layout_constraintTop_toBottomOf="@+id/timeline_liketext"
             app:srcCompat="@drawable/ic_comment_black_24dp" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/timeline_other"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeline_comment_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/timeline_liketext"
-            app:layout_constraintRight_toRightOf="@+id/timeline_time"
-            app:layout_constraintTop_toTopOf="@+id/timeline_liketext"
-            app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
+            android:layout_marginStart="5dp"
+            android:maxEms="5"
+            android:maxLines="1"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/timeline_comment_img"
+            app:layout_constraintTop_toTopOf="@+id/timeline_comment_img"
+            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_img"
+            tools:text="닉네임" />
 
-        <LinearLayout
-            android:id="@+id/timeline_comment_layout"
-            android:layout_width="match_parent"
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeline_comment_contents"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@+id/timeline_liketext">
+            android:layout_marginStart="5dp"
+            android:maxLines="2"
+            app:layout_constraintLeft_toRightOf="@+id/timeline_comment_nickname"
+            app:layout_constraintRight_toLeftOf="@+id/timeline_comment_date"
+            app:layout_constraintTop_toTopOf="@+id/timeline_comment_img"
+            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_img"
+            tools:text="내용" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
-                android:background="@color/grey" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/timeline_comment_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintRight_toRightOf="@+id/timeline_time"
+            app:layout_constraintTop_toTopOf="@+id/timeline_comment_nickname"
+            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_nickname"
+            tools:text="날짜" />
 
-            <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/timeline_commentdetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:flexDirection="column" />
-        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/timeline_comment_nickname"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

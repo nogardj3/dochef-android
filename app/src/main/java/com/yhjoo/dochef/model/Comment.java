@@ -29,14 +29,6 @@ public class Comment {
         this.dateTime = dateTime;
     }
 
-    // Create
-    public Comment(int postID, String userID, String contents, long dateTime) {
-        this.postID = postID;
-        this.userID = userID;
-        this.contents = contents;
-        this.dateTime = dateTime;
-    }
-
     // Dummy
     public Comment(String nickName, String contents, long dateTime) {
         this.nickName = nickName;

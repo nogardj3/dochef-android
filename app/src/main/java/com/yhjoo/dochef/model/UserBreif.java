@@ -4,16 +4,13 @@ import com.google.gson.annotations.SerializedName;
 
 public class UserBreif {
     @SerializedName("user_id")
-    private final String userID;
+    private String userID;
     @SerializedName("profile_img_url")
-    private final String userImg;
+    private String userImg;
     @SerializedName("nickname")
-    private final String nickname;
+    private String nickname;
     @SerializedName("is_follow")
-    private final int is_follow;
-    /*
-
-     */
+    private int is_follow;
 
     public UserBreif(String userID, String userImg, String nickname, int is_follow) {
         this.userID = userID;

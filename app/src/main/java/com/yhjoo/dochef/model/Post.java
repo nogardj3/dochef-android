@@ -3,31 +3,48 @@ package com.yhjoo.dochef.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Post implements Serializable {
-    @SerializedName("NICKNAME")
-    private final String nickName;
-    @SerializedName("PROFILE_IMAGE")
-    private final String userImg;
-    @SerializedName("IMAGE")
-    private final String postImg;
-    @SerializedName("SUBSTANCE")
-    private final String contents;
-    private final int likeCount;
-    private final String[] tags;
-    @SerializedName("POST_ID")
+    @SerializedName("post_id")
     private int postID;
-    @SerializedName("USER_ID")
+    @SerializedName("user_id")
     private String UserID;
+    @SerializedName("nickname")
+    private String nickname;
+    @SerializedName("profile_img_url")
+    private String userImg;
+    @SerializedName("post_img")
+    private ArrayList<String> postImg;
+    @SerializedName("datetime")
+    private long dateTime;
+    @SerializedName("contents")
+    private String contents;
+    @SerializedName("tags")
+    private ArrayList<String> tags;
+    @SerializedName("comments")
+    private ArrayList<Comment> comments;
+    @SerializedName("like_count")
+    private Integer like_count;
 
-    public Post(String nickname, String userImg, String postImg, int likeCount, String contents, String[] tags) {
-        this.nickName = nickname;
+    // Detail
+
+    public Post(int postID, String userID, String nickname, String userImg, ArrayList<String> postImg, long dateTime, String contents, ArrayList<String> tags, ArrayList<Comment> comments, Integer like_count) {
+        this.postID = postID;
+        UserID = userID;
+        this.nickname = nickname;
         this.userImg = userImg;
         this.postImg = postImg;
-        this.likeCount = likeCount;
+        this.dateTime = dateTime;
         this.contents = contents;
         this.tags = tags;
+        this.comments = comments;
+        this.like_count = like_count;
     }
+
+
+    // Dummy
+
 
     public int getPostID() {
         return postID;
@@ -37,27 +54,35 @@ public class Post implements Serializable {
         return UserID;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
     public String getUserImg() {
         return userImg;
     }
 
-    public String getPostImg() {
+    public ArrayList<String> getPostImg() {
         return postImg;
     }
 
-    public int getLikeCount() {
-        return likeCount;
+    public long getDateTime() {
+        return dateTime;
     }
 
     public String getContents() {
         return contents;
     }
 
-    public String[] getTags() {
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public Integer getLike_count() {
+        return like_count;
+    }
+
+    public ArrayList<String> getTags() {
         return tags;
     }
 }

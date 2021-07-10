@@ -28,7 +28,6 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.CommentActivity;
 import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.PostDetailActivity;
 import com.yhjoo.dochef.activities.PostWriteActivity;
@@ -80,7 +79,7 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) recyclerView.getParent());
         postListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
-            intent.putExtra("post", (Post) adapter.getData().get(position));
+            intent.putExtra("postID", ((Post) adapter.getData().get(position)).getPostID());
             startActivity(intent);
         });
         postListAdapter.setOnItemChildClickListener((baseQuickAdapter, view12, i) -> {
@@ -89,7 +88,9 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
                     App.getAppInstance().showToast("좋아요");
                     break;
                 case R.id.timeline_comment:
-                    startActivity(new Intent(MainTimelineFragment.this.getContext(), CommentActivity.class));
+                    Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
+                    intent.putExtra("post", ((Post) baseQuickAdapter.getData().get(i)).getPostID());
+                    startActivity(intent);
                     break;
 
                 case R.id.timeline_other:
@@ -240,22 +241,6 @@ public class MainTimelineFragment extends Fragment implements BaseQuickAdapter.R
             aa.add(bb);
             aa.add(bb);
 
-            if (aa.size() != 0) {
-                helper.getView(R.id.timeline_comment_layout).setVisibility(View.VISIBLE);
-                for (int i = 0; i < aa.size(); i++) {
-                    LinearLayout motherview = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.li_comment_brief, null);
-                    AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_comment_brief_nickname));
-                    view1.setText(aa.get(i).getNickName());
-                    AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_comment_brief_contents));
-                    view2.setText(aa.get(i).getContents());
-                    AppCompatTextView view3 = ((AppCompatTextView) motherview.findViewById(R.id.li_comment_brief_date));
-                    view3.setText("1일전");
-
-                    ((FlexboxLayout) helper.itemView.findViewById(R.id.timeline_commentdetail)).addView(motherview);
-                }
-            } else {
-                helper.getView(R.id.timeline_comment_layout).setVisibility(View.GONE);
-            }
         }
     }
 }

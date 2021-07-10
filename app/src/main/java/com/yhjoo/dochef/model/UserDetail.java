@@ -8,19 +8,19 @@ import org.json.JSONObject;
 public class UserDetail {
     @SerializedName("user_id")
     private String userID;
-    @SerializedName("PROFILE_IMAGE")
+    @SerializedName("profile_img_url")
     private String userImg;
-    @SerializedName("NICKNAME")
+    @SerializedName("nickname")
     private String nickname;
-    @SerializedName("INTRODUCTION")
+    @SerializedName("bio")
     private String profileText;
-    @SerializedName("RECIPE_COUNT")
+    @SerializedName("recipe_count")
     private int recipeCount;
-    @SerializedName("FOLLOWER_COUNT")
+    @SerializedName("follower_count")
     private int followerCount;
-    @SerializedName("FOLLOWING_COUNT")
+    @SerializedName("following_count")
     private int followingCount;
-    @SerializedName("IS_FOLLOWING")
+    @SerializedName("is_follow")
     private int is_following;
 
     public UserDetail(String userID, int recipeCount, int followerCount, int followingCount, int isfollowing, String nickname, String profileText) {
@@ -58,14 +58,6 @@ public class UserDetail {
 
     public int getFollowingCount() {
         return followingCount;
-    }
-
-    public int getIs_following() {
-        return is_following;
-    }
-
-    public void setIs_following(int is_following) {
-        this.is_following = is_following;
     }
 
     public String getNickname() {

@@ -44,6 +44,8 @@ public class CommentActivity extends BaseActivity {
 
     /*
         TODO
+        이거 필요 없는듯 -> postdetail로 합치기
+
         1. 대댓글은 없음 -> 시간없음
         2. retrofit 정리
     */
