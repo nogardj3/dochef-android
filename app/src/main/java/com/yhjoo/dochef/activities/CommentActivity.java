@@ -16,8 +16,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Comment;
+import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.databinding.ACommentBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 

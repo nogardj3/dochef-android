@@ -16,7 +16,6 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.tabs.TabLayout;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.fragments.ResultFragment;
 
 import java.util.ArrayList;

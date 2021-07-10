@@ -5,7 +5,6 @@ import android.text.Html;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.databinding.ATosBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.RetrofitBuilder;

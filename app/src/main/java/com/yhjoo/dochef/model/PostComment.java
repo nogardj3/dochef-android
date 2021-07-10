@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.classes;
+package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 

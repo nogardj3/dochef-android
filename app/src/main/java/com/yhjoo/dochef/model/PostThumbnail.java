@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.classes;
+package com.yhjoo.dochef.model;
 
 public class PostThumbnail {
     private final int thumbnail_type;

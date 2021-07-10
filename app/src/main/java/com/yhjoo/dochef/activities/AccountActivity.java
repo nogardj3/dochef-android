@@ -22,7 +22,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.databinding.AAccountBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;

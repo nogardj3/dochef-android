@@ -12,8 +12,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Review;
+import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.databinding.AReviewBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 

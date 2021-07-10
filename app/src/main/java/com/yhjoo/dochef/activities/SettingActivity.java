@@ -7,7 +7,6 @@ import android.view.View;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.BuildConfig;
-import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.databinding.ASettingBinding;
 import com.yhjoo.dochef.utils.ChefAuth;
 import com.yhjoo.dochef.utils.Utils;

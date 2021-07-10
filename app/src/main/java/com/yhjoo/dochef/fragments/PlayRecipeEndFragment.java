@@ -16,7 +16,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.flexbox.FlexboxLayout;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.ReviewWriteActivity;
-import com.yhjoo.dochef.classes.RecipeDetailPlay;
+import com.yhjoo.dochef.model.RecipeDetailPlay;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

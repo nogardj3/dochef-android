@@ -7,7 +7,6 @@ import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
 import com.yhjoo.dochef.databinding.ASplashBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.ChefAuth;

@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.classes;
+package com.yhjoo.dochef.model;
 
 import java.util.ArrayList;
 

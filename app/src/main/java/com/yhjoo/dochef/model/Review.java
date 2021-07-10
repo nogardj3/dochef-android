@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.classes;
+package com.yhjoo.dochef.model;
 
 public class Review {
     private final String imageURL;

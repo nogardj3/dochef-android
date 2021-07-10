@@ -19,8 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Recipe;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.databinding.ARecipelistBinding;
 
 import java.util.ArrayList;

@@ -3,14 +3,14 @@ package com.yhjoo.dochef.utils;
 import android.content.res.Resources;
 
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.classes.Comment;
-import com.yhjoo.dochef.classes.FAQ;
-import com.yhjoo.dochef.classes.Notice;
-import com.yhjoo.dochef.classes.Notification;
-import com.yhjoo.dochef.classes.PostThumbnail;
-import com.yhjoo.dochef.classes.Recipe;
-import com.yhjoo.dochef.classes.Review;
-import com.yhjoo.dochef.classes.UserBreif;
+import com.yhjoo.dochef.model.Comment;
+import com.yhjoo.dochef.model.FAQ;
+import com.yhjoo.dochef.model.Notice;
+import com.yhjoo.dochef.model.Notification;
+import com.yhjoo.dochef.model.PostThumbnail;
+import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.Review;
+import com.yhjoo.dochef.model.UserBreif;
 
 import java.util.ArrayList;
 import java.util.Random;

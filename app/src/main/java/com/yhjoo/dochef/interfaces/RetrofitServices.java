@@ -1,17 +1,17 @@
 package com.yhjoo.dochef.interfaces;
 
 import com.google.gson.JsonObject;
-import com.yhjoo.dochef.classes.Comment;
-import com.yhjoo.dochef.classes.FAQ;
-import com.yhjoo.dochef.classes.Notice;
-import com.yhjoo.dochef.classes.Post;
-import com.yhjoo.dochef.classes.PostComment;
-import com.yhjoo.dochef.classes.Recipe;
-import com.yhjoo.dochef.classes.RecipeDetail;
-import com.yhjoo.dochef.classes.RecipeDetailPlay;
-import com.yhjoo.dochef.classes.Review;
-import com.yhjoo.dochef.classes.UserBreif;
-import com.yhjoo.dochef.classes.UserDetail;
+import com.yhjoo.dochef.model.Comment;
+import com.yhjoo.dochef.model.FAQ;
+import com.yhjoo.dochef.model.Notice;
+import com.yhjoo.dochef.model.Post;
+import com.yhjoo.dochef.model.PostComment;
+import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeDetail;
+import com.yhjoo.dochef.model.RecipeDetailPlay;
+import com.yhjoo.dochef.model.Review;
+import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserDetail;
 
 import java.util.ArrayList;
 import java.util.List;

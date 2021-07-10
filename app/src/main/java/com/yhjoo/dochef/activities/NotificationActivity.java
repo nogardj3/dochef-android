@@ -15,8 +15,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.base.BaseActivity;
-import com.yhjoo.dochef.classes.Notification;
+import com.yhjoo.dochef.model.Notification;
 import com.yhjoo.dochef.databinding.ANotificationBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 

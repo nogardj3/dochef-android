@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.base;
+package com.yhjoo.dochef.activities;
 
 import android.app.Activity;
 import android.content.Context;

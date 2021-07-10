@@ -25,7 +25,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.classes.Recipe;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.utils.DummyMaker;
 
