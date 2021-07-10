@@ -49,6 +49,7 @@ public class AccountActivity extends BaseActivity {
     /*
         TODO
         1. FindPW 기능 구현
+        2. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -275,7 +276,7 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    public void checkUserInfo(String idToken) {
+    void checkUserInfo(String idToken) {
         accountService
                 .checkUser(idToken, mAuth.getUid())
                 .enqueue(new BasicCallback<JsonObject>(AccountActivity.this) {
@@ -293,7 +294,7 @@ public class AccountActivity extends BaseActivity {
                 });
     }
 
-    public void startMode(AccountActivity.Mode mode, String token) {
+    void startMode(AccountActivity.Mode mode, String token) {
         binding.accountSigninGroup.setVisibility(View.GONE);
         binding.accountSignupGroup.setVisibility(View.GONE);
         binding.accountSignupnickGroup.setVisibility(View.GONE);
@@ -318,7 +319,7 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    public void startMain(String userinfo) {
+    void startMain(String userinfo) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean(getString(R.string.SP_ACTIVATEDDEVICE), true);

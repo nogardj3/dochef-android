@@ -24,7 +24,7 @@ import com.yhjoo.dochef.model.Recipe;
 
 import java.util.ArrayList;
 
-public class RecipeListActivity extends BaseActivity {
+public class RecipeMyListActivity extends BaseActivity {
     private enum OPERATION {VIEW, ALIGN}
 
     ARecipelistBinding binding;
@@ -53,10 +53,10 @@ public class RecipeListActivity extends BaseActivity {
         recipeListAdapter = new RecipeListAdapter();
         recipeListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
         recipeListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.li_a_myrecipe_revise) {
-                startActivity(new Intent(new Intent(RecipeListActivity.this, RecipeMakeActivity.class)));
-            } else if (view.getId() == R.id.li_a_myrecipe_delete) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this);
+            if (view.getId() == R.id.recipemylist_revise) {
+                startActivity(new Intent(new Intent(RecipeMyListActivity.this, RecipeMakeActivity.class)));
+            } else if (view.getId() == R.id.recipemylist_delete) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeMyListActivity.this);
                 builder.setMessage("삭제하시겠습니까?")
                         .setPositiveButton("확인", (dialog, which) -> {
                             adapter.getData().remove(position);
@@ -116,11 +116,11 @@ public class RecipeListActivity extends BaseActivity {
     }
 
     void showAlignConfirm() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(RecipeListActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(RecipeMyListActivity.this);
         builder.setMessage("적용하시겠습니까?")
                 .setPositiveButton("확인", (dialog, which) -> {
                     recipeListAdapter.disableDragItem();
-                    ((AppCompatImageView) RecipeListActivity.this.findViewById(R.id.recipelist_alignbutton)).setImageResource(R.drawable.ic_low_priority_white_24dp);
+                    ((AppCompatImageView) RecipeMyListActivity.this.findViewById(R.id.recipelist_alignbutton)).setImageResource(R.drawable.ic_low_priority_white_24dp);
                     recipeListAdapter.notifyDataSetChanged();
                     binding.recipelistRecycler.getLayoutManager().scrollToPosition(0);
                     currentOperation = OPERATION.VIEW;
@@ -133,7 +133,7 @@ public class RecipeListActivity extends BaseActivity {
 
     class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseViewHolder> {
         RecipeListAdapter() {
-            super(R.layout.li_recipelist, recipes);
+            super(R.layout.li_recipe_mylist, recipes);
         }
 
         @Override
@@ -141,16 +141,16 @@ public class RecipeListActivity extends BaseActivity {
             Glide.with(mContext)
                     .load(item.getRecipeImg())
                     .apply(RequestOptions.centerCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.li_a_myrecipe_recipeimg));
+                    .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
 
-            helper.setText(R.id.li_a_myrecipe_recipetitle, item.getTitle());
-            helper.setText(R.id.li_a_myrecipe_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
-            helper.setVisible(R.id.li_a_myrecipe_mine, item.getNickName().equals("나"));
-            helper.setVisible(R.id.li_a_myrecipe_revise, item.getNickName().equals("나") && currentOperation == OPERATION.VIEW);
-            helper.setVisible(R.id.li_a_myrecipe_delete, currentOperation == OPERATION.VIEW);
-            helper.setVisible(R.id.li_a_myrecipe_touch, currentOperation == OPERATION.ALIGN);
-            helper.addOnClickListener(R.id.li_a_myrecipe_revise);
-            helper.addOnClickListener(R.id.li_a_myrecipe_delete);
+            helper.setText(R.id.recipemylist_recipetitle, item.getTitle());
+            helper.setText(R.id.recipemylist_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
+            helper.setVisible(R.id.recipemylist_mine, item.getNickName().equals("나"));
+            helper.setVisible(R.id.recipemylist_revise, item.getNickName().equals("나") && currentOperation == OPERATION.VIEW);
+            helper.setVisible(R.id.recipemylist_delete, currentOperation == OPERATION.VIEW);
+            helper.setVisible(R.id.recipemylist_touch, currentOperation == OPERATION.ALIGN);
+            helper.addOnClickListener(R.id.recipemylist_revise);
+            helper.addOnClickListener(R.id.recipemylist_delete);
         }
     }
 }

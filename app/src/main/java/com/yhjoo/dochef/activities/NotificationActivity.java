@@ -95,19 +95,19 @@ public class NotificationActivity extends BaseActivity implements BaseQuickAdapt
             Glide.with(mContext)
                     .load(Integer.valueOf(item.getUserImg()))
                     .apply(RequestOptions.circleCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.li_notification_userimg));
+                    .into((AppCompatImageView) helper.getView(R.id.notification_userimg));
 
             if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_1))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype1, item.getUserName()), Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.notification_contents, Html.fromHtml(getString(R.string.notification_texttype1, item.getUserName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_2))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype2, item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.notification_contents, Html.fromHtml(getString(R.string.notification_texttype2, item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_3))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype3, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.notification_contents, Html.fromHtml(getString(R.string.notification_texttype3, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_4))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype4, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.notification_contents, Html.fromHtml(getString(R.string.notification_texttype4, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
             else if (item.getNotificationType() == getResources().getInteger(R.integer.NOTIFICATION_TYPE_5))
-                helper.setText(R.id.li_notification_contents, Html.fromHtml(getString(R.string.notification_texttype5, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
-            helper.setText(R.id.li_notification_date, item.getDateTime());
+                helper.setText(R.id.notification_contents, Html.fromHtml(getString(R.string.notification_texttype5, item.getUserName(), item.getRecipeName()), Html.FROM_HTML_MODE_LEGACY));
+            helper.setText(R.id.notification_date, item.getDateTime());
         }
     }
 }

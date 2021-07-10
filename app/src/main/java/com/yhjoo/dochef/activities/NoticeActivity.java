@@ -59,7 +59,7 @@ public class NoticeActivity extends BaseActivity {
                 ArrayList<Notice> resList = res.body();
                 for (Notice item : resList) {
                     ExpandTitle title = new ExpandTitle(item.title);
-                    title.addSubItem(new ExpandContents(item.contents));
+                    title.addSubItem(new ExpandContents(item.contents,item.getDateTime()));
                     noticeList.add(title);
                 }
 
@@ -72,7 +72,7 @@ public class NoticeActivity extends BaseActivity {
         ArrayList<Notice> response = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
         for (Notice item : response) {
             ExpandTitle title = new ExpandTitle(item.title);
-            title.addSubItem(new ExpandContents(item.contents));
+            title.addSubItem(new ExpandContents(item.contents,item.getDateTime()));
             noticeList.add(title);
         }
         noticeListAdapter.setNewData(noticeList);

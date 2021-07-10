@@ -9,7 +9,7 @@
     android:paddingVertical="5dp">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/li_comment_userimg"
+        android:id="@+id/comment_userimg"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:background="@drawable/bg_round"
@@ -19,39 +19,39 @@
         app:srcCompat="@drawable/ic_default_profile" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/li_comment_nickname"
+        android:id="@+id/comment_nickname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:maxEms="5"
         android:maxLines="1"
         android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/li_comment_userimg"
+        app:layout_constraintLeft_toRightOf="@+id/comment_userimg"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="닉네임" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/li_comment_contents"
+        android:id="@+id/comment_contents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="@+id/li_comment_nickname"
-        app:layout_constraintTop_toBottomOf="@+id/li_comment_nickname"
+        app:layout_constraintLeft_toLeftOf="@+id/comment_nickname"
+        app:layout_constraintTop_toBottomOf="@+id/comment_nickname"
         tools:text="내용" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/li_comment_date"
+        android:id="@+id/comment_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="3dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        app:layout_constraintRight_toLeftOf="@+id/li_comment_other"
+        app:layout_constraintRight_toLeftOf="@+id/comment_other"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="1일 전" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/li_comment_other"
+        android:id="@+id/comment_other"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"

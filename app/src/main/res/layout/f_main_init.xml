@@ -61,7 +61,7 @@
         android:overScrollMode="never"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:orientation="horizontal"
-        tools:listitem="@layout/li_recommend"
+        tools:listitem="@layout/li_recipe_recommend"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_recommend_text" />

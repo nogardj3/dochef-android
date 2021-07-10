@@ -35,8 +35,8 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class PostWriteActivity extends BaseActivity {
-    final int CODE_PERMISSION = 22;
-    final int EXTRA_RQ_PICKFROMGALLERY = 200;
+    private final int CODE_PERMISSION = 22;
+    private final int EXTRA_RQ_PICKFROMGALLERY = 200;
 
     enum MODE {WRITE, REVISE}
 

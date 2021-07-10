@@ -38,17 +38,14 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
 
 public class MainInitFragment extends Fragment {
-    @BindView(R.id.main_adviewpager)
-    ViewPager viewPager;
-
     FMainInitBinding binding;
 
     ArrayList<Recipe> recipes;
 
     /*
         TODO
-        1. 급상승 retrofit 구현
-        2. 밑에 뭘 넣으면 좋을까
+        1. 서버 데이터 추가 및 기능 구현
+        2. retrofit 구현
     */
 
     @Override
@@ -56,47 +53,42 @@ public class MainInitFragment extends Fragment {
         binding = FMainInitBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-//        View view = inflater.inflate(R.layout.f_main_init, container, false);
-        ButterKnife.bind(this, view);
-
         ArrayList<Integer> imgs = new ArrayList<>();
         imgs.add(R.drawable.ad_temp_0);
         imgs.add(R.drawable.ad_temp_1);
 
-        viewPager.setAdapter(new ImagePagerAdapter(MainInitFragment.this.getContext(), imgs, Glide.with(getContext())));
-        ((CirclePageIndicator) view.findViewById(R.id.main_adviewpager_indicator)).setViewPager(((ViewPager) viewPager));
+        binding.mainAdviewpager.setAdapter(new ImagePagerAdapter(MainInitFragment.this.getContext(), imgs));
+        binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
+        binding.mainRecommendMore.setOnClickListener(
+                v -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeThemeActivity.class)));
 
         Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(count -> viewPager.setCurrentItem(viewPager.getCurrentItem() == imgs.size() - 1 ? 0 : viewPager.getCurrentItem() + 1));
+                .subscribe(count -> binding.mainAdviewpager
+                        .setCurrentItem(binding.mainAdviewpager.getCurrentItem() == imgs.size() - 1
+                                ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.main_recommend_recyclerview);
-
-        if(App.isServerAlive()){
-
-        }
+        if(App.isServerAlive()){}
         else
             recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        RecommendAdapter recommendAdapter = new RecommendAdapter(recipes, Glide.with(getContext()));
-        recyclerView.setAdapter(recommendAdapter);
+        RecommendAdapter recommendAdapter = new RecommendAdapter();
         recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeDetailActivity.class)));
-        view.findViewById(R.id.main_recommend_more).setOnClickListener(v -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeThemeActivity.class)));
+        recommendAdapter.setNewData(recipes);
+        binding.mainRecommendRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
 
         return view;
     }
 
     class ImagePagerAdapter extends PagerAdapter {
-        private final Context mContext;
-        private final ArrayList<Integer> imgids;
-        private final RequestManager requestManager;
+        Context mContext;
+        ArrayList<Integer> imgids;
 
-        public ImagePagerAdapter(Context context, ArrayList<Integer> imgids, RequestManager requestManager) {
+        public ImagePagerAdapter(Context context, ArrayList<Integer> imgids) {
             this.mContext = context;
             this.imgids = imgids;
-            this.requestManager = requestManager;
         }
 
         @Override
@@ -104,7 +96,7 @@ public class MainInitFragment extends Fragment {
             AppCompatImageView aa = new AppCompatImageView(mContext);
             ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
             aa.setLayoutParams(lp);
-            requestManager
+            Glide.with(mContext)
                     .load(imgids.get(position))
                     .apply(RequestOptions.centerInsideTransform())
                     .into(aa);
@@ -131,28 +123,25 @@ public class MainInitFragment extends Fragment {
     }
 
     class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
-        private final RequestManager requestManager;
-
-        RecommendAdapter(ArrayList<Recipe> recipe, RequestManager requestManager) {
-            super(R.layout.li_recommend, recipe);
-            this.requestManager = requestManager;
+        RecommendAdapter() {
+            super(R.layout.li_recipe_recommend);
         }
 
         @Override
         protected void convert(BaseViewHolder helper, Recipe item) {
             if(App.isServerAlive())
-                requestManager
+                Glide.with(mContext)
                         .load(item.getRecipeImg())
                         .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+                        .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
             else
-                requestManager
+                Glide.with(mContext)
                         .load(Integer.parseInt(item.getRecipeImg()))
                         .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.li_recommend_recipeimg));
+                        .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
 
-            helper.setText(R.id.li_recommend_title, item.getTitle());
-            helper.setText(R.id.li_recommend_nickname, "By - " + item.getNickName());
+            helper.setText(R.id.reciperecommend_title, item.getTitle());
+            helper.setText(R.id.reciperecommend_nickname, "By - " + item.getNickName());
         }
     }
 }

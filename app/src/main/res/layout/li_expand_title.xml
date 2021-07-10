@@ -7,7 +7,7 @@
     android:background="@color/white">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/exp_d0_icon"
+        android:id="@+id/exp_title_icon"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_margin="8dp"
@@ -16,13 +16,13 @@
         app:srcCompat="@drawable/ic_arrow" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/exp_d0_title"
+        android:id="@+id/exp_title_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/exp_d0_icon"
-        app:layout_constraintLeft_toRightOf="@+id/exp_d0_icon"
-        app:layout_constraintTop_toTopOf="@+id/exp_d0_icon"
+        app:layout_constraintBottom_toBottomOf="@+id/exp_title_icon"
+        app:layout_constraintLeft_toRightOf="@+id/exp_title_icon"
+        app:layout_constraintTop_toTopOf="@+id/exp_title_icon"
         tools:text="제목" />
 
     <View

@@ -60,7 +60,7 @@ public class FAQActivity extends BaseActivity {
                         ArrayList<FAQ> resList = res.body();
                         for (FAQ item : resList) {
                             ExpandTitle title = new ExpandTitle(item.title);
-                            title.addSubItem(new ExpandContents(item.contents));
+                            title.addSubItem(new ExpandContents(item.contents,0));
                             faqList.add(title);
                         }
 
@@ -73,7 +73,7 @@ public class FAQActivity extends BaseActivity {
         ArrayList<FAQ> faqs = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
         for (FAQ item : faqs) {
             ExpandTitle title = new ExpandTitle(item.title);
-            ExpandContents contents = new ExpandContents(item.contents);
+            ExpandContents contents = new ExpandContents(item.contents,0);
             title.addSubItem(contents);
             faqList.add(title);
         }

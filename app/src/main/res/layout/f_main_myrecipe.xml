@@ -11,6 +11,6 @@
         android:clipToPadding="false"
         android:overScrollMode="never"
         android:paddingTop="10dp"
-        tools:listitem="@layout/li_f_myrecipe"/>
+        tools:listitem="@layout/li_recipe_main"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

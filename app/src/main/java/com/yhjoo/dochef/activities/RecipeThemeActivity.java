@@ -34,7 +34,6 @@ public class RecipeThemeActivity extends BaseActivity {
         TODO
         1. 서버 테마 데이터 추가
         2. retrofit 구현
-        3. span size 뭐임
     */
 
     @Override
@@ -100,7 +99,7 @@ public class RecipeThemeActivity extends BaseActivity {
     class RecipeListAdapter extends BaseMultiItemQuickAdapter<ThemeItem, BaseViewHolder> {
         RecipeListAdapter(List<ThemeItem> data) {
             super(data);
-            addItemType(VIEWHOLDER_ITEM, R.layout.li_recipetheme);
+            addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_theme);
             addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         }
 
@@ -111,13 +110,13 @@ public class RecipeThemeActivity extends BaseActivity {
                     Glide.with(mContext)
                             .load(item.getContent().getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
-                            .into((AppCompatImageView) helper.getView(R.id.li_recipetheme_img));
-                    helper.setText(R.id.li_recipetheme_title, item.getContent().getTitle());
-                    helper.setText(R.id.li_recipetheme_nickname, "By - " + item.getContent().getNickName());
+                            .into((AppCompatImageView) helper.getView(R.id.recipetheme_img));
+                    helper.setText(R.id.recipetheme_title, item.getContent().getTitle());
+                    helper.setText(R.id.recipetheme_nickname, "By - " + item.getContent().getNickName());
                     break;
 
                 case VIEWHOLDER_AD:
-                    AdView mAdview = helper.getView(R.id.tempadview);
+                    AdView mAdview = helper.getView(R.id.adview);
                     AdRequest adRequest = new AdRequest.Builder().build();
                     mAdview.loadAd(adRequest);
                     break;

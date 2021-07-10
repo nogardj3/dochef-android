@@ -17,7 +17,7 @@
             android:clipToPadding="false"
             android:overScrollMode="never"
             android:paddingTop="10dp"
-            tools:listitem="@layout/li_recipe"
+            tools:listitem="@layout/li_recipe_main"
             />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

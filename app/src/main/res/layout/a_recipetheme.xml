@@ -20,6 +20,6 @@
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
-        tools:listitem="@layout/li_recipetheme" />
+        tools:listitem="@layout/li_recipe_theme" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

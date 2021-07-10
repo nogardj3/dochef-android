@@ -38,8 +38,7 @@ public class FollowListActivity extends BaseActivity {
 
     /*
         TODO
-        1. Home 이후 -> 구현된 것 확인
-        2. indexing 기능 보류
+        1. 실행 해보고 수정할거 수정하기
     */
 
     @Override

@@ -10,10 +10,10 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.UserBreif;
 
 public class FollowListAdapter extends BaseQuickAdapter<UserBreif, BaseViewHolder> {
-    String userID = "";
+    String userID;
 
     public FollowListAdapter(String userID) {
-        super(R.layout.li_follow);
+        super(R.layout.li_user);
         this.userID = userID;
     }
 
@@ -24,17 +24,16 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBreif, BaseViewHolde
                     .load(App.isServerAlive()
                             ? mContext.getString(R.string.storage_image_url_profile) + item.getUserImg()
                             : Integer.valueOf(item.getUserImg()))
-                    .into((AppCompatImageView) helper.getView(R.id.li_follow_userimg));
+                    .into((AppCompatImageView) helper.getView(R.id.user_img));
         }
 
         if (!item.getUserID().equals(userID)) {
             if (item.getIs_follow() == 1)
-                helper.setVisible(R.id.li_followcancel_btn, true);
+                helper.setVisible(R.id.user_followcancel_btn, true);
             else
-                helper.setVisible(R.id.li_follow_btn, true);
+                helper.setVisible(R.id.user_follow_btn, true);
         }
 
-
-        helper.setText(R.id.li_follow_nickname, item.getNickname());
+        helper.setText(R.id.user_nickname, item.getNickname());
     }
 }

@@ -9,6 +9,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.ASplashBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.ChefAuth;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -16,7 +17,6 @@ import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
@@ -107,20 +107,21 @@ public class SplashActivity extends BaseActivity {
 
         RetrofitServices.BasicService basicService = retrofit.create(RetrofitServices.BasicService.class);
 
-        basicService.getTOS().enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> res) {
-                App.setIsServerAlive(true);
-                serverAlive = true;
-            }
+        basicService.getTOS()
+                .enqueue(new BasicCallback<String>(this) {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> res) {
+                        App.setIsServerAlive(true);
+                        serverAlive = true;
+                    }
 
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                t.printStackTrace();
-                App.setIsServerAlive(false);
-                serverAlive = false;
-            }
-        });
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        t.printStackTrace();
+                        App.setIsServerAlive(false);
+                        serverAlive = false;
+                    }
+                });
     }
 
     void checkIsAutoLogin() {

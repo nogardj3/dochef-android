@@ -56,14 +56,11 @@ public class ResultFragment extends Fragment {
         userService = RetrofitBuilder.create(getContext(), RetrofitServices.UserService.class);
         recipeService = RetrofitBuilder.create(getContext(), RetrofitServices.RecipeService.class);
 
-        if (type == VIEWHOLDER_ITEM_RECIPE)
-            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_resultrecipe);
-        else if (type == VIEWHOLDER_ITEM_USER) {
-            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_resultuser);
-        } else if (type == VIEWHOLDER_ITEM_INGREDIENT)
-            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_resultingredient);
-        else if (type == VIEWHOLDER_ITEM_TAG)
-            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_resulttag);
+        if (type == VIEWHOLDER_ITEM_USER)
+            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_user);
+        else
+            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_recipe_result);
+
 
         resultListAdapter.setEmptyView(R.layout.rv_search, (ViewGroup) binding.resultRecycler.getParent());
         resultListAdapter.setOnItemClickListener((adapter, view1, position) -> {

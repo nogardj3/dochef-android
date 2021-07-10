@@ -50,7 +50,8 @@ public class PostDetailActivity extends BaseActivity {
         postDetail = 수정 O, 댓글 많이, 댓글 작성 가능
         timeline   = 수정 X, 댓글 하나, 댓글 작성 불가
 
-        1. 실행 해보고 수정할거 수정하기
+        1. tags 확인
+        2. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -90,13 +91,13 @@ public class PostDetailActivity extends BaseActivity {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
                         } else {
                             App.getAppInstance().showToast("post detail 가져오기 성공");
-                            setHeaderView(response.body());
+                            setTopView(response.body());
                         }
                     }
                 });
     }
 
-    void setHeaderView(Post postInfo) {
+    void setTopView(Post postInfo) {
         if (!postInfo.getPostImg().equals("default")) {
             Glide.with(this)
                     .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())

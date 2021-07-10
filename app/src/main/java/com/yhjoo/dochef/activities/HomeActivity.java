@@ -275,7 +275,7 @@ public class HomeActivity extends BaseActivity {
         }));
 
         itemView.findViewById(R.id.home_recipelayout).setOnClickListener((v -> {
-            Intent intent = new Intent(HomeActivity.this, RecipeListActivity.class);
+            Intent intent = new Intent(HomeActivity.this, RecipeMyListActivity.class);
             intent.putExtra("UserID", userDetailInfo.getUserID());
             startActivity(intent);
         }));

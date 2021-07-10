@@ -15,25 +15,24 @@ public class RecipeGridAdapter extends BaseQuickAdapter<RecipeThumbnail, BaseVie
     RecyclerView recyclerView;
 
     public RecipeGridAdapter(RecyclerView recyclerView) {
-        super(R.layout.li_homegrid);
+        super(R.layout.li_recipe_home);
         this.recyclerView = recyclerView;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, RecipeThumbnail item) {
-        ViewGroup.LayoutParams lp = helper.itemView.findViewById(R.id.li_homegrid_recipeimg).getLayoutParams();
+        ViewGroup.LayoutParams lp = helper.itemView.findViewById(R.id.recipehome_recipeimg).getLayoutParams();
 
         lp.width = recyclerView.getMeasuredWidth() / 3;
         lp.height = recyclerView.getMeasuredWidth() / 3;
-        helper.itemView.findViewById(R.id.li_homegrid_recipeimg).setLayoutParams(lp);
-
+        helper.itemView.findViewById(R.id.recipehome_recipeimg).setLayoutParams(lp);
 
         Glide.with(mContext)
                 .load(Integer.valueOf(item.getImageUrl()))
-                .into((AppCompatImageView) helper.getView(R.id.li_homegrid_recipeimg));
+                .into((AppCompatImageView) helper.getView(R.id.recipehome_recipeimg));
 
-        helper.setVisible(R.id.li_homegrid_type,
+        helper.setVisible(R.id.recipehome_type,
                 item.getThumbnail_type() == mContext.getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE));
-        helper.setVisible(R.id.li_homegrid_new, item.getIsNew() == 1);
+        helper.setVisible(R.id.recipehome_new, item.getIsNew() == 1);
     }
 }

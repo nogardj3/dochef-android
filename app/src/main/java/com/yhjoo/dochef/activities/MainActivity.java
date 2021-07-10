@@ -31,6 +31,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.MainFragmentAdapter;
+import com.yhjoo.dochef.databinding.AFaqBinding;
+import com.yhjoo.dochef.databinding.AMainBinding;
 import com.yhjoo.dochef.fragments.MainInitFragment;
 import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
@@ -47,56 +49,41 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
-    @BindView(R.id.main_toolbar)
-    Toolbar toolbar;
-    @BindView(R.id.main_drawerlayout)
-    DrawerLayout drawerLayout;
-    @BindView(R.id.main_navigationview)
-    NavigationView navigationView;
-    @BindView(R.id.main_viewpager)
-    ViewPager viewPager;
-    @BindView(R.id.main_tablayout)
-    TabLayout tabLayout;
-    @BindView(R.id.main_fam)
-    FloatingActionMenu floatingActionMenu;
-    @BindView(R.id.main_fab)
-    FloatingActionButton floatingActionButton;
+    AMainBinding binding;
+    FirebaseAnalytics mFirebaseAnalytics;
+    MainFragmentAdapter mainFragmentAdapter;
 
-    private AppCompatTextView userName;
-    private AppCompatImageView userImage;
-
-    private MainFragmentAdapter mainFragmentAdapter;
-
-    private FirebaseAnalytics mFirebaseAnalytics;
+    AppCompatTextView userName;
+    AppCompatImageView userImage;
 
     /*
         TODO
-        1. floating action menu 버튼 못바꾸나
-        2. 마지막에 정리할거임
+        1. 마지막에 정리
      */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.a_main);
-        ButterKnife.bind(this);
+        binding = AMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        setSupportActionBar(binding.mainToolbar);
+
         MobileAds.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
-
-        setSupportActionBar(toolbar);
+        binding.mainFab.setImageResource(R.drawable.ic_low_priority_white_24dp);
 
         ActionBar actionBar = getSupportActionBar();
-        floatingActionButton.setImageResource(R.drawable.ic_low_priority_white_24dp);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, 0, 0);
-        drawerLayout.addDrawerListener(toggle);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.mainDrawerlayout, binding.mainToolbar, 0, 0);
+        binding.mainDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView.setNavigationItemSelectedListener(this);
+        binding.mainNavigationview.setNavigationItemSelectedListener(this);
 
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new MainInitFragment());
@@ -109,45 +96,44 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
                 fragments);
 
-        viewPager.setAdapter(mainFragmentAdapter);
-        viewPager.setOffscreenPageLimit(3);
+        binding.mainViewpager.setOffscreenPageLimit(3);
+        binding.mainViewpager.setPageMargin(15);
+        binding.mainViewpager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.mainTablayout));
+        binding.mainViewpager.setAdapter(mainFragmentAdapter);
 
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[0]));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[1]));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[2]));
-        tabLayout.addTab(tabLayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[3]));
-
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        viewPager.setPageMargin(15);
-        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[0]));
+        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[1]));
+        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[2]));
+        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setText(getResources().getStringArray(R.array.main_menu)[3]));
+        binding.mainTablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
-                        viewPager.setCurrentItem(0);
-                        floatingActionMenu.hideMenu(false);
-                        floatingActionMenu.setVisibility(View.GONE);
-                        floatingActionButton.setVisibility(View.GONE);
+                        binding.mainViewpager.setCurrentItem(0);
+                        binding.mainFam.hideMenu(false);
+                        binding.mainFam.setVisibility(View.GONE);
+                        binding.mainFab.setVisibility(View.GONE);
                         break;
                     case 1:
-                        viewPager.setCurrentItem(1);
-                        floatingActionMenu.setVisibility(View.VISIBLE);
-                        floatingActionButton.setVisibility(View.GONE);
-                        floatingActionButton.setImageResource(R.drawable.ic_low_priority_white_24dp);
+                        binding.mainViewpager.setCurrentItem(1);
+                        binding.mainFam.setVisibility(View.VISIBLE);
+                        binding.mainFab.setVisibility(View.GONE);
+                        binding.mainFab.setImageResource(R.drawable.ic_low_priority_white_24dp);
                         break;
                     case 2:
-                        viewPager.setCurrentItem(2);
-                        floatingActionMenu.hideMenu(false);
-                        floatingActionMenu.setVisibility(View.GONE);
-                        floatingActionButton.setVisibility(View.VISIBLE);
-                        floatingActionButton.setImageResource(R.drawable.ic_create_white_24dp);
+                        binding.mainViewpager.setCurrentItem(2);
+                        binding.mainFam.hideMenu(false);
+                        binding.mainFam.setVisibility(View.GONE);
+                        binding.mainFab.setVisibility(View.VISIBLE);
+                        binding.mainFab.setImageResource(R.drawable.ic_create_white_24dp);
                         break;
                     case 3:
-                        viewPager.setCurrentItem(3);
-                        floatingActionMenu.hideMenu(false);
-                        floatingActionMenu.setVisibility(View.GONE);
-                        floatingActionButton.setVisibility(View.VISIBLE);
-                        floatingActionButton.setImageResource(R.drawable.ic_create_white_24dp);
+                        binding.mainViewpager.setCurrentItem(3);
+                        binding.mainFam.hideMenu(false);
+                        binding.mainFam.setVisibility(View.GONE);
+                        binding.mainFab.setVisibility(View.VISIBLE);
+                        binding.mainFab.setImageResource(R.drawable.ic_create_white_24dp);
                         break;
                 }
             }
@@ -161,8 +147,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
-        userName = (AppCompatTextView) navigationView.getHeaderView(0).findViewById(R.id.navheader_nickname);
-        userImage = (AppCompatImageView) navigationView.getHeaderView(0).findViewById(R.id.navheader_userimg);
+        binding.famRecent.setOnClickListener(this::recentSort);
+        binding.famPopular.setOnClickListener(this::popularSort);
+        binding.mainFab.setOnClickListener(this::clickFab);
+
+        userName = (AppCompatTextView) binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_nickname);
+        userImage = (AppCompatImageView) binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_userimg);
     }
 
     @Override
@@ -193,9 +183,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 e.printStackTrace();
             }
 
-            navigationView.getMenu().findItem(R.id.main_nav_myhome).setVisible(true);
-            navigationView.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(true);
-            navigationView.getMenu().findItem(R.id.main_nav_notification).setVisible(true);
+            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(true);
+            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(true);
+            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_notification).setVisible(true);
         } else {
             Glide.with(this)
                     .load(R.drawable.ic_default_profile)
@@ -206,16 +196,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             userName.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AccountActivity.class)));
             userName.setText("가나다라마바");
 
-            navigationView.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
-            navigationView.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(false);
-            navigationView.getMenu().findItem(R.id.main_nav_notification).setVisible(false);
+            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
+            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(false);
+            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_notification).setVisible(false);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
+        if (binding.mainDrawerlayout.isDrawerOpen(GravityCompat.START)) {
+            binding.mainDrawerlayout.closeDrawer(GravityCompat.START);
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -260,7 +250,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             intent.putExtra("MODE",HomeActivity.MODE.MY);
             startActivity(intent);
         } else if (id == R.id.main_nav_myrecipe) {
-            startActivity(new Intent(MainActivity.this, RecipeListActivity.class));
+            startActivity(new Intent(MainActivity.this, RecipeMyListActivity.class));
         } else if (id == R.id.main_nav_notification) {
             startActivity(new Intent(MainActivity.this, NotificationActivity.class));
         } else if (id == R.id.main_nav_setting) {
@@ -272,20 +262,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
-    @OnClick({R.id.main_fab, R.id.fam_recent, R.id.fam_popular})
-    void onclick(View v) {
-        switch (viewPager.getCurrentItem()) {
-            case 1:
-                if (v.getId() == R.id.fam_recent) {
-                    if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Recent)
-                        ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
-                } else if (v.getId() == R.id.fam_popular) {
-                    if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Popular)
-                        ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
-                }
-                floatingActionMenu.close(true);
+    void recentSort(View v){
+        if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Recent)
+            ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
 
-                break;
+        binding.mainFam.close(true);
+    }
+
+    void popularSort(View v){
+        if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Popular)
+            ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
+
+        binding.mainFam.close(true);
+    }
+
+    void clickFab(View v) {
+        switch (binding.mainViewpager.getCurrentItem()) {
             case 2:
                 startActivity(new Intent(MainActivity.this, RecipeMakeActivity.class));
                 break;
@@ -294,6 +286,4 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
         }
     }
-
-
 }

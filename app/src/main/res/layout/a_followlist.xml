@@ -21,6 +21,6 @@
         android:overScrollMode="never"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/followlist_toolbar"
-        tools:listitem="@layout/li_follow" />
+        tools:listitem="@layout/li_user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -8,7 +8,7 @@
     android:foreground="?attr/selectableItemBackground">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/li_ingredient_product"
+        android:id="@+id/ingredient_product"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
@@ -18,7 +18,7 @@
         tools:text="재료" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/li_ingredient_quantity"
+        android:id="@+id/ingredient_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"

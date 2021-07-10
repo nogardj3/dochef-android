@@ -57,7 +57,7 @@ public class RecipeDetailActivity extends BaseActivity {
             @Override
             public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response) {
                 try {
-                    setheaderview(response.body());
+                    setTopView(response.body());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -70,7 +70,7 @@ public class RecipeDetailActivity extends BaseActivity {
         });
     }
 
-    void setheaderview(RecipeDetail recipeDetail) {
+    void setTopView(RecipeDetail recipeDetail) {
         try {
             ArrayList<Integer> recipies = new ArrayList<>(
                     Arrays.asList(R.drawable.tempimg_playrecipestart,
@@ -115,9 +115,9 @@ public class RecipeDetailActivity extends BaseActivity {
             JSONArray aa = new JSONArray(recipeDetail.getIngredients());
             for (int i = 0; i < aa.length(); i++) {
                 ViewGroup motherview = (ViewGroup) getLayoutInflater().inflate(R.layout.li_ingredient, null);
-                AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_product));
+                AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_product));
                 view1.setText(aa.getJSONObject(i).getString("name"));
-                AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.li_ingredient_quantity));
+                AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_quantity));
                 view2.setText(aa.getJSONObject(i).getString("amount"));
 
                 binding.recipedetailIngredients.addView(motherview);

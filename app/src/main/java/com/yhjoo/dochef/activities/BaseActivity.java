@@ -14,7 +14,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import com.yhjoo.dochef.R;
 
 public class BaseActivity extends AppCompatActivity {
-    private AppCompatDialog progressDialog;
+    AppCompatDialog progressDialog;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -50,7 +50,7 @@ public class BaseActivity extends AppCompatActivity {
         progressOFF();
     }
 
-    public void progressON(Activity activity) {
+    void progressON(Activity activity) {
 
         if (activity == null || activity.isFinishing()) {
             return;
@@ -68,7 +68,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    public void progressOFF() {
+    void progressOFF() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }

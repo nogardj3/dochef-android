@@ -7,7 +7,7 @@ import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.utils.Utils;
 
 public class CommentListAdapter extends BaseQuickAdapter<Comment, BaseViewHolder> {
-    String mUserID = "";
+    String mUserID;
 
     public CommentListAdapter(String userID) {
         super(R.layout.li_comment);
@@ -16,10 +16,10 @@ public class CommentListAdapter extends BaseQuickAdapter<Comment, BaseViewHolder
 
     @Override
     protected void convert(BaseViewHolder helper, Comment item) {
-        helper.setText(R.id.li_comment_nickname, item.getNickName());
-        helper.setText(R.id.li_comment_contents, item.getContents());
-        helper.setText(R.id.li_comment_date, Utils.convertMillisToText(item.getDateTime()));
-        helper.setVisible(R.id.li_comment_other, item.getUserID().equals(mUserID));
-        helper.addOnClickListener(R.id.li_comment_other);
+        helper.setText(R.id.comment_nickname, item.getNickName());
+        helper.setText(R.id.comment_contents, item.getContents());
+        helper.setText(R.id.comment_date, Utils.convertMillisToText(item.getDateTime()));
+        helper.setVisible(R.id.comment_other, item.getUserID().equals(mUserID));
+        helper.addOnClickListener(R.id.comment_other);
     }
 }
