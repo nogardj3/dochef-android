@@ -1,13 +1,16 @@
 # Project2
 
-17.4 - 17.6 진행한 요리 앱
+17.4 - 17.6 진행한 요리 앱 버전업
 
 ## How to use
 
-1. apikey.properties 생성 샘플보고 생성하기
+1. local.properties에 
+admob_app_id = ""
+admob_banner_id = "" 
+추가
 
-2. google-services.json 파일 넣기
+2. app/ google-services.json 파일 추가
 
-3. strings.yaml에 서버 url 넣기
+3. strings.yaml에 서버 urls 추가
 
 ## APIs
