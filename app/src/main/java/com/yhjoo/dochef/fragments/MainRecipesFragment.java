@@ -27,6 +27,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
+import com.yhjoo.dochef.adapter.RecommendAdapter;
 import com.yhjoo.dochef.databinding.FMainRecipesBinding;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
@@ -222,29 +223,6 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                     mAdview.loadAd(adRequest);
                     break;
             }
-        }
-    }
-
-    class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
-        RecommendAdapter() {
-            super(R.layout.li_recipe_recommend);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Recipe item) {
-            if (App.isServerAlive())
-                Glide.with(mContext)
-                        .load(item.getRecipeImg())
-                        .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
-            else
-                Glide.with(mContext)
-                        .load(Integer.parseInt(item.getRecipeImg()))
-                        .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
-
-            helper.setText(R.id.reciperecommend_title, item.getTitle());
-            helper.setText(R.id.reciperecommend_nickname, "By - " + item.getNickName());
         }
     }
 }
