@@ -11,8 +11,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.google.android.gms.ads.MobileAds;
 import com.yhjoo.dochef.App;
+import com.yhjoo.dochef.adapter.SearchViewPagerAdapter;
 import com.yhjoo.dochef.databinding.ASearchBinding;
 import com.yhjoo.dochef.fragments.ResultFragment;
+import com.yhjoo.dochef.model.SearchType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,7 @@ public class SearchActivity extends BaseActivity {
         Types.add(new SearchType(3, "재료"));
         Types.add(new SearchType(4, "태그"));
         for (int i = 0; i < Types.size(); i++) {
-            viewPagerAdapter.addFragment(Types.get(i).fragment, Types.get(i).title);
+            viewPagerAdapter.addFragment(Types.get(i).getFragment(), Types.get(i).getTitle());
         }
 
         binding.searchViewpager.setAdapter(viewPagerAdapter);
@@ -98,47 +100,5 @@ public class SearchActivity extends BaseActivity {
 
     void onClickBack(View v){
         finish();
-    }
-
-    class SearchType {
-        ResultFragment fragment;
-        String title;
-
-        SearchType(int type, String title) {
-            this.title = title;
-            this.fragment = new ResultFragment();
-            Bundle b = new Bundle();
-            b.putInt("type", type);
-            fragment.setArguments(b);
-        }
-    }
-
-    class SearchViewPagerAdapter extends FragmentPagerAdapter {
-        List<Fragment> fragments = new ArrayList<>();
-        List<String> fragmentTitles = new ArrayList<>();
-
-        SearchViewPagerAdapter(FragmentManager Fm) {
-            super(Fm);
-        }
-
-        void addFragment(Fragment fragment, String title) {
-            fragments.add(fragment);
-            fragmentTitles.add(title);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return fragmentTitles.get(position);
-        }
     }
 }

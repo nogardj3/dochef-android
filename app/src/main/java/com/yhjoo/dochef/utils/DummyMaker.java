@@ -135,12 +135,11 @@ public class DummyMaker {
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_REVIEW)) {
             ArrayList<Review> arrayList = new ArrayList<>();
 
-            int[] img_recipies = {R.raw.dummy_recipe_0, R.raw.dummy_recipe_1, R.raw.dummy_recipe_2};
             int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
 
             Random r = new Random();
-            arrayList.add(new Review(Integer.toString(img_recipies[r.nextInt(3)]), "userid", Integer.toString(img_profiles[r.nextInt(3)]), "유저0", "내용", 0, 3));
-            arrayList.add(new Review(Integer.toString(img_recipies[r.nextInt(3)]), "userid", Integer.toString(img_profiles[r.nextInt(3)]), "유저1", "내용", 0, 5));
+            arrayList.add(new Review("userid",  "유저0", Integer.toString(img_profiles[r.nextInt(3)]),"내용", 3, System.currentTimeMillis()));
+            arrayList.add(new Review("userid",  "유저1", Integer.toString(img_profiles[r.nextInt(3)]),"내용", 5, System.currentTimeMillis()));
 
             return (T) arrayList;
         }

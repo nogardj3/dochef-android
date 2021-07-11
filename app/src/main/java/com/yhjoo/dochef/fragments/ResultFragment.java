@@ -19,7 +19,7 @@ import com.yhjoo.dochef.adapter.ResultListAdapter;
 import com.yhjoo.dochef.databinding.FResultBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.ResultItem;
+import com.yhjoo.dochef.model.ItemWithAd;
 import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
@@ -73,7 +73,7 @@ public class ResultFragment extends Fragment {
                     break;
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class);
-                    intent2.putExtra("userID", ((UserBreif) ((ResultItem) adapter.getData().get(position)).getContent()).getUserID());
+                    intent2.putExtra("userID", ((UserBreif) ((ItemWithAd) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
@@ -111,17 +111,17 @@ public class ResultFragment extends Fragment {
 
         switch (type) {
             case VIEWHOLDER_ITEM_RECIPE:
-                ArrayList<ResultItem> resultItems = new ArrayList<>();
+                ArrayList<ItemWithAd> itemWithAds = new ArrayList<>();
 
                 for (int i = 0; i < recipes.size(); i++) {
-                    resultItems.add(new ResultItem<>(VIEWHOLDER_ITEM_RECIPE, recipes.get(i)));
+                    itemWithAds.add(new ItemWithAd<>(VIEWHOLDER_ITEM_RECIPE, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
-                        resultItems.add(new ResultItem<>(VIEWHOLDER_AD));
+                        itemWithAds.add(new ItemWithAd<>(VIEWHOLDER_AD));
                     }
                 }
 
-                resultListAdapter.setNewData(resultItems);
+                resultListAdapter.setNewData(itemWithAds);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                 break;
             case VIEWHOLDER_ITEM_USER:
@@ -136,14 +136,14 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 성공");
 
                                     ArrayList<UserBreif> userBreif = response.body();
-                                    ArrayList<ResultItem> userListItem = new ArrayList<>();
+                                    ArrayList<ItemWithAd> userListItem = new ArrayList<>();
 
                                     for (int i = 0; i < response.body().size(); i++) {
                                         if (i % 5 != 4)
-                                            userListItem.add(new ResultItem<>(type, userBreif.get(i)));
+                                            userListItem.add(new ItemWithAd<>(type, userBreif.get(i)));
                                         else {
-                                            userListItem.add(new ResultItem<>(type, userBreif.get(i)));
-                                            userListItem.add(new ResultItem<>(VIEWHOLDER_AD));
+                                            userListItem.add(new ItemWithAd<>(type, userBreif.get(i)));
+                                            userListItem.add(new ItemWithAd<>(VIEWHOLDER_AD));
                                         }
                                     }
 
@@ -154,32 +154,32 @@ public class ResultFragment extends Fragment {
                         });
                 break;
             case VIEWHOLDER_ITEM_INGREDIENT:
-                ArrayList<ResultItem> resultItems2 = new ArrayList<>();
+                ArrayList<ItemWithAd> items2WithAd = new ArrayList<>();
 
                 for (int i = 0; i < recipes.size(); i++) {
-                    resultItems2.add(new ResultItem<>(VIEWHOLDER_ITEM_INGREDIENT, recipes.get(i)));
+                    items2WithAd.add(new ItemWithAd<>(VIEWHOLDER_ITEM_INGREDIENT, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
-                        resultItems2.add(new ResultItem<>(VIEWHOLDER_AD));
+                        items2WithAd.add(new ItemWithAd<>(VIEWHOLDER_AD));
                     }
                 }
 
-                resultListAdapter.setNewData(resultItems2);
+                resultListAdapter.setNewData(items2WithAd);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                 break;
 
             case VIEWHOLDER_ITEM_TAG:
-                ArrayList<ResultItem> resultItems3 = new ArrayList<>();
+                ArrayList<ItemWithAd> items3WithAd = new ArrayList<>();
 
                 for (int i = 0; i < recipes.size(); i++) {
-                    resultItems3.add(new ResultItem<>(VIEWHOLDER_ITEM_TAG, recipes.get(i)));
+                    items3WithAd.add(new ItemWithAd<>(VIEWHOLDER_ITEM_TAG, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
-                        resultItems3.add(new ResultItem<>(VIEWHOLDER_AD));
+                        items3WithAd.add(new ItemWithAd<>(VIEWHOLDER_AD));
                     }
                 }
 
-                resultListAdapter.setNewData(resultItems3);
+                resultListAdapter.setNewData(items3WithAd);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                 break;
         }

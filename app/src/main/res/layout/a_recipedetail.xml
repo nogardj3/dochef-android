@@ -12,25 +12,16 @@
         android:paddingBottom="10dp"
         android:layout_height="wrap_content">
 
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/recipedetail_recipeimgs"
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recipedetail_main_img"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:overScrollMode="never"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="1"
-            app:layout_constraintDimensionRatio="w,1:1.5"/>
-
-        <com.viewpagerindicator.CirclePageIndicator
-            android:id="@+id/recipedetail_recipeimgs_indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipeimgs"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_recipeimgs"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_recipeimgs"
-            android:padding="10dp" />
-
+            app:layout_constraintDimensionRatio="w,1:1.5"
+            tools:src="@raw/dummy_recipe_2"/>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipedetail_recipetitle"
@@ -43,7 +34,7 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_recipeimgs"
+            app:layout_constraintTop_toBottomOf="@+id/recipedetail_main_img"
             tools:text="레시피" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -247,18 +238,8 @@
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
             app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_rating_text"
-            android:overScrollMode="never" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_review_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="2dp"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_recycler"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            android:text="더보기"
-            android:textColor="@color/colorPrimary"
-            android:textSize="16sp" />
+            android:overScrollMode="never"
+            tools:listitem="@layout/li_review"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

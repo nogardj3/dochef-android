@@ -30,6 +30,7 @@ import com.bhargavms.podslider.PodSlider;
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.adapter.RecipeViewPagerAdapter;
 import com.yhjoo.dochef.databinding.APlayrecipeBinding;
 import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
@@ -50,14 +51,14 @@ import io.reactivex.rxjava3.core.Observable;
 
 public class PlayRecipeActivity extends BaseActivity implements SensorEventListener {
     APlayrecipeBinding binding;
-
-    ArrayList<RecipeDetailPlay> recipeDetailPlays;
-    TextToSpeech textToSpeech;
     SensorManager m_clsSensorManager;
     Sensor m_clsSensor;
-    SpeechRecognizer mRecognizer;
-    CountDownTimer countDownTimer;
     MediaPlayer player;
+    TextToSpeech textToSpeech;
+    SpeechRecognizer mRecognizer;
+
+    ArrayList<RecipeDetailPlay> recipeDetailPlays;
+    CountDownTimer countDownTimer;
 
     boolean timerSet = false;
 
@@ -233,14 +234,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
 
-    void toggleFab(View v) {
-        if (timerSet) {
-            stoptimer();
-        } else {
-            starttimer();
-        }
-    }
-
     @Override
     public void onSensorChanged(SensorEvent event) {
         float dbDistance = event.values[0];
@@ -304,6 +297,14 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 player.start();
             }
         }.start();
+    }
+
+    void toggleFab(View v) {
+        if (timerSet) {
+            stoptimer();
+        } else {
+            starttimer();
+        }
     }
 
     void stoptimer() {
@@ -408,30 +409,5 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                     i.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR");
                     mRecognizer.startListening(i);
                 });
-    }
-
-    class RecipeViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> fragments = new ArrayList<>();
-
-        private RecipeViewPagerAdapter(FragmentManager Fm) {
-            super(Fm);
-        }
-
-        private void addFragment(Fragment fragment, RecipeDetailPlay item) {
-            Bundle b = new Bundle();
-            b.putSerializable("item", item);
-            fragment.setArguments(b);
-            fragments.add(fragment);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return fragments.get(position);
-        }
-
-        @Override
-        public int getCount() {
-            return fragments.size();
-        }
     }
 }

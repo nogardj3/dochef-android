@@ -76,8 +76,11 @@ public class RetrofitServices {
         @GET("review/")
         Call<ArrayList<Review>> getReview(@Query("recipe_id") int recipeId);
 
-        @GET("review/")
-        Call<ArrayList<Review>> createReview(@Query("recipe_id") int recipeId);
+        @GET("review/create")
+        Call<JsonObject> createReview(@Query("recipe_id") int recipeId);
+
+        @GET("review/delete")
+        Call<JsonObject> deleteReview(@Query("recipe_id") int recipeId);
     }
 
     public interface PostService {

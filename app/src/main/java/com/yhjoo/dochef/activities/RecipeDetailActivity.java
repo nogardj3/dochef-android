@@ -17,6 +17,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.adapter.ReviewListAdapter;
 import com.yhjoo.dochef.databinding.ARecipedetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.RecipeDetail;
@@ -72,16 +73,13 @@ public class RecipeDetailActivity extends BaseActivity {
 
     void setTopView(RecipeDetail recipeDetail) {
         try {
-            ArrayList<Integer> recipies = new ArrayList<>(
-                    Arrays.asList(R.drawable.tempimg_playrecipestart,
-                            R.drawable.tempimg_playrecipe1,
-                            R.drawable.tempimg_playrecipe2,
-                            R.drawable.tempimg_playrecipe3,
-                            R.drawable.tempimg_playrecipe4,
-                            R.drawable.tempimg_playrecipefinish));
+//            if (!recipeDetail.getMainImg().equals("default")) {
+//                Glide.with(this)
+//                        .load(getString(R.string.storage_image_url_post) + recipeDetail.getMainImg())
+//                        .apply(RequestOptions.centerCropTransform())
+//                        .into(binding.recipedetailMainImg);
+//            }
 
-            binding.recipedetailRecipeimgs.setAdapter(new ImagePagerAdapter(RecipeDetailActivity.this, recipies));
-            binding.recipedetailRecipeimgsIndicator.setViewPager(((ViewPager) findViewById(R.id.recipedetail_recipeimgs)));
             binding.recipedetailRecipetitle.setText(recipeDetail.getTitle());
 
             Glide.with(this)
@@ -117,73 +115,12 @@ public class RecipeDetailActivity extends BaseActivity {
 
             ArrayList<Review> bb = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
 
-            binding.recipedetailReviewMore.setVisibility(bb.size() >= 2 ? View.VISIBLE : View.GONE);
-            binding.recipedetailReviewMore.setOnClickListener((v) -> startActivity(new Intent(this, ReviewDetailActivity.class)));
-
             ReviewListAdapter reviewListAdapter = new ReviewListAdapter();
-            reviewListAdapter.setOnItemClickListener((baseQuickAdapter, view, i) ->
-                    startActivity(new Intent(RecipeDetailActivity.this, ReviewDetailActivity.class)));
             binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this));
             binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
             reviewListAdapter.setNewData(bb);
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-
-    class ImagePagerAdapter extends PagerAdapter {
-        Context mContext;
-        ArrayList<Integer> imgids;
-
-        ImagePagerAdapter(Context context, ArrayList<Integer> imgids) {
-            this.mContext = context;
-            this.imgids = imgids;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            AppCompatImageView aa = new AppCompatImageView(mContext);
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            aa.setLayoutParams(lp);
-
-            Glide.with(mContext)
-                    .load(imgids.get(position))
-                    .apply(RequestOptions.centerCropTransform())
-                    .into(aa);
-
-            collection.addView(aa);
-
-            return aa;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
-            collection.removeView((View) view);
-        }
-
-        @Override
-        public int getCount() {
-            return imgids.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
-    }
-
-    class ReviewListAdapter extends BaseQuickAdapter<Review, BaseViewHolder> {
-        ReviewListAdapter() {
-            super(R.layout.li_reviewbrief);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Review item) {
-            helper.setRating(R.id.reviewbrief_rating, item.getRating());
-            helper.setText(R.id.reviewbrief_nickname, item.getNickname());
-            helper.setText(R.id.reviewbrief_contents, item.getContents());
-            helper.setText(R.id.reviewbrief_datetext, "1일전");
         }
     }
 }

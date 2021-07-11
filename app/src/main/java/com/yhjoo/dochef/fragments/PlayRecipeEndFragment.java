@@ -13,7 +13,6 @@ import androidx.fragment.app.Fragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.ReviewWriteActivity;
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding;
 import com.yhjoo.dochef.model.RecipeDetailPlay;
 
@@ -23,6 +22,7 @@ public class PlayRecipeEndFragment extends Fragment {
     /*
         TODO
         1. 분기 - end용 처리하기
+        2. 리뷰작성 기능
     */
 
     @Override
@@ -46,13 +46,8 @@ public class PlayRecipeEndFragment extends Fragment {
 
             binding.playrecipeEndTags.addView(textView);
         }
-        binding.playrecipeEndReview.setOnClickListener(this::startReviewWrite);
 
         return view;
     }
 
-    void startReviewWrite(View v) {
-        if (v.getId() == R.id.playrecipe_end_review)
-            startActivity(new Intent(PlayRecipeEndFragment.this.getContext(), ReviewWriteActivity.class));
-    }
 }

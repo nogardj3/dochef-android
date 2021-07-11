@@ -19,6 +19,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.adapter.RecipeListAdapter;
 import com.yhjoo.dochef.databinding.ARecipelistBinding;
 import com.yhjoo.dochef.model.Recipe;
 
@@ -128,29 +129,5 @@ public class RecipeMyListActivity extends BaseActivity {
                 })
                 .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
                 .show();
-    }
-
-
-    class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseViewHolder> {
-        RecipeListAdapter() {
-            super(R.layout.li_recipe_mylist, recipes);
-        }
-
-        @Override
-        protected void convert(BaseViewHolder helper, Recipe item) {
-            Glide.with(mContext)
-                    .load(item.getRecipeImg())
-                    .apply(RequestOptions.centerCropTransform())
-                    .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
-
-            helper.setText(R.id.recipemylist_recipetitle, item.getTitle());
-            helper.setText(R.id.recipemylist_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
-            helper.setVisible(R.id.recipemylist_mine, item.getNickName().equals("나"));
-            helper.setVisible(R.id.recipemylist_revise, item.getNickName().equals("나") && currentOperation == OPERATION.VIEW);
-            helper.setVisible(R.id.recipemylist_delete, currentOperation == OPERATION.VIEW);
-            helper.setVisible(R.id.recipemylist_touch, currentOperation == OPERATION.ALIGN);
-            helper.addOnClickListener(R.id.recipemylist_revise);
-            helper.addOnClickListener(R.id.recipemylist_delete);
-        }
     }
 }

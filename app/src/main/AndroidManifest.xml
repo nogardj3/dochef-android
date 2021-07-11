@@ -77,11 +77,6 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.ReviewDetailActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
             android:name="com.yhjoo.dochef.activities.SearchActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
@@ -111,11 +106,6 @@
 
         <activity
             android:name="com.yhjoo.dochef.activities.PostWriteActivity"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustResize" />
-
-        <activity
-            android:name="com.yhjoo.dochef.activities.ReviewWriteActivity"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 

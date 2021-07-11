@@ -1,46 +1,73 @@
 package com.yhjoo.dochef.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Review {
-    private final String imageURL;
-    private final String userID;
-    private final String userImg;
-    private final String nickname;
-    private final String contents;
-    private final long dateTime;
-    private final int rating;
+    @SerializedName("review_id")
+    private int reviewID;
+    @SerializedName("recipe_id")
+    private int postID;
+    @SerializedName("user_id")
+    private String userID;
+    @SerializedName("nickname")
+    private String nickname;
+    @SerializedName("profile_img_url")
+    private String userImg;
+    @SerializedName("contents")
+    private String contents;
+    @SerializedName("rating")
+    private long rating;
+    @SerializedName("datetime")
+    private long dateTime;
 
-    public Review(String imageURL, String userID, String userImg, String nickname, String contents, long dateTime, int rating) {
-        this.imageURL = imageURL;
+    // Detail
+    public Review(int reviewID, int postID, String userID, String nickname, String userImg, String contents, long rating, long dateTime) {
+        this.reviewID = reviewID;
+        this.postID = postID;
         this.userID = userID;
-        this.userImg = userImg;
         this.nickname = nickname;
+        this.userImg = userImg;
         this.contents = contents;
-        this.dateTime = dateTime;
         this.rating = rating;
+        this.dateTime = dateTime;
     }
 
-    public int getRating() {
-        return rating;
+    // Dummy
+    public Review(String userID, String nickname, String userImg, String contents, long rating, long dateTime) {
+        this.userID = userID;
+        this.nickname = nickname;
+        this.userImg = userImg;
+        this.contents = contents;
+        this.rating = rating;
+        this.dateTime = dateTime;
     }
 
-    public String getImageURL() {
-        return imageURL;
+    public int getReviewID() {
+        return reviewID;
+    }
+
+    public int getPostID() {
+        return postID;
     }
 
     public String getUserID() {
         return userID;
     }
 
-    public String getUserImg() {
-        return userImg;
-    }
-
     public String getNickname() {
         return nickname;
     }
 
+    public String getUserImg() {
+        return userImg;
+    }
+
     public String getContents() {
         return contents;
+    }
+
+    public long getRating() {
+        return rating;
     }
 
     public long getDateTime() {
