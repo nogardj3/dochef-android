@@ -8,7 +8,7 @@ import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Notification;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.RecipeThumbnail;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.model.UserBreif;
 
@@ -32,20 +32,20 @@ public class DummyMaker {
 
             return (T) arrayList;
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_GRID)) {
-            ArrayList<RecipeThumbnail> arrayList = new ArrayList<>();
+            ArrayList<RecipeBrief> arrayList = new ArrayList<>();
 
             int type_recipe = resources.getInteger(R.integer.HOMEITEM_TYPE_RECIPE);
             int type_photo = resources.getInteger(R.integer.HOMEITEM_TYPE_PHOTO);
             int[] img_grids = {R.raw.dummy_grid_0, R.raw.dummy_grid_1, R.raw.dummy_grid_2};
 
-            arrayList.add(new RecipeThumbnail(type_recipe, Integer.toString(img_grids[0]), 1));
+            arrayList.add(new RecipeBrief(type_recipe, Integer.toString(img_grids[0]), 1));
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
 
-                arrayList.add(new RecipeThumbnail(type_recipe,
+                arrayList.add(new RecipeBrief(type_recipe,
                         Integer.toString(img_grids[r.nextInt(3)]),
                         i == 0 ? 1 : 0));
-                arrayList.add(new RecipeThumbnail(type_photo,
+                arrayList.add(new RecipeBrief(type_photo,
                         Integer.toString(img_grids[r.nextInt(3)]),
                         i == 0 ? 1 : 0));
             }

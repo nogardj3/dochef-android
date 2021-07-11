@@ -44,9 +44,7 @@ public class MainMyRecipeFragment extends Fragment {
 
     /*
         TODO
-        1. recommendTheme 적용
-        2. new review, comment 적용
-        3. rating 추가
+        1. Recipe 서버 추가 및 기능 구현
     */
 
     @Override

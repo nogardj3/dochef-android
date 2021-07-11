@@ -19,7 +19,7 @@ import com.yhjoo.dochef.adapter.ResultListAdapter;
 import com.yhjoo.dochef.databinding.FResultBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.ItemWithAd;
+import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
@@ -44,6 +44,11 @@ public class ResultFragment extends Fragment {
 
     String keyword;
     int type;
+
+    /*
+        TODO
+        1. Recipe 서버 추가 및 기능 구현
+    */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -73,7 +78,7 @@ public class ResultFragment extends Fragment {
                     break;
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class);
-                    intent2.putExtra("userID", ((UserBreif) ((ItemWithAd) adapter.getData().get(position)).getContent()).getUserID());
+                    intent2.putExtra("userID", ((UserBreif) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
@@ -111,17 +116,17 @@ public class ResultFragment extends Fragment {
 
         switch (type) {
             case VIEWHOLDER_ITEM_RECIPE:
-                ArrayList<ItemWithAd> itemWithAds = new ArrayList<>();
+                ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
 
                 for (int i = 0; i < recipes.size(); i++) {
-                    itemWithAds.add(new ItemWithAd<>(VIEWHOLDER_ITEM_RECIPE, recipes.get(i)));
+                    multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_ITEM_RECIPE, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
-                        itemWithAds.add(new ItemWithAd<>(VIEWHOLDER_AD));
+                        multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
                     }
                 }
 
-                resultListAdapter.setNewData(itemWithAds);
+                resultListAdapter.setNewData(multiItemResults);
                 resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                 break;
             case VIEWHOLDER_ITEM_USER:
@@ -136,14 +141,14 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 성공");
 
                                     ArrayList<UserBreif> userBreif = response.body();
-                                    ArrayList<ItemWithAd> userListItem = new ArrayList<>();
+                                    ArrayList<MultiItemResult> userListItem = new ArrayList<>();
 
                                     for (int i = 0; i < response.body().size(); i++) {
                                         if (i % 5 != 4)
-                                            userListItem.add(new ItemWithAd<>(type, userBreif.get(i)));
+                                            userListItem.add(new MultiItemResult<>(type, userBreif.get(i)));
                                         else {
-                                            userListItem.add(new ItemWithAd<>(type, userBreif.get(i)));
-                                            userListItem.add(new ItemWithAd<>(VIEWHOLDER_AD));
+                                            userListItem.add(new MultiItemResult<>(type, userBreif.get(i)));
+                                            userListItem.add(new MultiItemResult<>(VIEWHOLDER_AD));
                                         }
                                     }
 
@@ -154,13 +159,13 @@ public class ResultFragment extends Fragment {
                         });
                 break;
             case VIEWHOLDER_ITEM_INGREDIENT:
-                ArrayList<ItemWithAd> items2WithAd = new ArrayList<>();
+                ArrayList<MultiItemResult> items2WithAd = new ArrayList<>();
 
                 for (int i = 0; i < recipes.size(); i++) {
-                    items2WithAd.add(new ItemWithAd<>(VIEWHOLDER_ITEM_INGREDIENT, recipes.get(i)));
+                    items2WithAd.add(new MultiItemResult<>(VIEWHOLDER_ITEM_INGREDIENT, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
-                        items2WithAd.add(new ItemWithAd<>(VIEWHOLDER_AD));
+                        items2WithAd.add(new MultiItemResult<>(VIEWHOLDER_AD));
                     }
                 }
 
@@ -169,13 +174,13 @@ public class ResultFragment extends Fragment {
                 break;
 
             case VIEWHOLDER_ITEM_TAG:
-                ArrayList<ItemWithAd> items3WithAd = new ArrayList<>();
+                ArrayList<MultiItemResult> items3WithAd = new ArrayList<>();
 
                 for (int i = 0; i < recipes.size(); i++) {
-                    items3WithAd.add(new ItemWithAd<>(VIEWHOLDER_ITEM_TAG, recipes.get(i)));
+                    items3WithAd.add(new MultiItemResult<>(VIEWHOLDER_ITEM_TAG, recipes.get(i)));
 
                     if (i != 0 && i % 4 == 0) {
-                        items3WithAd.add(new ItemWithAd<>(VIEWHOLDER_AD));
+                        items3WithAd.add(new MultiItemResult<>(VIEWHOLDER_AD));
                     }
                 }
 

@@ -14,26 +14,26 @@ import com.google.android.gms.ads.AdView;
 import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.ItemWithAd;
+import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.UserBreif;
 
 import java.util.List;
 
-public class ResultListAdapter extends BaseMultiItemQuickAdapter<ItemWithAd, BaseViewHolder> {
+public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult, BaseViewHolder> {
     public final int VIEWHOLDER_AD = 0;
     public final int VIEWHOLDER_ITEM_RECIPE = 1;
     public final int VIEWHOLDER_ITEM_USER = 2;
     public final int VIEWHOLDER_ITEM_INGREDIENT = 3;
     public final int VIEWHOLDER_ITEM_TAG = 4;
 
-        public ResultListAdapter(int type, List<ItemWithAd> data, int layoutResId) {
+        public ResultListAdapter(int type, List<MultiItemResult> data, int layoutResId) {
             super(data);
             addItemType(type, layoutResId);
             addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, ItemWithAd item) {
+        protected void convert(BaseViewHolder helper, MultiItemResult item) {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM_RECIPE:
                     Glide.with(mContext)

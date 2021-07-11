@@ -2,7 +2,7 @@ package com.yhjoo.dochef.model;
 
 import java.io.Serializable;
 
-public class RecipeDetailPlay implements Serializable {
+public class RecipePlay implements Serializable {
     private final int recipeType;
     private final int recipeImg;
     private final String title;
@@ -11,7 +11,7 @@ public class RecipeDetailPlay implements Serializable {
     private final int dateTime;
     private final String[] tags;
 
-    public RecipeDetailPlay(int recipeType, int recipeImg, String title, String[] ingredients, String explain, int dateTime, String[] tags) {
+    public RecipePlay(int recipeType, int recipeImg, String title, String[] ingredients, String explain, int dateTime, String[] tags) {
         this.recipeType = recipeType;
         this.recipeImg = recipeImg;
         this.title = title;

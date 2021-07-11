@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding;
-import com.yhjoo.dochef.model.RecipeDetailPlay;
+import com.yhjoo.dochef.model.RecipePlay;
 
 public class PlayRecipeEndFragment extends Fragment {
     FPlayrecipeItemBinding binding;
@@ -30,19 +29,19 @@ public class PlayRecipeEndFragment extends Fragment {
         binding = FPlayrecipeItemBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        RecipeDetailPlay recipeDetailPlay = (RecipeDetailPlay) getArguments().getSerializable("item");
+        RecipePlay recipePlay = (RecipePlay) getArguments().getSerializable("item");
 
         Glide.with(getContext())
-                .load(recipeDetailPlay.getRecipeImg())
+                .load(recipePlay.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
                 .into(binding.playrecipeItemImg);
 
-        binding.playrecipeItemExplain.setText(recipeDetailPlay.getExplain());
+        binding.playrecipeItemExplain.setText(recipePlay.getExplain());
 
         binding.playrecipeEndTags.removeAllViews();
-        for (int i = 0; i < recipeDetailPlay.getTags().length; i++) {
+        for (int i = 0; i < recipePlay.getTags().length; i++) {
             AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
-            textView.setText("#" + recipeDetailPlay.getTags()[i] + " ");
+            textView.setText("#" + recipePlay.getTags()[i] + " ");
 
             binding.playrecipeEndTags.addView(textView);
         }

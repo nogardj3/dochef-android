@@ -2,16 +2,16 @@ package com.yhjoo.dochef.model;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
-public class ItemWithAd<T> implements MultiItemEntity {
+public class MultiItemResult<T> implements MultiItemEntity {
     public int itemType;
     public T content;
 
-    public ItemWithAd(int itemType, T content) {
+    public MultiItemResult(int itemType, T content) {
         this.itemType = itemType;
         this.content = content;
     }
 
-    public ItemWithAd(int itemType) {
+    public MultiItemResult(int itemType) {
         this.itemType = itemType;
     }
 

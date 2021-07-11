@@ -6,7 +6,7 @@ import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.model.RecipeDetail;
-import com.yhjoo.dochef.model.RecipeDetailPlay;
+import com.yhjoo.dochef.model.RecipePlay;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.model.UserDetail;
@@ -66,7 +66,7 @@ public class RetrofitServices {
 
     public interface RecipeService {
         @GET("recipe/detail")
-        Call<RecipeDetailPlay> getRecipeDetail(@Field("recipe_id") int recipeId);
+        Call<RecipePlay> getRecipeDetail(@Field("recipe_id") int recipeId);
 
         @GET("recipe/default")
         Call<RecipeDetail> getRecipe(@Field("recipe_id") int recipeId);

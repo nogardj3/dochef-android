@@ -9,22 +9,22 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.ThemeItem;
+import com.yhjoo.dochef.model.MultiItemTheme;
 
 import java.util.List;
 
-public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<ThemeItem, BaseViewHolder> {
+public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme, BaseViewHolder> {
     public final int VIEWHOLDER_AD = 1;
     public final int VIEWHOLDER_ITEM = 2;
 
-    public RecipeThemeAdapter(List<ThemeItem> data) {
+    public RecipeThemeAdapter(List<MultiItemTheme> data) {
             super(data);
             addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_theme);
             addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, ThemeItem item) {
+        protected void convert(BaseViewHolder helper, MultiItemTheme item) {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM:
                     Glide.with(mContext)

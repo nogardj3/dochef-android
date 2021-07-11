@@ -38,8 +38,7 @@ public class MainInitFragment extends Fragment {
 
     /*
         TODO
-        1. 서버 데이터 추가 및 기능 구현
-        2. retrofit 구현
+        1. Recipe 서버 추가 및 기능 구현
     */
 
     @Override

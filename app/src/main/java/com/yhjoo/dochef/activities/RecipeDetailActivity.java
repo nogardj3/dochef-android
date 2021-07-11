@@ -40,9 +40,8 @@ public class RecipeDetailActivity extends BaseActivity {
 
     /*
         TODO
-        1. 서버 데이터 추가 및 기능 구현 (recipedetail, review)
-        2. retrofit 구현
-        3. 뷰들이 이상하다
+        1. Review 뷰 추가
+        2. Recipe 서버 추가 및 기능 구현
     */
 
     @Override

@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.FPlayrecipeStartBinding;
-import com.yhjoo.dochef.model.RecipeDetailPlay;
+import com.yhjoo.dochef.model.RecipePlay;
 
 public class PlayRecipeStartFragment extends Fragment {
     FPlayrecipeStartBinding binding;
@@ -28,25 +28,25 @@ public class PlayRecipeStartFragment extends Fragment {
         binding = FPlayrecipeStartBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        RecipeDetailPlay recipeDetailPlay = (RecipeDetailPlay) getArguments().getSerializable("item");
+        RecipePlay recipePlay = (RecipePlay) getArguments().getSerializable("item");
 
         Glide.with(getContext())
-                .load(recipeDetailPlay.getRecipeImg())
+                .load(recipePlay.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
                 .into(binding.playrecipeStartImg);
 
-        binding.playrecipeStartTitle.setText(recipeDetailPlay.getTitle());
-        binding.playrecipeStartExplain.setText(recipeDetailPlay.getExplain());
+        binding.playrecipeStartTitle.setText(recipePlay.getTitle());
+        binding.playrecipeStartExplain.setText(recipePlay.getExplain());
 
         binding.playrecipeStartIngredients.removeAllViews();
-        for (int i = 0; i < recipeDetailPlay.getIngredients().length; i++) {
+        for (int i = 0; i < recipePlay.getIngredients().length; i++) {
             ConstraintLayout motherview = (ConstraintLayout) getActivity().getLayoutInflater().inflate(R.layout.li_ingredient, null);
             AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_product));
             view1.setTextColor(getResources().getColor(R.color.white,null));
-            view1.setText(recipeDetailPlay.getIngredients()[i]);
+            view1.setText(recipePlay.getIngredients()[i]);
             AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_quantity));
             view2.setTextColor(getResources().getColor(R.color.white,null));
-            view2.setText(recipeDetailPlay.getIngredients()[i]);
+            view2.setText(recipePlay.getIngredients()[i]);
 
             binding.playrecipeStartIngredients.addView(motherview);
         }

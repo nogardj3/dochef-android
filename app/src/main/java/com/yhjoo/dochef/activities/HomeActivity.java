@@ -27,7 +27,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.RecipeGridAdapter;
 import com.yhjoo.dochef.databinding.AHomeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.RecipeThumbnail;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.PermissionUtil;
 
@@ -52,7 +52,7 @@ public class HomeActivity extends BaseActivity {
     RecipeGridAdapter recipeGridAdapter;
 
     ArrayList<View> revise_Icons = new ArrayList<>();
-    ArrayList<RecipeThumbnail> postItems = new ArrayList<>();
+    ArrayList<RecipeBrief> postItems = new ArrayList<>();
 
     AppCompatButton appCompatButton;
     AppCompatImageView userimg;

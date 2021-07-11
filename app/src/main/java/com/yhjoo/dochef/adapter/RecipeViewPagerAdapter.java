@@ -6,7 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.yhjoo.dochef.model.RecipeDetailPlay;
+import com.yhjoo.dochef.model.RecipePlay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ public class RecipeViewPagerAdapter extends FragmentPagerAdapter {
         super(Fm);
     }
 
-    public void addFragment(Fragment fragment, RecipeDetailPlay item) {
+    public void addFragment(Fragment fragment, RecipePlay item) {
         Bundle b = new Bundle();
         b.putSerializable("item", item);
         fragment.setArguments(b);

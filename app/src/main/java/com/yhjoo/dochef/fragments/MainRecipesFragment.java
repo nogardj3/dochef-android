@@ -55,9 +55,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     /*
         TODO
-        1. 타임 컨버터 적용 -> li_recipe에 datetime 디자인 추가
-        2. recommendTheme 적용
-        3. rating 추가
+        1. Recipe 서버 추가 및 기능 구현
     */
 
     @Override

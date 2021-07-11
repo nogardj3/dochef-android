@@ -9,9 +9,9 @@ import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.RecipeThumbnail;
+import com.yhjoo.dochef.model.RecipeBrief;
 
-public class RecipeGridAdapter extends BaseQuickAdapter<RecipeThumbnail, BaseViewHolder> {
+public class RecipeGridAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHolder> {
     RecyclerView recyclerView;
 
     public RecipeGridAdapter(RecyclerView recyclerView) {
@@ -20,7 +20,7 @@ public class RecipeGridAdapter extends BaseQuickAdapter<RecipeThumbnail, BaseVie
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, RecipeThumbnail item) {
+    protected void convert(BaseViewHolder helper, RecipeBrief item) {
         ViewGroup.LayoutParams lp = helper.itemView.findViewById(R.id.recipehome_recipeimg).getLayoutParams();
 
         lp.width = recyclerView.getMeasuredWidth() / 3;

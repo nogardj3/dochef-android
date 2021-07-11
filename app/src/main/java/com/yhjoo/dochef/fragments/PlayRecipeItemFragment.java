@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding;
-import com.yhjoo.dochef.model.RecipeDetailPlay;
+import com.yhjoo.dochef.model.RecipePlay;
 
 public class PlayRecipeItemFragment extends Fragment {
     FPlayrecipeItemBinding binding;
@@ -28,22 +28,22 @@ public class PlayRecipeItemFragment extends Fragment {
         binding = FPlayrecipeItemBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        RecipeDetailPlay recipeDetailPlay = (RecipeDetailPlay) getArguments().getSerializable("item");
+        RecipePlay recipePlay = (RecipePlay) getArguments().getSerializable("item");
 
         Glide.with(getContext())
-                .load(recipeDetailPlay.getRecipeImg())
+                .load(recipePlay.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
                 .into(binding.playrecipeItemImg);
 
         binding.playrecipeItemIngredients.removeAllViews();
-        for (int i = 0; i < recipeDetailPlay.getIngredients().length; i++) {
+        for (int i = 0; i < recipePlay.getIngredients().length; i++) {
             LinearLayout motherview = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.v_ingredient, null);
-            ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_product)).setText(recipeDetailPlay.getIngredients()[i]);
+            ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_product)).setText(recipePlay.getIngredients()[i]);
             ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_quantity)).setText("0");
             binding.playrecipeItemIngredients.addView(motherview);
         }
 
-        binding.playrecipeItemExplain.setText(recipeDetailPlay.getExplain());
+        binding.playrecipeItemExplain.setText(recipePlay.getExplain());
 
         return view;
     }
