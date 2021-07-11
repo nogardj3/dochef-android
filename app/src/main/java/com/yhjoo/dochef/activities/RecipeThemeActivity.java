@@ -9,8 +9,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.RecipeThemeAdapter;
 import com.yhjoo.dochef.databinding.ARecipethemeBinding;
-import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.MultiItemTheme;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;

@@ -3,17 +3,11 @@ package com.yhjoo.dochef.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.text.Html;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.NotificationListAdapter;
 import com.yhjoo.dochef.databinding.ANotificationBinding;

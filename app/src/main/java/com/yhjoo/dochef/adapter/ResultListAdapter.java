@@ -13,8 +13,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.MultiItemResult;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserBreif;
 
 import java.util.List;
