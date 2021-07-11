@@ -13,7 +13,7 @@ admob_banner_id = ""
 
 3. strings.yaml에 서버 urls 추가
 
-## Skills
+## Libraries
 
 RxJava
 
