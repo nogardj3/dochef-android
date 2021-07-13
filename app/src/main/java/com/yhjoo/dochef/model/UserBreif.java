@@ -34,4 +34,14 @@ public class UserBreif {
     public String getNickname() {
         return nickname;
     }
+
+    @Override
+    public String toString() {
+        return "UserBreif{" +
+                "userID='" + userID + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", is_follow=" + is_follow +
+                '}';
+    }
 }

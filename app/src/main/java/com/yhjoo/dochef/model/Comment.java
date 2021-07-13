@@ -63,4 +63,17 @@ public class Comment {
     public long getDateTime() {
         return dateTime;
     }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "commentID=" + commentID +
+                ", postID=" + postID +
+                ", userID='" + userID + '\'' +
+                ", nickName='" + nickName + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", contents='" + contents + '\'' +
+                ", dateTime=" + dateTime +
+                '}';
+    }
 }

@@ -63,8 +63,8 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="8dp"
         android:background="@color/grey"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/comment_userimg" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

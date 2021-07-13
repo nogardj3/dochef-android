@@ -19,11 +19,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.AAccountBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -49,7 +51,6 @@ public class AccountActivity extends BaseActivity {
     /*
         TODO
         1. FindPW 기능 구현
-        2. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -259,9 +260,9 @@ public class AccountActivity extends BaseActivity {
             progressON(AccountActivity.this);
             accountService
                     .createUser(idToken, mAuth.getUid(), nickname)
-                    .enqueue(new BasicCallback<JsonObject>(AccountActivity.this) {
+                    .enqueue(new BasicCallback<UserBreif>(AccountActivity.this) {
                         @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        public void onResponse(Call<UserBreif> call, Response<UserBreif> response) {
                             super.onResponse(call, response);
                             progressOFF();
 
@@ -269,7 +270,7 @@ public class AccountActivity extends BaseActivity {
                                 App.getAppInstance().showToast("이미 존재하는 닉네임입니다.");
                             else {
                                 App.getAppInstance().showToast("회원 가입 되었습니다.");
-                                startMain(response.body().toString());
+                                startMain(response.body());
                             }
                         }
                     });
@@ -279,9 +280,9 @@ public class AccountActivity extends BaseActivity {
     void checkUserInfo(String idToken) {
         accountService
                 .checkUser(idToken, mAuth.getUid())
-                .enqueue(new BasicCallback<JsonObject>(AccountActivity.this) {
+                .enqueue(new BasicCallback<UserBreif>(AccountActivity.this) {
                     @Override
-                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                    public void onResponse(Call<UserBreif> call, Response<UserBreif> response) {
                         super.onResponse(call, response);
                         progressOFF();
 
@@ -289,7 +290,7 @@ public class AccountActivity extends BaseActivity {
                             App.getAppInstance().showToast("닉네임을 입력해주세요.");
                             startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
                         } else
-                            startMain(response.body().toString());
+                            startMain(response.body());
                     }
                 });
     }
@@ -319,12 +320,16 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    void startMain(String userinfo) {
+    void startMain(UserBreif userinfo) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
         editor.putBoolean(getString(R.string.SP_ACTIVATEDDEVICE), true);
-        editor.putString(getString(R.string.SP_USERINFO), userinfo);
+        editor.putString(getString(R.string.SP_USERINFO), gson.toJson(userinfo));
         editor.apply();
+
+        Utils.log(userinfo.toString());
+        Utils.log(gson.toJson(userinfo));
 
         startActivity(new Intent(this, MainActivity.class));
 

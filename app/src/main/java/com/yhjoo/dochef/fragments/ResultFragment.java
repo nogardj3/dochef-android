@@ -138,8 +138,6 @@ public class ResultFragment extends Fragment {
                                 if (response.code() == 500) {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
-                                    App.getAppInstance().showToast("user list 가져오기 성공");
-
                                     ArrayList<UserBreif> userBreif = response.body();
                                     ArrayList<MultiItemResult> userListItem = new ArrayList<>();
 

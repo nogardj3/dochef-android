@@ -19,6 +19,8 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Post item) {
         if (!item.getPostImg().equals("default")) {
+            helper.setVisible(R.id.timeline_postimg,true);
+
             Glide.with(mContext)
                     .load(mContext.getString(R.string.storage_image_url_post) + item.getPostImg())
                     .apply(RequestOptions.centerCropTransform())
@@ -31,7 +33,7 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
                     .into((AppCompatImageView) helper.getView(R.id.timeline_userimg));
 
         helper.setText(R.id.timeline_nickname, item.getNickname());
-        helper.setText(R.id.timeline_likecount, item.getLikes().size());
+        helper.setText(R.id.timeline_likecount, item.getLikes().size()+"");
         helper.setText(R.id.timeline_contents, " " + item.getContents());
         helper.setText(R.id.timeline_time, Utils.convertMillisToText(item.getDateTime()));
         helper.addOnClickListener(R.id.timeline_user_group);
@@ -39,18 +41,23 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         helper.addOnClickListener(R.id.timeline_contents);
         helper.addOnClickListener(R.id.timeline_postimg);
 
+        ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
         ((TagView) helper.getView(R.id.timeline_tags)).setTagList(item.getTags());
 
         if (item.getComments().size() != 0) {
+            Utils.log(item.getComments().size()+"");
+
+            helper.setVisible(R.id.timeline_comment_group,true);
             helper.setText(R.id.timeline_comment_nickname, item.getComments().get(0).getNickName());
+            helper.setText(R.id.timeline_comment_contents, item.getComments().get(0).getContents());
+            helper.setText(R.id.timeline_comment_date, Utils.convertMillisToText(item.getComments().get(0).getDateTime()));
 
             String comment_profile_img = item.getComments().get(0).getUserImg();
+
             if (!comment_profile_img.equals("default"))
                 Glide.with(mContext)
                         .load(mContext.getString(R.string.storage_image_url_profile) + comment_profile_img)
                         .into((AppCompatImageView) helper.getView(R.id.timeline_comment_img));
-
-            helper.setText(R.id.timeline_comment_date, Utils.convertMillisToText(item.getComments().get(0).getDateTime()));
         }
     }
 }

@@ -53,18 +53,23 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         binding = FMainRecipesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        if(App.isServerAlive()){
+            // get recipes
+        }
+        else{
+            ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
-        for (int i = 0; i < temp.size(); i++) {
-            recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
+            for (int i = 0; i < temp.size(); i++) {
+                recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
 
-            int tt = i % 4;
-            int ttt = i / 4 % 2;
-            if (i != 0 && tt == 0) {
-                if (ttt == 0)
-                    recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER, recommendTheme[i % 4]));
-                else
-                    recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
+                int tt = i % 4;
+                int ttt = i / 4 % 2;
+                if (i != 0 && tt == 0) {
+                    if (ttt == 0)
+                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER, recommendTheme[i % 4]));
+                    else
+                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
+                }
             }
         }
 

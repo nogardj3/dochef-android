@@ -35,11 +35,11 @@ public class RetrofitServices {
     public interface AccountService {
         @FormUrlEncoded
         @POST("user/check/")
-        Call<JsonObject> checkUser(@Field("user_token") String token, @Field("user_id") String uid);
+        Call<UserBreif> checkUser(@Field("user_token") String token, @Field("user_id") String uid);
 
         @FormUrlEncoded
         @POST("user/signup")
-        Call<JsonObject> createUser(@Field("user_token") String token, @Field("user_id") String uid, @Field("nickname") String nickname);
+        Call<UserBreif> createUser(@Field("user_token") String token, @Field("user_id") String uid, @Field("nickname") String nickname);
     }
 
     public interface UserService {

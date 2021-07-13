@@ -38,6 +38,7 @@ public abstract class BasicCallback<T> implements Callback<T> {
 
     @Override
     public void onFailure(Call<T> call, Throwable t) {
+        Utils.log(call);
         t.printStackTrace();
         onFailure();
     }

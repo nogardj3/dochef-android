@@ -29,6 +29,7 @@ public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
                         .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
 
             helper.setText(R.id.reciperecommend_title, item.getTitle());
-            helper.setText(R.id.reciperecommend_nickname, "By - " + item.getNickName());
+            helper.setText(R.id.reciperecommend_nickname,
+                    String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickName()));
         }
     }

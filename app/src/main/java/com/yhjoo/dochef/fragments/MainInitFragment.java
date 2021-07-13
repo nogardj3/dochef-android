@@ -57,7 +57,9 @@ public class MainInitFragment extends Fragment {
                         .setCurrentItem(binding.mainAdviewpager.getCurrentItem() == imgs.size() - 1
                                 ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
 
-        if(App.isServerAlive()){}
+        if(App.isServerAlive()){
+            // get recipes
+        }
         else
             recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 

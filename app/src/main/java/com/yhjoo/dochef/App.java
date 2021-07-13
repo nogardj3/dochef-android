@@ -9,6 +9,10 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.orhanobut.logger.AndroidLogAdapter;
+import com.orhanobut.logger.Logger;
+
+
 public class App extends Application {
     private static App appInstance;
     private static boolean isServerAlive;
@@ -30,6 +34,8 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Logger.addLogAdapter(new AndroidLogAdapter());
 
         appInstance = this;
 

@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
 
@@ -24,9 +26,11 @@ public class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseView
                 .load(item.getRecipeImg())
                 .apply(RequestOptions.centerCropTransform())
                 .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
         helper.setText(R.id.recipemylist_recipetitle, item.getTitle());
-        helper.setText(R.id.recipemylist_nickname, Html.fromHtml("By - <b>" + item.getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
+        helper.setText(R.id.recipemylist_nickname,
+                String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickName()));
         helper.setVisible(R.id.recipemylist_mine, item.getNickName().equals("나"));
 //            helper.setVisible(R.id.recipemylist_revise, item.getNickName().equals("나") && currentOperation == OPERATION.VIEW);
 //            helper.setVisible(R.id.recipemylist_delete, currentOperation == OPERATION.VIEW);

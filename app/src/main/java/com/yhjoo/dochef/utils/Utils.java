@@ -3,6 +3,8 @@ package com.yhjoo.dochef.utils;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.orhanobut.logger.Logger;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -11,10 +13,8 @@ import static android.util.Patterns.EMAIL_ADDRESS;
 
 
 public class Utils {
-    public static void log(String... msgs) {
-        String msg = TextUtils.join("\n", msgs);
-        Log.d("YHJOO ", "-----------------");
-        Log.d("YHJOO ", msg);
+    public static void log(Object... msgs) {
+        Logger.d("YHJOO %s", msgs);
     }
 
     public enum EMAIL_VALIDATE {VALID, NODATA, INVALID}
@@ -67,8 +67,6 @@ public class Utils {
     public static String convertMillisToText(long millis) {
         long current_millis = new Date().getTime();
         long diff_sec = (current_millis - millis) / 1000;
-
-        log(current_millis + "", millis + "");
 
         if (diff_sec < 60)
             return "방금 전";

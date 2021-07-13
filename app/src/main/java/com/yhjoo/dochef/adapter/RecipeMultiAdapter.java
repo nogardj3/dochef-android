@@ -52,7 +52,8 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                             .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
 
                 helper.setText(R.id.recipemain_title, item.getContent().getTitle());
-                helper.setText(R.id.recipemain_nickname, Html.fromHtml("By - <b>" + item.getContent().getNickName() + "</b>", Html.FROM_HTML_MODE_LEGACY));
+                helper.setText(R.id.recipemain_nickname,
+                        String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getContent().getNickName()));
                 helper.setVisible(R.id.recipemain_other_group, false);
 
                 break;

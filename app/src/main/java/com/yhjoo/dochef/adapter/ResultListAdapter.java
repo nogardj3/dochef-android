@@ -43,7 +43,8 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                     helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getTitle());
                     helper.setTextColor(R.id.reciperesult_title, mContext.getColor(R.color.colorPrimary));
                     ((AppCompatTextView) helper.getView(R.id.reciperesult_title)).setTypeface(null, Typeface.BOLD);
-                    helper.setText(R.id.reciperesult_nickname, "By - " + ((Recipe) item.getContent()).getNickName());
+                    helper.setText(R.id.reciperesult_nickname,
+                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickName()));
 
                     break;
 
@@ -64,9 +65,11 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.reciperesult_recipeimg));
                     helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getTitle());
-                    helper.setText(R.id.reciperesult_nickname, "By - " + ((Recipe) item.getContent()).getNickName());
+                    helper.setText(R.id.reciperesult_nickname,
+                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickName()));
                     helper.setVisible(R.id.reciperesult_ingredients, true);
 
+                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
                     ((TagView) helper.getView(R.id.reciperesult_ingredients)).setTagList(((Recipe) item.getContent()).getIngredients());
                     break;
 
@@ -76,9 +79,11 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.reciperesult_recipeimg));
                     helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getTitle());
-                    helper.setText(R.id.reciperesult_nickname, "By - " + ((Recipe) item.getContent()).getNickName());
+                    helper.setText(R.id.reciperesult_nickname,
+                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickName()));
                     helper.setVisible(R.id.reciperesult_tags, true);
 
+                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
                     ((TagView) helper.getView(R.id.reciperesult_tags)).setTagList(((Recipe) item.getContent()).getTags());
 
                     break;

@@ -24,6 +24,7 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.MainFragmentAdapter;
@@ -32,6 +33,7 @@ import com.yhjoo.dochef.fragments.MainInitFragment;
 import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
+import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.utils.Utils;
 
 import org.json.JSONException;
@@ -144,48 +146,43 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         userName = (AppCompatTextView) binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_nickname);
         userImage = (AppCompatImageView) binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_userimg);
+
+        userName.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            intent.putExtra("MODE",HomeActivity.MODE.MY);
+            startActivity(intent);
+        });
+        userImage.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+            intent.putExtra("MODE",HomeActivity.MODE.MY);
+            startActivity(intent);
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
+
         if (App.isServerAlive()) {
-            userName.setOnClickListener(v -> {
-                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                intent.putExtra("MODE",HomeActivity.MODE.MY);
-                startActivity(intent);
-            });
+            SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            Gson gson = new Gson();
+            UserBreif userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBreif.class);
 
-            try {
-                SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-                JSONObject userInfo = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
+            Utils.log(userInfo.toString());
 
-                Utils.log(userInfo.toString());
+            userName.setText(userInfo.getNickname());
 
-                userName.setText(userInfo.getString("nickname"));
-
+            if(userInfo.getUserImg()!="default")
                 Glide.with(this)
-                        .load(getString(R.string.storage_image_url_profile) + userInfo.get("profile_image_url"))
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_default_profile))
+                        .load(getString(R.string.storage_image_url_profile) + userInfo.getUserImg())
                         .into(userImage);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
 
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(true);
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(true);
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_notification).setVisible(true);
         } else {
-            Glide.with(this)
-                    .load(R.drawable.ic_default_profile)
-                    .apply(RequestOptions.circleCropTransform())
-                    .into(userImage);
-
-            userImage.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AccountActivity.class)));
-            userName.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, AccountActivity.class)));
-            userName.setText("가나다라마바");
+            userName.setText("더미");
 
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(false);
@@ -273,7 +270,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(MainActivity.this, RecipeMakeActivity.class));
                 break;
             case 3:
-                startActivity(new Intent(MainActivity.this, PostWriteActivity.class));
+                Intent intent=new Intent(MainActivity.this, PostWriteActivity.class);
+                intent.putExtra("MODE", PostWriteActivity.MODE.WRITE);
+                startActivity(intent);
                 break;
         }
     }

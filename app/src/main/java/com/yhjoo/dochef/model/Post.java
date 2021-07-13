@@ -79,4 +79,22 @@ public class Post implements Serializable {
     public ArrayList<String> getTags() {
         return tags;
     }
+
+
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "postID=" + postID +
+                ", UserID='" + UserID + '\'' +
+                ", postImg='" + postImg + '\'' +
+                ", contents='" + contents + '\'' +
+                ", dateTime=" + dateTime +
+                ", tags=" + tags +
+                ", comments=" + comments +
+                ", likes=" + likes +
+                ", nickname='" + nickname + '\'' +
+                ", userImg='" + userImg + '\'' +
+                '}';
+    }
 }

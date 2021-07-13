@@ -51,7 +51,6 @@ public class PostDetailActivity extends BaseActivity {
         timeline   = 수정 X, 댓글 하나, 댓글 작성 불가
 
         1. tags 확인
-        2. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -64,6 +63,7 @@ public class PostDetailActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
+        commentService = RetrofitBuilder.create(this, RetrofitServices.CommentService.class);
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         try {
@@ -90,8 +90,9 @@ public class PostDetailActivity extends BaseActivity {
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
                         } else {
-                            App.getAppInstance().showToast("post detail 가져오기 성공");
-                            setTopView(response.body());
+                            postInfo = response.body();
+
+                            setTopView(postInfo);
                         }
                     }
                 });
@@ -99,6 +100,7 @@ public class PostDetailActivity extends BaseActivity {
 
     void setTopView(Post postInfo) {
         if (!postInfo.getPostImg().equals("default")) {
+            binding.postPostimg.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
                     .apply(RequestOptions.centerCropTransform())
@@ -122,7 +124,7 @@ public class PostDetailActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        binding.postLikecount.setText(postInfo.getLikes().size());
+        binding.postLikecount.setText(Integer.toString(postInfo.getLikes().size()));
         binding.postContents.setText(postInfo.getContents());
         binding.postTime.setText(Utils.convertMillisToText(postInfo.getDateTime()));
 
@@ -166,6 +168,7 @@ public class PostDetailActivity extends BaseActivity {
             popup.show();
         });
 
+        binding.postTags.removeAllViews();
         binding.postTags.setTagList(postInfo.getTags());
 
         binding.postCommentOk.setOnClickListener(this::writeComment);
@@ -181,9 +184,9 @@ public class PostDetailActivity extends BaseActivity {
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("comment 가져오기 실패");
                         } else {
-                            App.getAppInstance().showToast("comment 가져오기 성공");
                             setCommentView(response.body());
                         }
+                        commentListAdapter.setEmptyView(R.layout.rv_comment_empty, (ViewGroup) binding.postCommentRecycler.getParent());
                     }
                 });
     }
@@ -215,7 +218,8 @@ public class PostDetailActivity extends BaseActivity {
 
     void toggleLikePost(String userID, int postID) {
         int new_like;
-        if (postInfo.getLikes().contains(userID)) {
+        Utils.log(postInfo.toString());
+        if (!postInfo.getLikes().contains(userID)) {
             new_like = 1;
             binding.postLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         } else {
@@ -234,6 +238,8 @@ public class PostDetailActivity extends BaseActivity {
                             App.getAppInstance().showToast("like toggle 실패");
                         } else
                             App.getAppInstance().showToast("like toggle 성공");
+
+                        getPostInfo(postID);
                     }
                 });
     }

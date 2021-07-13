@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.HomeActivity;
@@ -59,6 +60,11 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
         binding.timelineSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
 
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.timelineRecycler.getParent());
+        postListAdapter.setOnItemClickListener((adapter, view1, position) -> {
+            Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
+            intent.putExtra("postID", ((Post) adapter.getData().get(position)).getPostID());
+            startActivity(intent);
+        });
         postListAdapter.setOnItemChildClickListener((baseQuickAdapter, view12, i) -> {
             switch (view12.getId()) {
                 case R.id.timeline_user_group:
@@ -121,7 +127,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
                         } else {
-                            App.getAppInstance().showToast("post detail 가져오기 성공");
                             postListAdapter.setNewData(response.body());
                             postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.timelineSwipe.getParent());
 

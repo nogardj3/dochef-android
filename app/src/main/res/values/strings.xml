@@ -14,6 +14,7 @@
     <!-- admob 테스트용-->
     <string name="admob_banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
 
+
     <!-- analytics-->
     <string name="analytics_type_text">text</string>
     <string name="analytics_type_image">image</string>
@@ -26,6 +27,9 @@
     <string name="analytics_name_signup">APP_SIGNUP</string>
     <string name="analytics_name_signin">APP_SIGNIN</string>
     <string name="analytics_name_terminated">APP_TERMINATED</string>
+
+    <!-- format-->
+    <string name="string_format_usernickname">By - %s</string>
 
 
     <string name="notification_texttype1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신의 팔로워가 되었습니다.</string>

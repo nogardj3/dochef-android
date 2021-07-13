@@ -16,14 +16,17 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.model.UserBreif;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.PermissionUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +55,6 @@ public class PostWriteActivity extends BaseActivity {
     /*
         TODO
         1. tags 추가 및 삭제 레이아웃
-        2. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -63,13 +65,9 @@ public class PostWriteActivity extends BaseActivity {
 
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        try {
-            JSONObject userInfo = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
-            userID = userInfo.getString("user_id");
-        }
-        catch (JSONException e){
-            e.printStackTrace();
-        }
+        Gson gson = new Gson();
+        UserBreif userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBreif.class);
+        userID = userInfo.getUserID();
 
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
 
@@ -86,13 +84,14 @@ public class PostWriteActivity extends BaseActivity {
                         .into(binding.postwritePostimg);
 
             ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");
+            binding.postwriteTags.removeAllViews();
             binding.postwriteTags.setTagList(tags);
         }
         setSupportActionBar(binding.postwriteToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         binding.postwritePostimgAdd.setOnClickListener(this::addImage);
-        binding.postwritePostimgAdd.setOnClickListener(this::createOrUpdatePost);
+        binding.postwriteOk.setOnClickListener(this::createOrUpdatePost);
     }
 
     @Override
@@ -100,9 +99,11 @@ public class PostWriteActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
             if (data != null) {
+                Utils.log(data);
+                mImageUri = data.getData();
                 binding.postwritePostimg.setVisibility(View.VISIBLE);
                 Glide.with(this)
-                        .load(mImageUri != null ? mImageUri : data.getData())
+                        .load(mImageUri)
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
                         .into(binding.postwritePostimg);
             }
@@ -157,10 +158,13 @@ public class PostWriteActivity extends BaseActivity {
         tags.add("tag1");
         tags.add("tag2");
 
+        String image_url = mImageUri == null ? "":mImageUri.toString();
+
+        Utils.log(current_mode);
         if(current_mode == MODE.WRITE){
             postService.createPost(
                     userID,
-                    mImageUri.toString(),
+                    image_url,
                     binding.postwriteContents.getText().toString(),
                     System.currentTimeMillis(),
                     tags)
@@ -181,7 +185,7 @@ public class PostWriteActivity extends BaseActivity {
         else{
             postService.updatePost(
                     postID,
-                    mImageUri.toString(),
+                    image_url,
                     binding.postwriteContents.getText().toString(),
                     System.currentTimeMillis(),
                     tags)
