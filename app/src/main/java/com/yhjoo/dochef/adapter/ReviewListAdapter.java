@@ -13,9 +13,9 @@ public class ReviewListAdapter extends BaseQuickAdapter<Review, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder helper, Review item) {
-        helper.setRating(R.id.review_rating, item.getRating());
         helper.setText(R.id.review_nickname, item.getNickname());
         helper.setText(R.id.review_contents, item.getContents());
         helper.setText(R.id.review_datetext, Utils.convertMillisToText(item.getDateTime()));
+        helper.setRating(R.id.review_rating, item.getRating());
     }
 }

@@ -39,11 +39,13 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
     protected void convert(BaseViewHolder helper, MultiItemRecipe item) {
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
-                if (App.isServerAlive())
-                    Glide.with(mContext)
-                            .load(item.getContent().getRecipeImg())
-                            .apply(RequestOptions.centerCropTransform())
-                            .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
+                if (App.isServerAlive()){
+                    if (!item.getContent().getRecipeImg().equals("default"))
+                        Glide.with(mContext)
+                                .load(item.getContent().getRecipeImg())
+                                .apply(RequestOptions.centerCropTransform())
+                                .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
+                }
                 else
                     Glide.with(mContext)
                             .load(Integer.parseInt(item.getContent().getRecipeImg()))
@@ -61,7 +63,7 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 helper.setText(R.id.recommend_title, item.getPager_title());
                 helper.getView(R.id.recommend_more).setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RecipeThemeActivity.class)));
 
-                RecyclerView recyclerView = (RecyclerView) helper.getView(R.id.recommend_recyclerview);
+                RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
 
                 ArrayList<RecipeBrief> recipes = DummyMaker.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
 

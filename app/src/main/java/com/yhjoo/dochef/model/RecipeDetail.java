@@ -34,7 +34,7 @@ public class RecipeDetail {
     @SerializedName("phase")
     private RecipePhase phases;
 
-    public Recipe(int recipeID, int recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, Ingredient ingredient, String[] tags, RecipePhase phases) {
+    public RecipeDetail(int recipeID, int recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, Ingredient ingredient, String[] tags, RecipePhase phases) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;

@@ -17,6 +17,7 @@ import java.util.List;
 
 public class SearchActivity extends BaseActivity {
     ASearchBinding binding;
+
     SearchViewPagerAdapter viewPagerAdapter;
 
     List<SearchType> Types = new ArrayList<>();

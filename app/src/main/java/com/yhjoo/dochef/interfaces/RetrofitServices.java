@@ -52,7 +52,7 @@ public class RetrofitServices {
         Call<ArrayList<UserBrief>> getUserByNickname(@Query("nickname") String nickname);
 
         @GET("user/detail")
-        Call<ArrayList<UserDetail>> getUserDetail(@Query("user_id") String user_id);
+        Call<UserDetail> getUserDetail(@Query("user_id") String user_id);
 
         @GET("user/follower")
         Call<ArrayList<UserBrief>> getFollowers(@Query("user_id") String user_id,
@@ -78,16 +78,16 @@ public class RetrofitServices {
         Call<RecipeDetail> getRecipeDetail(@Field("recipe_id") int recipeId);
 
         @GET("recipe/")
-        Call<RecipeBrief> getRecipeByUserID(@Field("user_id") int recipeId);
+        Call<ArrayList<RecipeBrief>> getRecipeByUserID(@Field("user_id") String userId);
 
         @GET("recipe/")
-        Call<RecipeBrief> getRecipeByName(@Field("recipe_name") String recipeName);
+        Call<ArrayList<RecipeBrief>> getRecipeByName(@Field("recipe_name") String recipeName);
 
         @GET("recipe/")
-        Call<RecipeBrief> getRecipeByIngredient(@Field("ingredient") String ingredient);
+        Call<ArrayList<RecipeBrief>> getRecipeByIngredient(@Field("ingredient") String ingredient);
 
         @GET("recipe/")
-        Call<RecipeBrief> getRecipeByTag(@Field("tag") String tag);
+        Call<ArrayList<RecipeBrief>> getRecipeByTag(@Field("tag") String tag);
 
         @POST("recipe/count")
         Call<JsonObject> addCount(@Field("recipe_id") int recipeId);

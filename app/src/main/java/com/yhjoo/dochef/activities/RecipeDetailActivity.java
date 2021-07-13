@@ -9,12 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.ReviewListAdapter;
 import com.yhjoo.dochef.databinding.ARecipedetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.Review;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
@@ -24,16 +26,24 @@ import org.json.JSONException;
 import java.util.ArrayList;
 
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RecipeDetailActivity extends BaseActivity {
     ARecipedetailBinding binding;
 
+    ReviewListAdapter reviewListAdapter;
+
+    RetrofitServices.RecipeService recipeService;
+    RetrofitServices.ReviewService reviewService;
+
+    RecipeDetail recipeDetailInfo;
+    ArrayList<Review> reviewList;
+
+    int recipeID;
+
     /*
         TODO
-        1. Review 뷰 추가
-        2. Recipe 서버 추가 및 기능 구현
+        1. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -42,47 +52,78 @@ public class RecipeDetailActivity extends BaseActivity {
         binding = ARecipedetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        RetrofitServices.OverViewService overViewService = RetrofitBuilder.create(this, RetrofitServices.OverViewService.class);
+        recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
+        reviewService = RetrofitBuilder.create(this, RetrofitServices.ReviewService.class);
 
-        int recipdID = 1;
-        overViewService.LoadOverViewCall(recipdID)
-                .enqueue(new Callback<RecipeDetail>() {
+        recipeID = getIntent().getIntExtra("recipeID",0);
+
+        reviewListAdapter = new ReviewListAdapter();
+        binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
+
+        if (App.isServerAlive()) {
+            getRecipeDetail();
+            getReviewList();
+        } else {
+            recipeDetailInfo = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+            reviewList = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
+
+            setTopView();
+            reviewListAdapter.setNewData(reviewList);
+        }
+    }
+
+    void getRecipeDetail(){
+        recipeService.getRecipeDetail(recipeID)
+                .enqueue(new BasicCallback<RecipeDetail>(this) {
                     @Override
                     public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response) {
-                        try {
-                            setTopView(response.body());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
+                        super.onResponse(call, response);
 
-                    @Override
-                    public void onFailure(Call<RecipeDetail> call, Throwable t) {
-                        t.printStackTrace();
+                        if (response.code() == 403)
+                            App.getAppInstance().showToast("뭔가에러");
+                        else {
+                            recipeDetailInfo = response.body();
+                            setTopView();
+                        }
                     }
                 });
     }
 
-    void setTopView(RecipeDetail recipeDetail) {
+    void getReviewList(){
+        reviewService.getReview(recipeID)
+                .enqueue(new BasicCallback<ArrayList<Review>>(this) {
+                    @Override
+                    public void onResponse(Call<ArrayList<Review>> call, Response<ArrayList<Review>> response) {
+                        super.onResponse(call, response);
+
+                        if (response.code() == 403)
+                            App.getAppInstance().showToast("뭔가에러");
+                        else {
+                            reviewList = response.body();
+                            reviewListAdapter.setNewData(reviewList);
+                            reviewListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipedetailReviewRecycler.getParent());
+                        }
+                    }
+                });
+
+    }
+
+    void setTopView() {
         try {
-//            if (!recipeDetail.getMainImg().equals("default")) {
-//                Glide.with(this)
-//                        .load(getString(R.string.storage_image_url_post) + recipeDetail.getMainImg())
-//                        .apply(RequestOptions.centerCropTransform())
-//                        .into(binding.recipedetailMainImg);
-//            }
-
-            binding.recipedetailRecipetitle.setText(recipeDetail.getTitle());
-
-            Glide.with(this)
-                    .load(getString(R.string.storage_image_url_profile) + recipeDetail.getProducerID())
+            if (!recipeDetailInfo.getUserImg().equals("default"))
+                Glide.with(this)
+                    .load(getString(R.string.storage_image_url_profile) + recipeDetailInfo.getRecipeImg())
                     .apply(RequestOptions.circleCropTransform())
                     .into(binding.recipedetailUserimg);
 
-            binding.recipedetailNickname.setText(recipeDetail.getProducerName());
-            binding.recipedetailExplain.setText(recipeDetail.getSubstance());
+            binding.recipedetailRecipetitle.setText(recipeDetailInfo.getRecipeName());
+            binding.recipedetailNickname.setText(recipeDetailInfo.getNickname());
+            binding.recipedetailExplain.setText(recipeDetailInfo.getContents());
+            binding.recipedetailStartrecipe.setOnClickListener((v) ->
+                    startActivity(new Intent(this, PlayRecipeActivity.class)));
 
-            JSONArray tagsArray = new JSONArray(recipeDetail.getTag());
+            JSONArray tagsArray = new JSONArray(recipeDetailInfo.getTags());
 
             for (int i = 0; i < tagsArray.length(); i++) {
                 AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag, null);
@@ -91,10 +132,7 @@ public class RecipeDetailActivity extends BaseActivity {
                 binding.recipedetailTags.addView(textView);
             }
 
-            binding.recipedetailStartrecipe.setOnClickListener((v) ->
-                    startActivity(new Intent(this, PlayRecipeActivity.class)));
-
-            JSONArray aa = new JSONArray(recipeDetail.getIngredients());
+            JSONArray aa = new JSONArray(recipeDetailInfo.getIngredient());
             for (int i = 0; i < aa.length(); i++) {
                 ViewGroup motherview = (ViewGroup) getLayoutInflater().inflate(R.layout.li_ingredient, null);
                 AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_product));
@@ -104,13 +142,6 @@ public class RecipeDetailActivity extends BaseActivity {
 
                 binding.recipedetailIngredients.addView(motherview);
             }
-
-            ArrayList<Review> bb = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
-
-            ReviewListAdapter reviewListAdapter = new ReviewListAdapter();
-            binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this));
-            binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
-            reviewListAdapter.setNewData(bb);
         } catch (JSONException e) {
             e.printStackTrace();
         }

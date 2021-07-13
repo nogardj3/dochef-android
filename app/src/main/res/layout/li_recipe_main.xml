@@ -27,7 +27,7 @@
             android:layout_height="0dp"
             android:background="@drawable/bg_gradient"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/recipemain_title"/>
+            app:layout_constraintTop_toTopOf="@+id/recipemain_title" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipemain_title"
@@ -57,8 +57,7 @@
             android:id="@+id/recipemain_other_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="recipemain_date_text,recipemain_viewscountimage,recipemain_viewscount,recipemain_new"
-            />
+            app:constraint_referenced_ids="recipemain_date_text,recipemain_viewscountimage,recipemain_viewscount,recipemain_new" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipemain_date_text"
@@ -87,9 +86,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/recipemain_viewscountimage"
             app:layout_constraintRight_toRightOf="@+id/recipemain_date_text"
             app:layout_constraintTop_toTopOf="@+id/recipemain_viewscountimage"
-            app:layout_constraintBottom_toBottomOf="@+id/recipemain_viewscountimage"
             tools:text="0" />
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -97,11 +96,11 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginTop="2dp"
+            android:visibility="gone"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:visibility="gone"
-            tools:visibility="visible"
-            app:srcCompat="@drawable/ic_new" />
+            app:srcCompat="@drawable/ic_new"
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

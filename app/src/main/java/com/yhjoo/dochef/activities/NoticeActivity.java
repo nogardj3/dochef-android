@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.activities;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -38,18 +39,16 @@ public class NoticeActivity extends BaseActivity {
         setSupportActionBar(binding.noticeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        basicService =
-                RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
+        basicService = RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
 
         noticeListAdapter = new NoticeListAdapter(noticeList);
+        binding.noticeRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.noticeRecycler.setAdapter(noticeListAdapter);
 
         if (App.isServerAlive())
             getListFromServer();
         else
             getListFromDummy();
-
-        binding.noticeRecycler.setAdapter(noticeListAdapter);
-        binding.noticeRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     void getListFromServer() {
@@ -64,6 +63,7 @@ public class NoticeActivity extends BaseActivity {
                 }
 
                 noticeListAdapter.setNewData(noticeList);
+                noticeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.noticeRecycler.getParent());
             }
         });
     }
@@ -76,5 +76,6 @@ public class NoticeActivity extends BaseActivity {
             noticeList.add(title);
         }
         noticeListAdapter.setNewData(noticeList);
+        noticeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.noticeRecycler.getParent());
     }
 }

@@ -49,15 +49,13 @@ public class NotificationActivity extends BaseActivity implements SwipeRefreshLa
                 startActivity(new Intent(NotificationActivity.this, RecipeDetailActivity.class));
             } else {
                 Intent intent = new Intent(NotificationActivity.this, HomeActivity.class);
-//                intent.putExtra("userID", );
+                intent.putExtra("MODE", HomeActivity.MODE.MY);
                 startActivity(intent);
             }
         });
-        notificationListAdapter.setNewData(notifications);
-        notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.notificationRecycler.getParent());
-
         binding.notificationRecycler.setLayoutManager(new LinearLayoutManager(this));
         binding.notificationRecycler.setAdapter(notificationListAdapter);
+        notificationListAdapter.setNewData(notifications);
     }
 
     @Override
@@ -65,6 +63,7 @@ public class NotificationActivity extends BaseActivity implements SwipeRefreshLa
         binding.notificationSwipe.setRefreshing(true);
         new Handler().postDelayed(() -> {
             notificationListAdapter.setNewData(notifications);
+            notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.notificationRecycler.getParent());
             binding.notificationSwipe.setRefreshing(false);
         }, 1000);
     }

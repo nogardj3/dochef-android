@@ -77,8 +77,7 @@
         app:constraint_referenced_ids="playrecipe_end_tags, playrecipe_end_divider,
             playrecipe_end_like, playrecipe_end_addmyrecipe, playrecipe_end_share,
             playrecipe_end_review"
-        tools:visibility="gone"
-        />
+        tools:visibility="gone" />
 
     <com.skyhope.materialtagview.TagView
         android:id="@+id/playrecipe_end_tags"

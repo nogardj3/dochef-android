@@ -34,18 +34,18 @@
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
                 android:visibility="gone"
-                tools:visibility="visible"
                 app:layout_constraintDimensionRatio="w,1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="1"
-                tools:src="@raw/dummy_post" />
+                tools:src="@raw/dummy_post"
+                tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/post_user_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:constraint_referenced_ids="post_nickname, post_userimg"/>
+                app:constraint_referenced_ids="post_nickname, post_userimg" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/post_userimg"
@@ -55,7 +55,7 @@
                 android:background="@drawable/bg_round"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_postimg"
-                app:srcCompat="@drawable/ic_default_profile"/>
+                app:srcCompat="@drawable/ic_default_profile" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_nickname"
@@ -87,10 +87,10 @@
                 android:id="@+id/post_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:tag_text_color="@color/white"
-                app:tag_background_color="@color/colorPrimary"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
-                app:layout_constraintTop_toBottomOf="@+id/post_contents" />
+                app:layout_constraintTop_toBottomOf="@+id/post_contents"
+                app:tag_background_color="@color/colorPrimary"
+                app:tag_text_color="@color/white" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_time"
@@ -167,41 +167,39 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:flexDirection="column"
-                tools:listitem="@layout/li_comment"
-                tools:itemCount="2"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toRightOf="@id/post_time"
-                app:layout_constraintTop_toBottomOf="@+id/post_like" />
+                app:layout_constraintTop_toBottomOf="@+id/post_like"
+                tools:itemCount="2"
+                tools:listitem="@layout/li_comment" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/post_comment_edittext"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:lines="3"
                 android:layout_marginRight="12dp"
+                android:lines="3"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler"
                 app:layout_constraintRight_toLeftOf="@+id/post_comment_ok"
-                />
+                app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_comment_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="5dp"
-                android:gravity="center"
+                android:layout_marginRight="4dp"
                 android:background="@drawable/bg_commentedittextok"
+                android:gravity="center"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="5dp"
-                android:layout_marginRight="4dp"
                 android:text="입력"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/colorPrimary"
-                app:layout_constraintTop_toTopOf="@+id/post_comment_edittext"
                 app:layout_constraintBottom_toBottomOf="@+id/post_comment_edittext"
-                app:layout_constraintRight_toRightOf="parent" />
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/post_comment_edittext" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

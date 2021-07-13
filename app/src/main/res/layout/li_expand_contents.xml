@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/exp_contents_contents"
@@ -20,16 +19,16 @@
         android:id="@+id/exp_contents_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/white"
         android:layout_marginRight="8dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/white"
         app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="1일 전" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:background="@color/grey" />
+        android:background="@color/grey"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

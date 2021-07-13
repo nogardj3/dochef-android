@@ -14,7 +14,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.HomeActivity;
@@ -78,7 +77,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                             intent.putExtra("MODE", HomeActivity.MODE.MY);
                         else {
                             intent.putExtra("MODE", HomeActivity.MODE.USER);
-                            intent.putExtra("UserID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
+                            intent.putExtra("userID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                         }
                         startActivity(intent);
                     } catch (JSONException e) {
@@ -103,6 +102,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
+        binding.timelineSwipe.setRefreshing(true);
         refreshPost();
     }
 
@@ -114,7 +114,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
 
     void refreshPost() {
         binding.timelineSwipe.setEnabled(false);
-        binding.timelineSwipe.setRefreshing(true);
         getPostList();
     }
 

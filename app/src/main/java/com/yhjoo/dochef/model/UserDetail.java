@@ -2,9 +2,6 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class UserDetail {
     @SerializedName("user_id")
     private String userID;
@@ -23,29 +20,31 @@ public class UserDetail {
     @SerializedName("is_follow")
     private int is_following;
 
-    public UserDetail(String userID, int recipeCount, int followerCount, int followingCount, int isfollowing, String nickname, String profileText) {
+    public UserDetail(String userID, String userImg, String nickname, String profileText, int recipeCount, int followerCount, int followingCount, int is_following) {
         this.userID = userID;
+        this.userImg = userImg;
+        this.nickname = nickname;
+        this.profileText = profileText;
         this.recipeCount = recipeCount;
         this.followerCount = followerCount;
         this.followingCount = followingCount;
-        is_following = isfollowing;
-        this.nickname = nickname;
-        this.profileText = profileText;
-    }
-
-    public UserDetail(JSONObject userInfo) {
-        try {
-            userID = userInfo.getString("USER_ID");
-            nickname = userInfo.getString("NICKNAME");
-            profileText = userInfo.getString("INTRODUCTION");
-            userImg = userInfo.getString("PROFILE_IMAGE");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        this.is_following = is_following;
     }
 
     public String getUserID() {
         return userID;
+    }
+
+    public String getUserImg() {
+        return userImg;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public String getProfileText() {
+        return profileText;
     }
 
     public int getRecipeCount() {
@@ -60,15 +59,7 @@ public class UserDetail {
         return followingCount;
     }
 
-    public String getNickname() {
-        return nickname;
-    }
-
-    public String getProfileText() {
-        return profileText;
-    }
-
-    public String getUserImg() {
-        return userImg;
+    public int getIs_following() {
+        return is_following;
     }
 }

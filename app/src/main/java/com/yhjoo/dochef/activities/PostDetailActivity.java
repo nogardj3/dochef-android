@@ -24,6 +24,7 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -42,6 +43,7 @@ public class PostDetailActivity extends BaseActivity {
     CommentListAdapter commentListAdapter;
 
     Post postInfo;
+    ArrayList<Comment> commentList;
     String userID;
     int postID;
 
@@ -74,8 +76,38 @@ public class PostDetailActivity extends BaseActivity {
         }
         postID = getIntent().getIntExtra("postID", -1);
 
-        getPostInfo(postID);
-        getCommentList(postID);
+        commentListAdapter = new CommentListAdapter(userID);
+        commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.postCommentRecycler.getParent());
+        commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
+            PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
+            getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
+                builder.setMessage("삭제 하시겠습니까?")
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            dialog.dismiss();
+                            removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID());
+                        })
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return false;
+            });
+            popup.show();
+        });
+        binding.postCommentRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.postCommentRecycler.setAdapter(commentListAdapter);
+
+        if (App.isServerAlive()) {
+            getPostInfo(postID);
+            getCommentList(postID);
+        }
+        else{
+            postInfo = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_POST));
+            commentList = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS));
+
+            setTopView();
+            commentListAdapter.setNewData(commentList);
+        }
     }
 
     void getPostInfo(int postID) {
@@ -91,14 +123,13 @@ public class PostDetailActivity extends BaseActivity {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
                         } else {
                             postInfo = response.body();
-
-                            setTopView(postInfo);
+                            setTopView();
                         }
                     }
                 });
     }
 
-    void setTopView(Post postInfo) {
+    void setTopView() {
         if (!postInfo.getPostImg().equals("default")) {
             binding.postPostimg.setVisibility(View.VISIBLE);
             Glide.with(this)
@@ -184,36 +215,12 @@ public class PostDetailActivity extends BaseActivity {
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("comment 가져오기 실패");
                         } else {
-                            setCommentView(response.body());
+                            commentList = response.body();
+                            commentListAdapter.setNewData(commentList);
+                            commentListAdapter.setEmptyView(R.layout.rv_comment_empty, (ViewGroup) binding.postCommentRecycler.getParent());
                         }
-                        commentListAdapter.setEmptyView(R.layout.rv_comment_empty, (ViewGroup) binding.postCommentRecycler.getParent());
                     }
                 });
-    }
-
-    void setCommentView(ArrayList<Comment> commentList) {
-        commentListAdapter = new CommentListAdapter(userID);
-        commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.postCommentRecycler.getParent());
-        commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
-            PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
-            getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
-            popup.setOnMenuItemClickListener(item -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
-                builder.setMessage("삭제 하시겠습니까?")
-                        .setPositiveButton("확인", (dialog, which) -> {
-                            dialog.dismiss();
-                            removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID());
-                        })
-                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
-                        .show();
-                return false;
-            });
-            popup.show();
-        });
-        commentListAdapter.setNewData(commentList);
-
-        binding.postCommentRecycler.setLayoutManager(new LinearLayoutManager(this));
-        binding.postCommentRecycler.setAdapter(commentListAdapter);
     }
 
     void toggleLikePost(String userID, int postID) {

@@ -171,8 +171,8 @@
         android:text="비밀번호 찾기"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintDimensionRatio="w,1:4.15"
         app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:layout_constraintLeft_toLeftOf="@+id/account_findpw_email"
         app:layout_constraintRight_toRightOf="@+id/account_findpw_email"
         app:layout_constraintTop_toBottomOf="@+id/account_findpw_notice" />
@@ -244,14 +244,13 @@
         android:layout_marginTop="16dp"
         android:text="회원 가입"
         android:textAllCaps="false"
-        app:layout_constraintDimensionRatio="w,1:4.15"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:layout_constraintLeft_toLeftOf="@+id/account_signup_email"
         app:layout_constraintRight_toRightOf="@+id/account_signup_email"
         app:layout_constraintTop_toBottomOf="@+id/account_signup_notice" />
-
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/account_signupnick_group"
@@ -260,8 +259,7 @@
         android:visibility="gone"
         app:constraint_referenced_ids="account_signupnick_nickname, account_signupnick_divider,
         account_signupnick_notice, account_signupnick_ok"
-        tools:visibility="gone"
-        />
+        tools:visibility="gone" />
 
     <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/account_signupnick_nickname"
@@ -308,8 +306,8 @@
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintDimensionRatio="w,1:4.15"
         app:backgroundTint="@color/colorPrimary"
+        app:layout_constraintDimensionRatio="w,1:4.15"
         app:layout_constraintLeft_toLeftOf="@+id/account_signupnick_nickname"
         app:layout_constraintRight_toRightOf="@+id/account_signupnick_nickname"
         app:layout_constraintTop_toBottomOf="@+id/account_signupnick_notice" />

@@ -18,18 +18,18 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:visibility="gone"
-            tools:visibility="visible"
             app:layout_constraintDimensionRatio="width,1:1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="1"
-            tools:src="@raw/dummy_post" />
+            tools:src="@raw/dummy_post"
+            tools:visibility="visible" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/timeline_user_group"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:constraint_referenced_ids="timeline_userimg, timeline_nickname"/>
+            app:constraint_referenced_ids="timeline_userimg, timeline_nickname" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/timeline_userimg"
@@ -37,9 +37,9 @@
             android:layout_height="30dp"
             android:layout_margin="10dp"
             android:background="@drawable/bg_round"
-            app:srcCompat="@drawable/ic_default_profile"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeline_postimg"/>
+            app:layout_constraintTop_toBottomOf="@+id/timeline_postimg"
+            app:srcCompat="@drawable/ic_default_profile" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timeline_nickname"
@@ -69,10 +69,10 @@
             android:id="@+id/timeline_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:tag_text_color="@color/white"
-            app:tag_background_color="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="@+id/timeline_contents"
-            app:layout_constraintTop_toBottomOf="@+id/timeline_contents" />
+            app:layout_constraintTop_toBottomOf="@+id/timeline_contents"
+            app:tag_background_color="@color/colorPrimary"
+            app:tag_text_color="@color/white" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timeline_time"
@@ -130,9 +130,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:visibility="gone"
-            tools:visibility="visible"
             app:constraint_referenced_ids="timeline_comment_img,
-            timeline_comment_nickname,timeline_comment_contents,timeline_comment_date"/>
+            timeline_comment_nickname,timeline_comment_contents,timeline_comment_date"
+            tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/timeline_comment_img"
@@ -151,9 +151,9 @@
             android:maxEms="5"
             android:maxLines="1"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_img"
             app:layout_constraintLeft_toRightOf="@+id/timeline_comment_img"
             app:layout_constraintTop_toTopOf="@+id/timeline_comment_img"
-            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_img"
             tools:text="닉네임" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -162,10 +162,10 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:maxLines="2"
+            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_img"
             app:layout_constraintLeft_toRightOf="@+id/timeline_comment_nickname"
             app:layout_constraintRight_toLeftOf="@+id/timeline_comment_date"
             app:layout_constraintTop_toTopOf="@+id/timeline_comment_img"
-            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_img"
             tools:text="내용" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -175,9 +175,9 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_nickname"
             app:layout_constraintRight_toRightOf="@+id/timeline_time"
             app:layout_constraintTop_toTopOf="@+id/timeline_comment_nickname"
-            app:layout_constraintBottom_toBottomOf="@+id/timeline_comment_nickname"
             tools:text="날짜" />
 
         <View
@@ -186,7 +186,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/timeline_comment_img"/>
+            app:layout_constraintTop_toBottomOf="@+id/timeline_comment_img" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

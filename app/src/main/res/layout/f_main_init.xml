@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/main_adviewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:overScrollMode="never"
         android:layout_marginTop="2dp"
+        android:overScrollMode="never"
         app:layout_constraintDimensionRatio="w,1:2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -44,14 +44,13 @@
         android:id="@+id/main_recommend_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
         android:text="더보기"
         android:textColor="@color/grey_text"
+        app:layout_constraintBottom_toBottomOf="@+id/main_recommend_text"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_recommend_text"
-        app:layout_constraintBottom_toBottomOf="@+id/main_recommend_text"/>
+        app:layout_constraintTop_toTopOf="@+id/main_recommend_text" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_recommend_recyclerview"
@@ -59,11 +58,11 @@
         android:layout_height="190dp"
         android:layout_marginTop="8dp"
         android:overScrollMode="never"
-        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:orientation="horizontal"
-        tools:listitem="@layout/li_recipe_recommend"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_recommend_text" />
+        app:layout_constraintTop_toBottomOf="@+id/main_recommend_text"
+        tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/li_recipe_recommend"
+        tools:orientation="horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

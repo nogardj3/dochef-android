@@ -1,8 +1,5 @@
 package com.yhjoo.dochef.utils;
 
-import android.text.TextUtils;
-import android.util.Log;
-
 import com.orhanobut.logger.Logger;
 
 import java.text.SimpleDateFormat;

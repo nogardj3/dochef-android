@@ -8,7 +8,6 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.RecipeBrief;
 
 public class RecommendAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHolder> {
@@ -18,11 +17,13 @@ public class RecommendAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHold
 
         @Override
         protected void convert(BaseViewHolder helper, RecipeBrief item) {
-            if (App.isServerAlive())
-                Glide.with(mContext)
-                        .load(item.getRecipeImg())
-                        .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
+            if (App.isServerAlive()){
+                if (!item.getRecipeImg().equals("default"))
+                    Glide.with(mContext)
+                            .load(item.getRecipeImg())
+                            .apply(RequestOptions.centerCropTransform())
+                            .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
+            }
             else
                 Glide.with(mContext)
                         .load(Integer.parseInt(item.getRecipeImg()))

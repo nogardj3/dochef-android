@@ -73,6 +73,8 @@ public class FollowListActivity extends BaseActivity {
                     startActivity(intent);
                 }
         );
+        binding.followlistRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.followlistRecycler.setAdapter(followListAdapter);
 
         if (App.isServerAlive()) {
             if (current_mode == MODE.FOLLOWER)
@@ -83,9 +85,6 @@ public class FollowListActivity extends BaseActivity {
             ArrayList<UserBrief> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
             followListAdapter.setNewData(data);
         }
-
-        binding.followlistRecycler.setLayoutManager(new LinearLayoutManager(this));
-        binding.followlistRecycler.setAdapter(followListAdapter);
     }
 
     void getFollower(){
@@ -93,8 +92,8 @@ public class FollowListActivity extends BaseActivity {
                 .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
                     @Override
                     public void onResponse(Response<ArrayList<UserBrief>> response) {
-                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                         followListAdapter.setNewData(response.body());
+                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                     }
                 });
     }
@@ -104,8 +103,8 @@ public class FollowListActivity extends BaseActivity {
                 .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
                     @Override
                     public void onResponse(Response<ArrayList<UserBrief>> response) {
-                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                         followListAdapter.setNewData(response.body());
+                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                     }
                 });
     }

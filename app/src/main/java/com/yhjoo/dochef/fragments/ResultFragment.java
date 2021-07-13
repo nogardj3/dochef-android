@@ -82,6 +82,7 @@ public class ResultFragment extends Fragment {
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class);
                     intent2.putExtra("userID", ((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
+                    intent2.putExtra("MODE", HomeActivity.MODE.USER);
                     startActivity(intent2);
                     break;
             }

@@ -140,8 +140,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         binding.famPopular.setOnClickListener(this::popularSort);
         binding.mainFab.setOnClickListener(this::clickFab);
 
-        userName = (AppCompatTextView) binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_nickname);
-        userImage = (AppCompatImageView) binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_userimg);
+        userName = binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_nickname);
+        userImage = binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_userimg);
 
         userName.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, HomeActivity.class);

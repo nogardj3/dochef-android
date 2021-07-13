@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.MultiItemTheme;
 
@@ -27,10 +28,20 @@ public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme
         protected void convert(BaseViewHolder helper, MultiItemTheme item) {
             switch (helper.getItemViewType()) {
                 case VIEWHOLDER_ITEM:
-                    Glide.with(mContext)
-                            .load(item.getContent().getRecipeImg())
-                            .apply(RequestOptions.centerCropTransform())
-                            .into((AppCompatImageView) helper.getView(R.id.recipetheme_img));
+                    if (App.isServerAlive()) {
+                        if (!item.getContent().getRecipeImg().equals("default"))
+                            Glide.with(mContext)
+                                    .load(item.getContent().getRecipeImg())
+                                    .apply(RequestOptions.centerCropTransform())
+                                    .into((AppCompatImageView) helper.getView(R.id.recipetheme_img));
+                    }
+                    else{
+                        Glide.with(mContext)
+                                .load(Integer.parseInt(item.getContent().getRecipeImg()))
+                                .apply(RequestOptions.centerCropTransform())
+                                .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
+                    }
+
                     helper.setText(R.id.recipetheme_title, item.getContent().getRecipeName());
                     helper.setText(R.id.recipetheme_nickname,
                             String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getContent().getNickname()));

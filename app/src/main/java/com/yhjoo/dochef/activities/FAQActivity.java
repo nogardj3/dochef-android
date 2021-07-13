@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.activities;
 
 import android.os.Bundle;
+import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -42,14 +43,13 @@ public class FAQActivity extends BaseActivity {
                 RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
 
         FAQListAdapter = new FAQListAdapter(faqList);
+        binding.faqRecycler.setAdapter(FAQListAdapter);
+        binding.faqRecycler.setLayoutManager(new LinearLayoutManager(this));
 
         if (App.isServerAlive())
             getListFromServer();
         else
             getListFromLocal();
-
-        binding.faqRecycler.setAdapter(FAQListAdapter);
-        binding.faqRecycler.setLayoutManager(new LinearLayoutManager(this));
     }
 
     void getListFromServer() {
@@ -65,6 +65,7 @@ public class FAQActivity extends BaseActivity {
                         }
 
                         FAQListAdapter.setNewData(faqList);
+                        FAQListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.faqRecycler.getParent());
                     }
                 });
     }
@@ -78,5 +79,6 @@ public class FAQActivity extends BaseActivity {
             faqList.add(title);
         }
         FAQListAdapter.setNewData(faqList);
+        FAQListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.faqRecycler.getParent());
     }
 }

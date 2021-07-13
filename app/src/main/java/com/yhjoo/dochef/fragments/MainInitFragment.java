@@ -17,7 +17,9 @@ import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
 import com.yhjoo.dochef.adapter.RecommendAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -25,16 +27,19 @@ import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class MainInitFragment extends Fragment {
     FMainInitBinding binding;
 
-    ArrayList<RecipeBrief> recipes;
+    RetrofitServices.RecipeService recipeService;
+    RecommendAdapter recommendAdapter;
+    ArrayList<RecipeBrief> recipeList;
 
     /*
         TODO
-        1. get recipes by tag, sort by view_count desc
-        1. Recipe 서버 추가 및 기능 구현
+        1. 실행 해보고 수정할거 수정하기
     */
 
     @Override
@@ -45,6 +50,7 @@ public class MainInitFragment extends Fragment {
         ArrayList<Integer> imgs = new ArrayList<>();
         imgs.add(R.drawable.ad_temp_0);
         imgs.add(R.drawable.ad_temp_1);
+
 
         binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
         binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
@@ -59,17 +65,37 @@ public class MainInitFragment extends Fragment {
                                 ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
 
 
-        if(App.isServerAlive()){
-        }
-        else
-            recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
-
-        RecommendAdapter recommendAdapter = new RecommendAdapter();
+        recommendAdapter = new RecommendAdapter();
         recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(getContext(), RecipeDetailActivity.class)));
-        recommendAdapter.setNewData(recipes);
+        recommendAdapter.setNewData(recipeList);
         binding.mainRecommendRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
+        if(App.isServerAlive()){
+            getRecipelist();
+        }
+        else{
+            recipeList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+            recommendAdapter.setNewData(recipeList);
+        }
 
         return view;
+    }
+
+    void getRecipelist(){
+        recipeService.getRecipeByTag("매운맛")
+                .enqueue(new BasicCallback<ArrayList<RecipeBrief>>(this.getContext()) {
+                    @Override
+                    public void onResponse(Call<ArrayList<RecipeBrief>> call, Response<ArrayList<RecipeBrief>> response) {
+                        super.onResponse(call, response);
+
+                        if (response.code() == 403)
+                            App.getAppInstance().showToast("뭔가에러");
+                        else {
+                            recipeList = response.body();
+                            recommendAdapter.setNewData(recipeList);
+                            recommendAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.mainRecommendRecyclerview.getParent());
+                        }
+                    }
+                });
     }
 }
