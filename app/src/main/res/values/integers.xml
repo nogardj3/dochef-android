@@ -8,8 +8,6 @@
     <integer name="RECIPEITEM_TYPE_START">0</integer>
     <integer name="RECIPEITEM_TYPE_ITEM">1</integer>
     <integer name="RECIPEITEM_TYPE_FINISH">2</integer>
-    <integer name="HOMEITEM_TYPE_PHOTO">0</integer>
-    <integer name="HOMEITEM_TYPE_RECIPE">1</integer>
 
     <integer name="DUMMY_TYPE_FAQ">0</integer>
     <integer name="DUMMY_TYPE_NOTICE">1</integer>

@@ -11,6 +11,7 @@ import com.yhjoo.dochef.adapter.RecipeThemeAdapter;
 import com.yhjoo.dochef.databinding.ARecipethemeBinding;
 import com.yhjoo.dochef.model.MultiItemTheme;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
         MobileAds.initialize(this);
 
-        ArrayList<Recipe> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+        ArrayList<RecipeBrief> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
         for (int i = 0; i < arrayList.size(); i++) {
             recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
             if (i != 0 && i % 4 == 0)

@@ -80,7 +80,7 @@ public class FollowListActivity extends BaseActivity {
             else if (current_mode == MODE.FOLLOWING)
                 getFollowing();
         } else {
-            ArrayList<UserBrief> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER));
+            ArrayList<UserBrief> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
             followListAdapter.setNewData(data);
         }
 

@@ -40,11 +40,11 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                             .load(((Recipe) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.reciperesult_recipeimg));
-                    helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getTitle());
+                    helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getRecipeName());
                     helper.setTextColor(R.id.reciperesult_title, mContext.getColor(R.color.colorPrimary));
                     ((AppCompatTextView) helper.getView(R.id.reciperesult_title)).setTypeface(null, Typeface.BOLD);
                     helper.setText(R.id.reciperesult_nickname,
-                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickName()));
+                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickname()));
 
                     break;
 
@@ -64,13 +64,13 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                             .load(((Recipe) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.reciperesult_recipeimg));
-                    helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getTitle());
+                    helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getRecipeName());
                     helper.setText(R.id.reciperesult_nickname,
-                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickName()));
+                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickname()));
                     helper.setVisible(R.id.reciperesult_ingredients, true);
 
                     ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
-                    ((TagView) helper.getView(R.id.reciperesult_ingredients)).setTagList(((Recipe) item.getContent()).getIngredients());
+//                    ((TagView) helper.getView(R.id.reciperesult_ingredients)).setTagList(((Recipe) item.getContent()).getIngredient());
                     break;
 
                 case VIEWHOLDER_ITEM_TAG:
@@ -78,9 +78,9 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                             .load(((Recipe) item.getContent()).getRecipeImg())
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.reciperesult_recipeimg));
-                    helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getTitle());
+                    helper.setText(R.id.reciperesult_title, ((Recipe) item.getContent()).getRecipeName());
                     helper.setText(R.id.reciperesult_nickname,
-                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickName()));
+                            String.format(mContext.getResources().getString(R.string.string_format_usernickname),((Recipe) item.getContent()).getNickname()));
                     helper.setVisible(R.id.reciperesult_tags, true);
 
                     ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();

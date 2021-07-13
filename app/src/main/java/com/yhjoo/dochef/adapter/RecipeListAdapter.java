@@ -28,13 +28,12 @@ public class RecipeListAdapter extends BaseItemDraggableAdapter<Recipe, BaseView
                 .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
         StorageReference storageReference = FirebaseStorage.getInstance().getReference();
 
-        helper.setText(R.id.recipemylist_recipetitle, item.getTitle());
+        helper.setText(R.id.recipemylist_recipetitle, item.getRecipeName());
         helper.setText(R.id.recipemylist_nickname,
-                String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickName()));
-        helper.setVisible(R.id.recipemylist_mine, item.getNickName().equals("나"));
+                String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickname()));
+        helper.setVisible(R.id.recipemylist_mine, item.getNickname().equals("나"));
 //            helper.setVisible(R.id.recipemylist_revise, item.getNickName().equals("나") && currentOperation == OPERATION.VIEW);
 //            helper.setVisible(R.id.recipemylist_delete, currentOperation == OPERATION.VIEW);
-//            helper.setVisible(R.id.recipemylist_touch, currentOperation == OPERATION.ALIGN);
         helper.addOnClickListener(R.id.recipemylist_revise);
         helper.addOnClickListener(R.id.recipemylist_delete);
     }

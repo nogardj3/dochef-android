@@ -81,4 +81,11 @@ public class Utils {
             return formatter.format(new Date(millis));
         }
     }
+
+    public static boolean checkNew(long millis) {
+        long current_millis = new Date().getTime();
+        long diff_sec = (current_millis - millis) / 1000;
+
+        return diff_sec / 60 / 60 / 24 < 3;
+    }
 }

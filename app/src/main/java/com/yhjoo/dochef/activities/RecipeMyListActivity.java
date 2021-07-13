@@ -18,6 +18,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.RecipeListAdapter;
 import com.yhjoo.dochef.databinding.ARecipelistBinding;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 
 import java.util.ArrayList;
 
@@ -26,7 +27,7 @@ public class RecipeMyListActivity extends BaseActivity {
 
     ARecipelistBinding binding;
 
-    ArrayList<Recipe> recipes = new ArrayList<>();
+    ArrayList<RecipeBrief> recipes = new ArrayList<>();
     RecipeListAdapter recipeListAdapter;
     ItemTouchHelper dragitemTouchHelper;
 
@@ -34,6 +35,7 @@ public class RecipeMyListActivity extends BaseActivity {
 
     /*
         TODO
+        1. ALIGN 없애기
         1. Recipe 서버 추가 및 기능 구현
     */
 

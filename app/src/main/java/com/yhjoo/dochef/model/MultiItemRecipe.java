@@ -7,34 +7,34 @@ public class MultiItemRecipe implements MultiItemEntity {
     private final int VIEWHOLDER_PAGER = 2;
     private final int VIEWHOLDER_ITEM = 3;
 
-        int itemType;
-        RecipeBrief content;
-        String pager_title;
+    int itemType;
+    RecipeBrief content;
+    String pager_title;
 
     public MultiItemRecipe(int itemType, RecipeBrief content) {
-            this.itemType = itemType;
-            this.content = content;
-        }
+        this.itemType = itemType;
+        this.content = content;
+    }
 
     public MultiItemRecipe(int itemType, String title) {
-            this.itemType = itemType;
-            this.pager_title = title;
-        }
+        this.itemType = itemType;
+        this.pager_title = title;
+    }
 
     public MultiItemRecipe(int itemType) {
-            this.itemType = itemType;
-        }
+        this.itemType = itemType;
+    }
 
-        public String getPager_title() {
-            return pager_title;
-        }
+    public String getPager_title() {
+        return pager_title;
+    }
 
     public RecipeBrief getContent() {
-            return content;
-        }
-
-        @Override
-        public int getItemType() {
-            return itemType;
-        }
+        return content;
     }
+
+    @Override
+    public int getItemType() {
+        return itemType;
+    }
+}

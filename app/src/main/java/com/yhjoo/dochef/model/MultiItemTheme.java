@@ -6,9 +6,9 @@ public class MultiItemTheme implements MultiItemEntity {
     final int itemType;
     final int spanSize;
 
-    Recipe content;
+    RecipeBrief content;
 
-    public MultiItemTheme(int itemType, int spanSize, Recipe content) {
+    public MultiItemTheme(int itemType, int spanSize, RecipeBrief content) {
         this.itemType = itemType;
         this.spanSize = spanSize;
         this.content = content;
@@ -23,7 +23,7 @@ public class MultiItemTheme implements MultiItemEntity {
         return spanSize;
     }
 
-    public Recipe getContent() {
+    public RecipeBrief getContent() {
         return content;
     }
 

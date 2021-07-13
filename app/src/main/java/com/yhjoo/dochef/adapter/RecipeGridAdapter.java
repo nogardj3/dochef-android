@@ -10,6 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.utils.Utils;
 
 public class RecipeGridAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHolder> {
     RecyclerView recyclerView;
@@ -28,11 +29,9 @@ public class RecipeGridAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHol
         helper.itemView.findViewById(R.id.recipehome_recipeimg).setLayoutParams(lp);
 
         Glide.with(mContext)
-                .load(Integer.valueOf(item.getImageUrl()))
+                .load(Integer.valueOf(item.getRecipeImg()))
                 .into((AppCompatImageView) helper.getView(R.id.recipehome_recipeimg));
 
-        helper.setVisible(R.id.recipehome_type,
-                item.getThumbnail_type() == mContext.getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE));
-        helper.setVisible(R.id.recipehome_new, item.getIsNew() == 1);
+        helper.setVisible(R.id.recipehome_new, Utils.checkNew(item.getDatetime()));
     }
 }
