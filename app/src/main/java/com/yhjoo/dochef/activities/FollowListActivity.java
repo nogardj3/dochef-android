@@ -13,7 +13,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.FollowListAdapter;
 import com.yhjoo.dochef.databinding.AFollowlistBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -69,7 +69,7 @@ public class FollowListActivity extends BaseActivity {
         followListAdapter.setOnItemClickListener((adapter, view, position) -> {
                     Intent intent = new Intent(FollowListActivity.this, HomeActivity.class);
                     intent.putExtra("MODE", HomeActivity.MODE.USER);
-                    intent.putExtra("userID", ((UserBreif) adapter.getData().get(position)).getUserID());
+                    intent.putExtra("userID", ((UserBrief) adapter.getData().get(position)).getUserID());
                     startActivity(intent);
                 }
         );
@@ -80,7 +80,7 @@ public class FollowListActivity extends BaseActivity {
             else if (current_mode == MODE.FOLLOWING)
                 getFollowing();
         } else {
-            ArrayList<UserBreif> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_PROFILE));
+            ArrayList<UserBrief> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER));
             followListAdapter.setNewData(data);
         }
 
@@ -90,9 +90,9 @@ public class FollowListActivity extends BaseActivity {
 
     void getFollower(){
         userService.getFollowers(active_userid, target_id)
-                .enqueue(new BasicCallback<ArrayList<UserBreif>>(FollowListActivity.this) {
+                .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
                     @Override
-                    public void onResponse(Response<ArrayList<UserBreif>> response) {
+                    public void onResponse(Response<ArrayList<UserBrief>> response) {
                         followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                         followListAdapter.setNewData(response.body());
                     }
@@ -101,9 +101,9 @@ public class FollowListActivity extends BaseActivity {
 
     void getFollowing(){
         userService.getFollowings(active_userid, target_id)
-                .enqueue(new BasicCallback<ArrayList<UserBreif>>(FollowListActivity.this) {
+                .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
                     @Override
-                    public void onResponse(Response<ArrayList<UserBreif>> response) {
+                    public void onResponse(Response<ArrayList<UserBrief>> response) {
                         followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
                         followListAdapter.setNewData(response.body());
                     }

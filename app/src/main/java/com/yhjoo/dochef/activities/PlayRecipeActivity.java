@@ -79,68 +79,68 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
 
         recipePlays = new ArrayList<>(Arrays.asList(
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_START),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipestart,
                         "치즈김치볶음밥!! / 백종원 김치볶음밥, 묵은지해결",
                         ingredients,
                         "김치는\n미리\n썰어요\n",
                         0, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe1,
                         null,
                         ingredients,
                         "햄과\n 대파1줄을\n 총총\n 썰어주세요",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe2,
                         null,
                         ingredients,
                         "팬에 기름을 넉넉히 두르신후 파를 넣고 볶아서 파기름을 내주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe3,
                         null,
                         ingredients,
                         "파기름을 냈으면 김치를 넣고 볶아주신뒤, 고추장1큰술을 넣고 잘 섞어주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_ITEM),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipe4,
                         null,
                         ingredients,
                         "햄과 밥을 넣고 잘 섞어주신뒤, 참기름 1큰술을 넣고 볶아주세요!",
                         10, null),
 
-                new RecipePlay(getResources().getInteger(R.integer.RECIPEITEM_TYPE_FINISH),
+                new RecipePlay(
                         R.drawable.tempimg_playrecipefinish,
                         null,
                         ingredients,

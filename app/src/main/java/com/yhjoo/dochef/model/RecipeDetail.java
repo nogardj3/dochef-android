@@ -2,65 +2,128 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+
 public class RecipeDetail {
-    @SerializedName("RECIPE_ID")
+    @SerializedName("recipe_id")
     private int recipeID;
-    @SerializedName("USER_ID")
-    private String producerID;
-    @SerializedName("NICKNAME")
-    private String producerName;
-    @SerializedName("TITLE")
-    private String title;
-    @SerializedName("SUBSTANCE")
-    private String substance;
-    @SerializedName("THUMBNAIL")
-    private String thumbnail;
-    @SerializedName("INGREDIENTS")
-    private String ingredients;
-    @SerializedName("TIME")
-    private long dateTime;
-    @SerializedName("TAG")
-    private String Tag;
-    @SerializedName("FILE")
-    private String file;
+    @SerializedName("recipe_name")
+    private int recipeName;
+    @SerializedName("user_id")
+    private String userID;
+    @SerializedName("nickname")
+    private String nickname;
+    @SerializedName("profile_img_url")
+    private String userImg;
+    @SerializedName("recipe_img")
+    private String recipeImg;
+    @SerializedName("contents")
+    private String contents;
+    @SerializedName("datetime")
+    private long datetime;
+    @SerializedName("amount_time")
+    private String amount_time;
+    @SerializedName("view_count")
+    private int view_count;
+    @SerializedName("rating")
+    private int rating;
+    @SerializedName("ingredients")
+    private Ingredient ingredient;
+    @SerializedName("tags")
+    private String[] tags;
+    @SerializedName("phase")
+    private RecipePhase phases;
 
-    public String getProducerID() {
-        return producerID;
-    }
-
-    public String getProducerName() {
-        return producerName;
+    public Recipe(int recipeID, int recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, Ingredient ingredient, String[] tags, RecipePhase phases) {
+        this.recipeID = recipeID;
+        this.recipeName = recipeName;
+        this.userID = userID;
+        this.nickname = nickname;
+        this.userImg = userImg;
+        this.recipeImg = recipeImg;
+        this.contents = contents;
+        this.datetime = datetime;
+        this.amount_time = amount_time;
+        this.view_count = view_count;
+        this.rating = rating;
+        this.ingredient = ingredient;
+        this.tags = tags;
+        this.phases = phases;
     }
 
     public int getRecipeID() {
         return recipeID;
     }
 
-    public long getDateTime() {
-        return dateTime;
+    public int getRecipeName() {
+        return recipeName;
     }
 
-    public String getFile() {
-        return file;
+    public String getUserID() {
+        return userID;
     }
 
-    public String getIngredients() {
-        return ingredients;
+    public String getNickname() {
+        return nickname;
     }
 
-    public String getSubstance() {
-        return substance;
+    public String getUserImg() {
+        return userImg;
     }
 
-    public String getTag() {
-        return Tag;
+    public String getRecipeImg() {
+        return recipeImg;
     }
 
-    public String getThumbnail() {
-        return thumbnail;
+    public String getContents() {
+        return contents;
     }
 
-    public String getTitle() {
-        return title;
+    public long getDatetime() {
+        return datetime;
+    }
+
+    public String getAmount_time() {
+        return amount_time;
+    }
+
+    public int getView_count() {
+        return view_count;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public Ingredient getIngredient() {
+        return ingredient;
+    }
+
+    public String[] getTags() {
+        return tags;
+    }
+
+    public RecipePhase getPhases() {
+        return phases;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "recipeID=" + recipeID +
+                ", recipeName=" + recipeName +
+                ", userID='" + userID + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", recipeImg='" + recipeImg + '\'' +
+                ", contents='" + contents + '\'' +
+                ", datetime=" + datetime +
+                ", amount_time='" + amount_time + '\'' +
+                ", view_count=" + view_count +
+                ", rating=" + rating +
+                ", ingredient=" + ingredient +
+                ", tags=" + Arrays.toString(tags) +
+                ", phases=" + phases +
+                '}';
     }
 }

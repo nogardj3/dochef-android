@@ -20,12 +20,11 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.AAccountBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -260,9 +259,9 @@ public class AccountActivity extends BaseActivity {
             progressON(AccountActivity.this);
             accountService
                     .createUser(idToken, mAuth.getUid(), nickname)
-                    .enqueue(new BasicCallback<UserBreif>(AccountActivity.this) {
+                    .enqueue(new BasicCallback<UserBrief>(AccountActivity.this) {
                         @Override
-                        public void onResponse(Call<UserBreif> call, Response<UserBreif> response) {
+                        public void onResponse(Call<UserBrief> call, Response<UserBrief> response) {
                             super.onResponse(call, response);
                             progressOFF();
 
@@ -280,9 +279,9 @@ public class AccountActivity extends BaseActivity {
     void checkUserInfo(String idToken) {
         accountService
                 .checkUser(idToken, mAuth.getUid())
-                .enqueue(new BasicCallback<UserBreif>(AccountActivity.this) {
+                .enqueue(new BasicCallback<UserBrief>(AccountActivity.this) {
                     @Override
-                    public void onResponse(Call<UserBreif> call, Response<UserBreif> response) {
+                    public void onResponse(Call<UserBrief> call, Response<UserBrief> response) {
                         super.onResponse(call, response);
                         progressOFF();
 
@@ -320,7 +319,7 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    void startMain(UserBreif userinfo) {
+    void startMain(UserBrief userinfo) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();

@@ -3,14 +3,13 @@ package com.yhjoo.dochef.utils;
 import android.content.res.Resources;
 
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Notification;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.model.Review;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,79 +17,7 @@ import java.util.Random;
 
 public class DummyMaker {
     public static <T> T make(Resources resources, int type) {
-        if (type == resources.getInteger(R.integer.DUMMY_TYPE_PROFILE)) {
-            ArrayList<UserBreif> arrayList = new ArrayList<>();
-            int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
-
-            for (int i = 0; i < 5; i++) {
-                Random r = new Random();
-
-                arrayList.add(new UserBreif("유저 " + i,
-                        Integer.toString(img_profiles[r.nextInt(3)]),
-                        "더미 유저 " + i, 0));
-            }
-
-            return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_GRID)) {
-            ArrayList<RecipeBrief> arrayList = new ArrayList<>();
-
-            int type_recipe = resources.getInteger(R.integer.HOMEITEM_TYPE_RECIPE);
-            int type_photo = resources.getInteger(R.integer.HOMEITEM_TYPE_PHOTO);
-            int[] img_grids = {R.raw.dummy_grid_0, R.raw.dummy_grid_1, R.raw.dummy_grid_2};
-
-            arrayList.add(new RecipeBrief(type_recipe, Integer.toString(img_grids[0]), 1));
-            for (int i = 0; i < 10; i++) {
-                Random r = new Random();
-
-                arrayList.add(new RecipeBrief(type_recipe,
-                        Integer.toString(img_grids[r.nextInt(3)]),
-                        i == 0 ? 1 : 0));
-                arrayList.add(new RecipeBrief(type_photo,
-                        Integer.toString(img_grids[r.nextInt(3)]),
-                        i == 0 ? 1 : 0));
-            }
-
-            return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPIES)) {
-            ArrayList<Recipe> arrayList = new ArrayList<>();
-
-            int[] img_recipies = {R.raw.dummy_recipe_0, R.raw.dummy_recipe_1, R.raw.dummy_recipe_2};
-
-            ArrayList<String> ingredients = new ArrayList<>();
-            ingredients.add("재료1");
-            ingredients.add("재료2");
-            ArrayList<String> tags = new ArrayList<>();
-            ingredients.add("태그1");
-            ingredients.add("태그2");
-
-            for (int i = 1; i < 20; i++) {
-                Random r = new Random();
-
-                arrayList.add(new Recipe("요리" + i,
-                        "요리사" + i,
-                        "메세지" + i,
-                        r.nextInt(1000),
-                        Integer.toString(img_recipies[r.nextInt(3)]),
-                        ingredients,
-                        tags));
-                arrayList.add(new Recipe("요리" + (i + 1),
-                        "나",
-                        "메세지" + (i + 1),
-                        r.nextInt(1000),
-                        Integer.toString(img_recipies[r.nextInt(3)]),
-                        ingredients,
-                        tags));
-            }
-
-            return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_GRID)) {
-            ArrayList<Comment> arrayList = new ArrayList<>();
-            for (int i = 0; i < 10; i++) {
-                arrayList.add(new Comment("유져" + i, "내용 " + i + "\n", System.currentTimeMillis()));
-            }
-
-            return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_FAQ)) {
+        if (type == resources.getInteger(R.integer.DUMMY_TYPE_FAQ)) {
             ArrayList<FAQ> arrayList = new ArrayList<>();
 
             for (int i = 1; i < 10; i++) {
@@ -132,7 +59,98 @@ public class DummyMaker {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_REVIEW)) {
+        }
+        else if (type == resources.getInteger(R.integer.DUMMY_TYPE_USER_BRIEF)) {
+            ArrayList<UserBrief> arrayList = new ArrayList<>();
+            int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
+
+            for (int i = 0; i < 5; i++) {
+                Random r = new Random();
+
+                arrayList.add(new UserBrief("유저 " + i,
+                        Integer.toString(img_profiles[r.nextInt(3)]),
+                        "더미 유저 " + i, 0));
+            }
+
+            return (T) arrayList;
+        }
+        else if (type == resources.getInteger(R.integer.DUMMY_TYPE_USER_DETAIL)) {
+            ArrayList<UserBrief> arrayList = new ArrayList<>();
+            int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
+
+            for (int i = 0; i < 5; i++) {
+                Random r = new Random();
+
+                arrayList.add(new UserBrief("유저 " + i,
+                        Integer.toString(img_profiles[r.nextInt(3)]),
+                        "더미 유저 " + i, 0));
+            }
+
+            return (T) arrayList;
+        }else if (type == resources.getInteger(R.integer.DUMMY_TYPE_COMMENTS)) {
+            ArrayList<Review> arrayList = new ArrayList<>();
+
+            int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
+
+            Random r = new Random();
+            arrayList.add(new Review("userid",  "유저0", Integer.toString(img_profiles[r.nextInt(3)]),"내용", 3, System.currentTimeMillis()));
+            arrayList.add(new Review("userid",  "유저1", Integer.toString(img_profiles[r.nextInt(3)]),"내용", 5, System.currentTimeMillis()));
+
+            return (T) arrayList;
+        }
+        else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPE_BRIEF)) {
+            ArrayList<RecipeBrief> arrayList = new ArrayList<>();
+
+            int type_recipe = resources.getInteger(R.integer.HOMEITEM_TYPE_RECIPE);
+            int type_photo = resources.getInteger(R.integer.HOMEITEM_TYPE_PHOTO);
+            int[] img_grids = {R.raw.dummy_grid_0, R.raw.dummy_grid_1, R.raw.dummy_grid_2};
+
+            arrayList.add(new RecipeBrief(type_recipe, Integer.toString(img_grids[0]), 1));
+            for (int i = 0; i < 10; i++) {
+                Random r = new Random();
+
+                arrayList.add(new RecipeBrief(type_recipe,
+                        Integer.toString(img_grids[r.nextInt(3)]),
+                        i == 0 ? 1 : 0));
+                arrayList.add(new RecipeBrief(type_photo,
+                        Integer.toString(img_grids[r.nextInt(3)]),
+                        i == 0 ? 1 : 0));
+            }
+
+            return (T) arrayList;
+        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL)) {
+            ArrayList<Recipe> arrayList = new ArrayList<>();
+
+            int[] img_recipies = {R.raw.dummy_recipe_0, R.raw.dummy_recipe_1, R.raw.dummy_recipe_2};
+
+            ArrayList<String> ingredients = new ArrayList<>();
+            ingredients.add("재료1");
+            ingredients.add("재료2");
+            ArrayList<String> tags = new ArrayList<>();
+            ingredients.add("태그1");
+            ingredients.add("태그2");
+
+            for (int i = 1; i < 20; i++) {
+                Random r = new Random();
+
+                arrayList.add(new Recipe("요리" + i,
+                        "요리사" + i,
+                        "메세지" + i,
+                        r.nextInt(1000),
+                        Integer.toString(img_recipies[r.nextInt(3)]),
+                        ingredients,
+                        tags));
+                arrayList.add(new Recipe("요리" + (i + 1),
+                        "나",
+                        "메세지" + (i + 1),
+                        r.nextInt(1000),
+                        Integer.toString(img_recipies[r.nextInt(3)]),
+                        ingredients,
+                        tags));
+            }
+
+            return (T) arrayList;
+        }else if (type == resources.getInteger(R.integer.DUMMY_TYPE_REVIEW)) {
             ArrayList<Review> arrayList = new ArrayList<>();
 
             int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};

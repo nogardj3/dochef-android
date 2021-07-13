@@ -17,7 +17,7 @@ import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
 import com.yhjoo.dochef.adapter.RecommendAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
-import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -29,10 +29,11 @@ import io.reactivex.rxjava3.core.Observable;
 public class MainInitFragment extends Fragment {
     FMainInitBinding binding;
 
-    ArrayList<Recipe> recipes;
+    ArrayList<RecipeBrief> recipes;
 
     /*
         TODO
+        1. get recipes by tag, sort by view_count desc
         1. Recipe 서버 추가 및 기능 구현
     */
 
@@ -57,11 +58,11 @@ public class MainInitFragment extends Fragment {
                         .setCurrentItem(binding.mainAdviewpager.getCurrentItem() == imgs.size() - 1
                                 ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
 
+
         if(App.isServerAlive()){
-            // get recipes
         }
         else
-            recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+            recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
 
         RecommendAdapter recommendAdapter = new RecommendAdapter();
         recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(getContext(), RecipeDetailActivity.class)));

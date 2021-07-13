@@ -52,7 +52,7 @@ public class HomeActivity extends BaseActivity {
     RecipeGridAdapter recipeGridAdapter;
 
     ArrayList<View> revise_Icons = new ArrayList<>();
-    ArrayList<RecipeBrief> postItems = new ArrayList<>();
+    ArrayList<RecipeBrief> recipeList = new ArrayList<>();
 
     AppCompatButton appCompatButton;
     AppCompatImageView userimg;
@@ -69,6 +69,7 @@ public class HomeActivity extends BaseActivity {
         1. userHome과 합침 - MODE, OPERATION 두개로 구분
         2. UserService - headerview - recycler로 말고 밖으로 빼기
         3. RecipeService - recipe grid 꾸미기
+        4. recipe 가로로, post 세로로 각각 따로
         4. 서버 작업 / retrofit 구현
     */
 
@@ -97,9 +98,9 @@ public class HomeActivity extends BaseActivity {
         recipeGridAdapter = new RecipeGridAdapter(binding.homeRecycler);
         recipeGridAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.homeRecycler.getParent());
         recipeGridAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if (postItems.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_PHOTO))
+            if (recipeList.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_PHOTO))
                 startActivity(new Intent(HomeActivity.this, PostDetailActivity.class));
-            else if (postItems.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE))
+            else if (recipeList.get(position).getThumbnail_type() == getResources().getInteger(R.integer.HOMEITEM_TYPE_RECIPE))
                 startActivity(new Intent(HomeActivity.this, RecipeDetailActivity.class));
         });
 

@@ -22,14 +22,11 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.PermissionUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -66,7 +63,7 @@ public class PostWriteActivity extends BaseActivity {
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
-        UserBreif userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBreif.class);
+        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
         userID = userInfo.getUserID();
 
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);

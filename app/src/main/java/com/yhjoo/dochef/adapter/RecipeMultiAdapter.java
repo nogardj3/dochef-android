@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.adapter;
 
 import android.content.Intent;
-import android.text.Html;
 
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -18,7 +17,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.model.MultiItemRecipe;
-import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -51,9 +50,9 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                             .apply(RequestOptions.centerCropTransform())
                             .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
 
-                helper.setText(R.id.recipemain_title, item.getContent().getTitle());
+                helper.setText(R.id.recipemain_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipemain_nickname,
-                        String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getContent().getNickName()));
+                        String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getContent().getNickname()));
                 helper.setVisible(R.id.recipemain_other_group, false);
 
                 break;
@@ -64,8 +63,10 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
 
                 RecyclerView recyclerView = (RecyclerView) helper.getView(R.id.recommend_recyclerview);
 
-                ArrayList<Recipe> recipes = DummyMaker.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+                ArrayList<RecipeBrief> recipes = DummyMaker.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
 
+                // TODO
+                // get recipe by tag sort by view_count desc
                 RecommendAdapter recommendAdapter = new RecommendAdapter();
                 recommendAdapter.setOnItemClickListener((adapter, view, position) -> mContext.startActivity(new Intent(mContext, RecipeDetailActivity.class)));
                 recommendAdapter.setNewData(recipes);

@@ -18,7 +18,7 @@ import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.adapter.RecipeMultiAdapter;
 import com.yhjoo.dochef.databinding.FMainRecipesBinding;
 import com.yhjoo.dochef.model.MultiItemRecipe;
-import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -45,6 +45,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     /*
         TODO
+        1. get recipe sort by view_count desc
         1. Recipe 서버 추가 및 기능 구현
     */
 
@@ -53,11 +54,9 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         binding = FMainRecipesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        if(App.isServerAlive()){
-            // get recipes
-        }
+        if(App.isServerAlive()){}
         else{
-            ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+            ArrayList<RecipeBrief> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
 
             for (int i = 0; i < temp.size(); i++) {
                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));

@@ -19,7 +19,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -33,11 +32,8 @@ import com.yhjoo.dochef.fragments.MainInitFragment;
 import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -167,7 +163,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (App.isServerAlive()) {
             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             Gson gson = new Gson();
-            UserBreif userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBreif.class);
+            UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
 
             Utils.log(userInfo.toString());
 

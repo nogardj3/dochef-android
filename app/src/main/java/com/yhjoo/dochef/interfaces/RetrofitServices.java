@@ -3,12 +3,14 @@ package com.yhjoo.dochef.interfaces;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.FAQ;
+import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.model.Post;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.model.RecipeDetail;
-import com.yhjoo.dochef.model.RecipePlay;
+import com.yhjoo.dochef.model.RecipePhase;
 import com.yhjoo.dochef.model.Review;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.model.UserDetail;
 
 import java.util.ArrayList;
@@ -35,41 +37,74 @@ public class RetrofitServices {
     public interface AccountService {
         @FormUrlEncoded
         @POST("user/check/")
-        Call<UserBreif> checkUser(@Field("user_token") String token, @Field("user_id") String uid);
+        Call<UserBrief> checkUser(@Field("user_token") String token,
+                                  @Field("user_id") String uid);
 
         @FormUrlEncoded
         @POST("user/signup")
-        Call<UserBreif> createUser(@Field("user_token") String token, @Field("user_id") String uid, @Field("nickname") String nickname);
+        Call<UserBrief> createUser(@Field("user_token") String token,
+                                   @Field("user_id") String uid,
+                                   @Field("nickname") String nickname);
     }
 
     public interface UserService {
         @GET("user/")
-        Call<ArrayList<UserBreif>> getUserByNickname(@Query("nickname") String nickname);
+        Call<ArrayList<UserBrief>> getUserByNickname(@Query("nickname") String nickname);
 
         @GET("user/detail")
         Call<ArrayList<UserDetail>> getUserDetail(@Query("user_id") String user_id);
 
         @GET("user/follower")
-        Call<ArrayList<UserBreif>> getFollowers(@Query("user_id") String user_id, @Query("target_id") String target_id);
+        Call<ArrayList<UserBrief>> getFollowers(@Query("user_id") String user_id,
+                                                @Query("target_id") String target_id);
 
         @GET("user/following")
-        Call<ArrayList<UserBreif>> getFollowings(@Query("user_id") String user_id, @Query("target_id") String target_id);
+        Call<ArrayList<UserBrief>> getFollowings(@Query("user_id") String user_id,
+                                                 @Query("target_id") String target_id);
 
         @FormUrlEncoded
         @POST("user/subscribe")
-        Call<ArrayList<UserBreif>> subscribeUser(@Query("user_id") String user_id, @Query("target_id") String target_id);
+        Call<ArrayList<UserBrief>> subscribeUser(@Query("user_id") String user_id,
+                                                 @Query("target_id") String target_id);
 
         @FormUrlEncoded
         @POST("user/unsubscribe")
-        Call<ArrayList<UserBreif>> unsubscribeUser(@Query("user_id") String user_id, @Query("target_id") String target_id);
+        Call<ArrayList<UserBrief>> unsubscribeUser(@Query("user_id") String user_id,
+                                                   @Query("target_id") String target_id);
     }
 
     public interface RecipeService {
         @GET("recipe/detail")
-        Call<RecipePlay> getRecipeDetail(@Field("recipe_id") int recipeId);
+        Call<RecipeDetail> getRecipeDetail(@Field("recipe_id") int recipeId);
 
-        @GET("recipe/default")
-        Call<RecipeDetail> getRecipe(@Field("recipe_id") int recipeId);
+        @GET("recipe/")
+        Call<RecipeBrief> getRecipeByUserID(@Field("user_id") int recipeId);
+
+        @GET("recipe/")
+        Call<RecipeBrief> getRecipeByName(@Field("recipe_name") String recipeName);
+
+        @GET("recipe/")
+        Call<RecipeBrief> getRecipeByIngredient(@Field("ingredient") String ingredient);
+
+        @GET("recipe/")
+        Call<RecipeBrief> getRecipeByTag(@Field("tag") String tag);
+
+        @POST("recipe/count")
+        Call<JsonObject> addCount(@Field("recipe_id") int recipeId);
+
+        @POST("review/create")
+        Call<JsonObject> createRecipe(@Field("user_id") String userID,
+                                      @Field("recipe_name") String recipeName,
+                                      @Field("recipe_img") String recipeImg,
+                                      @Field("contents") String contents,
+                                      @Field("datetime") long datetime,
+                                      @Field("amount_time") String amountTime,
+                                      @Field("ingredients") Ingredient[] ingredients,
+                                      @Field("tags") String[] tags,
+                                      @Field("phase") RecipePhase[] phases);
+
+        @POST("review/delete")
+        Call<JsonObject> updateRecipe(@Query("recipe_id") int recipeId);
     }
 
     public interface ReviewService {
@@ -98,7 +133,9 @@ public class RetrofitServices {
 
         @FormUrlEncoded
         @POST("post/like")
-        Call<JsonObject> likePost(@Field("user_id") String userID, @Field("post_id") int postID, @Field("like") int like);
+        Call<JsonObject> likePost(@Field("user_id") String userID,
+                                  @Field("post_id") int postID,
+                                  @Field("like") int like);
 
         @FormUrlEncoded
         @POST("post/create")

@@ -39,7 +39,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
         MobileAds.initialize(this);
 
-        ArrayList<Recipe> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        ArrayList<Recipe> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
         for (int i = 0; i < arrayList.size(); i++) {
             recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
             if (i != 0 && i % 4 == 0)

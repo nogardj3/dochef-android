@@ -9,14 +9,15 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 
-public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
+public class RecommendAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHolder> {
     public RecommendAdapter() {
             super(R.layout.li_recipe_recommend);
         }
 
         @Override
-        protected void convert(BaseViewHolder helper, Recipe item) {
+        protected void convert(BaseViewHolder helper, RecipeBrief item) {
             if (App.isServerAlive())
                 Glide.with(mContext)
                         .load(item.getRecipeImg())
@@ -28,8 +29,8 @@ public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
                         .apply(RequestOptions.centerCropTransform())
                         .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
 
-            helper.setText(R.id.reciperecommend_title, item.getTitle());
+            helper.setText(R.id.reciperecommend_title, item.getRecipeName());
             helper.setText(R.id.reciperecommend_nickname,
-                    String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickName()));
+                    String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickname()));
         }
     }

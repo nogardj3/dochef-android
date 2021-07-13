@@ -8,10 +8,10 @@ public class MultiItemRecipe implements MultiItemEntity {
     private final int VIEWHOLDER_ITEM = 3;
 
         int itemType;
-        Recipe content;
+        RecipeBrief content;
         String pager_title;
 
-    public MultiItemRecipe(int itemType, Recipe content) {
+    public MultiItemRecipe(int itemType, RecipeBrief content) {
             this.itemType = itemType;
             this.content = content;
         }
@@ -29,7 +29,7 @@ public class MultiItemRecipe implements MultiItemEntity {
             return pager_title;
         }
 
-    public Recipe getContent() {
+    public RecipeBrief getContent() {
             return content;
         }
 

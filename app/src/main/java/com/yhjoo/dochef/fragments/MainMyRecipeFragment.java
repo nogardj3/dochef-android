@@ -15,7 +15,7 @@ import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.adapter.RecipeMultiAdapter;
 import com.yhjoo.dochef.databinding.FMainMyrecipeBinding;
 import com.yhjoo.dochef.model.MultiItemRecipe;
-import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeBrief;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -33,7 +33,9 @@ public class MainMyRecipeFragment extends Fragment {
 
     /*
         TODO
+        1. get recipe by userId sort by datetime desc
         1. Recipe 서버 추가 및 기능 구현
+
     */
 
     @Override
@@ -41,7 +43,8 @@ public class MainMyRecipeFragment extends Fragment {
         binding = FMainMyrecipeBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        // get recipe by recipe sort by datetime desc
+        ArrayList<RecipeBrief> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
 
         for (int i = 0; i < temp.size(); i++) {
             recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));

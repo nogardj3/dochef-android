@@ -20,7 +20,7 @@ import com.yhjoo.dochef.databinding.FResultBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -47,7 +47,10 @@ public class ResultFragment extends Fragment {
 
     /*
         TODO
-        1. Recipe 서버 추가 및 기능 구현
+        1. get recipe by recipename sort by view_count desc
+        2. get recipe by ingredient sort by view_count desc
+        3. get recipe by tag sort by view_count desc
+        4. Recipe 서버 추가 및 기능 구현
     */
 
     @Override
@@ -78,7 +81,7 @@ public class ResultFragment extends Fragment {
                     break;
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class);
-                    intent2.putExtra("userID", ((UserBreif) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
+                    intent2.putExtra("userID", ((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
@@ -112,7 +115,7 @@ public class ResultFragment extends Fragment {
     }
 
     void loadList() {
-        ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
+        ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
 
         switch (type) {
             case VIEWHOLDER_ITEM_RECIPE:
@@ -131,21 +134,21 @@ public class ResultFragment extends Fragment {
                 break;
             case VIEWHOLDER_ITEM_USER:
                 userService.getUserByNickname(keyword)
-                        .enqueue(new BasicCallback<ArrayList<UserBreif>>(getContext()) {
+                        .enqueue(new BasicCallback<ArrayList<UserBrief>>(getContext()) {
                             @Override
-                            public void onResponse(Call<ArrayList<UserBreif>> call, Response<ArrayList<UserBreif>> response) {
+                            public void onResponse(Call<ArrayList<UserBrief>> call, Response<ArrayList<UserBrief>> response) {
                                 super.onResponse(call, response);
                                 if (response.code() == 500) {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
-                                    ArrayList<UserBreif> userBreif = response.body();
+                                    ArrayList<UserBrief> userBrief = response.body();
                                     ArrayList<MultiItemResult> userListItem = new ArrayList<>();
 
                                     for (int i = 0; i < response.body().size(); i++) {
                                         if (i % 5 != 4)
-                                            userListItem.add(new MultiItemResult<>(type, userBreif.get(i)));
+                                            userListItem.add(new MultiItemResult<>(type, userBrief.get(i)));
                                         else {
-                                            userListItem.add(new MultiItemResult<>(type, userBreif.get(i)));
+                                            userListItem.add(new MultiItemResult<>(type, userBrief.get(i)));
                                             userListItem.add(new MultiItemResult<>(VIEWHOLDER_AD));
                                         }
                                     }

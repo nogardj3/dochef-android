@@ -2,7 +2,7 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UserBreif {
+public class UserBrief {
     @SerializedName("user_id")
     private String userID;
     @SerializedName("profile_img_url")
@@ -12,7 +12,7 @@ public class UserBreif {
     @SerializedName("is_follow")
     private int is_follow;
 
-    public UserBreif(String userID, String userImg, String nickname, int is_follow) {
+    public UserBrief(String userID, String userImg, String nickname, int is_follow) {
         this.userID = userID;
         this.userImg = userImg;
         this.nickname = nickname;

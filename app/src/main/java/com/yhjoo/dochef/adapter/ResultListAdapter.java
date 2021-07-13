@@ -15,7 +15,7 @@ import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 
 import java.util.List;
 
@@ -49,7 +49,7 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                     break;
 
                 case VIEWHOLDER_ITEM_USER:
-                    UserBreif ele = (UserBreif) item.getContent();
+                    UserBrief ele = (UserBrief) item.getContent();
 
                     if (!ele.getUserImg().equals("default"))
                         Glide.with(mContext)

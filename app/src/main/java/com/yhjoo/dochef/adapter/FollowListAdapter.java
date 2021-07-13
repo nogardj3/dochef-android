@@ -7,9 +7,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.UserBreif;
+import com.yhjoo.dochef.model.UserBrief;
 
-public class FollowListAdapter extends BaseQuickAdapter<UserBreif, BaseViewHolder> {
+public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolder> {
     String userID;
 
     public FollowListAdapter(String userID) {
@@ -18,7 +18,7 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBreif, BaseViewHolde
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, UserBreif item) {
+    protected void convert(BaseViewHolder helper, UserBrief item) {
         if (!item.getUserImg().equals("default")) {
             Glide.with(mContext)
                     .load(App.isServerAlive()
