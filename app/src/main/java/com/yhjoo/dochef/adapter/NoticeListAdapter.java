@@ -28,7 +28,7 @@ public class NoticeListAdapter extends BaseMultiItemQuickAdapter<MultiItemEntity
                 helper.setText(R.id.exp_title_title, lv0.title)
                         .setImageResource(R.id.exp_title_icon, lv0.isExpanded() ? R.drawable.ic_arrow_downward_black_24dp : R.drawable.ic_arrow);
                 helper.itemView.setOnClickListener(v -> {
-                    int pos = helper.getAbsoluteAdapterPosition();
+                    int pos = helper.getAdapterPosition();
                     if (lv0.isExpanded()) {
                         collapse(pos);
                     } else {

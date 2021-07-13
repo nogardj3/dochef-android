@@ -88,7 +88,7 @@ public class FollowListActivity extends BaseActivity {
         binding.followlistRecycler.setAdapter(followListAdapter);
     }
 
-    public void getFollower(){
+    void getFollower(){
         userService.getFollowers(active_userid, target_id)
                 .enqueue(new BasicCallback<ArrayList<UserBreif>>(FollowListActivity.this) {
                     @Override
@@ -99,7 +99,7 @@ public class FollowListActivity extends BaseActivity {
                 });
     }
 
-    public void getFollowing(){
+    void getFollowing(){
         userService.getFollowings(active_userid, target_id)
                 .enqueue(new BasicCallback<ArrayList<UserBreif>>(FollowListActivity.this) {
                     @Override

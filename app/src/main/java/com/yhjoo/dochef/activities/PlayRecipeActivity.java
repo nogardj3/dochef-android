@@ -251,7 +251,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
                     @Override
                     public void onDone(String utteranceId) {
-                        startlistening();
+                        startListening();
                     }
 
                     @Override
@@ -263,7 +263,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         }
     }
 
-    void starttimer() {
+    void startTimer() {
         timerSet = true;
         ViewAnimator.animate(binding.playrecipeTimerFab)
                 .onStart(() -> binding.playrecipeTimerFab.setClickable(false))
@@ -297,13 +297,13 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
     void toggleFab(View v) {
         if (timerSet) {
-            stoptimer();
+            stopTimer();
         } else {
-            starttimer();
+            startTimer();
         }
     }
 
-    void stoptimer() {
+    void stopTimer() {
         timerSet = false;
         ViewAnimator.animate(binding.playrecipeTimerFab)
                 .onStart(() -> binding.playrecipeTimerFab.setClickable(false))
@@ -322,7 +322,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
             player.stop();
     }
 
-    void startlistening() {
+    void startListening() {
         Observable.timer(10, TimeUnit.MILLISECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -386,7 +386,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                                     break;
                                 case "시작":
                                     if (binding.playrecipeViewpager.getCurrentItem() != 0 || binding.playrecipeViewpager.getCurrentItem() != recipePlays.size() - 1)
-                                        starttimer();
+                                        startTimer();
                                     break;
                             }
                         }

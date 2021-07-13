@@ -45,21 +45,22 @@ public class RecipeDetailActivity extends BaseActivity {
         RetrofitServices.OverViewService overViewService = RetrofitBuilder.create(this, RetrofitServices.OverViewService.class);
 
         int recipdID = 1;
-        overViewService.LoadOverViewCall(recipdID).enqueue(new Callback<RecipeDetail>() {
-            @Override
-            public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response) {
-                try {
-                    setTopView(response.body());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+        overViewService.LoadOverViewCall(recipdID)
+                .enqueue(new Callback<RecipeDetail>() {
+                    @Override
+                    public void onResponse(Call<RecipeDetail> call, Response<RecipeDetail> response) {
+                        try {
+                            setTopView(response.body());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
 
-            @Override
-            public void onFailure(Call<RecipeDetail> call, Throwable t) {
-                t.printStackTrace();
-            }
-        });
+                    @Override
+                    public void onFailure(Call<RecipeDetail> call, Throwable t) {
+                        t.printStackTrace();
+                    }
+                });
     }
 
     void setTopView(RecipeDetail recipeDetail) {
@@ -84,7 +85,7 @@ public class RecipeDetailActivity extends BaseActivity {
             JSONArray tagsArray = new JSONArray(recipeDetail.getTag());
 
             for (int i = 0; i < tagsArray.length(); i++) {
-                AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
+                AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag, null);
                 textView.setText("#" + tagsArray.getString(i) + " ");
 
                 binding.recipedetailTags.addView(textView);

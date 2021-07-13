@@ -37,7 +37,7 @@ public class PlayRecipeItemFragment extends Fragment {
 
         binding.playrecipeItemIngredients.removeAllViews();
         for (int i = 0; i < recipePlay.getIngredients().length; i++) {
-            LinearLayout motherview = (LinearLayout) getActivity().getLayoutInflater().inflate(R.layout.v_ingredient, null);
+            LinearLayout motherview = (LinearLayout) getLayoutInflater().inflate(R.layout.v_ingredient, null);
             ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_product)).setText(recipePlay.getIngredients()[i]);
             ((AppCompatTextView) motherview.findViewById(R.id.v_ingredient_quantity)).setText("0");
             binding.playrecipeItemIngredients.addView(motherview);

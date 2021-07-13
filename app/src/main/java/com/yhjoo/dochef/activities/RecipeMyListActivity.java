@@ -22,7 +22,7 @@ import com.yhjoo.dochef.model.Recipe;
 import java.util.ArrayList;
 
 public class RecipeMyListActivity extends BaseActivity {
-    private enum OPERATION {VIEW, ALIGN}
+    enum OPERATION {VIEW, ALIGN}
 
     ARecipelistBinding binding;
 

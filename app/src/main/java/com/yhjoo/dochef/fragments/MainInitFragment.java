@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,17 +7,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.viewpager.widget.PagerAdapter;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
+import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
 import com.yhjoo.dochef.adapter.RecommendAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.model.Recipe;
@@ -49,10 +45,10 @@ public class MainInitFragment extends Fragment {
         imgs.add(R.drawable.ad_temp_0);
         imgs.add(R.drawable.ad_temp_1);
 
-        binding.mainAdviewpager.setAdapter(new ImagePagerAdapter(MainInitFragment.this.getContext(), imgs));
+        binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
         binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
         binding.mainRecommendMore.setOnClickListener(
-                v -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeThemeActivity.class)));
+                v -> startActivity(new Intent(getContext(), RecipeThemeActivity.class)));
 
         Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -66,51 +62,11 @@ public class MainInitFragment extends Fragment {
             recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPIES));
 
         RecommendAdapter recommendAdapter = new RecommendAdapter();
-        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(MainInitFragment.this.getActivity(), RecipeDetailActivity.class)));
+        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(getContext(), RecipeDetailActivity.class)));
         recommendAdapter.setNewData(recipes);
         binding.mainRecommendRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
 
         return view;
-    }
-
-    class ImagePagerAdapter extends PagerAdapter {
-        Context mContext;
-        ArrayList<Integer> imgids;
-
-        public ImagePagerAdapter(Context context, ArrayList<Integer> imgids) {
-            this.mContext = context;
-            this.imgids = imgids;
-        }
-
-        @Override
-        public Object instantiateItem(ViewGroup collection, int position) {
-            AppCompatImageView aa = new AppCompatImageView(mContext);
-            ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            aa.setLayoutParams(lp);
-            Glide.with(mContext)
-                    .load(imgids.get(position))
-                    .apply(RequestOptions.centerInsideTransform())
-                    .into(aa);
-
-            collection.addView(aa);
-
-            return aa;
-        }
-
-        @Override
-        public void destroyItem(ViewGroup collection, int position, Object view) {
-            collection.removeView((View) view);
-        }
-
-        @Override
-        public int getCount() {
-            return imgids.size();
-        }
-
-        @Override
-        public boolean isViewFromObject(View view, Object object) {
-            return view == object;
-        }
     }
 }
