@@ -38,8 +38,7 @@ public class FollowListActivity extends BaseActivity {
 
     /*
         TODO
-        follower, following 반대인가?
-
+        follower, following 반대인듯
     */
 
     @Override

@@ -229,7 +229,6 @@ public class PostDetailActivity extends BaseActivity {
                         } else {
                             commentList = response.body();
                             commentListAdapter.setNewData(commentList);
-                            commentListAdapter.setEmptyView(R.layout.rv_comment_empty, (ViewGroup) binding.postCommentRecycler.getParent());
                         }
                     }
                 });
