@@ -15,10 +15,11 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.RecipeListAdapter;
 import com.yhjoo.dochef.databinding.ARecipelistBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
 
@@ -32,7 +33,7 @@ public class RecipeMyListActivity extends BaseActivity {
 
     RetrofitServices.RecipeService recipeService;
 
-    ArrayList<RecipeBrief> recipeList = new ArrayList<>();
+    ArrayList<Recipe> recipeList = new ArrayList<>();
     String userID = "";
 
     /*
@@ -48,6 +49,8 @@ public class RecipeMyListActivity extends BaseActivity {
 
         setSupportActionBar(binding.recipelistToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
@@ -79,16 +82,16 @@ public class RecipeMyListActivity extends BaseActivity {
         if (App.isServerAlive()) {
             getRecipeList();
         } else {
-            recipeList = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_BRIEF));
+            recipeList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
             recipeListAdapter.setNewData(recipeList);
         }
     }
 
-    void getRecipeList(){
+    void getRecipeList() {
         recipeService.getRecipeByUserID(userID)
-                .enqueue(new BasicCallback<ArrayList<RecipeBrief>>(this) {
+                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
                     @Override
-                    public void onResponse(Call<ArrayList<RecipeBrief>> call, Response<ArrayList<RecipeBrief>> response) {
+                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                         super.onResponse(call, response);
 
                         if (response.code() == 403)

@@ -17,10 +17,8 @@ public class UserDetail {
     private int followerCount;
     @SerializedName("following_count")
     private int followingCount;
-    @SerializedName("is_follow")
-    private int is_following;
 
-    public UserDetail(String userID, String userImg, String nickname, String profileText, int recipeCount, int followerCount, int followingCount, int is_following) {
+    public UserDetail(String userID, String userImg, String nickname, String profileText, int recipeCount, int followerCount, int followingCount) {
         this.userID = userID;
         this.userImg = userImg;
         this.nickname = nickname;
@@ -28,7 +26,6 @@ public class UserDetail {
         this.recipeCount = recipeCount;
         this.followerCount = followerCount;
         this.followingCount = followingCount;
-        this.is_following = is_following;
     }
 
     public String getUserID() {
@@ -59,7 +56,16 @@ public class UserDetail {
         return followingCount;
     }
 
-    public int getIs_following() {
-        return is_following;
+    @Override
+    public String toString() {
+        return "UserDetail{" +
+                "userID='" + userID + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", profileText='" + profileText + '\'' +
+                ", recipeCount=" + recipeCount +
+                ", followerCount=" + followerCount +
+                ", followingCount=" + followingCount +
+                '}';
     }
 }

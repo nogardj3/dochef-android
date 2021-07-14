@@ -2,7 +2,7 @@
 <resources>
     <string-array name="main_menu">
         <item>메인</item>
-        <item>레시피들</item>
+        <item>인기레시피</item>
         <item>내 레시피</item>
         <item>타임라인</item>
     </string-array>

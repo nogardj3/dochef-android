@@ -166,10 +166,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
 
             Utils.log(userInfo.toString());
+            Utils.log(!userInfo.getUserImg().equals("default"));
 
             userName.setText(userInfo.getNickname());
 
-            if(userInfo.getUserImg()!="default")
+            if(!userInfo.getUserImg().equals("default"))
                 Glide.with(this)
                         .load(getString(R.string.storage_image_url_profile) + userInfo.getUserImg())
                         .into(userImage);

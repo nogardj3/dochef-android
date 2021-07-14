@@ -8,30 +8,29 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.model.Recipe;
 
-public class RecommendAdapter extends BaseQuickAdapter<RecipeBrief, BaseViewHolder> {
+public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
     public RecommendAdapter() {
-            super(R.layout.li_recipe_recommend);
-        }
+        super(R.layout.li_recipe_recommend);
+    }
 
-        @Override
-        protected void convert(BaseViewHolder helper, RecipeBrief item) {
-            if (App.isServerAlive()){
-                if (!item.getRecipeImg().equals("default"))
-                    Glide.with(mContext)
-                            .load(item.getRecipeImg())
-                            .apply(RequestOptions.centerCropTransform())
-                            .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
-            }
-            else
+    @Override
+    protected void convert(BaseViewHolder helper, Recipe item) {
+        if (App.isServerAlive()) {
+            if (!item.getRecipeImg().equals("default"))
                 Glide.with(mContext)
-                        .load(Integer.parseInt(item.getRecipeImg()))
+                        .load(item.getRecipeImg())
                         .apply(RequestOptions.centerCropTransform())
                         .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
+        } else
+            Glide.with(mContext)
+                    .load(Integer.parseInt(item.getRecipeImg()))
+                    .apply(RequestOptions.centerCropTransform())
+                    .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
 
-            helper.setText(R.id.reciperecommend_title, item.getRecipeName());
-            helper.setText(R.id.reciperecommend_nickname,
-                    String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getNickname()));
-        }
+        helper.setText(R.id.reciperecommend_title, item.getRecipeName());
+        helper.setText(R.id.reciperecommend_nickname,
+                String.format(mContext.getResources().getString(R.string.string_format_usernickname), item.getNickname()));
     }
+}

@@ -16,8 +16,10 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
+import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.MultiItemRecipe;
-import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.utils.DummyMaker;
 
 import java.util.ArrayList;
@@ -33,20 +35,20 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
         addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_main);
+
     }
 
     @Override
     protected void convert(BaseViewHolder helper, MultiItemRecipe item) {
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
-                if (App.isServerAlive()){
+                if (App.isServerAlive()) {
                     if (!item.getContent().getRecipeImg().equals("default"))
                         Glide.with(mContext)
                                 .load(item.getContent().getRecipeImg())
                                 .apply(RequestOptions.centerCropTransform())
                                 .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
-                }
-                else
+                } else
                     Glide.with(mContext)
                             .load(Integer.parseInt(item.getContent().getRecipeImg()))
                             .apply(RequestOptions.centerCropTransform())
@@ -54,7 +56,7 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
 
                 helper.setText(R.id.recipemain_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipemain_nickname,
-                        String.format(mContext.getResources().getString(R.string.string_format_usernickname),item.getContent().getNickname()));
+                        String.format(mContext.getResources().getString(R.string.string_format_usernickname), item.getContent().getNickname()));
                 helper.setVisible(R.id.recipemain_other_group, false);
 
                 break;
@@ -65,7 +67,7 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
 
                 RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
 
-                ArrayList<RecipeBrief> recipes = DummyMaker.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+                ArrayList<Recipe> recipes = DummyMaker.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
 
                 // TODO
                 // get recipe by tag sort by view_count desc

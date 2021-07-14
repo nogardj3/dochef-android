@@ -18,20 +18,12 @@ public class Comment {
     @SerializedName("datetime")
     private long dateTime;
 
-    // Detail
     public Comment(int commentID, int postID, String userID, String nickName, String userImg, String contents, long dateTime) {
         this.commentID = commentID;
         this.postID = postID;
         this.userID = userID;
         this.nickName = nickName;
         this.userImg = userImg;
-        this.contents = contents;
-        this.dateTime = dateTime;
-    }
-
-    // Dummy
-    public Comment(String nickName, String contents, long dateTime) {
-        this.nickName = nickName;
         this.contents = contents;
         this.dateTime = dateTime;
     }

@@ -17,7 +17,7 @@ import com.yhjoo.dochef.adapter.RecipeMultiAdapter;
 import com.yhjoo.dochef.databinding.FMainMyrecipeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemRecipe;
-import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -44,7 +44,7 @@ public class MainMyRecipeFragment extends Fragment {
     /*
         TODO
         1. get recipe by userId sort by datetime desc
-        1. Recipe 서버 추가 및 기능 구현
+        like recipe 추가 -> 뷰 내거 아님 남거 추가
 
     */
 
@@ -66,11 +66,10 @@ public class MainMyRecipeFragment extends Fragment {
         binding.fMyrecipeRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
         binding.fMyrecipeRecycler.setAdapter(recipeMultiAdapter);
 
-        if(App.isServerAlive()){
+        if (App.isServerAlive()) {
             getRecipelist();
-        }
-        else{
-            ArrayList<RecipeBrief> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_BRIEF));
+        } else {
+            ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
 
             for (int i = 0; i < temp.size(); i++) {
                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
@@ -90,17 +89,17 @@ public class MainMyRecipeFragment extends Fragment {
         return view;
     }
 
-    void getRecipelist(){
+    void getRecipelist() {
         recipeService.getRecipeByTag("매운맛")
-                .enqueue(new BasicCallback<ArrayList<RecipeBrief>>(this.getContext()) {
+                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
                     @Override
-                    public void onResponse(Call<ArrayList<RecipeBrief>> call, Response<ArrayList<RecipeBrief>> response) {
+                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                         super.onResponse(call, response);
 
                         if (response.code() == 403)
                             App.getAppInstance().showToast("뭔가에러");
                         else {
-                            ArrayList<RecipeBrief> temp = response.body();
+                            ArrayList<Recipe> temp = response.body();
 
                             for (int i = 0; i < temp.size(); i++) {
                                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));

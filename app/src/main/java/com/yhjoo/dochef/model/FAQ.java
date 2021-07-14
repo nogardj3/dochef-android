@@ -20,4 +20,12 @@ public class FAQ {
     public String getContents() {
         return contents;
     }
+
+    @Override
+    public String toString() {
+        return "FAQ{" +
+                "title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                '}';
+    }
 }

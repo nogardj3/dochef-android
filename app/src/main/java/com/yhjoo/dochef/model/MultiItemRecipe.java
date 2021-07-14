@@ -3,15 +3,11 @@ package com.yhjoo.dochef.model;
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
 public class MultiItemRecipe implements MultiItemEntity {
-    private final int VIEWHOLDER_AD = 1;
-    private final int VIEWHOLDER_PAGER = 2;
-    private final int VIEWHOLDER_ITEM = 3;
-
     int itemType;
-    RecipeBrief content;
+    Recipe content;
     String pager_title;
 
-    public MultiItemRecipe(int itemType, RecipeBrief content) {
+    public MultiItemRecipe(int itemType, Recipe content) {
         this.itemType = itemType;
         this.content = content;
     }
@@ -29,7 +25,7 @@ public class MultiItemRecipe implements MultiItemEntity {
         return pager_title;
     }
 
-    public RecipeBrief getContent() {
+    public Recipe getContent() {
         return content;
     }
 

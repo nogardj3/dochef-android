@@ -167,6 +167,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
+                android:overScrollMode="never"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toRightOf="@id/post_time"
                 app:layout_constraintTop_toBottomOf="@+id/post_like"

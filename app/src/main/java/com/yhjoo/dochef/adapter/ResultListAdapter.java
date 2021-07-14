@@ -94,7 +94,7 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                     helper.setText(R.id.reciperesult_nickname,String.format(mContext.getResources().getString(R.string.string_format_usernickname),recipeItem2.getNickname()));
                     helper.setVisible(R.id.reciperesult_ingredients, true);
 
-                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
+//                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
 //                    ((TagView) helper.getView(R.id.reciperesult_ingredients)).setTagList(((Recipe) item.getContent()).getIngredient());
                     break;
 
@@ -119,8 +119,8 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                     helper.setText(R.id.reciperesult_nickname,String.format(mContext.getResources().getString(R.string.string_format_usernickname),recipeItem3.getNickname()));
                     helper.setVisible(R.id.reciperesult_tags, true);
 
-                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
-                    ((TagView) helper.getView(R.id.reciperesult_tags)).setTagList(recipeItem3.getTags());
+//                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
+//                    ((TagView) helper.getView(R.id.reciperesult_tags)).setTagList(recipeItem3.getTags());
 
                     break;
 

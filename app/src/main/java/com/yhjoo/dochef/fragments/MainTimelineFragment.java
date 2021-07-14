@@ -23,6 +23,7 @@ import com.yhjoo.dochef.databinding.FMainTimelineBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -37,13 +38,14 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
     FMainTimelineBinding binding;
     RetrofitServices.PostService postService;
     PostListAdapter postListAdapter;
+    ArrayList<Post> postList;
 
     /*
         TODO
         postDetail = 수정 O, 댓글 많이, 댓글 작성 가능
         timeline   = 수정 X, 댓글 하나, 댓글 작성 불가
 
-        1. 실행 해보고 수정할거 수정하기
+        swipe refresh 왜 안됨
     */
 
     @Override
@@ -57,7 +59,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
         postListAdapter = new PostListAdapter();
         binding.timelineSwipe.setOnRefreshListener(this);
         binding.timelineSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
-
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.timelineRecycler.getParent());
         postListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
@@ -110,6 +111,12 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
     public void onResume() {
         super.onResume();
         refreshPost();
+        if (App.isServerAlive()) {
+            getPostList();
+        } else {
+            postList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST));
+            postListAdapter.setNewData(postList);
+        }
     }
 
     void refreshPost() {
@@ -126,6 +133,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
                         } else {
+                            postList = response.body();
                             postListAdapter.setNewData(response.body());
                             postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.timelineSwipe.getParent());
 

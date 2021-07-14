@@ -38,8 +38,8 @@ public class ResultFragment extends Fragment {
     private final int VIEWHOLDER_ITEM_TAG = 4;
 
     FResultBinding binding;
-    RetrofitServices.UserService userService;
     RetrofitServices.RecipeService recipeService;
+    RetrofitServices.UserService userService;
     ResultListAdapter resultListAdapter;
 
     String keyword;
@@ -69,7 +69,6 @@ public class ResultFragment extends Fragment {
         else
             resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_recipe_result);
 
-
         resultListAdapter.setEmptyView(R.layout.rv_search, (ViewGroup) binding.resultRecycler.getParent());
         resultListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             switch (adapter.getItemViewType(position)) {
@@ -87,7 +86,6 @@ public class ResultFragment extends Fragment {
                     break;
             }
         });
-        resultListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.resultRecycler.getParent());
         binding.resultRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
         binding.resultRecycler.setAdapter(resultListAdapter);
 
@@ -116,7 +114,7 @@ public class ResultFragment extends Fragment {
     }
 
     void loadList() {
-        ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+        ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
 
         switch (type) {
             case VIEWHOLDER_ITEM_RECIPE:

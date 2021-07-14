@@ -52,7 +52,9 @@ public class PostDetailActivity extends BaseActivity {
         postDetail = 수정 O, 댓글 많이, 댓글 작성 가능
         timeline   = 수정 X, 댓글 하나, 댓글 작성 불가
 
-        1. tags 확인
+        tags
+        edittext design
+
     */
 
     @Override
@@ -100,10 +102,9 @@ public class PostDetailActivity extends BaseActivity {
         if (App.isServerAlive()) {
             getPostInfo(postID);
             getCommentList(postID);
-        }
-        else{
-            postInfo = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_POST));
-            commentList = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS));
+        } else {
+            postInfo = ((ArrayList<Post>) DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST))).get(0);
+            commentList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS));
 
             setTopView();
             commentListAdapter.setNewData(commentList);
@@ -130,20 +131,35 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     void setTopView() {
-        if (!postInfo.getPostImg().equals("default")) {
+        if (App.isServerAlive()) {
+            if (!postInfo.getPostImg().equals("")) {
+                binding.postPostimg.setVisibility(View.VISIBLE);
+                Glide.with(this)
+                        .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
+                        .into(binding.postPostimg);
+            }
+            if (!postInfo.getUserImg().equals("default"))
+                Glide.with(this)
+                        .load(getString(R.string.storage_image_url_profile) + postInfo.getUserImg())
+                        .circleCrop()
+                        .into(binding.postUserimg);
+        } else {
             binding.postPostimg.setVisibility(View.VISIBLE);
             Glide.with(this)
-                    .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
-                    .apply(RequestOptions.centerCropTransform())
+                    .load(Integer.parseInt(postInfo.getPostImg()))
                     .into(binding.postPostimg);
+            Glide.with(this)
+                    .load(Integer.parseInt(postInfo.getUserImg()))
+                    .circleCrop()
+                    .into(binding.postUserimg);
         }
 
-        if (!postInfo.getUserImg().equals("default"))
-            Glide.with(this)
-                    .load(getString(R.string.storage_image_url_profile) + postInfo.getUserImg())
-                    .into(binding.postUserimg);
 
         binding.postNickname.setText(postInfo.getNickname());
+        binding.postContents.setText(postInfo.getContents());
+        binding.postTime.setText(Utils.convertMillisToText(postInfo.getDateTime()));
+        binding.postLikecount.setText(Integer.toString(postInfo.getLikes().size()));
+        binding.postCommentcount.setText(Integer.toString(postInfo.getComments().size()));
         binding.postUserGroup.setOnClickListener(v -> {
             Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class);
             if (postInfo.getUserID().equals(userID))
@@ -154,10 +170,6 @@ public class PostDetailActivity extends BaseActivity {
             }
             startActivity(intent);
         });
-
-        binding.postLikecount.setText(Integer.toString(postInfo.getLikes().size()));
-        binding.postContents.setText(postInfo.getContents());
-        binding.postTime.setText(Utils.convertMillisToText(postInfo.getDateTime()));
 
         if (postInfo.getLikes().contains(userID))
             binding.postLike.setImageResource(R.drawable.ic_favorite_24dp);

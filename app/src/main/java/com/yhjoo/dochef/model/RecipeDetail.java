@@ -8,7 +8,7 @@ public class RecipeDetail {
     @SerializedName("recipe_id")
     private int recipeID;
     @SerializedName("recipe_name")
-    private int recipeName;
+    private String recipeName;
     @SerializedName("user_id")
     private String userID;
     @SerializedName("nickname")
@@ -28,13 +28,13 @@ public class RecipeDetail {
     @SerializedName("rating")
     private int rating;
     @SerializedName("ingredients")
-    private Ingredient ingredient;
+    private String[] ingredient;
     @SerializedName("tags")
     private String[] tags;
     @SerializedName("phase")
     private RecipePhase phases;
 
-    public RecipeDetail(int recipeID, int recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, Ingredient ingredient, String[] tags, RecipePhase phases) {
+    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, String[] ingredient, String[] tags, RecipePhase phases) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -51,11 +51,25 @@ public class RecipeDetail {
         this.phases = phases;
     }
 
+    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating) {
+        this.recipeID = recipeID;
+        this.recipeName = recipeName;
+        this.userID = userID;
+        this.nickname = nickname;
+        this.userImg = userImg;
+        this.recipeImg = recipeImg;
+        this.contents = contents;
+        this.datetime = datetime;
+        this.amount_time = amount_time;
+        this.view_count = view_count;
+        this.rating = rating;
+    }
+
     public int getRecipeID() {
         return recipeID;
     }
 
-    public int getRecipeName() {
+    public String getRecipeName() {
         return recipeName;
     }
 
@@ -95,7 +109,7 @@ public class RecipeDetail {
         return rating;
     }
 
-    public Ingredient getIngredient() {
+    public String[] getIngredient() {
         return ingredient;
     }
 

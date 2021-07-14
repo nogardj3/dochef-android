@@ -27,4 +27,13 @@ public class Notice {
     public long getDateTime() {
         return dateTime;
     }
+
+    @Override
+    public String toString() {
+        return "Notice{" +
+                "title='" + title + '\'' +
+                ", contents='" + contents + '\'' +
+                ", dateTime=" + dateTime +
+                '}';
+    }
 }

@@ -39,7 +39,7 @@ public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme
                         Glide.with(mContext)
                                 .load(Integer.parseInt(item.getContent().getRecipeImg()))
                                 .apply(RequestOptions.centerCropTransform())
-                                .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
+                                .into((AppCompatImageView) helper.getView(R.id.recipetheme_img));
                     }
 
                     helper.setText(R.id.recipetheme_title, item.getContent().getRecipeName());

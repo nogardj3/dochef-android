@@ -8,7 +8,7 @@ public class Recipe {
     @SerializedName("recipe_id")
     private int recipeID;
     @SerializedName("recipe_name")
-    private int recipeName;
+    private String recipeName;
     @SerializedName("user_id")
     private String userID;
     @SerializedName("nickname")
@@ -28,13 +28,11 @@ public class Recipe {
     @SerializedName("rating")
     private int rating;
     @SerializedName("ingredients")
-    private Ingredient ingredient;
+    private String[] ingredient;
     @SerializedName("tags")
     private String[] tags;
-    @SerializedName("phase")
-    private RecipePhase phases;
 
-    public Recipe(int recipeID, int recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, Ingredient ingredient, String[] tags, RecipePhase phases) {
+    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, String[] ingredient, String[] tags) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -48,14 +46,27 @@ public class Recipe {
         this.rating = rating;
         this.ingredient = ingredient;
         this.tags = tags;
-        this.phases = phases;
+    }
+
+    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating) {
+        this.recipeID = recipeID;
+        this.recipeName = recipeName;
+        this.userID = userID;
+        this.nickname = nickname;
+        this.userImg = userImg;
+        this.recipeImg = recipeImg;
+        this.contents = contents;
+        this.datetime = datetime;
+        this.amount_time = amount_time;
+        this.view_count = view_count;
+        this.rating = rating;
     }
 
     public int getRecipeID() {
         return recipeID;
     }
 
-    public int getRecipeName() {
+    public String getRecipeName() {
         return recipeName;
     }
 
@@ -95,7 +106,7 @@ public class Recipe {
         return rating;
     }
 
-    public Ingredient getIngredient() {
+    public String[] getIngredient() {
         return ingredient;
     }
 
@@ -103,15 +114,11 @@ public class Recipe {
         return tags;
     }
 
-    public RecipePhase getPhases() {
-        return phases;
-    }
-
     @Override
     public String toString() {
         return "Recipe{" +
                 "recipeID=" + recipeID +
-                ", recipeName=" + recipeName +
+                ", recipeName='" + recipeName + '\'' +
                 ", userID='" + userID + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", userImg='" + userImg + '\'' +
@@ -123,7 +130,6 @@ public class Recipe {
                 ", rating=" + rating +
                 ", ingredient=" + ingredient +
                 ", tags=" + Arrays.toString(tags) +
-                ", phases=" + phases +
                 '}';
     }
 }

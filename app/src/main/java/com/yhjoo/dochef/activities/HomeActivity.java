@@ -28,13 +28,14 @@ import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter;
 import com.yhjoo.dochef.databinding.AHomeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Post;
-import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
 import com.yhjoo.dochef.utils.PermissionUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class HomeActivity extends BaseActivity {
     PostListAdapter postListAdapter;
     SharedPreferences mSharedPreferences;
 
-    ArrayList<RecipeBrief> recipeList = new ArrayList<>();
+    ArrayList<Recipe> recipeList = new ArrayList<>();
     ArrayList<Post> postList = new ArrayList<>();
 
 
@@ -71,7 +72,8 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
-        1. 실행 해보고 수정할거 수정하기
+        1. recipe setemptyview
+        2. is follow
     */
 
     @Override
@@ -120,7 +122,7 @@ public class HomeActivity extends BaseActivity {
             getPostList(userID);
         } else {
             userDetailInfo = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_RECIPE_DETAIL);
-            recipeList = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_RECIPE_BRIEF);
+            recipeList = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_RECIPE);
             postList = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_POST);
 
             setUserInfo();
@@ -181,7 +183,7 @@ public class HomeActivity extends BaseActivity {
                     @Override
                     public void onResponse(Call<UserDetail> call, Response<UserDetail> response) {
                         super.onResponse(call, response);
-
+                        Utils.log(response.body().toString());
                         if (response.code() == 403)
                             App.getAppInstance().showToast("뭔가에러");
                         else {
@@ -194,9 +196,9 @@ public class HomeActivity extends BaseActivity {
 
     void getRecipeList(String userID) {
         recipeService.getRecipeByUserID(userID)
-                .enqueue(new BasicCallback<ArrayList<RecipeBrief>>(this) {
+                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
                     @Override
-                    public void onResponse(Call<ArrayList<RecipeBrief>> call, Response<ArrayList<RecipeBrief>> response) {
+                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                         super.onResponse(call, response);
 
                         if (response.code() == 403)
@@ -234,6 +236,7 @@ public class HomeActivity extends BaseActivity {
                     .load(getString(R.string.storage_image_url_profile) + userDetailInfo.getUserImg())
                     .into(binding.homeUserimg);
 
+        binding.homeNickname.setText(userDetailInfo.getNickname());
         binding.homeProfiletext.setText(userDetailInfo.getProfileText());
         binding.homeRecipecount.setText(Integer.toString(userDetailInfo.getRecipeCount()));
         binding.homeFollowercount.setText(Integer.toString(userDetailInfo.getFollowerCount()));
@@ -245,25 +248,23 @@ public class HomeActivity extends BaseActivity {
             binding.homeReviseBtn.setText("프로필 수정");
         } else {
             binding.homeFollowBtn.setVisibility(View.VISIBLE);
-            binding.homeFollowBtn.setText(userDetailInfo.getIs_following() == 1 ? "팔로우 해제" : "팔로우");
         }
 
         binding.homeUserimgRevise.setOnClickListener(this::reviseImage);
         binding.homeNicknameRevise.setOnClickListener(this::reviseNickname);
         binding.homeUserimgRevise.setOnClickListener(this::reviseContents);
-        binding.homeRecipegroup.setOnClickListener((v -> {
+        binding.homeRecipecount.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, RecipeMyListActivity.class);
             intent.putExtra("userID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
-        binding.homeFollowergroup.setOnClickListener((v -> {
+        binding.homeFollowercount.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class);
             intent.putExtra("MODE", FollowListActivity.MODE.FOLLOWER);
             intent.putExtra("userID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
-
-        binding.homeFollowinggroup.setOnClickListener((v -> {
+        binding.homeFollowingcount.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class);
             intent.putExtra("MODE", FollowListActivity.MODE.FOLLOWING);
             intent.putExtra("userID", userDetailInfo.getUserID());

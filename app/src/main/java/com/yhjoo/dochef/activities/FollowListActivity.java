@@ -38,7 +38,8 @@ public class FollowListActivity extends BaseActivity {
 
     /*
         TODO
-        1. 실행 해보고 수정할거 수정하기
+        follower, following 반대인가?
+
     */
 
     @Override
@@ -60,7 +61,7 @@ public class FollowListActivity extends BaseActivity {
         }
 
         target_id = getIntent().getStringExtra("userID");
-        current_mode = (MODE) getIntent().getSerializableExtra("mode");
+        current_mode = (MODE) getIntent().getSerializableExtra("MODE");
 
         binding.followlistToolbar.setTitle(current_mode == MODE.FOLLOWER ? "팔로워" : "팔로잉");
 

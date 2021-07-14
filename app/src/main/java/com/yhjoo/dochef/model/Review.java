@@ -20,20 +20,9 @@ public class Review {
     @SerializedName("datetime")
     private long dateTime;
 
-    // Detail
     public Review(int reviewID, int postID, String userID, String nickname, String userImg, String contents, long rating, long dateTime) {
         this.reviewID = reviewID;
         this.postID = postID;
-        this.userID = userID;
-        this.nickname = nickname;
-        this.userImg = userImg;
-        this.contents = contents;
-        this.rating = rating;
-        this.dateTime = dateTime;
-    }
-
-    // Dummy
-    public Review(String userID, String nickname, String userImg, String contents, long rating, long dateTime) {
         this.userID = userID;
         this.nickname = nickname;
         this.userImg = userImg;
@@ -72,5 +61,19 @@ public class Review {
 
     public long getDateTime() {
         return dateTime;
+    }
+
+    @Override
+    public String toString() {
+        return "Review{" +
+                "reviewID=" + reviewID +
+                ", postID=" + postID +
+                ", userID='" + userID + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", userImg='" + userImg + '\'' +
+                ", contents='" + contents + '\'' +
+                ", rating=" + rating +
+                ", dateTime=" + dateTime +
+                '}';
     }
 }

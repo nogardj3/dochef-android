@@ -16,7 +16,7 @@
     <integer name="DUMMY_TYPE_USER_DETAIL">4</integer>
     <integer name="DUMMY_TYPE_POST">5</integer>
     <integer name="DUMMY_TYPE_COMMENTS">6</integer>
-    <integer name="DUMMY_TYPE_RECIPE_BRIEF">7</integer>
+    <integer name="DUMMY_TYPE_RECIPE">7</integer>
     <integer name="DUMMY_TYPE_RECIPE_DETAIL">8</integer>
     <integer name="DUMMY_TYPE_REVIEW">9</integer>
 

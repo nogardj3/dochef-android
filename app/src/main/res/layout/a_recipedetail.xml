@@ -42,8 +42,9 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:layout_marginEnd="5dp"
+            android:layout_marginTop="4dp"
             android:background="@drawable/bg_round"
-            app:layout_constraintRight_toLeftOf="@+id/recipedetail_nickname"
+            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_recipetitle"
             app:srcCompat="@drawable/ic_default_profile" />
 
@@ -53,9 +54,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="10dp"
+            android:layout_marginLeft="4dp"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
-            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toRightOf="@+id/recipedetail_userimg"
             app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg"
             tools:text="닉네임" />
 
@@ -124,19 +126,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintRight_toLeftOf="@+id/recipedetail_addmyrecipe"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
-            app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipedetail_addmyrecipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
             app:layout_constraintRight_toLeftOf="@+id/recipedetail_share"
             app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
-            app:srcCompat="@drawable/ic_bookmark_border_black_24dp" />
+            app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/recipedetail_share"

@@ -18,9 +18,10 @@ import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
 import com.yhjoo.dochef.adapter.RecommendAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.RecipeBrief;
+import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -35,17 +36,20 @@ public class MainInitFragment extends Fragment {
 
     RetrofitServices.RecipeService recipeService;
     RecommendAdapter recommendAdapter;
-    ArrayList<RecipeBrief> recipeList;
+    ArrayList<Recipe> recipeList;
 
     /*
         TODO
         1. 실행 해보고 수정할거 수정하기
+        recommendAdapter emptyview 필요없음
     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FMainInitBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
+
+        recipeService = RetrofitBuilder.create(this.getContext(), RetrofitServices.RecipeService.class);
 
         ArrayList<Integer> imgs = new ArrayList<>();
         imgs.add(R.drawable.ad_temp_0);
@@ -70,22 +74,21 @@ public class MainInitFragment extends Fragment {
         recommendAdapter.setNewData(recipeList);
         binding.mainRecommendRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
-        if(App.isServerAlive()){
+        if (App.isServerAlive()) {
             getRecipelist();
-        }
-        else{
-            recipeList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+        } else {
+            recipeList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
             recommendAdapter.setNewData(recipeList);
         }
 
         return view;
     }
 
-    void getRecipelist(){
+    void getRecipelist() {
         recipeService.getRecipeByTag("매운맛")
-                .enqueue(new BasicCallback<ArrayList<RecipeBrief>>(this.getContext()) {
+                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
                     @Override
-                    public void onResponse(Call<ArrayList<RecipeBrief>> call, Response<ArrayList<RecipeBrief>> response) {
+                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
                         super.onResponse(call, response);
 
                         if (response.code() == 403)
