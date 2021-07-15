@@ -10,6 +10,8 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.MultiItemResult;
@@ -38,8 +40,11 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                 Recipe recipeItem = (Recipe) item.getContent();
 
                 if (App.isServerAlive()) {
+                    StorageReference sr = FirebaseStorage
+                            .getInstance().getReference().child("recipe/" + recipeItem.getRecipeImg());
+
                     Glide.with(mContext)
-                            .load(mContext.getString(R.string.storage_image_url_recipe) + recipeItem.getRecipeImg())
+                            .load(sr)
                             .centerCrop()
                             .into((AppCompatImageView) helper.getView(R.id.reciperesult_recipeimg));
                 } else {

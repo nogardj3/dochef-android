@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.HomeActivity;
@@ -22,13 +23,11 @@ import com.yhjoo.dochef.adapter.PostListAdapter;
 import com.yhjoo.dochef.databinding.FMainTimelineBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Post;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -69,29 +68,28 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
             switch (view12.getId()) {
                 case R.id.timeline_user_group:
                     SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-                    try {
-                        String item_userid = ((Post) baseQuickAdapter.getData().get(i)).getUserID();
-                        String active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("user_id");
+                    Gson gson = new Gson();
+                    UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
+                    String active_userid = userInfo.getUserID();
 
-                        Intent intent = new Intent(getContext(), HomeActivity.class);
-                        if (item_userid.equals(active_userid))
-                            intent.putExtra("MODE", HomeActivity.MODE.MY);
-                        else {
-                            intent.putExtra("MODE", HomeActivity.MODE.USER);
-                            intent.putExtra("userID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
-                        }
-                        startActivity(intent);
-                    } catch (JSONException e) {
-                        Utils.log(e.toString());
+                    String item_userid = ((Post) baseQuickAdapter.getData().get(i)).getUserID();
+
+                    Intent intent = new Intent(getContext(), HomeActivity.class);
+                    if (item_userid.equals(active_userid))
+                        intent.putExtra("MODE", HomeActivity.MODE.MY);
+                    else {
+                        intent.putExtra("MODE", HomeActivity.MODE.USER);
+                        intent.putExtra("userID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                     }
+                    startActivity(intent);
                     break;
 
                 case R.id.timeline_comment_group:
                 case R.id.timeline_contents:
                 case R.id.timeline_postimg:
-                    Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
-                    intent.putExtra("postID", ((Post) baseQuickAdapter.getData().get(i)).getPostID());
-                    startActivity(intent);
+                    Intent intent2 = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class);
+                    intent2.putExtra("postID", ((Post) baseQuickAdapter.getData().get(i)).getPostID());
+                    startActivity(intent2);
                     break;
             }
         });
@@ -104,24 +102,20 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
     @Override
     public void onRefresh() {
         binding.timelineSwipe.setRefreshing(true);
-        refreshPost();
+        binding.timelineSwipe.setEnabled(false);
+        getPostList();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        refreshPost();
         if (App.isServerAlive()) {
             getPostList();
         } else {
             postList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST));
             postListAdapter.setNewData(postList);
+            postListAdapter.notifyDataSetChanged();
         }
-    }
-
-    void refreshPost() {
-        binding.timelineSwipe.setEnabled(false);
-        getPostList();
     }
 
     void getPostList() {
@@ -135,6 +129,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                         } else {
                             postList = response.body();
                             postListAdapter.setNewData(response.body());
+                            postListAdapter.notifyDataSetChanged();
                             postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.timelineSwipe.getParent());
 
                             new Handler().postDelayed(() -> binding.timelineSwipe.setRefreshing(false), 1000);

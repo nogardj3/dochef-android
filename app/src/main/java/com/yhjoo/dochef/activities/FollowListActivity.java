@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.FollowListAdapter;
@@ -38,7 +39,8 @@ public class FollowListActivity extends BaseActivity {
 
     /*
         TODO
-        follower, following 반대인듯
+        follower  user_id를 follow하고 있는 사람
+        following user_id가 following하고 있는 사람
     */
 
     @Override
@@ -53,11 +55,9 @@ public class FollowListActivity extends BaseActivity {
         userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        try {
-            active_userid = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null)).getString("user_id");
-        } catch (Exception e) {
-            Utils.log(e.toString());
-        }
+        Gson gson = new Gson();
+        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
+        active_userid = userInfo.getUserID();
 
         target_id = getIntent().getStringExtra("userID");
         current_mode = (MODE) getIntent().getSerializableExtra("MODE");
@@ -88,7 +88,7 @@ public class FollowListActivity extends BaseActivity {
     }
 
     void getFollower(){
-        userService.getFollowers(active_userid, target_id)
+        userService.getFollowers(target_id)
                 .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
                     @Override
                     public void onResponse(Response<ArrayList<UserBrief>> response) {
@@ -99,7 +99,7 @@ public class FollowListActivity extends BaseActivity {
     }
 
     void getFollowing(){
-        userService.getFollowings(active_userid, target_id)
+        userService.getFollowings(target_id)
                 .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
                     @Override
                     public void onResponse(Response<ArrayList<UserBrief>> response) {

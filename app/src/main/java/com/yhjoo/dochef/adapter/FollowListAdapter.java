@@ -8,6 +8,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.UserBrief;
+import com.yhjoo.dochef.utils.Utils;
 
 public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolder> {
     String userID;
@@ -32,11 +33,17 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
                     .circleCrop()
                     .into((AppCompatImageView) helper.getView(R.id.user_img));
 
+        Utils.log(item);
         if (!item.getUserID().equals(userID)) {
-            if (item.getIs_follow() == 1)
-                helper.setVisible(R.id.user_followcancel_btn, true);
-            else
+            if(item.getFollow().contains(userID))
                 helper.setVisible(R.id.user_follow_btn, true);
+            else
+                helper.setVisible(R.id.user_followcancel_btn, true);
+            helper.addOnClickListener(R.id.user_followcancel_btn);
+            helper.addOnClickListener(R.id.user_follow_btn);
+        }
+        else{
+
         }
 
         helper.setText(R.id.user_nickname, item.getNickname());

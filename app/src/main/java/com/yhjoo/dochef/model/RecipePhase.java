@@ -2,9 +2,11 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public class RecipePhase {
+public class RecipePhase implements Serializable {
     @SerializedName("phase_type")
     private int phase_type;
     @SerializedName("recipe_img")
@@ -14,11 +16,11 @@ public class RecipePhase {
     @SerializedName("time_amount")
     private String time_amount;
     @SerializedName("ingredients")
-    private Ingredient[] ingredients;
+    private ArrayList<Ingredient> ingredients;
     @SerializedName("tips")
-    private String[] tips;
+    private ArrayList<String> tips;
 
-    public RecipePhase(int phase_type, String recipe_img, String contents, String time_amount, Ingredient[] ingredients, String[] tips) {
+    public RecipePhase(int phase_type, String recipe_img, String contents, String time_amount, ArrayList<Ingredient> ingredients, ArrayList<String> tips) {
         this.phase_type = phase_type;
         this.recipe_img = recipe_img;
         this.contents = contents;
@@ -46,11 +48,11 @@ public class RecipePhase {
         return time_amount;
     }
 
-    public Ingredient[] getIngredients() {
+    public ArrayList<Ingredient> getIngredients() {
         return ingredients;
     }
 
-    public String[] getTips() {
+    public ArrayList<String> getTips() {
         return tips;
     }
 
@@ -61,8 +63,8 @@ public class RecipePhase {
                 ", recipe_img='" + recipe_img + '\'' +
                 ", contents='" + contents + '\'' +
                 ", time_amount='" + time_amount + '\'' +
-                ", ingredients=" + Arrays.toString(ingredients) +
-                ", tips=" + Arrays.toString(tips) +
+                ", ingredients=" + ingredients +
+                ", tips=" + tips +
                 '}';
     }
 }

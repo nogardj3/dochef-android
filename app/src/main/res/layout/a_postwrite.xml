@@ -2,8 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:TagsEditText="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/postwrite_toolbar"
@@ -31,8 +30,8 @@
         android:id="@+id/postwrite_scroll"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/postwrite_postimg_add"
-        app:layout_constraintTop_toBottomOf="@+id/postwrite_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/postwrite_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -76,13 +75,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:backgroundTint="@null"
                 android:gravity="top"
                 android:hint="글 내용"
+                android:textCursorDrawable="@color/colorPrimary"
                 android:minLines="4"
                 android:paddingLeft="4dp"
                 android:paddingTop="4dp"
                 android:theme="@style/BaseTheme.EditTextStyle"
-                android:backgroundTint="@null"
                 app:layout_constraintTop_toBottomOf="@+id/postwrite_contents_text" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -99,16 +99,16 @@
                 android:id="@+id/postwrite_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="4dp"
-                android:theme="@style/BaseTheme.EditTextStyle_post"
                 android:animateLayoutChanges="true"
+                android:paddingTop="4dp"
                 android:textCursorDrawable="@drawable/tag_cursor_post"
+                android:theme="@style/BaseTheme.EditTextStyle_post"
                 app:allowSpaceInTag="true"
-                app:tagsTextColor="@color/white"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postwrite_tags_text"
                 app:tagsBackground="@drawable/bg_tag_post_add"
                 app:tagsCloseImageRight="@drawable/tag_close"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/postwrite_tags_text"/>
+                app:tagsTextColor="@color/white" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

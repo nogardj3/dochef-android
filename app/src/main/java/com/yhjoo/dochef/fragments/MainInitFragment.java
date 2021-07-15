@@ -69,7 +69,11 @@ public class MainInitFragment extends Fragment {
 
         recommendAdapter = new RecommendAdapter();
         recommendAdapter.setOnItemClickListener((adapter, view1, position)
-                -> startActivity(new Intent(getContext(), RecipeDetailActivity.class)));
+                -> {
+            Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
+            intent.putExtra("recipeID", recipeList.get(position).getRecipeID());
+            startActivity(intent);
+        });
         recommendAdapter.setNewData(recipeList);
         binding.mainRecommendRecyclerview.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));

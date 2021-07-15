@@ -1,7 +1,9 @@
 package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -10,6 +12,10 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.ReviewListAdapter;
@@ -18,9 +24,12 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.Review;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.GlideApp;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -31,23 +40,18 @@ public class RecipeDetailActivity extends BaseActivity {
     ARecipedetailBinding binding;
 
     ReviewListAdapter reviewListAdapter;
-
     RetrofitServices.RecipeService recipeService;
     RetrofitServices.ReviewService reviewService;
 
     RecipeDetail recipeDetailInfo;
     ArrayList<Review> reviewList;
 
+    String userID;
     int recipeID;
 
     /*
         TODO
-        1. 실행 해보고 수정할거 수정하기
-        - like 추가
-        - tag 수정
-        - ingredients 수정
-        - share 수정
-        - 스크롤문제
+        like 추가
     */
 
     @Override
@@ -58,6 +62,11 @@ public class RecipeDetailActivity extends BaseActivity {
 
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
         reviewService = RetrofitBuilder.create(this, RetrofitServices.ReviewService.class);
+
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
+        userID = userInfo.getUserID();
 
         recipeID = getIntent().getIntExtra("recipeID", 0);
 
@@ -76,6 +85,7 @@ public class RecipeDetailActivity extends BaseActivity {
         binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
 
         if (App.isServerAlive()) {
+            addCount();
             getRecipeDetail();
             getReviewList();
         } else {
@@ -116,7 +126,7 @@ public class RecipeDetailActivity extends BaseActivity {
                         else {
                             reviewList = response.body();
                             reviewListAdapter.setNewData(reviewList);
-                            reviewListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipedetailReviewRecycler.getParent());
+                            reviewListAdapter.setEmptyView(R.layout.rv_empty_review, (ViewGroup) binding.recipedetailReviewRecycler.getParent());
                         }
                     }
                 });
@@ -125,8 +135,12 @@ public class RecipeDetailActivity extends BaseActivity {
 
     void setTopView() {
         if (App.isServerAlive()) {
-            Glide.with(this)
-                    .load(getString(R.string.storage_image_url_recipe) + recipeDetailInfo.getRecipeImg())
+            StorageReference pathReference = FirebaseStorage.getInstance()
+                    .getReference()
+                    .child("recipe/" + recipeDetailInfo.getRecipeImg());
+
+            GlideApp.with(this)
+                    .load(pathReference)
                     .centerCrop()
                     .into(binding.recipedetailMainImg);
             if (!recipeDetailInfo.getUserImg().equals("default"))
@@ -149,15 +163,19 @@ public class RecipeDetailActivity extends BaseActivity {
         binding.recipedetailRecipetitle.setText(recipeDetailInfo.getRecipeName());
         binding.recipedetailNickname.setText(recipeDetailInfo.getNickname());
         binding.recipedetailExplain.setText(recipeDetailInfo.getContents());
-//        binding.recipedetailLikecount.setText(Integer.toString(recipeDetailInfo.getView_count()));
+        binding.recipedetailLikecount.setText(Integer.toString(recipeDetailInfo.getLikes().size()));
         binding.recipedetailViewcount.setText(Integer.toString(recipeDetailInfo.getView_count()));
         binding.recipedetailReviewRatingText.setText(Integer.toString(recipeDetailInfo.getRating()));
         binding.recipedetailReviewRating.setRating(recipeDetailInfo.getRating());
 
-//        binding.recipedetailLike.setOnClickListener((v) ->
-//                startActivity(new Intent(this, PlayRecipeActivity.class)));
-//        binding.recipedetailShare.setOnClickListener((v) ->
-//                startActivity(new Intent(this, PlayRecipeActivity.class)));
+        if(recipeDetailInfo.getLikes().contains(userID) || recipeDetailInfo.getUserID().equals(userID))
+            binding.recipedetailLike.setImageResource(R.drawable.ic_favorite_24dp);
+        else
+            binding.recipedetailLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+        binding.recipedetailLike.setOnClickListener((v) ->{
+                    if(!recipeDetailInfo.getUserID().equals(userID))
+                        setLike();
+                });
         binding.recipedetailStartrecipe.setOnClickListener((v) ->
                 startActivity(new Intent(this, PlayRecipeActivity.class)));
 
@@ -178,5 +196,40 @@ public class RecipeDetailActivity extends BaseActivity {
             ingredientAmount.setText(ingredient.getAmount());
             binding.recipedetailIngredients.addView(ingredientContainer);
         }
+    }
+
+    void addCount(){
+        recipeService.addCount(recipeID)
+                .enqueue(new BasicCallback<JsonObject>(this) {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        super.onResponse(call, response);
+
+                        if (response.code() == 403)
+                            App.getAppInstance().showToast("뭔가에러");
+                        else {
+                            Utils.log("count ok");
+                        }
+                    }
+                });
+    }
+
+    void setLike(){
+        int like = recipeDetailInfo.getLikes().contains(userID) ? -1 : 1;
+
+        recipeService.setLikeRecipe(recipeID,userID,like)
+                .enqueue(new BasicCallback<JsonObject>(this) {
+                    @Override
+                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                        super.onResponse(call, response);
+
+                        if (response.code() == 403)
+                            App.getAppInstance().showToast("뭔가에러");
+                        else {
+                            getRecipeDetail();
+                            getReviewList();
+                        }
+                    }
+                });
     }
 }

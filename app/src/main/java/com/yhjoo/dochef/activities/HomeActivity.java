@@ -72,8 +72,7 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
-        1. recipe setemptyview
-        2. is follow
+        follow 확인
     */
 
     @Override
@@ -105,7 +104,7 @@ public class HomeActivity extends BaseActivity {
             intent.putExtra("recipeID", recipeList.get(position).getRecipeID());
             startActivity(intent);
         });
-        binding.homeRecipeRecycler.setLayoutManager(new GridLayoutManager(HomeActivity.this, 3));
+        binding.homeRecipeRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         binding.homeRecipeRecycler.setAdapter(recipeHorizontalAdapter);
 
         postListAdapter = new PostListAdapter();
@@ -113,7 +112,17 @@ public class HomeActivity extends BaseActivity {
         postListAdapter.setOnItemClickListener((adapter, view, position) -> {
             startActivity(new Intent(HomeActivity.this, PostDetailActivity.class));
         });
-        binding.homePostRecycler.setLayoutManager(new LinearLayoutManager(this));
+        binding.homePostRecycler.setLayoutManager(new LinearLayoutManager(this){
+            @Override
+            public boolean canScrollHorizontally() {
+                return false;
+            }
+
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        });
         binding.homePostRecycler.setAdapter(postListAdapter);
 
         if (App.isServerAlive()) {
@@ -184,7 +193,6 @@ public class HomeActivity extends BaseActivity {
                     @Override
                     public void onResponse(Call<UserDetail> call, Response<UserDetail> response) {
                         super.onResponse(call, response);
-                        Utils.log(response.body().toString());
                         if (response.code() == 403)
                             App.getAppInstance().showToast("뭔가에러");
                         else {

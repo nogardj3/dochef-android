@@ -5,9 +5,12 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.utils.GlideApp;
 
 public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
     public RecommendAdapter() {
@@ -17,8 +20,11 @@ public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
         if (App.isServerAlive()) {
-            Glide.with(mContext)
-                    .load(item.getRecipeImg())
+            StorageReference sr = FirebaseStorage
+                    .getInstance().getReference().child("recipe/" + item.getRecipeImg());
+
+            GlideApp.with(mContext)
+                    .load(sr)
                     .centerCrop()
                     .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
         } else

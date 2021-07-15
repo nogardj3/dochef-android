@@ -16,7 +16,9 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.google.android.flexbox.FlexboxLayout;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -25,13 +27,12 @@ import com.yhjoo.dochef.databinding.APostdetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.Post;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.GlideApp;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -51,12 +52,6 @@ public class PostDetailActivity extends BaseActivity {
 
     /*
         TODO
-        postDetail = 수정 O, 댓글 많이, 댓글 작성 가능
-        timeline   = 수정 X, 댓글 하나, 댓글 작성 불가
-
-        tags
-        edittext design
-
     */
 
     @Override
@@ -72,12 +67,10 @@ public class PostDetailActivity extends BaseActivity {
         commentService = RetrofitBuilder.create(this, RetrofitServices.CommentService.class);
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        try {
-            JSONObject aa = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
-            userID = aa.getString("user_id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Gson gson = new Gson();
+        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
+        userID = userInfo.getUserID();
+
         postID = getIntent().getIntExtra("postID", -1);
 
         commentListAdapter = new CommentListAdapter(userID);
@@ -133,18 +126,26 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     void setTopView() {
+        Utils.log(postInfo.toString());
         if (App.isServerAlive()) {
             if (!postInfo.getPostImg().equals("")) {
                 binding.postPostimg.setVisibility(View.VISIBLE);
-                Glide.with(this)
-                        .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
+
+                StorageReference sr = FirebaseStorage
+                        .getInstance().getReference().child("post/" + postInfo.getPostImg());
+
+                GlideApp.with(this)
+                        .load(sr)
                         .into(binding.postPostimg);
             }
-            if (!postInfo.getUserImg().equals("default"))
-                Glide.with(this)
-                        .load(getString(R.string.storage_image_url_profile) + postInfo.getUserImg())
+            if (!postInfo.getUserImg().equals("default")){
+                StorageReference sr = FirebaseStorage
+                        .getInstance().getReference().child("profile/" + postInfo.getUserImg());
+                GlideApp.with(this)
+                        .load(sr)
                         .circleCrop()
                         .into(binding.postUserimg);
+            }
         } else {
             binding.postPostimg.setVisibility(View.VISIBLE);
             Glide.with(this)
@@ -155,7 +156,6 @@ public class PostDetailActivity extends BaseActivity {
                     .circleCrop()
                     .into(binding.postUserimg);
         }
-
 
         binding.postNickname.setText(postInfo.getNickname());
         binding.postContents.setText(postInfo.getContents());
@@ -189,7 +189,7 @@ public class PostDetailActivity extends BaseActivity {
                         Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class);
                         intent.putExtra("MODE", PostWriteActivity.MODE.REVISE)
                                 .putExtra("postID", postInfo.getPostID())
-                                .putExtra("postimg", getString(R.string.storage_image_url_post) + postInfo.getPostImg())
+                                .putExtra("postimg", postInfo.getPostImg())
                                 .putExtra("contents", postInfo.getContents())
                                 .putExtra("tags", postInfo.getTags());
 
@@ -236,6 +236,9 @@ public class PostDetailActivity extends BaseActivity {
                         } else {
                             commentList = response.body();
                             commentListAdapter.setNewData(commentList);
+                            commentListAdapter.notifyDataSetChanged();
+                            commentListAdapter.setEmptyView(R.layout.rv_empty_comment,
+                                    (ViewGroup) binding.postCommentRecycler.getParent());
                         }
                     }
                 });
@@ -248,11 +251,11 @@ public class PostDetailActivity extends BaseActivity {
             new_like = 1;
             binding.postLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
         } else {
-            new_like = 0;
+            new_like = -1;
             binding.postLike.setImageResource(R.drawable.ic_favorite_24dp);
         }
 
-        postService.likePost(userID, postID, new_like)
+        postService.setLikePost(userID, postID, new_like)
                 .enqueue(new BasicCallback<JsonObject>(this) {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
@@ -298,16 +301,17 @@ public class PostDetailActivity extends BaseActivity {
 
                             if (response.code() == 500) {
                                 App.getAppInstance().showToast("comment 생성 실패");
-                            } else
+                            } else{
                                 App.getAppInstance().showToast("comment 생성 성공");
+                                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(binding.postCommentEdittext.getWindowToken(), 0);
+                                binding.postCommentEdittext.setText("");
+
+                                getCommentList(postID);
+                            }
                         }
                     });
 
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(binding.postCommentEdittext.getWindowToken(), 0);
-            binding.postCommentEdittext.setText("");
-
-            getCommentList(postID);
         } else
             App.getAppInstance().showToast("댓글을 입력 해 주세요");
     }
@@ -324,11 +328,12 @@ public class PostDetailActivity extends BaseActivity {
 
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("comment 삭제 실패");
-                        } else
+                        } else{
                             App.getAppInstance().showToast("comment 삭제 성공");
+                            getCommentList(postID);
+                        }
                     }
                 });
 
-        getCommentList(postID);
     }
 }

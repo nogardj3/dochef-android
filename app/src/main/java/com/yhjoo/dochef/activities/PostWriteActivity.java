@@ -16,6 +16,10 @@ import androidx.core.app.ActivityCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
@@ -24,17 +28,14 @@ import com.yhjoo.dochef.databinding.APostwriteBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.GlideApp;
 import com.yhjoo.dochef.utils.PermissionUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
 
-import mabbas007.tagsedittext.TagsEditText;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -46,17 +47,19 @@ public class PostWriteActivity extends BaseActivity {
 
     APostwriteBinding binding;
     RetrofitServices.PostService postService;
+    FirebaseStorage storage;
+    StorageReference storageReference;
 
     String userID;
     int postID;
     Uri mImageUri;
+    String image_url;
     MODE current_mode = MODE.WRITE;
 
 
     /*
         TODO
         REVISE 시 최초 통신해서 데이터 가져오는걸로
-        tagview 확인
     */
 
     @Override
@@ -65,6 +68,8 @@ public class PostWriteActivity extends BaseActivity {
         binding = APostwriteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
 
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         Gson gson = new Gson();
@@ -75,19 +80,21 @@ public class PostWriteActivity extends BaseActivity {
 
         current_mode = (PostWriteActivity.MODE) getIntent().getSerializableExtra("MODE");
 
-        if(current_mode == MODE.REVISE){
+        if (current_mode == MODE.REVISE) {
             binding.postwriteToolbar.setTitle("수정");
-            postID = getIntent().getIntExtra("postID",-1);
+            postID = getIntent().getIntExtra("postID", -1);
             binding.postwriteContents.setText(getIntent().getStringExtra("contents"));
 
-            if(getIntent().getStringExtra("postImg") != null)
-                Glide.with(this)
-                        .load(getIntent().getStringExtra("postImg"))
-                .centerCrop()
+            if (getIntent().getStringExtra("postImg") != null){
+                StorageReference sr = FirebaseStorage
+                        .getInstance().getReference().child("post/" + getIntent().getStringExtra("postImg"));
+                GlideApp.with(this)
+                        .load(sr)
                         .into(binding.postwritePostimg);
+            }
 
             ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");
-            binding.postwriteTags.setTags((String[])tags.toArray());
+            binding.postwriteTags.setTags((String[]) tags.toArray());
         }
         setSupportActionBar(binding.postwriteToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -156,34 +163,44 @@ public class PostWriteActivity extends BaseActivity {
     }
 
     void createOrUpdatePost(View v) {
-        ArrayList<String> tags = new ArrayList<>(binding.postwriteTags.getTags());
-        Utils.log(tags.toString());
+        ArrayList<String> tags = new ArrayList<>();
+        for (String a: binding.postwriteTags.getTags()) {
+            tags.add(a);
+        }
 
-        String image_url = mImageUri == null ? "":mImageUri.toString();
-
-        Utils.log(current_mode);
-        if(current_mode == MODE.WRITE){
-            postService.createPost(
-                    userID,
-                    image_url,
-                    binding.postwriteContents.getText().toString(),
-                    System.currentTimeMillis(),
-                    tags)
-                    .enqueue(new BasicCallback<JsonObject>(this) {
+        image_url = "";
+        if(mImageUri != null){
+            image_url= String.format(getString(R.string.format_upload_post),
+                    userID, Long.toString(System.currentTimeMillis()));
+        }
+        if (current_mode == MODE.WRITE) {
+            StorageReference ref = storageReference.child(image_url);
+            ref.putFile(mImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            super.onResponse(call, response);
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            postService.createPost(
+                                    userID,
+                                    image_url,
+                                    binding.postwriteContents.getText().toString(),
+                                    System.currentTimeMillis(),
+                                    tags)
+                                    .enqueue(new BasicCallback<JsonObject>(PostWriteActivity.this) {
+                                        @Override
+                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+                                            super.onResponse(call, response);
 
-                            if (response.code() == 500) {
-                                App.getAppInstance().showToast("comment 가져오기 실패");
-                            } else {
-                                App.getAppInstance().showToast("글이 등록되었습니다.");
-                                finish();
-                            }
+                                            if (response.code() == 500) {
+                                                App.getAppInstance().showToast("post 등록 실패");
+                                            } else {
+                                                App.getAppInstance().showToast("글이 등록되었습니다.");
+                                                finish();
+                                            }
+                                        }
+                                    });
                         }
                     });
-        }
-        else{
+        } else {
             postService.updatePost(
                     postID,
                     image_url,

@@ -3,6 +3,7 @@ package com.yhjoo.dochef.fragments;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +12,19 @@ import android.view.ViewGroup;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.adapter.RecipeMultiAdapter;
 import com.yhjoo.dochef.databinding.FMainMyrecipeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
@@ -37,7 +42,7 @@ import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_AD;
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_ITEM;
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_PAGER;
 
-public class MainMyRecipeFragment extends Fragment {
+public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     String[] recommend_tags;
 
     FMainMyrecipeBinding binding;
@@ -62,20 +67,22 @@ public class MainMyRecipeFragment extends Fragment {
 
         recipeService = RetrofitBuilder.create(this.getContext(), RetrofitServices.RecipeService.class);
 
+        binding.fMyrecipeSwipe.setOnRefreshListener(this);
+        binding.fMyrecipeSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
+
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext().getApplicationContext());
-        try {
-            JSONObject aa = new JSONObject(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null));
-            userID = aa.getString("user_id");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        Gson gson = new Gson();
+        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
+        userID = userInfo.getUserID();
 
         // get recipe by recipe sort by datetime desc
         recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems,recipeService);
         recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fMyrecipeRecycler.getParent());
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                startActivity(new Intent(getContext(), RecipeDetailActivity.class));
+                Intent intent = new Intent(MainMyRecipeFragment.this.getContext(), RecipeDetailActivity.class);
+                intent.putExtra("recipeID", recipeListItems.get(position).getContent().getRecipeID());
+                startActivity(intent);
             }
         });
         binding.fMyrecipeRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -108,6 +115,13 @@ public class MainMyRecipeFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(() -> {
+            getRecipelist();
+        }, 1000);
+    }
+
     void getRecipelist() {
         recipeService.getRecipeByUserID(userID,"latest")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
@@ -121,6 +135,7 @@ public class MainMyRecipeFragment extends Fragment {
                             ArrayList<Recipe> temp = response.body();
                             Random r = new Random();
 
+                            recipeListItems.clear();
                             for (int i = 0; i < temp.size(); i++) {
                                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
 
@@ -136,6 +151,8 @@ public class MainMyRecipeFragment extends Fragment {
                             }
 
                             recipeMultiAdapter.setNewData(recipeListItems);
+                            recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fMyrecipeRecycler.getParent());
+                            binding.fMyrecipeSwipe.setRefreshing(false);
                         }
                     }
                 });

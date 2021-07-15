@@ -80,10 +80,12 @@ public class DataGenerator {
             ArrayList<UserBrief> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
+                ArrayList<String> follow = new ArrayList<String>();
 
                 arrayList.add(new UserBrief("userID",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
-                        "유저 " + i, i % 2 == 1 ? 1 : 0));
+                        "nickname",
+                        follow));
             }
 
             return (T) arrayList;
@@ -149,13 +151,19 @@ public class DataGenerator {
             ArrayList<Recipe> arrayList = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
                 Random r = new Random();
+                ArrayList<Ingredient> ingredients = new ArrayList<>();
                 Ingredient ingredient = new Ingredient("재료" + i, i + "스푼");
+                ingredients.add(ingredient);
+                ArrayList<String> tags = new ArrayList<>();
+                tags.add("태그 1");
+                tags.add("태그 2");
+
                 Recipe recipe = new Recipe(i, "레시피 " + i, "userID",
                         "유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                         Integer.toString(img_recipes[r.nextInt(img_recipes.length)]),
                         "내용 " + i, System.currentTimeMillis() - (1000 * 1000 * i),
-                        i + "분", i, r.nextInt(6)
+                        i + "분", i, r.nextInt(6),ingredients, tags
                 );
 
                 arrayList.add(recipe);
@@ -167,17 +175,29 @@ public class DataGenerator {
             ArrayList<String> tags = new ArrayList<>();
             tags.add("태그 1");
             tags.add("태그 2");
+
             ArrayList<Ingredient> ingredients = new ArrayList<>();
             Ingredient ingredient = new Ingredient("재료" + 1, 1 + "스푼");
             ingredients.add(ingredient);
             ingredients.add(ingredient);
+
+            ArrayList<String> likes = new ArrayList<>();
+            likes.add("유저 1");
+            likes.add("유저 2");
+
+            ArrayList<RecipePhase> phases = new ArrayList<>();
+            RecipePhase phase = new RecipePhase(
+
+            );
+            phases.add(phase);
+
             RecipeDetail recipeDetail = new RecipeDetail(
                     1, "레시피 " + 1, "userID", "유저 " + 1,
                     Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                     Integer.toString(img_recipes[r.nextInt(img_recipes.length)]),
                     "내용 " + 1, System.currentTimeMillis() - (1000 * 1000),
-                    1 + "분", 1, r.nextInt(6),
-                    ingredients, tags, new RecipePhase()
+                    1 + "분", 1, likes ,r.nextInt(6),
+                    ingredients, tags, phases
             );
 
             return (T) recipeDetail;

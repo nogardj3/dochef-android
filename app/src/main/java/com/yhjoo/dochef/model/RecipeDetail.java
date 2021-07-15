@@ -2,9 +2,10 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class RecipeDetail {
+public class RecipeDetail implements Serializable {
     @SerializedName("recipe_id")
     private int recipeID;
     @SerializedName("recipe_name")
@@ -25,6 +26,8 @@ public class RecipeDetail {
     private String amount_time;
     @SerializedName("view_count")
     private int view_count;
+    @SerializedName("likes")
+    private ArrayList<String> likes;
     @SerializedName("rating")
     private int rating;
     @SerializedName("ingredients")
@@ -32,9 +35,9 @@ public class RecipeDetail {
     @SerializedName("tags")
     private ArrayList<String> tags;
     @SerializedName("phase")
-    private RecipePhase phases;
+    private ArrayList<RecipePhase> phases;
 
-    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, ArrayList<Ingredient> ingredients, ArrayList<String> tags, RecipePhase phases) {
+    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, ArrayList<String> likes, int rating, ArrayList<Ingredient> ingredients, ArrayList<String> tags, ArrayList<RecipePhase> phases) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -45,6 +48,7 @@ public class RecipeDetail {
         this.datetime = datetime;
         this.amount_time = amount_time;
         this.view_count = view_count;
+        this.likes = likes;
         this.rating = rating;
         this.ingredients = ingredients;
         this.tags = tags;
@@ -91,6 +95,10 @@ public class RecipeDetail {
         return view_count;
     }
 
+    public ArrayList<String> getLikes() {
+        return likes;
+    }
+
     public int getRating() {
         return rating;
     }
@@ -103,7 +111,7 @@ public class RecipeDetail {
         return tags;
     }
 
-    public RecipePhase getPhases() {
+    public ArrayList<RecipePhase> getPhases() {
         return phases;
     }
 
@@ -120,8 +128,9 @@ public class RecipeDetail {
                 ", datetime=" + datetime +
                 ", amount_time='" + amount_time + '\'' +
                 ", view_count=" + view_count +
+                ", likes=" + likes +
                 ", rating=" + rating +
-                ", ingredient=" + ingredients +
+                ", ingredients=" + ingredients +
                 ", tags=" + tags +
                 ", phases=" + phases +
                 '}';

@@ -2,6 +2,7 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Recipe {
@@ -28,11 +29,11 @@ public class Recipe {
     @SerializedName("rating")
     private int rating;
     @SerializedName("ingredients")
-    private String[] ingredient;
+    private ArrayList<Ingredient> ingredient;
     @SerializedName("tags")
-    private String[] tags;
+    private ArrayList<String> tags;
 
-    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, String[] ingredient, String[] tags) {
+    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, ArrayList<Ingredient> ingredient, ArrayList<String> tags) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -46,20 +47,6 @@ public class Recipe {
         this.rating = rating;
         this.ingredient = ingredient;
         this.tags = tags;
-    }
-
-    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating) {
-        this.recipeID = recipeID;
-        this.recipeName = recipeName;
-        this.userID = userID;
-        this.nickname = nickname;
-        this.userImg = userImg;
-        this.recipeImg = recipeImg;
-        this.contents = contents;
-        this.datetime = datetime;
-        this.amount_time = amount_time;
-        this.view_count = view_count;
-        this.rating = rating;
     }
 
     public int getRecipeID() {
@@ -106,11 +93,11 @@ public class Recipe {
         return rating;
     }
 
-    public String[] getIngredient() {
+    public ArrayList<Ingredient> getIngredient() {
         return ingredient;
     }
 
-    public String[] getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
@@ -129,7 +116,7 @@ public class Recipe {
                 ", view_count=" + view_count +
                 ", rating=" + rating +
                 ", ingredient=" + ingredient +
-                ", tags=" + Arrays.toString(tags) +
+                ", tags=" + tags +
                 '}';
     }
 }

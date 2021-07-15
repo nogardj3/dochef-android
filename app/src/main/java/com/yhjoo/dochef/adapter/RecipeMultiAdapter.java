@@ -11,8 +11,11 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
@@ -20,6 +23,7 @@ import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,8 +51,11 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
                 if (App.isServerAlive()) {
-                    Glide.with(mContext)
-                            .load(item.getContent().getRecipeImg())
+                    StorageReference sr = FirebaseStorage
+                            .getInstance().getReference().child("recipe/" + item.getContent().getRecipeImg());
+
+                    GlideApp.with(mContext)
+                            .load(sr)
                             .centerCrop()
                             .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
                 } else
@@ -69,7 +76,11 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 helper.getView(R.id.recommend_more).setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RecipeThemeActivity.class)));
 
                 RecommendAdapter recommendAdapter = new RecommendAdapter();
-                recommendAdapter.setOnItemClickListener((adapter, view, position) -> mContext.startActivity(new Intent(mContext, RecipeDetailActivity.class)));
+                recommendAdapter.setOnItemClickListener((adapter, view, position) -> {
+                    Intent intent = new Intent(mContext, RecipeDetailActivity.class);
+                    intent.putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
+                    mContext.startActivity(intent);
+                });
                 RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(recommendAdapter);

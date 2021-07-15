@@ -69,7 +69,9 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems,recipeService);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                startActivity(new Intent(getContext(), RecipeDetailActivity.class));
+                Intent intent = new Intent(MainRecipesFragment.this.getContext(), RecipeDetailActivity.class);
+                intent.putExtra("recipeID", ((MultiItemRecipe)adapter.getData().get(position)).getContent().getRecipeID());
+                startActivity(intent);
             }
         });
         binding.fRecipeRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
@@ -104,8 +106,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
     @Override
     public void onRefresh() {
         new Handler().postDelayed(() -> {
-            recipeMultiAdapter.setNewData(recipeListItems);
-            binding.fRecipeSwipe.setRefreshing(false);
+            getRecipeList();
         }, 1000);
     }
 
@@ -122,6 +123,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                             ArrayList<Recipe> arrayList = response.body();
                             Random r = new Random();
 
+                            recipeListItems.clear();
                             for (int i = 0; i < arrayList.size(); i++) {
                                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, arrayList.get(i)));
 
@@ -138,6 +140,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
                             recipeMultiAdapter.setNewData(recipeListItems);
                             recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fRecipeRecycler.getParent());
+                            binding.fRecipeSwipe.setRefreshing(false);
                         }
                     }
                 });

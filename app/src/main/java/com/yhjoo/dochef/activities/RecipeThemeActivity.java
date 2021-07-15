@@ -60,7 +60,9 @@ public class RecipeThemeActivity extends BaseActivity {
         recipeThemeAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
         recipeThemeAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                startActivity(new Intent(RecipeThemeActivity.this, RecipeDetailActivity.class));
+                Intent intent = new Intent(RecipeThemeActivity.this, RecipeDetailActivity.class);
+                intent.putExtra("recipeID",recipeListItems.get(position).getContent().getRecipeID());
+                startActivity(intent);
             }
         });
 

@@ -46,7 +46,9 @@ public class NotificationActivity extends BaseActivity implements SwipeRefreshLa
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2)) {
-                startActivity(new Intent(NotificationActivity.this, RecipeDetailActivity.class));
+                Intent intent = new Intent(NotificationActivity.this, RecipeDetailActivity.class);
+//                intent.putExtra("recipeID", notifications.get(position).getRecipeID());
+                startActivity(intent);
             } else {
                 Intent intent = new Intent(NotificationActivity.this, HomeActivity.class);
                 intent.putExtra("MODE", HomeActivity.MODE.MY);

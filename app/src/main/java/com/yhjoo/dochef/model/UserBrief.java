@@ -2,6 +2,8 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class UserBrief {
     @SerializedName("user_id")
     private String userID;
@@ -9,22 +11,18 @@ public class UserBrief {
     private String userImg;
     @SerializedName("nickname")
     private String nickname;
-    @SerializedName("is_follow")
-    private int is_follow;
+    @SerializedName("follow")
+    private ArrayList<String> follow;
 
-    public UserBrief(String userID, String userImg, String nickname, int is_follow) {
+    public UserBrief(String userID, String userImg, String nickname, ArrayList<String> follow) {
         this.userID = userID;
         this.userImg = userImg;
         this.nickname = nickname;
-        this.is_follow = is_follow;
+        this.follow = follow;
     }
 
     public String getUserID() {
         return userID;
-    }
-
-    public int getIs_follow() {
-        return is_follow;
     }
 
     public String getUserImg() {
@@ -35,13 +33,17 @@ public class UserBrief {
         return nickname;
     }
 
+    public ArrayList<String> getFollow() {
+        return follow;
+    }
+
     @Override
     public String toString() {
-        return "UserBreif{" +
+        return "UserBrief{" +
                 "userID='" + userID + '\'' +
                 ", userImg='" + userImg + '\'' +
                 ", nickname='" + nickname + '\'' +
-                ", is_follow=" + is_follow +
+                ", follow=" + follow +
                 '}';
     }
 }

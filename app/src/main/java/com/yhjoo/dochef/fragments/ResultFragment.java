@@ -72,8 +72,9 @@ public class ResultFragment extends Fragment {
                 case VIEWHOLDER_ITEM_RECIPE_NAME:
                 case VIEWHOLDER_ITEM_INGREDIENT:
                 case VIEWHOLDER_ITEM_TAG:
-                    Intent intent1 = new Intent(getContext(), RecipeDetailActivity.class);
-                    startActivity(intent1);
+                    Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
+                    intent.putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
+                    startActivity(intent);
                     break;
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class);

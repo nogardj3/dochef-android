@@ -55,12 +55,10 @@ public class RetrofitServices {
         Call<UserDetail> getUserDetail(@Query("user_id") String user_id);
 
         @GET("user/follower")
-        Call<ArrayList<UserBrief>> getFollowers(@Query("user_id") String user_id,
-                                                @Query("target_id") String target_id);
+        Call<ArrayList<UserBrief>> getFollowers(@Query("target_id") String target_id);
 
         @GET("user/following")
-        Call<ArrayList<UserBrief>> getFollowings(@Query("user_id") String user_id,
-                                                 @Query("target_id") String target_id);
+        Call<ArrayList<UserBrief>> getFollowings(@Query("target_id") String target_id);
 
         @FormUrlEncoded
         @POST("user/subscribe")
@@ -96,6 +94,10 @@ public class RetrofitServices {
         @FormUrlEncoded
         @POST("recipe/count")
         Call<JsonObject> addCount(@Field("recipe_id") int recipeId);
+
+        @FormUrlEncoded
+        @POST("recipe/like")
+        Call<JsonObject> setLikeRecipe(@Field("recipe_id") int recipeId, @Field("user_id") String userId , @Field("like") int like);
 
         @FormUrlEncoded
         @POST("review/create")
@@ -140,9 +142,9 @@ public class RetrofitServices {
 
         @FormUrlEncoded
         @POST("post/like")
-        Call<JsonObject> likePost(@Field("user_id") String userID,
-                                  @Field("post_id") int postID,
-                                  @Field("like") int like);
+        Call<JsonObject> setLikePost(@Field("user_id") String userID,
+                                     @Field("post_id") int postID,
+                                     @Field("like") int like);
 
         @FormUrlEncoded
         @POST("post/create")
