@@ -20,7 +20,7 @@ import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
@@ -40,8 +40,6 @@ public class MainInitFragment extends Fragment {
 
     /*
         TODO
-        1. 실행 해보고 수정할거 수정하기
-        recommendAdapter emptyview 필요없음
     */
 
     @Override
@@ -70,14 +68,16 @@ public class MainInitFragment extends Fragment {
 
 
         recommendAdapter = new RecommendAdapter();
-        recommendAdapter.setOnItemClickListener((adapter, view1, position) -> startActivity(new Intent(getContext(), RecipeDetailActivity.class)));
+        recommendAdapter.setOnItemClickListener((adapter, view1, position)
+                -> startActivity(new Intent(getContext(), RecipeDetailActivity.class)));
         recommendAdapter.setNewData(recipeList);
-        binding.mainRecommendRecyclerview.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.mainRecommendRecyclerview.setLayoutManager(
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
         if (App.isServerAlive()) {
             getRecipelist();
         } else {
-            recipeList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+            recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
             recommendAdapter.setNewData(recipeList);
         }
 
@@ -85,7 +85,7 @@ public class MainInitFragment extends Fragment {
     }
 
     void getRecipelist() {
-        recipeService.getRecipeByTag("매운맛")
+        recipeService.getRecipes("popular")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
@@ -96,7 +96,6 @@ public class MainInitFragment extends Fragment {
                         else {
                             recipeList = response.body();
                             recommendAdapter.setNewData(recipeList);
-                            recommendAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.mainRecommendRecyclerview.getParent());
                         }
                     }
                 });

@@ -51,20 +51,6 @@ public class RecipeDetail {
         this.phases = phases;
     }
 
-    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating) {
-        this.recipeID = recipeID;
-        this.recipeName = recipeName;
-        this.userID = userID;
-        this.nickname = nickname;
-        this.userImg = userImg;
-        this.recipeImg = recipeImg;
-        this.contents = contents;
-        this.datetime = datetime;
-        this.amount_time = amount_time;
-        this.view_count = view_count;
-        this.rating = rating;
-    }
-
     public int getRecipeID() {
         return recipeID;
     }

@@ -27,6 +27,9 @@ public class RecipePhase {
         this.tips = tips;
     }
 
+    public RecipePhase() {
+    }
+
     public int getPhase_type() {
         return phase_type;
     }

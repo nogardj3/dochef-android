@@ -15,7 +15,7 @@ import com.yhjoo.dochef.databinding.AFollowlistBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -82,7 +82,7 @@ public class FollowListActivity extends BaseActivity {
             else if (current_mode == MODE.FOLLOWING)
                 getFollowing();
         } else {
-            ArrayList<UserBrief> data = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
+            ArrayList<UserBrief> data = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
             followListAdapter.setNewData(data);
         }
     }

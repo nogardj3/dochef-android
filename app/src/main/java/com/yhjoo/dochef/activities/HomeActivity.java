@@ -32,7 +32,7 @@ import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.PermissionUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
@@ -121,9 +121,9 @@ public class HomeActivity extends BaseActivity {
             getRecipeList(userID);
             getPostList(userID);
         } else {
-            userDetailInfo = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_RECIPE_DETAIL);
-            recipeList = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_RECIPE);
-            postList = DummyMaker.make(getResources(), R.integer.DUMMY_TYPE_POST);
+            userDetailInfo = DataGenerator.make(getResources(), R.integer.DUMMY_TYPE_RECIPE_DETAIL);
+            recipeList = DataGenerator.make(getResources(), R.integer.DUMMY_TYPE_RECIPE);
+            postList = DataGenerator.make(getResources(), R.integer.DUMMY_TYPE_POST);
 
             setUserInfo();
             recipeHorizontalAdapter.setNewData(recipeList);
@@ -139,6 +139,7 @@ public class HomeActivity extends BaseActivity {
                 mImageUri = data.getData();
                 Glide.with(this)
                         .load(mImageUri)
+                        .centerCrop()
                         .into(binding.homeUserimg);
             }
     }
@@ -195,7 +196,7 @@ public class HomeActivity extends BaseActivity {
     }
 
     void getRecipeList(String userID) {
-        recipeService.getRecipeByUserID(userID)
+        recipeService.getRecipeByUserID(userID,"latest")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
@@ -231,10 +232,19 @@ public class HomeActivity extends BaseActivity {
     }
 
     void setUserInfo() {
-        if (!userDetailInfo.getUserImg().equals("default"))
-            Glide.with(HomeActivity.this)
-                    .load(getString(R.string.storage_image_url_profile) + userDetailInfo.getUserImg())
+        if (App.isServerAlive()) {
+            if (!userDetailInfo.getUserImg().equals("default"))
+                Glide.with(this)
+                        .load(getString(R.string.storage_image_url_profile) + userDetailInfo.getUserImg())
+                        .circleCrop()
+                        .into(binding.homeUserimg);
+        } else {
+            Glide.with(this)
+                    .load(Integer.parseInt(userDetailInfo.getUserImg()))
+                    .circleCrop()
                     .into(binding.homeUserimg);
+        }
+
 
         binding.homeNickname.setText(userDetailInfo.getNickname());
         binding.homeProfiletext.setText(userDetailInfo.getProfileText());

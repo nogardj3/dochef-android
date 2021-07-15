@@ -19,13 +19,18 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, UserBrief item) {
-        if (!item.getUserImg().equals("default")) {
+        if (App.isServerAlive()) {
+            if (!item.getUserImg().equals("default")) {
+                Glide.with(mContext)
+                        .load(mContext.getString(R.string.storage_image_url_profile) + item.getUserImg())
+                        .circleCrop()
+                        .into((AppCompatImageView) helper.getView(R.id.user_img));
+            }
+        } else
             Glide.with(mContext)
-                    .load(App.isServerAlive()
-                            ? mContext.getString(R.string.storage_image_url_profile) + item.getUserImg()
-                            : Integer.valueOf(item.getUserImg()))
+                    .load(Integer.valueOf(item.getUserImg()))
+                    .circleCrop()
                     .into((AppCompatImageView) helper.getView(R.id.user_img));
-        }
 
         if (!item.getUserID().equals(userID)) {
             if (item.getIs_follow() == 1)

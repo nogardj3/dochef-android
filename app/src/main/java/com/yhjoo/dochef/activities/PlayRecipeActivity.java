@@ -195,7 +195,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
             }
         });
 
-        PodSlider podSlider = (PodSlider) findViewById(R.id.playrecipe_podslider);
+        PodSlider podSlider = binding.playrecipePodslider;
         podSlider.setNumberOfPods(recipePlays.size());
         podSlider.setUpWithViewPager(binding.playrecipeViewpager);
         ArrayList<String> arrayList = new ArrayList<>();

@@ -11,6 +11,7 @@ import com.yhjoo.dochef.model.Notification;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.RecipeDetail;
+import com.yhjoo.dochef.model.RecipePhase;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.model.UserDetail;
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class DummyMaker {
+public class DataGenerator {
     public static <T> T make(Resources resources, int type) {
         if (type == resources.getInteger(R.integer.DUMMY_TYPE_FAQ)) {
             ArrayList<FAQ> arrayList = new ArrayList<>();
@@ -70,30 +71,22 @@ public class DummyMaker {
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
 
-                arrayList.add(new UserBrief("유저 " + i,
+                arrayList.add(new UserBrief("userID",
                         Integer.toString(img_profiles[r.nextInt(3)]),
-                        "더미 유저 " + i, i % 2 == 1 ? 1 : 0));
+                        "유저 " + i, i % 2 == 1 ? 1 : 0));
             }
 
             return (T) arrayList;
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_USER_DETAIL)) {
-            UserDetail userDetail = new UserDetail(
-                    "userID",
-                    "default",
-                    "더미 유저",
-                    "유저 BIO",
-                    1,
-                    1,
-                    1
-            );
+            int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1, R.raw.dummy_profile_2};
+            Random r = new Random();
 
-            return (T) userDetail;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_USER_DETAIL)) {
+
             UserDetail userDetail = new UserDetail(
                     "userID",
-                    "default",
-                    "더미 유저",
-                    "유저 BIO",
+                    Integer.toString(img_profiles[r.nextInt(3)]),
+                    "유저",
+                    "유저 소개글",
                     1,
                     1,
                     1
@@ -113,13 +106,9 @@ public class DummyMaker {
                 ArrayList<String> likes = new ArrayList<>();
                 likes.add("유저" + i);
                 ArrayList<Comment> comments = new ArrayList<>();
-                comments.add(new Comment(i,
-                        i,
-                        "userID" + i,
-                        "유저 " + i,
-                        Integer.toString(img_profiles[r.nextInt(3)]),
-                        "내용 " + i,
-                        System.currentTimeMillis() - (1000* 1000 * i)
+                comments.add(new Comment(i, i, "userID" + i,
+                        "유저 " + i, Integer.toString(img_profiles[r.nextInt(3)]),
+                        "내용 " + i, System.currentTimeMillis() - (1000 * 1000 * i)
                 ));
 
                 arrayList.add(new Post(i,
@@ -127,7 +116,7 @@ public class DummyMaker {
                         "유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(3)]),
                         Integer.toString(R.raw.dummy_post),
-                        System.currentTimeMillis() - (1000* 1000 * i),
+                        System.currentTimeMillis() - (1000 * 1000 * i),
                         "내용 " + i,
                         tags,
                         comments,
@@ -149,7 +138,7 @@ public class DummyMaker {
                         "유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(3)]),
                         "내용 " + i,
-                        System.currentTimeMillis() - (1000* 1000 * i)
+                        System.currentTimeMillis() - (1000 * 1000 * i)
                 ));
             }
 
@@ -163,18 +152,12 @@ public class DummyMaker {
             for (int i = 0; i < 20; i++) {
                 Random r = new Random();
                 Ingredient ingredient = new Ingredient("재료" + i, i, "스푼");
-                Recipe recipe = new Recipe(
-                        i,
-                        "레시피 " + i,
-                        "userID",
+                Recipe recipe = new Recipe(i, "레시피 " + i, "userID",
                         "유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(3)]),
                         Integer.toString(img_grids[r.nextInt(3)]),
-                        "내용 " + i,
-                        System.currentTimeMillis() - (i * 1000000),
-                        i + "분",
-                        i,
-                        i % 5
+                        "내용 " + i, System.currentTimeMillis() - (1000 * 1000 * i),
+                        i + "분", i, r.nextInt(6)
                 );
 
                 arrayList.add(recipe);
@@ -189,17 +172,12 @@ public class DummyMaker {
 
             Ingredient ingredient = new Ingredient("재료" + 1, 1, "스푼");
             RecipeDetail recipeDetail = new RecipeDetail(
-                    1,
-                    "레시피 " + 1,
-                    "userID",
-                    "유저 " + 1,
+                    1, "레시피 " + 1, "userID", "유저 " + 1,
                     Integer.toString(img_profiles[r.nextInt(3)]),
                     Integer.toString(img_recipe[r.nextInt(3)]),
-                    "내용 " + 1,
-                    System.currentTimeMillis() - (1 * 1000000),
-                    1 + "분",
-                    1,
-                    r.nextInt(5)
+                    "내용 " + 1, System.currentTimeMillis() - (1000 * 1000),
+                    1 + "분", 1, r.nextInt(6),
+                    new String[]{}, new String[]{}, new RecipePhase()
             );
 
             return (T) recipeDetail;
@@ -210,15 +188,10 @@ public class DummyMaker {
 
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
-                arrayList.add(new Review(
-                        i,
-                        i,
-                        "userID",
-                        "유저 " + i,
-                        Integer.toString(img_profiles[r.nextInt(3)]),
-                        "내용",
-                        r.nextInt(5),
-                        System.currentTimeMillis() - (1000* 1000 * i)));
+                arrayList.add(new Review(i, i, "userID",
+                        "유저 " + i, Integer.toString(img_profiles[r.nextInt(3)]),
+                        "내용 " + i, r.nextInt(6),
+                        System.currentTimeMillis() - (1000 * 1000 * i)));
             }
 
             return (T) arrayList;

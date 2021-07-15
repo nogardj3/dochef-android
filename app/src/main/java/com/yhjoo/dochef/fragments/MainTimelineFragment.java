@@ -23,7 +23,7 @@ import com.yhjoo.dochef.databinding.FMainTimelineBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -114,7 +114,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
         if (App.isServerAlive()) {
             getPostList();
         } else {
-            postList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST));
+            postList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST));
             postListAdapter.setNewData(postList);
         }
     }

@@ -3,7 +3,6 @@ package com.yhjoo.dochef.adapter;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.skyhope.materialtagview.TagView;
@@ -25,7 +24,7 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
                 helper.setVisible(R.id.timeline_postimg, true);
                 Glide.with(mContext)
                         .load(mContext.getString(R.string.storage_image_url_post) + item.getPostImg())
-                        .apply(RequestOptions.centerCropTransform())
+                        .centerCrop()
                         .into((AppCompatImageView) helper.getView(R.id.timeline_postimg));
             }
             if (!item.getUserImg().equals("default"))
@@ -37,7 +36,7 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
             helper.setVisible(R.id.timeline_postimg, true);
             Glide.with(mContext)
                     .load(Integer.parseInt(item.getPostImg()))
-                    .apply(RequestOptions.centerCropTransform())
+                    .centerCrop()
                     .into((AppCompatImageView) helper.getView(R.id.timeline_postimg));
             Glide.with(mContext)
                     .load(Integer.parseInt(item.getUserImg()))
@@ -59,8 +58,6 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         ((TagView) helper.getView(R.id.timeline_tags)).setTagList(item.getTags());
 
         if (item.getComments().size() != 0) {
-            Utils.log(item.getComments().size() + "");
-
             helper.setVisible(R.id.timeline_comment_group, true);
             helper.setText(R.id.timeline_comment_nickname, item.getComments().get(0).getNickName());
             helper.setText(R.id.timeline_comment_contents, item.getComments().get(0).getContents());

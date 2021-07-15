@@ -2,14 +2,11 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.ReviewListAdapter;
@@ -18,11 +15,8 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.ArrayList;
 
@@ -61,10 +55,10 @@ public class RecipeDetailActivity extends BaseActivity {
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
         reviewService = RetrofitBuilder.create(this, RetrofitServices.ReviewService.class);
 
-        recipeID = getIntent().getIntExtra("recipeID",0);
+        recipeID = getIntent().getIntExtra("recipeID", 0);
 
         reviewListAdapter = new ReviewListAdapter();
-        binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this){
+        binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this) {
             @Override
             public boolean canScrollHorizontally() {
                 return false;
@@ -81,15 +75,15 @@ public class RecipeDetailActivity extends BaseActivity {
             getRecipeDetail();
             getReviewList();
         } else {
-            recipeDetailInfo = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
-            reviewList = DummyMaker.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
+            recipeDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+            reviewList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
 
             setTopView();
             reviewListAdapter.setNewData(reviewList);
         }
     }
 
-    void getRecipeDetail(){
+    void getRecipeDetail() {
         recipeService.getRecipeDetail(recipeID)
                 .enqueue(new BasicCallback<RecipeDetail>(this) {
                     @Override
@@ -106,7 +100,7 @@ public class RecipeDetailActivity extends BaseActivity {
                 });
     }
 
-    void getReviewList(){
+    void getReviewList() {
         reviewService.getReview(recipeID)
                 .enqueue(new BasicCallback<ArrayList<Review>>(this) {
                     @Override
@@ -127,22 +121,23 @@ public class RecipeDetailActivity extends BaseActivity {
 
     void setTopView() {
         if (App.isServerAlive()) {
-            if (!recipeDetailInfo.getRecipeImg().equals("default"))
-                Glide.with(this)
-                        .load(getString(R.string.storage_image_url_recipe) + recipeDetailInfo.getRecipeImg())
-                        .into(binding.recipedetailMainImg);
+            Glide.with(this)
+                    .load(getString(R.string.storage_image_url_recipe) + recipeDetailInfo.getRecipeImg())
+                    .centerCrop()
+                    .into(binding.recipedetailMainImg);
             if (!recipeDetailInfo.getUserImg().equals("default"))
                 Glide.with(this)
                         .load(getString(R.string.storage_image_url_profile) + recipeDetailInfo.getRecipeImg())
-                        .apply(RequestOptions.circleCropTransform())
+                        .circleCrop()
                         .into(binding.recipedetailUserimg);
         } else {
             Glide.with(this)
                     .load(Integer.parseInt(recipeDetailInfo.getRecipeImg()))
+                    .centerCrop()
                     .into(binding.recipedetailMainImg);
             Glide.with(this)
                     .load(Integer.parseInt(recipeDetailInfo.getUserImg()))
-                    .apply(RequestOptions.circleCropTransform())
+                    .circleCrop()
                     .into(binding.recipedetailUserimg);
         }
 

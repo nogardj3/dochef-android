@@ -12,7 +12,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.NotificationListAdapter;
 import com.yhjoo.dochef.databinding.ANotificationBinding;
 import com.yhjoo.dochef.model.Notification;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 
 import java.util.ArrayList;
 
@@ -40,7 +40,7 @@ public class NotificationActivity extends BaseActivity implements SwipeRefreshLa
         binding.notificationSwipe.setOnRefreshListener(this);
         binding.notificationSwipe.setColorSchemeColors(this.getColor(R.color.colorPrimary));
 
-        notifications = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTIFICATION));
+        notifications = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTIFICATION));
 
         notificationListAdapter = new NotificationListAdapter();
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());

@@ -3,7 +3,6 @@ package com.yhjoo.dochef.adapter;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.App;
@@ -18,15 +17,14 @@ public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
         if (App.isServerAlive()) {
-            if (!item.getRecipeImg().equals("default"))
-                Glide.with(mContext)
-                        .load(item.getRecipeImg())
-                        .apply(RequestOptions.centerCropTransform())
-                        .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
+            Glide.with(mContext)
+                    .load(item.getRecipeImg())
+                    .centerCrop()
+                    .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
         } else
             Glide.with(mContext)
                     .load(Integer.parseInt(item.getRecipeImg()))
-                    .apply(RequestOptions.centerCropTransform())
+                    .centerCrop()
                     .into((AppCompatImageView) helper.getView(R.id.reciperecommend_recipeimg));
 
         helper.setText(R.id.reciperecommend_title, item.getRecipeName());

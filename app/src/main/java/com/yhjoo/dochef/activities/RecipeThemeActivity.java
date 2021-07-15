@@ -15,7 +15,7 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemTheme;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
@@ -26,6 +26,7 @@ import retrofit2.Response;
 public class RecipeThemeActivity extends BaseActivity {
     public final int VIEWHOLDER_AD = 1;
     public final int VIEWHOLDER_ITEM = 2;
+    public enum MODE {NORMAL, TAG}
 
     ARecipethemeBinding binding;
 
@@ -34,6 +35,8 @@ public class RecipeThemeActivity extends BaseActivity {
     RecipeThemeAdapter recipeThemeAdapter;
 
     ArrayList<MultiItemTheme> recipeListItems = new ArrayList<>();
+
+    String tagName;
 
     /*
         TODO
@@ -67,7 +70,7 @@ public class RecipeThemeActivity extends BaseActivity {
         if (App.isServerAlive()) {
             getRecipeList();
         } else {
-            ArrayList<Recipe> arrayList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+            ArrayList<Recipe> arrayList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
             for (int i = 0; i < arrayList.size(); i++) {
                 recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                 if (i != 0 && i % 4 == 0)
@@ -79,7 +82,7 @@ public class RecipeThemeActivity extends BaseActivity {
     }
 
     void getRecipeList() {
-        recipeService.getRecipeByTag("매운맛")
+        recipeService.getRecipeByTag("매운맛","popular")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {

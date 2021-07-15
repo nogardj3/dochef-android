@@ -3,9 +3,9 @@ package com.yhjoo.dochef.adapter;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
 
@@ -18,11 +18,18 @@ public class RecipeListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
-        if (!item.getRecipeImg().equals("default"))
+        if(App.isServerAlive()) {
             Glide.with(mContext)
-                    .load(item.getRecipeImg())
-                    .apply(RequestOptions.centerCropTransform())
+                    .load(mContext.getString(R.string.storage_image_url_recipe)+item.getRecipeImg())
+                    .centerCrop()
                     .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
+        }
+        else{
+            Glide.with(mContext)
+                .load(Integer.parseInt(item.getRecipeImg()))
+                .centerCrop()
+                .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
+        }
 
         helper.setText(R.id.recipemylist_recipetitle, item.getRecipeName());
         helper.setText(R.id.recipemylist_nickname,

@@ -22,7 +22,7 @@ import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
@@ -32,8 +32,8 @@ import retrofit2.Response;
 
 public class ResultFragment extends Fragment {
     private final int VIEWHOLDER_AD = 0;
-    private final int VIEWHOLDER_ITEM_RECIPE = 1;
-    private final int VIEWHOLDER_ITEM_USER = 2;
+    private final int VIEWHOLDER_ITEM_USER = 1;
+    private final int VIEWHOLDER_ITEM_RECIPE_NAME = 2;
     private final int VIEWHOLDER_ITEM_INGREDIENT = 3;
     private final int VIEWHOLDER_ITEM_TAG = 4;
 
@@ -47,10 +47,7 @@ public class ResultFragment extends Fragment {
 
     /*
         TODO
-        1. get recipe by recipename sort by view_count desc
-        2. get recipe by ingredient sort by view_count desc
-        3. get recipe by tag sort by view_count desc
-        4. Recipe 서버 추가 및 기능 구현
+        서버 확인
     */
 
     @Override
@@ -72,7 +69,7 @@ public class ResultFragment extends Fragment {
         resultListAdapter.setEmptyView(R.layout.rv_search, (ViewGroup) binding.resultRecycler.getParent());
         resultListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             switch (adapter.getItemViewType(position)) {
-                case VIEWHOLDER_ITEM_RECIPE:
+                case VIEWHOLDER_ITEM_RECIPE_NAME:
                 case VIEWHOLDER_ITEM_INGREDIENT:
                 case VIEWHOLDER_ITEM_TAG:
                     Intent intent1 = new Intent(getContext(), RecipeDetailActivity.class);
@@ -108,30 +105,14 @@ public class ResultFragment extends Fragment {
 
     public void search() {
         if (((SearchActivity) getActivity()).getKeyword() != null) {
-            this.keyword = ((SearchActivity) getActivity()).getKeyword();
+            keyword = ((SearchActivity) getActivity()).getKeyword();
             loadList();
         }
     }
 
     void loadList() {
-        ArrayList<Recipe> recipes = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
-
-        switch (type) {
-            case VIEWHOLDER_ITEM_RECIPE:
-                ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
-
-                for (int i = 0; i < recipes.size(); i++) {
-                    multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_ITEM_RECIPE, recipes.get(i)));
-
-                    if (i != 0 && i % 4 == 0) {
-                        multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
-                    }
-                }
-
-                resultListAdapter.setNewData(multiItemResults);
-                resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                break;
-            case VIEWHOLDER_ITEM_USER:
+        if (App.isServerAlive()) {
+            if(type== resultListAdapter.VIEWHOLDER_ITEM_USER){
                 userService.getUserByNickname(keyword)
                         .enqueue(new BasicCallback<ArrayList<UserBrief>>(getContext()) {
                             @Override
@@ -140,53 +121,89 @@ public class ResultFragment extends Fragment {
                                 if (response.code() == 500) {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
-                                    ArrayList<UserBrief> userBrief = response.body();
-                                    ArrayList<MultiItemResult> userListItem = new ArrayList<>();
-
-                                    for (int i = 0; i < response.body().size(); i++) {
-                                        if (i % 5 != 4)
-                                            userListItem.add(new MultiItemResult<>(type, userBrief.get(i)));
-                                        else {
-                                            userListItem.add(new MultiItemResult<>(type, userBrief.get(i)));
-                                            userListItem.add(new MultiItemResult<>(VIEWHOLDER_AD));
-                                        }
-                                    }
-
-                                    resultListAdapter.setNewData(userListItem);
-                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+                                    setUserItem(response.body());
                                 }
                             }
                         });
-                break;
-            case VIEWHOLDER_ITEM_INGREDIENT:
-                ArrayList<MultiItemResult> items2WithAd = new ArrayList<>();
-
-                for (int i = 0; i < recipes.size(); i++) {
-                    items2WithAd.add(new MultiItemResult<>(VIEWHOLDER_ITEM_INGREDIENT, recipes.get(i)));
-
-                    if (i != 0 && i % 4 == 0) {
-                        items2WithAd.add(new MultiItemResult<>(VIEWHOLDER_AD));
-                    }
-                }
-
-                resultListAdapter.setNewData(items2WithAd);
-                resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                break;
-
-            case VIEWHOLDER_ITEM_TAG:
-                ArrayList<MultiItemResult> items3WithAd = new ArrayList<>();
-
-                for (int i = 0; i < recipes.size(); i++) {
-                    items3WithAd.add(new MultiItemResult<>(VIEWHOLDER_ITEM_TAG, recipes.get(i)));
-
-                    if (i != 0 && i % 4 == 0) {
-                        items3WithAd.add(new MultiItemResult<>(VIEWHOLDER_AD));
-                    }
-                }
-
-                resultListAdapter.setNewData(items3WithAd);
-                resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                break;
+            }
+            else if (type== resultListAdapter.VIEWHOLDER_ITEM_RECIPE_NAME){
+                recipeService.getRecipeByName(keyword,"popular")
+                        .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
+                            @Override
+                            public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                                super.onResponse(call, response);
+                                if (response.code() == 500) {
+                                    App.getAppInstance().showToast("user list 가져오기 실패");
+                                } else {
+                                    setRecipeItem(response.body());
+                                }
+                            }
+                        });
+            }
+            else if (type== resultListAdapter.VIEWHOLDER_ITEM_TAG){
+                recipeService.getRecipeByTag(keyword,"popular")
+                        .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
+                            @Override
+                            public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                                super.onResponse(call, response);
+                                if (response.code() == 500) {
+                                    App.getAppInstance().showToast("user list 가져오기 실패");
+                                } else {
+                                    setRecipeItem(response.body());
+                                }
+                            }
+                        });
+            }
+            else if (type== resultListAdapter.VIEWHOLDER_ITEM_INGREDIENT){
+                recipeService.getRecipeByIngredient(keyword,"popular")
+                        .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
+                            @Override
+                            public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                                super.onResponse(call, response);
+                                if (response.code() == 500) {
+                                    App.getAppInstance().showToast("user list 가져오기 실패");
+                                } else {
+                                    setRecipeItem(response.body());
+                                }
+                            }
+                        });
+            }
+        } else{
+            if(type == VIEWHOLDER_ITEM_USER){
+                ArrayList<UserBrief> userBriefs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
+                setUserItem(userBriefs);
+            }
+            else{
+                ArrayList<Recipe> recipes = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+                setRecipeItem(recipes);
+            }
         }
+    }
+
+
+    void setRecipeItem(ArrayList<Recipe> recipes) {
+        ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
+        if (type == VIEWHOLDER_ITEM_USER) {
+        } else{
+            for (int i = 0; i < recipes.size(); i++) {
+                multiItemResults.add(new MultiItemResult<>(type, recipes.get(i)));
+
+                if (i != 0 && i % 4 == 0)
+                    multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
+            }
+        }
+    }
+
+    void setUserItem(ArrayList<UserBrief> userBriefs){
+        ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
+        for (int i = 0; i < userBriefs.size(); i++) {
+            multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_ITEM_USER, userBriefs.get(i)));
+
+            if (i != 0 && i % 4 == 0)
+                multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
+        }
+
+        resultListAdapter.setNewData(multiItemResults);
+        resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
     }
 }

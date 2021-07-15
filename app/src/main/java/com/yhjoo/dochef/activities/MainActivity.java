@@ -14,7 +14,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
@@ -32,7 +31,11 @@ import com.yhjoo.dochef.fragments.MainInitFragment;
 import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.UserBrief;
+import com.yhjoo.dochef.model.UserDetail;
+import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
@@ -40,7 +43,10 @@ import java.util.ArrayList;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     AMainBinding binding;
     FirebaseAnalytics mFirebaseAnalytics;
+    RetrofitServices.UserService userService;
     MainFragmentAdapter mainFragmentAdapter;
+
+    UserDetail userDetailInfo;
 
     AppCompatTextView userName;
     AppCompatImageView userImage;
@@ -60,6 +66,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         MobileAds.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
+        userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
 
         binding.mainFab.setImageResource(R.drawable.ic_low_priority_white_24dp);
 
@@ -159,27 +167,31 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onResume() {
         super.onResume();
 
-
         if (App.isServerAlive()) {
             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
             Gson gson = new Gson();
             UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
 
             Utils.log(userInfo.toString());
-            Utils.log(!userInfo.getUserImg().equals("default"));
-
-            userName.setText(userInfo.getNickname());
 
             if(!userInfo.getUserImg().equals("default"))
                 Glide.with(this)
                         .load(getString(R.string.storage_image_url_profile) + userInfo.getUserImg())
+                        .circleCrop()
                         .into(userImage);
+            userName.setText(userInfo.getNickname());
 
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(true);
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(true);
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_notification).setVisible(true);
         } else {
-            userName.setText("더미");
+            userDetailInfo = DataGenerator.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_USER_DETAIL));
+
+            Glide.with(this)
+                    .load(Integer.parseInt(userDetailInfo.getUserImg()))
+                    .circleCrop()
+                    .into(userImage);
+            userName.setText(userDetailInfo.getNickname());
 
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
             binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(false);
@@ -242,8 +254,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startActivity(new Intent(MainActivity.this, SettingActivity.class));
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.main_drawerlayout);
-        drawer.closeDrawer(GravityCompat.START);
+        binding.mainDrawerlayout.closeDrawer(GravityCompat.START);
         return true;
     }
 

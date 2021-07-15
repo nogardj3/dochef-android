@@ -15,7 +15,7 @@ import com.yhjoo.dochef.model.ExpandContents;
 import com.yhjoo.dochef.model.ExpandTitle;
 import com.yhjoo.dochef.model.FAQ;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
@@ -71,7 +71,7 @@ public class FAQActivity extends BaseActivity {
     }
 
     void getListFromLocal() {
-        ArrayList<FAQ> faqs = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
+        ArrayList<FAQ> faqs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
         for (FAQ item : faqs) {
             ExpandTitle title = new ExpandTitle(item.title);
             ExpandContents contents = new ExpandContents(item.contents,0);

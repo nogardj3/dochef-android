@@ -77,17 +77,21 @@ public class RetrofitServices {
         @GET("recipe/detail")
         Call<RecipeDetail> getRecipeDetail(@Query("recipe_id") int recipeId);
 
-        @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeByUserID(@Query("user_id") String userId);
 
         @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeByName(@Query("recipe_name") String recipeName);
+        Call<ArrayList<Recipe>> getRecipes(@Query("sort") String sort);
 
         @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeByIngredient(@Query("ingredient") String ingredient);
+        Call<ArrayList<Recipe>> getRecipeByUserID(@Query("user_id") String userId, @Query("sort") String sort);
 
         @GET("recipe/")
-        Call<ArrayList<Recipe>> getRecipeByTag(@Query("tag") String tag);
+        Call<ArrayList<Recipe>> getRecipeByName(@Query("recipe_name") String recipeName, @Query("sort") String sort);
+
+        @GET("recipe/")
+        Call<ArrayList<Recipe>> getRecipeByTag(@Query("tag") String tag, @Query("sort") String sort);
+
+        @GET("recipe/")
+        Call<ArrayList<Recipe>> getRecipeByIngredient(@Query("ingredient") String ingredient, @Query("sort") String sort);
 
         @FormUrlEncoded
         @POST("recipe/count")

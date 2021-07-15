@@ -8,7 +8,6 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 
 import java.util.ArrayList;
 
@@ -28,7 +27,7 @@ public class MainAdPagerAdapter extends PagerAdapter {
             aa.setLayoutParams(lp);
             Glide.with(mContext)
                     .load(imgids.get(position))
-                    .apply(RequestOptions.centerInsideTransform())
+                    .centerInside()
                     .into(aa);
 
             collection.addView(aa);

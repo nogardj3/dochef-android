@@ -15,7 +15,7 @@ import com.yhjoo.dochef.model.ExpandContents;
 import com.yhjoo.dochef.model.ExpandTitle;
 import com.yhjoo.dochef.model.Notice;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 
 import java.util.ArrayList;
@@ -69,7 +69,7 @@ public class NoticeActivity extends BaseActivity {
     }
 
     void getListFromDummy(){
-        ArrayList<Notice> response = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
+        ArrayList<Notice> response = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
         for (Notice item : response) {
             ExpandTitle title = new ExpandTitle(item.title);
             title.addSubItem(new ExpandContents(item.contents,item.getDateTime()));

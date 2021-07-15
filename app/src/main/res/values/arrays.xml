@@ -6,4 +6,10 @@
         <item>내 레시피</item>
         <item>타임라인</item>
     </string-array>
+    <string-array name="recommend_tags">
+        <item>매운맛</item>
+        <item>짠맛</item>
+        <item>국수</item>
+        <item>라면</item>
+    </string-array>
 </resources>

@@ -51,7 +51,7 @@ public class PostWriteActivity extends BaseActivity {
 
     /*
         TODO
-        1. tags 추가 및 삭제 레이아웃
+        REVISE 시 최초 통신해서 데이터 가져오는걸로
     */
 
     @Override
@@ -78,6 +78,7 @@ public class PostWriteActivity extends BaseActivity {
             if(getIntent().getStringExtra("postImg") != null)
                 Glide.with(this)
                         .load(getIntent().getStringExtra("postImg"))
+                .centerCrop()
                         .into(binding.postwritePostimg);
 
             ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");

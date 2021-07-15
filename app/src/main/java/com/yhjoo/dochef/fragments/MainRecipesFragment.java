@@ -21,11 +21,12 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -40,7 +41,8 @@ import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_PAGER;
 public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     public static final int mode_Recent = 1;
     public static final int mode_Popular = 2;
-    private final String[] recommendTheme = {"추천 메뉴", "#매운맛 #간단", "인기 메뉴", "초스피드 간단메뉴"};
+
+    String[] recommend_tags;
 
     FMainRecipesBinding binding;
     RetrofitServices.RecipeService recipeService;
@@ -52,7 +54,6 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     /*
         TODO
-        1. get recipe sort by view_count desc
         recommendAdapter emptyview 필요없음
     */
 
@@ -65,7 +66,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
         binding.fRecipeSwipe.setOnRefreshListener(this);
         binding.fRecipeSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
-        recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems);
+        recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems,recipeService);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
                 startActivity(new Intent(getContext(), RecipeDetailActivity.class));
@@ -74,10 +75,13 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         binding.fRecipeRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
         binding.fRecipeRecycler.setAdapter(recipeMultiAdapter);
 
+        recommend_tags = getResources().getStringArray(R.array.recommend_tags);
+        Random r = new Random();
+
         if (App.isServerAlive()) {
             getRecipeList();
         } else {
-            ArrayList<Recipe> temp = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+            ArrayList<Recipe> temp = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
 
             for (int i = 0; i < temp.size(); i++) {
                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
@@ -86,7 +90,8 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                 int ttt = i / 4 % 2;
                 if (i != 0 && tt == 0) {
                     if (ttt == 0)
-                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER, recommendTheme[i % 4]));
+                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
+                                recommend_tags[r.nextInt(recommend_tags.length)]));
                     else
                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                 }
@@ -105,7 +110,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
     }
 
     void getRecipeList() {
-        recipeService.getRecipeByTag("매운맛")
+        recipeService.getRecipes("popular")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
@@ -115,6 +120,8 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                             App.getAppInstance().showToast("뭔가에러");
                         else {
                             ArrayList<Recipe> arrayList = response.body();
+                            Random r = new Random();
+
                             for (int i = 0; i < arrayList.size(); i++) {
                                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, arrayList.get(i)));
 
@@ -122,7 +129,8 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                                 int ttt = i / 4 % 2;
                                 if (i != 0 && tt == 0) {
                                     if (ttt == 0)
-                                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER, recommendTheme[i % 4]));
+                                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
+                                                recommend_tags[r.nextInt(recommend_tags.length)]));
                                     else
                                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                                 }

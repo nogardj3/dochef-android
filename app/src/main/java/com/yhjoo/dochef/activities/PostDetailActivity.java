@@ -14,7 +14,6 @@ import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -24,7 +23,7 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -103,8 +102,8 @@ public class PostDetailActivity extends BaseActivity {
             getPostInfo(postID);
             getCommentList(postID);
         } else {
-            postInfo = ((ArrayList<Post>) DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST))).get(0);
-            commentList = DummyMaker.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS));
+            postInfo = ((ArrayList<Post>) DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST))).get(0);
+            commentList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS));
 
             setTopView();
             commentListAdapter.setNewData(commentList);
@@ -136,6 +135,7 @@ public class PostDetailActivity extends BaseActivity {
                 binding.postPostimg.setVisibility(View.VISIBLE);
                 Glide.with(this)
                         .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
+                        .centerCrop()
                         .into(binding.postPostimg);
             }
             if (!postInfo.getUserImg().equals("default"))
@@ -147,6 +147,7 @@ public class PostDetailActivity extends BaseActivity {
             binding.postPostimg.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(Integer.parseInt(postInfo.getPostImg()))
+                    .centerCrop()
                     .into(binding.postPostimg);
             Glide.with(this)
                     .load(Integer.parseInt(postInfo.getUserImg()))

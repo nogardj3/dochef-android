@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
@@ -16,26 +15,31 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.model.Ingredient;
+import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.model.RecipeDetail;
-import com.yhjoo.dochef.utils.DummyMaker;
+import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.DataGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+
+import retrofit2.Call;
+import retrofit2.Response;
 
 public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecipe, BaseViewHolder> {
     public static final int VIEWHOLDER_AD = 1;
     public static final int VIEWHOLDER_PAGER = 2;
     public static final int VIEWHOLDER_ITEM = 3;
+    public RetrofitServices.RecipeService recipeService;
 
-    public RecipeMultiAdapter(List<MultiItemRecipe> data) {
+    public RecipeMultiAdapter(List<MultiItemRecipe> data, RetrofitServices.RecipeService recipeService) {
         super(data);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
         addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_main);
-
+        this.recipeService = recipeService;
     }
 
     @Override
@@ -43,15 +47,14 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
                 if (App.isServerAlive()) {
-                    if (!item.getContent().getRecipeImg().equals("default"))
-                        Glide.with(mContext)
-                                .load(item.getContent().getRecipeImg())
-                                .apply(RequestOptions.centerCropTransform())
-                                .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
+                    Glide.with(mContext)
+                            .load(item.getContent().getRecipeImg())
+                            .centerCrop()
+                            .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
                 } else
                     Glide.with(mContext)
                             .load(Integer.parseInt(item.getContent().getRecipeImg()))
-                            .apply(RequestOptions.centerCropTransform())
+                            .centerCrop()
                             .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
 
                 helper.setText(R.id.recipemain_title, item.getContent().getRecipeName());
@@ -65,17 +68,32 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 helper.setText(R.id.recommend_title, item.getPager_title());
                 helper.getView(R.id.recommend_more).setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RecipeThemeActivity.class)));
 
-                RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
-
-                ArrayList<Recipe> recipes = DummyMaker.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
-
-                // TODO
-                // get recipe by tag sort by view_count desc
                 RecommendAdapter recommendAdapter = new RecommendAdapter();
                 recommendAdapter.setOnItemClickListener((adapter, view, position) -> mContext.startActivity(new Intent(mContext, RecipeDetailActivity.class)));
-                recommendAdapter.setNewData(recipes);
-                recyclerView.setAdapter(recommendAdapter);
+                RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
+                recyclerView.setAdapter(recommendAdapter);
+                if(App.isServerAlive()){
+                    recipeService.getRecipeByTag(item.getPager_title(),"popular")
+                            .enqueue(new BasicCallback<ArrayList<Recipe>>(mContext) {
+                        @Override
+                        public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                            super.onResponse(call, response);
+
+                            if (response.code() == 403)
+                                App.getAppInstance().showToast("뭔가에러");
+                            else {
+                                recommendAdapter.setNewData(response.body());
+                            }
+                        }
+                    });
+                }
+                else{
+                    ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+
+                    recommendAdapter.setNewData(recipes);
+                }
+
 
                 break;
 
