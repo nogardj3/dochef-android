@@ -25,7 +25,7 @@
         android:layout_alignEnd="@+id/main_adviewpager"
         android:layout_alignBottom="@+id/main_adviewpager"
         android:padding="10dp"
-        app:fillColor="@color/colorPrimary"
+        app:fillColor="@color/colorSecondary"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_adviewpager" />

@@ -8,12 +8,15 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -135,7 +138,6 @@ public class PostDetailActivity extends BaseActivity {
                 binding.postPostimg.setVisibility(View.VISIBLE);
                 Glide.with(this)
                         .load(getString(R.string.storage_image_url_post) + postInfo.getPostImg())
-                        .centerCrop()
                         .into(binding.postPostimg);
             }
             if (!postInfo.getUserImg().equals("default"))
@@ -147,7 +149,6 @@ public class PostDetailActivity extends BaseActivity {
             binding.postPostimg.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(Integer.parseInt(postInfo.getPostImg()))
-                    .centerCrop()
                     .into(binding.postPostimg);
             Glide.with(this)
                     .load(Integer.parseInt(postInfo.getUserImg()))
@@ -213,7 +214,12 @@ public class PostDetailActivity extends BaseActivity {
         });
 
         binding.postTags.removeAllViews();
-        binding.postTags.setTagList(postInfo.getTags());
+        for (String tag : postInfo.getTags()) {
+            LinearLayout tagcontainer = (LinearLayout) getLayoutInflater().inflate(R.layout.v_tag_post,null);
+            AppCompatTextView tagview = tagcontainer.findViewById(R.id.vtag_post_text);
+            tagview.setText("#" + tag);
+            binding.postTags.addView(tagcontainer);
+        }
 
         binding.postCommentOk.setOnClickListener(this::writeComment);
     }

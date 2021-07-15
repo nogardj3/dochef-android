@@ -23,12 +23,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@raw/dummy_recipe_1" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="#77ffffff"
+            app:layout_constraintTop_toTopOf="@+id/reciperecommend_title"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/reciperecommend_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:shadowColor="@color/white"
-            android:shadowRadius="1.5"
             android:textColor="@color/black"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/reciperecommend_nickname"

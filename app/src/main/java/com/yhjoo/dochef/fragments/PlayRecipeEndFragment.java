@@ -40,7 +40,7 @@ public class PlayRecipeEndFragment extends Fragment {
 
         binding.playrecipeEndTags.removeAllViews();
         for (int i = 0; i < recipePlay.getTags().length; i++) {
-            AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag,null);
+            AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag_recipe,null);
             textView.setText("#" + recipePlay.getTags()[i] + " ");
 
             binding.playrecipeEndTags.addView(textView);

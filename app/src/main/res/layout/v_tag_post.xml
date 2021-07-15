@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:paddingRight="2dp"
+    android:paddingBottom="4dp">
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/vtag_post_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_tag_post"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="4dp"
+        android:textColor="@color/white"
+        android:textSize="12dp"
+        tools:text="태그" />
+</LinearLayout>

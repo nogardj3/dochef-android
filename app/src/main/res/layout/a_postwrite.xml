@@ -49,7 +49,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="1"
-                tools:src="@raw/dummy_post"
+                tools:src="@raw/dummy_post_0_0"
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatEditText

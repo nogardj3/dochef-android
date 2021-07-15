@@ -1,10 +1,14 @@
 package com.yhjoo.dochef.adapter;
 
+import android.widget.LinearLayout;
+
 import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.AppCompatTextView;
 
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.google.android.flexbox.FlexboxLayout;
 import com.skyhope.materialtagview.TagView;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -24,7 +28,6 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
                 helper.setVisible(R.id.timeline_postimg, true);
                 Glide.with(mContext)
                         .load(mContext.getString(R.string.storage_image_url_post) + item.getPostImg())
-                        .centerCrop()
                         .into((AppCompatImageView) helper.getView(R.id.timeline_postimg));
             }
             if (!item.getUserImg().equals("default"))
@@ -36,7 +39,6 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
             helper.setVisible(R.id.timeline_postimg, true);
             Glide.with(mContext)
                     .load(Integer.parseInt(item.getPostImg()))
-                    .centerCrop()
                     .into((AppCompatImageView) helper.getView(R.id.timeline_postimg));
             Glide.with(mContext)
                     .load(Integer.parseInt(item.getUserImg()))
@@ -54,8 +56,13 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         helper.addOnClickListener(R.id.timeline_contents);
         helper.addOnClickListener(R.id.timeline_postimg);
 
-        ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
-        ((TagView) helper.getView(R.id.timeline_tags)).setTagList(item.getTags());
+        ((FlexboxLayout) helper.getView(R.id.timeline_tags)).removeAllViews();
+        for (String tag : item.getTags()) {
+            LinearLayout tagcontainer = (LinearLayout) mLayoutInflater.inflate(R.layout.v_tag_post,null);
+            AppCompatTextView tagview = tagcontainer.findViewById(R.id.vtag_post_text);
+            tagview.setText("#" + tag);
+            ((FlexboxLayout) helper.getView(R.id.timeline_tags)).addView(tagcontainer);
+        }
 
         if (item.getComments().size() != 0) {
             helper.setVisible(R.id.timeline_comment_group, true);
