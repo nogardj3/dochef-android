@@ -30,7 +30,11 @@ import com.yhjoo.dochef.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
+import mabbas007.tagsedittext.TagsEditText;
 import retrofit2.Call;
 import retrofit2.Response;
 
@@ -52,6 +56,7 @@ public class PostWriteActivity extends BaseActivity {
     /*
         TODO
         REVISE 시 최초 통신해서 데이터 가져오는걸로
+        tagview 확인
     */
 
     @Override
@@ -82,8 +87,7 @@ public class PostWriteActivity extends BaseActivity {
                         .into(binding.postwritePostimg);
 
             ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");
-            binding.postwriteTags.removeAllViews();
-            binding.postwriteTags.setTagList(tags);
+            binding.postwriteTags.setTags((String[])tags.toArray());
         }
         setSupportActionBar(binding.postwriteToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -152,9 +156,8 @@ public class PostWriteActivity extends BaseActivity {
     }
 
     void createOrUpdatePost(View v) {
-        ArrayList<String> tags = new ArrayList<>();
-        tags.add("tag1");
-        tags.add("tag2");
+        ArrayList<String> tags = new ArrayList<>(binding.postwriteTags.getTags());
+        Utils.log(tags.toString());
 
         String image_url = mImageUri == null ? "":mImageUri.toString();
 

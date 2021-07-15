@@ -149,7 +149,7 @@ public class DataGenerator {
             ArrayList<Recipe> arrayList = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
                 Random r = new Random();
-                Ingredient ingredient = new Ingredient("재료" + i, i, "스푼");
+                Ingredient ingredient = new Ingredient("재료" + i, i + "스푼");
                 Recipe recipe = new Recipe(i, "레시피 " + i, "userID",
                         "유저 " + i,
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
@@ -164,15 +164,20 @@ public class DataGenerator {
             return (T) arrayList;
         } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL)) {
             Random r = new Random();
-
-            Ingredient ingredient = new Ingredient("재료" + 1, 1, "스푼");
+            ArrayList<String> tags = new ArrayList<>();
+            tags.add("태그 1");
+            tags.add("태그 2");
+            ArrayList<Ingredient> ingredients = new ArrayList<>();
+            Ingredient ingredient = new Ingredient("재료" + 1, 1 + "스푼");
+            ingredients.add(ingredient);
+            ingredients.add(ingredient);
             RecipeDetail recipeDetail = new RecipeDetail(
                     1, "레시피 " + 1, "userID", "유저 " + 1,
                     Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                     Integer.toString(img_recipes[r.nextInt(img_recipes.length)]),
                     "내용 " + 1, System.currentTimeMillis() - (1000 * 1000),
                     1 + "분", 1, r.nextInt(6),
-                    new String[]{}, new String[]{}, new RecipePhase()
+                    ingredients, tags, new RecipePhase()
             );
 
             return (T) recipeDetail;

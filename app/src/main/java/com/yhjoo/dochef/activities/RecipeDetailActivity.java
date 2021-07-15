@@ -3,7 +3,10 @@ package com.yhjoo.dochef.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
+import androidx.appcompat.widget.AppCompatTextView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.bumptech.glide.Glide;
@@ -12,6 +15,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.ReviewListAdapter;
 import com.yhjoo.dochef.databinding.ARecipedetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.utils.BasicCallback;
@@ -157,24 +161,22 @@ public class RecipeDetailActivity extends BaseActivity {
         binding.recipedetailStartrecipe.setOnClickListener((v) ->
                 startActivity(new Intent(this, PlayRecipeActivity.class)));
 
-//            JSONArray tagsArray = new JSONArray(recipeDetailInfo.getTags());
-//
-//            for (int i = 0; i < tagsArray.length(); i++) {
-//                AppCompatTextView textView = (AppCompatTextView) getLayoutInflater().inflate(R.layout.v_tag, null);
-//                textView.setText("#" + tagsArray.getString(i) + " ");
-//
-//                binding.recipedetailTags.addView(textView);
-//            }
+        binding.recipedetailTags.removeAllViews();
+        for (String tag : recipeDetailInfo.getTags()) {
+            LinearLayout tagcontainer = (LinearLayout) getLayoutInflater().inflate(R.layout.v_tag_recipe,null);
+            AppCompatTextView tagview = tagcontainer.findViewById(R.id.vtag_recipe_text);
+            tagview.setText("#" + tag);
+            binding.recipedetailTags.addView(tagcontainer);
+        }
 
-//            JSONArray aa = new JSONArray(recipeDetailInfo.getIngredient());
-//            for (int i = 0; i < aa.length(); i++) {
-//                ViewGroup motherview = (ViewGroup) getLayoutInflater().inflate(R.layout.li_ingredient, null);
-//                AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_product));
-//                view1.setText(aa.getJSONObject(i).getString("name"));
-//                AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_quantity));
-//                view2.setText(aa.getJSONObject(i).getString("amount"));
-//
-//                binding.recipedetailIngredients.addView(motherview);
-//            }
+        binding.recipedetailIngredients.removeAllViews();
+        for (Ingredient ingredient : recipeDetailInfo.getIngredients()) {
+            ConstraintLayout ingredientContainer = (ConstraintLayout) getLayoutInflater().inflate(R.layout.v_ingredient,null);
+            AppCompatTextView ingredientName = ingredientContainer.findViewById(R.id.v_ingredient_name);
+            ingredientName.setText(ingredient.getName());
+            AppCompatTextView ingredientAmount = ingredientContainer.findViewById(R.id.v_ingredient_amount);
+            ingredientAmount.setText(ingredient.getAmount());
+            binding.recipedetailIngredients.addView(ingredientContainer);
+        }
     }
 }

@@ -2,7 +2,7 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class RecipeDetail {
     @SerializedName("recipe_id")
@@ -28,13 +28,13 @@ public class RecipeDetail {
     @SerializedName("rating")
     private int rating;
     @SerializedName("ingredients")
-    private String[] ingredient;
+    private ArrayList<Ingredient> ingredients;
     @SerializedName("tags")
-    private String[] tags;
+    private ArrayList<String> tags;
     @SerializedName("phase")
     private RecipePhase phases;
 
-    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, String[] ingredient, String[] tags, RecipePhase phases) {
+    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, ArrayList<Ingredient> ingredients, ArrayList<String> tags, RecipePhase phases) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -46,7 +46,7 @@ public class RecipeDetail {
         this.amount_time = amount_time;
         this.view_count = view_count;
         this.rating = rating;
-        this.ingredient = ingredient;
+        this.ingredients = ingredients;
         this.tags = tags;
         this.phases = phases;
     }
@@ -95,11 +95,11 @@ public class RecipeDetail {
         return rating;
     }
 
-    public String[] getIngredient() {
-        return ingredient;
+    public ArrayList<Ingredient> getIngredients() {
+        return ingredients;
     }
 
-    public String[] getTags() {
+    public ArrayList<String> getTags() {
         return tags;
     }
 
@@ -109,9 +109,9 @@ public class RecipeDetail {
 
     @Override
     public String toString() {
-        return "Recipe{" +
+        return "RecipeDetail{" +
                 "recipeID=" + recipeID +
-                ", recipeName=" + recipeName +
+                ", recipeName='" + recipeName + '\'' +
                 ", userID='" + userID + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", userImg='" + userImg + '\'' +
@@ -121,8 +121,8 @@ public class RecipeDetail {
                 ", amount_time='" + amount_time + '\'' +
                 ", view_count=" + view_count +
                 ", rating=" + rating +
-                ", ingredient=" + ingredient +
-                ", tags=" + Arrays.toString(tags) +
+                ", ingredient=" + ingredients +
+                ", tags=" + tags +
                 ", phases=" + phases +
                 '}';
     }

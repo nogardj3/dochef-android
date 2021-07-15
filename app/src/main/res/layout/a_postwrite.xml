@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:TagsEditText="http://schemas.android.com/tools">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/postwrite_toolbar"
@@ -41,16 +41,35 @@
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/postwrite_postimg"
                 android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:overScrollMode="never"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
-                app:layout_constraintDimensionRatio="w,1:1"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintWidth_percent="1"
-                tools:src="@raw/dummy_post_0_0"
-                tools:visibility="visible" />
+                app:srcCompat="@raw/sample_post" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/postwrite_postimg_add"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_add_btn"
+                android:padding="4dp"
+                app:layout_constraintBottom_toBottomOf="@+id/postwrite_postimg"
+                app:layout_constraintRight_toRightOf="parent"
+                app:srcCompat="@drawable/fab_add" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postwrite_contents_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:paddingTop="4dp"
+                android:text="내용"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/postwrite_postimg" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/postwrite_contents"
@@ -58,41 +77,40 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="입력해 보세요"
+                android:hint="글 내용"
                 android:minLines="4"
                 android:paddingLeft="4dp"
                 android:paddingTop="4dp"
                 android:theme="@style/BaseTheme.EditTextStyle"
-                app:layout_constraintTop_toBottomOf="@+id/postwrite_postimg" />
+                android:backgroundTint="@null"
+                app:layout_constraintTop_toBottomOf="@+id/postwrite_contents_text" />
 
-            <com.skyhope.materialtagview.TagView
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postwrite_tags_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="4dp"
+                android:paddingTop="4dp"
+                android:text="태그"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@+id/postwrite_contents" />
+
+            <mabbas007.tagsedittext.TagsEditText
                 android:id="@+id/postwrite_tags"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:theme="@style/BaseTheme.EditTextStyle_post"
+                android:animateLayoutChanges="true"
+                android:textCursorDrawable="@drawable/tag_cursor_post"
+                app:allowSpaceInTag="true"
+                app:tagsTextColor="@color/white"
+                app:tagsBackground="@drawable/bg_tag_post_add"
+                app:tagsCloseImageRight="@drawable/tag_close"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/postwrite_contents"
-                app:tag_background_color="@color/colorPrimary"
-                app:tag_text_color="@color/white" />
+                app:layout_constraintTop_toBottomOf="@+id/postwrite_tags_text"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:background="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/postwrite_postimg_add"
-        app:layout_constraintTop_toTopOf="@+id/postwrite_postimg_add" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/postwrite_postimg_add"
-        android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="10dp"
-        android:tint="@color/grey_text"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/postwrite_scroll"
-        app:srcCompat="@drawable/ic_image_black_24dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

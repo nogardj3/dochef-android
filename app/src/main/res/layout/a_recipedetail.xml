@@ -63,22 +63,25 @@
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipedetail_explain"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="18dp"
             android:textSize="16sp"
+            android:minLines="2"
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_userimg"
             tools:text="내용" />
 
-        <com.skyhope.materialtagview.TagView
+        <com.google.android.flexbox.FlexboxLayout
             android:id="@+id/recipedetail_tags"
-            android:layout_width="match_parent"
-            android:layout_height="36sp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="4dp"
             app:flexWrap="wrap"
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_explain" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -165,7 +168,7 @@
             android:id="@+id/recipedetail_ingredients_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="4dp"
             android:text="재료"
             android:textSize="18sp"
@@ -173,21 +176,30 @@
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_startrecipe" />
 
-        <com.skyhope.materialtagview.TagView
+        <LinearLayout
             android:id="@+id/recipedetail_ingredients"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            app:flexDirection="column"
+            android:orientation="vertical"
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
             app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients_text" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/grey"
+            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+            app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipedetail_review_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="16dp"
             android:text="리뷰"
             android:textSize="18sp"
             android:textStyle="bold"

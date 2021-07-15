@@ -13,7 +13,13 @@
     </style>
 
     <style name="BaseTheme.EditTextStyle">
-        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/colorAccent</item>
+        <item name="colorControlHighlight">@color/grey</item>
+    </style>
+
+    <style name="BaseTheme.EditTextStyle_post">
+        <item name="colorControlNormal">@android:color/darker_gray</item>
+        <item name="colorControlActivated">@color/colorSecondary</item>
     </style>
 
     <style name="BaseTheme.ProgressBarStyle">
