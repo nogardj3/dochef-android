@@ -144,9 +144,7 @@ public class PostWriteActivity extends BaseActivity {
 
     void createOrUpdatePost(View v) {
         ArrayList<String> tags = new ArrayList<>();
-        for (String a : binding.postwriteTags.getTags()) {
-            tags.add(a);
-        }
+        tags.addAll(binding.postwriteTags.getTags());
 
         image_url = "";
         if (mImageUri != null) {

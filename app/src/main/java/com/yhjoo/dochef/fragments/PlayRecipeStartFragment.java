@@ -41,10 +41,10 @@ public class PlayRecipeStartFragment extends Fragment {
         binding.playrecipeStartIngredients.removeAllViews();
         for (int i = 0; i < recipePlay.getIngredients().length; i++) {
             ConstraintLayout motherview = (ConstraintLayout) getLayoutInflater().inflate(R.layout.li_ingredient, null);
-            AppCompatTextView view1 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_product));
+            AppCompatTextView view1 = (motherview.findViewById(R.id.ingredient_product));
             view1.setTextColor(getResources().getColor(R.color.white,null));
             view1.setText(recipePlay.getIngredients()[i]);
-            AppCompatTextView view2 = ((AppCompatTextView) motherview.findViewById(R.id.ingredient_quantity));
+            AppCompatTextView view2 = (motherview.findViewById(R.id.ingredient_quantity));
             view2.setTextColor(getResources().getColor(R.color.white,null));
             view2.setText(recipePlay.getIngredients()[i]);
 

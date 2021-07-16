@@ -57,8 +57,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
 
-        if (progressDialog != null && progressDialog.isShowing()) {
-        } else {
+        if (progressDialog == null || !progressDialog.isShowing()){
             progressDialog = new AppCompatDialog(activity);
             progressDialog.setCancelable(false);
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

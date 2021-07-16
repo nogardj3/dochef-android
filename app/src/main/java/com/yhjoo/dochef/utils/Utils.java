@@ -35,9 +35,9 @@ public class Utils {
     public static UserBrief getUserBrief(Context context) {
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
         Gson gson = new Gson();
-        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(context.getString(R.string.SP_USERINFO), null), UserBrief.class);
 
-        return userInfo;
+        return gson.fromJson(mSharedPreferences.getString(
+                context.getString(R.string.SP_USERINFO), null), UserBrief.class);
     }
 
     public enum EMAIL_VALIDATE {VALID, NODATA, INVALID}

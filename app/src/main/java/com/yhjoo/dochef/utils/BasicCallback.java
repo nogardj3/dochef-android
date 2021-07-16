@@ -11,6 +11,7 @@ public abstract class BasicCallback<T> implements Callback<T> {
 
     /*
        TODO
+       http error code 정리하고 이거 정리
     */
     protected BasicCallback(Context context) {
     }

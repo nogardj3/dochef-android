@@ -80,7 +80,7 @@ public class DataGenerator {
             ArrayList<UserBrief> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
-                ArrayList<String> follow = new ArrayList<String>();
+                ArrayList<String> follow = new ArrayList<>();
 
                 arrayList.add(new UserBrief("userID",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),

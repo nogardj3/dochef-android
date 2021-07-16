@@ -102,9 +102,7 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(() -> {
-            getRecipelist();
-        }, 1000);
+        new Handler().postDelayed(this::getRecipelist, 1000);
     }
 
     void getRecipelist() {
