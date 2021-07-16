@@ -62,7 +62,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         TODO
         1. TTS, sensor등 확인
         2. 서버 데이터 추가 및 기능 구현
-        3. retrofit 구현
     */
 
     @Override

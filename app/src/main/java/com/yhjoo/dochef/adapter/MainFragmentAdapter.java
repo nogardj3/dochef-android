@@ -7,6 +7,10 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import java.util.List;
 
 public class MainFragmentAdapter extends FragmentPagerAdapter {
+    /*
+        TODO
+        이건 곧 아래뷰 페이저로 바뀜
+     */
     private final List<Fragment> fragmentList;
 
     public MainFragmentAdapter(FragmentManager fm, int behavior, List<Fragment> fragmentList) {

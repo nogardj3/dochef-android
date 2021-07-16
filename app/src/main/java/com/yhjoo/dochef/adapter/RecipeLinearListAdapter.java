@@ -6,8 +6,8 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 
-public class RecipeListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
-    public RecipeListAdapter() {
+public class RecipeLinearListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
+    public RecipeLinearListAdapter() {
         super(R.layout.li_recipe_mylist);
     }
 

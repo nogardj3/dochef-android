@@ -42,7 +42,6 @@ public class RecipeDetailActivity extends BaseActivity {
 
     /*
         TODO
-        like 추가
     */
 
     @Override

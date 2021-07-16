@@ -23,10 +23,18 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@+id/user_img"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/user_img"
         tools:text="닉네임" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/user_follower_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@+id/user_nickname"
+        app:layout_constraintLeft_toLeftOf="@+id/user_nickname"
+        tools:text="팔로워 : 1" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/user_followcancel_btn"

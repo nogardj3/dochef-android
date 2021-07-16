@@ -9,28 +9,28 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.SearchResult;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 
 import java.util.List;
 
-public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult, BaseViewHolder> {
+public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, BaseViewHolder> {
     public final int VIEWHOLDER_AD = 0;
     public final int VIEWHOLDER_ITEM_USER = 1;
     public final int VIEWHOLDER_ITEM_RECIPE_NAME = 2;
     public final int VIEWHOLDER_ITEM_INGREDIENT = 3;
     public final int VIEWHOLDER_ITEM_TAG = 4;
 
-    public ResultListAdapter(int type, List<MultiItemResult> data, int layoutResId) {
+    public SearchListAdapter(int type, List<SearchResult> data, int layoutResId) {
         super(data);
         addItemType(type, layoutResId);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, MultiItemResult item) {
+    protected void convert(BaseViewHolder helper, SearchResult item) {
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM_USER:
                 UserBrief ele = (UserBrief) item.getContent();
@@ -38,6 +38,9 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                 ImageLoadUtil.loadUserImage(mContext, ele.getUserImg(),helper.getView(R.id.user_img));
 
                 helper.setText(R.id.user_nickname, ele.getNickname());
+                helper.setText(R.id.user_follower_count, String.format(
+                    mContext.getString(R.string.format_follower),Integer.toString(ele.getFollower_count())
+                ));
                 break;
 
             case VIEWHOLDER_ITEM_RECIPE_NAME:

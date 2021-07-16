@@ -25,8 +25,7 @@ public class NotificationActivity extends BaseActivity implements SwipeRefreshLa
 
     /*
         TODO
-        1. firebase auth로 사용자 확인 하고, 쏠 수 있다면 FCM으로 날리기
-        2. 서버에 저장할 필요는 없고, SQLITE에 저장
+        액션 -> 서버보냄 -> 클라이언트에 보냄 -> 서버에서 오는거 받아서 뷰 처리
     */
 
     @Override

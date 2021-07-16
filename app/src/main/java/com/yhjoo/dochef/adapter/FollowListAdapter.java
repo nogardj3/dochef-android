@@ -38,6 +38,9 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
             helper.addOnClickListener(R.id.user_follow_btn);
         }
 
+        helper.setText(R.id.user_follower_count, String.format(
+                mContext.getString(R.string.format_follower),Integer.toString(item.getFollower_count())
+        ));
         helper.setText(R.id.user_nickname, item.getNickname());
     }
 }

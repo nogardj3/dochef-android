@@ -85,7 +85,7 @@ public class DataGenerator {
                 arrayList.add(new UserBrief("userID",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                         "nickname",
-                        follow));
+                        follow,1));
             }
 
             return (T) arrayList;

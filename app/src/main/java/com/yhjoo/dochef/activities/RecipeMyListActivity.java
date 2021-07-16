@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.adapter.RecipeListAdapter;
+import com.yhjoo.dochef.adapter.RecipeLinearListAdapter;
 import com.yhjoo.dochef.databinding.ARecipelistBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
@@ -26,7 +26,7 @@ import retrofit2.Response;
 public class RecipeMyListActivity extends BaseActivity {
     ARecipelistBinding binding;
     RetrofitServices.RecipeService recipeService;
-    RecipeListAdapter recipeListAdapter;
+    RecipeLinearListAdapter recipeLinearListAdapter;
 
     ArrayList<Recipe> recipeList = new ArrayList<>();
     String userID;
@@ -52,9 +52,9 @@ public class RecipeMyListActivity extends BaseActivity {
 
         userID = Utils.getUserBrief(this).getUserID();
 
-        recipeListAdapter = new RecipeListAdapter();
-        recipeListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
-        recipeListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+        recipeLinearListAdapter = new RecipeLinearListAdapter();
+        recipeLinearListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
+        recipeLinearListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.recipemylist_revise) {
                 Intent intent = new Intent(RecipeMyListActivity.this, RecipeMakeActivity.class)
                     .putExtra("OPERATION", RecipeMakeActivity.OPERATION.REVISE);
@@ -72,13 +72,13 @@ public class RecipeMyListActivity extends BaseActivity {
             }
         });
         binding.recipelistRecycler.setLayoutManager(new LinearLayoutManager(this));
-        binding.recipelistRecycler.setAdapter(recipeListAdapter);
+        binding.recipelistRecycler.setAdapter(recipeLinearListAdapter);
 
         if (App.isServerAlive())
             getRecipeList();
         else {
             recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-            recipeListAdapter.setNewData(recipeList);
+            recipeLinearListAdapter.setNewData(recipeList);
         }
     }
 
@@ -93,8 +93,8 @@ public class RecipeMyListActivity extends BaseActivity {
                             App.getAppInstance().showToast("뭔가에러");
                         else {
                             recipeList = response.body();
-                            recipeListAdapter.setNewData(recipeList);
-                            recipeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipelistRecycler.getParent());
+                            recipeLinearListAdapter.setNewData(recipeList);
+                            recipeLinearListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipelistRecycler.getParent());
                         }
                     }
                 });

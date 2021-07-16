@@ -37,9 +37,6 @@ public class FollowListActivity extends BaseActivity {
 
     /*
         TODO
-        firebase storage profile image
-        디자인
-            팔로워 카운트
     */
 
     @Override
@@ -79,7 +76,6 @@ public class FollowListActivity extends BaseActivity {
         binding.followlistRecycler.setAdapter(followListAdapter);
 
 
-
         if (App.isServerAlive())
             getActiveUserInfo();
         else {
@@ -94,7 +90,7 @@ public class FollowListActivity extends BaseActivity {
         }
     }
 
-    void getActiveUserInfo(){
+    void getActiveUserInfo() {
         userService.getUserDetail(active_userid)
                 .enqueue(new BasicCallback<UserDetail>(this) {
                     @Override

@@ -62,15 +62,15 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                     mContext.startActivity(intent);
                 });
 
-                RecommendAdapter recommendAdapter = new RecommendAdapter();
-                recommendAdapter.setOnItemClickListener((adapter, view, position) -> {
+                RecipeHorizontalAdapter recipeHorizontalAdapter = new RecipeHorizontalAdapter();
+                recipeHorizontalAdapter.setOnItemClickListener((adapter, view, position) -> {
                     Intent intent = new Intent(mContext, RecipeDetailActivity.class)
                             .putExtra("recipeID", ((Recipe) adapter.getData().get(position)).getRecipeID());
                     mContext.startActivity(intent);
                 });
                 RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                recyclerView.setAdapter(recommendAdapter);
+                recyclerView.setAdapter(recipeHorizontalAdapter);
                 if (App.isServerAlive()) {
                     recipeService.getRecipeByTag(item.getPager_title(), "popular")
                             .enqueue(new BasicCallback<ArrayList<Recipe>>(mContext) {
@@ -81,14 +81,14 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                                     if (response.code() == 403)
                                         App.getAppInstance().showToast("뭔가에러");
                                     else {
-                                        recommendAdapter.setNewData(response.body());
+                                        recipeHorizontalAdapter.setNewData(response.body());
                                     }
                                 }
                             });
                 } else {
                     ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
 
-                    recommendAdapter.setNewData(recipes);
+                    recipeHorizontalAdapter.setNewData(recipes);
                 }
                 break;
 

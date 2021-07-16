@@ -19,11 +19,10 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.PostListAdapter;
-import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter;
+import com.yhjoo.dochef.adapter.RecipeHorizontalHomeAdapter;
 import com.yhjoo.dochef.databinding.AHomeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Post;
@@ -54,7 +53,7 @@ public class HomeActivity extends BaseActivity {
     RetrofitServices.UserService userService;
     RetrofitServices.RecipeService recipeService;
     RetrofitServices.PostService postService;
-    RecipeHorizontalAdapter recipeHorizontalAdapter;
+    RecipeHorizontalHomeAdapter recipeHorizontalHomeAdapter;
     PostListAdapter postListAdapter;
 
     ArrayList<Recipe> recipeList = new ArrayList<>();
@@ -69,13 +68,8 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
-        firebase storage profile image
-        revise 구현 - 각각 말고 완료 누를 때 적용하기
         디자인
-            툴바 홈-> 이름
-            프로필 수정 위로 옮기기
-            내 홈이면 버튼 없애기
-
+            내 홈이면 수정 버튼 없애기, 툴바 메뉴에 수정 추가, 수정 완료 추가
     */
 
     @Override
@@ -102,14 +96,14 @@ public class HomeActivity extends BaseActivity {
             currentUserID = getIntent().getStringExtra("userID");
         }
 
-        recipeHorizontalAdapter = new RecipeHorizontalAdapter(currentUserID);
-        recipeHorizontalAdapter.setOnItemClickListener((adapter, view, position) -> {
+        recipeHorizontalHomeAdapter = new RecipeHorizontalHomeAdapter(currentUserID);
+        recipeHorizontalHomeAdapter.setOnItemClickListener((adapter, view, position) -> {
             Intent intent = new Intent(HomeActivity.this, RecipeDetailActivity.class)
                     .putExtra("recipeID", recipeList.get(position).getRecipeID());
             startActivity(intent);
         });
         binding.homeRecipeRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        binding.homeRecipeRecycler.setAdapter(recipeHorizontalAdapter);
+        binding.homeRecipeRecycler.setAdapter(recipeHorizontalHomeAdapter);
 
         postListAdapter = new PostListAdapter();
         postListAdapter.setOnItemClickListener((adapter, view, position) -> {
@@ -145,7 +139,7 @@ public class HomeActivity extends BaseActivity {
             postList = DataGenerator.make(getResources(), R.integer.DATA_TYPE_POST);
 
             setUserInfo();
-            recipeHorizontalAdapter.setNewData(recipeList);
+            recipeHorizontalHomeAdapter.setNewData(recipeList);
             postListAdapter.setNewData(postList);
         }
     }
@@ -204,6 +198,7 @@ public class HomeActivity extends BaseActivity {
                             App.getAppInstance().showToast("뭔가에러");
                         else {
                             userDetailInfo = response.body();
+                            binding.homeToolbar.setTitle(userDetailInfo.getNickname());
                             setUserInfo();
                         }
                     }
@@ -222,8 +217,8 @@ public class HomeActivity extends BaseActivity {
                         else {
                             recipeList = response.body();
                             Utils.log(recipeList.size());
-                            recipeHorizontalAdapter.setNewData(recipeList);
-                            recipeHorizontalAdapter.setEmptyView(R.layout.rv_empty_recipe, (ViewGroup) binding.homeRecipeRecycler.getParent());
+                            recipeHorizontalHomeAdapter.setNewData(recipeList);
+                            recipeHorizontalHomeAdapter.setEmptyView(R.layout.rv_empty_recipe, (ViewGroup) binding.homeRecipeRecycler.getParent());
                         }
                     }
                 });

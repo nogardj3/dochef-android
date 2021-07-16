@@ -15,7 +15,7 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
-import com.yhjoo.dochef.adapter.RecommendAdapter;
+import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
@@ -35,7 +35,7 @@ public class MainInitFragment extends Fragment {
     FMainInitBinding binding;
 
     RetrofitServices.RecipeService recipeService;
-    RecommendAdapter recommendAdapter;
+    RecipeHorizontalAdapter recipeHorizontalAdapter;
 
     ArrayList<Recipe> recipeList;
 
@@ -70,22 +70,22 @@ public class MainInitFragment extends Fragment {
                                 ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
 
 
-        recommendAdapter = new RecommendAdapter();
-        recommendAdapter.setOnItemClickListener((adapter, view1, position)
+        recipeHorizontalAdapter = new RecipeHorizontalAdapter();
+        recipeHorizontalAdapter.setOnItemClickListener((adapter, view1, position)
                 -> {
             Intent intent = new Intent(getContext(), RecipeDetailActivity.class)
                 .putExtra("recipeID", recipeList.get(position).getRecipeID());
             startActivity(intent);
         });
-        recommendAdapter.setNewData(recipeList);
+        recipeHorizontalAdapter.setNewData(recipeList);
         binding.mainRecommendRecyclerview.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
+        binding.mainRecommendRecyclerview.setAdapter(recipeHorizontalAdapter);
         if (App.isServerAlive())
             getRecipelist();
         else {
             recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-            recommendAdapter.setNewData(recipeList);
+            recipeHorizontalAdapter.setNewData(recipeList);
         }
 
         return view;
@@ -102,7 +102,7 @@ public class MainInitFragment extends Fragment {
                             App.getAppInstance().showToast("뭔가에러");
                         else {
                             recipeList = response.body();
-                            recommendAdapter.setNewData(recipeList);
+                            recipeHorizontalAdapter.setNewData(recipeList);
                         }
                     }
                 });

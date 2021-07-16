@@ -113,7 +113,7 @@ public class RetrofitServices {
 
         @FormUrlEncoded
         @POST("review/delete")
-        Call<JsonObject> updateRecipe(@Field("recipe_id") int recipeId);
+        Call<JsonObject> deleteRecipe(@Field("recipe_id") int recipeId);
     }
 
     public interface ReviewService {

@@ -15,11 +15,11 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.SearchActivity;
-import com.yhjoo.dochef.adapter.ResultListAdapter;
+import com.yhjoo.dochef.adapter.SearchListAdapter;
 import com.yhjoo.dochef.databinding.FResultBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.MultiItemResult;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.SearchResult;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
@@ -41,7 +41,7 @@ public class ResultFragment extends Fragment {
     FResultBinding binding;
     RetrofitServices.UserService userService;
     RetrofitServices.RecipeService recipeService;
-    ResultListAdapter resultListAdapter;
+    SearchListAdapter searchListAdapter;
 
     String keyword;
     int type;
@@ -62,12 +62,12 @@ public class ResultFragment extends Fragment {
         recipeService = RetrofitBuilder.create(getContext(), RetrofitServices.RecipeService.class);
 
         if (type == VIEWHOLDER_ITEM_USER)
-            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_user);
+            searchListAdapter = new SearchListAdapter(type, new ArrayList<>(), R.layout.li_user);
         else
-            resultListAdapter = new ResultListAdapter(type, new ArrayList<>(), R.layout.li_recipe_result);
+            searchListAdapter = new SearchListAdapter(type, new ArrayList<>(), R.layout.li_recipe_result);
 
-        resultListAdapter.setEmptyView(R.layout.rv_search, (ViewGroup) binding.resultRecycler.getParent());
-        resultListAdapter.setOnItemClickListener((adapter, view1, position) -> {
+        searchListAdapter.setEmptyView(R.layout.rv_search, (ViewGroup) binding.resultRecycler.getParent());
+        searchListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             switch (adapter.getItemViewType(position)) {
                 case VIEWHOLDER_ITEM_RECIPE_NAME:
                 case VIEWHOLDER_ITEM_INGREDIENT:
@@ -78,14 +78,14 @@ public class ResultFragment extends Fragment {
                     break;
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class)
-                        .putExtra("userID", ((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
-                    Utils.log(((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
+                        .putExtra("userID", ((UserBrief) ((SearchResult) adapter.getData().get(position)).getContent()).getUserID());
+                    Utils.log(((UserBrief) ((SearchResult) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
         });
         binding.resultRecycler.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        binding.resultRecycler.setAdapter(resultListAdapter);
+        binding.resultRecycler.setAdapter(searchListAdapter);
 
         return view;
     }
@@ -113,7 +113,7 @@ public class ResultFragment extends Fragment {
 
     void loadList() {
         if (App.isServerAlive()) {
-            if(type== resultListAdapter.VIEWHOLDER_ITEM_USER){
+            if(type== searchListAdapter.VIEWHOLDER_ITEM_USER){
                 userService.getUserByNickname(keyword)
                         .enqueue(new BasicCallback<ArrayList<UserBrief>>(getContext()) {
                             @Override
@@ -123,12 +123,12 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setUserItem(response.body());
-                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
             }
-            else if (type== resultListAdapter.VIEWHOLDER_ITEM_RECIPE_NAME){
+            else if (type== searchListAdapter.VIEWHOLDER_ITEM_RECIPE_NAME){
                 recipeService.getRecipeByName(keyword,"popular")
                         .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
                             @Override
@@ -138,12 +138,12 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setRecipeItem(response.body());
-                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
             }
-            else if (type== resultListAdapter.VIEWHOLDER_ITEM_TAG){
+            else if (type== searchListAdapter.VIEWHOLDER_ITEM_TAG){
                 recipeService.getRecipeByTag(keyword,"popular")
                         .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
                             @Override
@@ -153,12 +153,12 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setRecipeItem(response.body());
-                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
             }
-            else if (type== resultListAdapter.VIEWHOLDER_ITEM_INGREDIENT){
+            else if (type== searchListAdapter.VIEWHOLDER_ITEM_INGREDIENT){
                 recipeService.getRecipeByIngredient(keyword,"popular")
                         .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
                             @Override
@@ -168,7 +168,7 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setRecipeItem(response.body());
-                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
@@ -187,26 +187,26 @@ public class ResultFragment extends Fragment {
 
 
     void setRecipeItem(ArrayList<Recipe> recipes) {
-        ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
+        ArrayList<SearchResult> searchResults = new ArrayList<>();
         if (type == VIEWHOLDER_ITEM_USER) {
         } else{
             for (int i = 0; i < recipes.size(); i++) {
                 if (i != 0 && i % 4 == 0)
-                    multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
-                multiItemResults.add(new MultiItemResult<>(type, recipes.get(i)));
+                    searchResults.add(new SearchResult<>(VIEWHOLDER_AD));
+                searchResults.add(new SearchResult<>(type, recipes.get(i)));
             }
         }
     }
 
     void setUserItem(ArrayList<UserBrief> userBriefs){
-        ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
+        ArrayList<SearchResult> searchResults = new ArrayList<>();
         for (int i = 0; i < userBriefs.size(); i++) {
             if (i != 0 && i % 4 == 0)
-                multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
-            multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_ITEM_USER, userBriefs.get(i)));
+                searchResults.add(new SearchResult<>(VIEWHOLDER_AD));
+            searchResults.add(new SearchResult<>(VIEWHOLDER_ITEM_USER, userBriefs.get(i)));
         }
 
-        resultListAdapter.setNewData(multiItemResults);
-        resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+        searchListAdapter.setNewData(searchResults);
+        searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
     }
 }

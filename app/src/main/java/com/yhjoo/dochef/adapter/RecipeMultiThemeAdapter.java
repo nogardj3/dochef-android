@@ -10,11 +10,11 @@ import com.yhjoo.dochef.utils.ImageLoadUtil;
 
 import java.util.List;
 
-public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme, BaseViewHolder> {
+public class RecipeMultiThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme, BaseViewHolder> {
     public final int VIEWHOLDER_AD = 1;
     public final int VIEWHOLDER_ITEM = 2;
 
-    public RecipeThemeAdapter(List<MultiItemTheme> data) {
+    public RecipeMultiThemeAdapter(List<MultiItemTheme> data) {
         super(data);
         addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_theme);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);

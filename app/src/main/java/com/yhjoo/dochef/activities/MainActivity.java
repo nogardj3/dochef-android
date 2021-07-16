@@ -54,13 +54,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /*
         TODO
-        firebase storage profile image
         로고 아이콘빼고 텍스트로
         fragment adapter
             bottom으로 바꾸기
             floating action button -> menu item
-            fragment추가 -> drawer에 있는거 옮기기 (알림은 위로 올라간다
-
+            fragment추가 -> drawer에 있는거 옮기기 (알림은 위로 올라간다)
      */
 
     @Override

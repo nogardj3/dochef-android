@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import com.google.android.gms.ads.MobileAds;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.adapter.RecipeThemeAdapter;
+import com.yhjoo.dochef.adapter.RecipeMultiThemeAdapter;
 import com.yhjoo.dochef.databinding.ARecipethemeBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemTheme;
@@ -31,7 +31,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
     ARecipethemeBinding binding;
     RetrofitServices.RecipeService recipeService;
-    RecipeThemeAdapter recipeThemeAdapter;
+    RecipeMultiThemeAdapter recipeMultiThemeAdapter;
 
     ArrayList<MultiItemTheme> recipeListItems = new ArrayList<>();
     String tagName;
@@ -40,7 +40,6 @@ public class RecipeThemeActivity extends BaseActivity {
 
     /*
         TODO
-        테마적용
     */
 
     @Override
@@ -62,9 +61,9 @@ public class RecipeThemeActivity extends BaseActivity {
 
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
 
-        recipeThemeAdapter = new RecipeThemeAdapter(recipeListItems);
-        recipeThemeAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
-        recipeThemeAdapter.setOnItemClickListener((adapter, view, position) -> {
+        recipeMultiThemeAdapter = new RecipeMultiThemeAdapter(recipeListItems);
+        recipeMultiThemeAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
+        recipeMultiThemeAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
                 Intent intent = new Intent(RecipeThemeActivity.this, RecipeDetailActivity.class)
                         .putExtra("recipeID", recipeListItems.get(position).getContent().getRecipeID());
@@ -73,7 +72,7 @@ public class RecipeThemeActivity extends BaseActivity {
         });
 
         binding.recipethemeRecycler.setLayoutManager(new GridLayoutManager(this, 2));
-        binding.recipethemeRecycler.setAdapter(recipeThemeAdapter);
+        binding.recipethemeRecycler.setAdapter(recipeMultiThemeAdapter);
 
         if (App.isServerAlive()){
             if(currentMode == MODE.POPULAR)
@@ -89,7 +88,7 @@ public class RecipeThemeActivity extends BaseActivity {
                 recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
             }
 
-            recipeThemeAdapter.setNewData(recipeListItems);
+            recipeMultiThemeAdapter.setNewData(recipeListItems);
         }
     }
 
@@ -110,8 +109,8 @@ public class RecipeThemeActivity extends BaseActivity {
                                 recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                             }
 
-                            recipeThemeAdapter.setNewData(recipeListItems);
-                            recipeThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
+                            recipeMultiThemeAdapter.setNewData(recipeListItems);
+                            recipeMultiThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
                         }
                     }
                 });
@@ -134,8 +133,8 @@ public class RecipeThemeActivity extends BaseActivity {
                                 recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                             }
 
-                            recipeThemeAdapter.setNewData(recipeListItems);
-                            recipeThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
+                            recipeMultiThemeAdapter.setNewData(recipeListItems);
+                            recipeMultiThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
                         }
                     }
                 });
