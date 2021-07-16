@@ -24,6 +24,7 @@ import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -78,6 +79,7 @@ public class ResultFragment extends Fragment {
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class)
                         .putExtra("userID", ((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
+                    Utils.log(((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
@@ -121,6 +123,7 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setUserItem(response.body());
+                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
@@ -135,6 +138,7 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setRecipeItem(response.body());
+                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
@@ -149,6 +153,7 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setRecipeItem(response.body());
+                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });
@@ -163,6 +168,7 @@ public class ResultFragment extends Fragment {
                                     App.getAppInstance().showToast("user list 가져오기 실패");
                                 } else {
                                     setRecipeItem(response.body());
+                                    resultListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
                                 }
                             }
                         });

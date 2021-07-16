@@ -65,7 +65,7 @@ public class HomeActivity extends BaseActivity {
     MODE currentMode;
     OPERATION currentOperation = OPERATION.VIEW;
     String image_url;
-    String userID;
+    String currentUserID;
 
     /*
         TODO
@@ -92,16 +92,17 @@ public class HomeActivity extends BaseActivity {
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
 
+        String userID = Utils.getUserBrief(this).getUserID();
         if (getIntent().getStringExtra("userID") == null
                 || getIntent().getStringExtra("userID").equals(userID)) {
             currentMode = MODE.MY;
-            userID = Utils.getUserBrief(this).getUserID();
+            currentUserID = userID;
         } else {
             currentMode = MODE.USER;
-            userID = getIntent().getStringExtra("userID");
+            currentUserID = getIntent().getStringExtra("userID");
         }
 
-        recipeHorizontalAdapter = new RecipeHorizontalAdapter(userID);
+        recipeHorizontalAdapter = new RecipeHorizontalAdapter(currentUserID);
         recipeHorizontalAdapter.setOnItemClickListener((adapter, view, position) -> {
             Intent intent = new Intent(HomeActivity.this, RecipeDetailActivity.class)
                     .putExtra("recipeID", recipeList.get(position).getRecipeID());
@@ -135,9 +136,9 @@ public class HomeActivity extends BaseActivity {
         super.onResume();
 
         if (App.isServerAlive()) {
-            getUserDetailInfo(userID);
-            getRecipeList(userID);
-            getPostList(userID);
+            getUserDetailInfo(currentUserID);
+            getRecipeList(currentUserID);
+            getPostList(currentUserID);
         } else {
             userDetailInfo = DataGenerator.make(getResources(), R.integer.DATA_TYPE_RECIPE_DETAIL);
             recipeList = DataGenerator.make(getResources(), R.integer.DATE_TYPE_RECIPE);
@@ -363,7 +364,7 @@ public class HomeActivity extends BaseActivity {
         image_url = "";
         if (mImageUri != null) {
             image_url = String.format(getString(R.string.format_upload_file),
-                    userID, Long.toString(System.currentTimeMillis()));
+                    currentUserID, Long.toString(System.currentTimeMillis()));
         }
 
         StorageReference ref = storageReference.child(image_url);

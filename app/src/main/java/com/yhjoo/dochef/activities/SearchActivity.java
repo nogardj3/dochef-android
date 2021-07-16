@@ -36,8 +36,8 @@ public class SearchActivity extends BaseActivity {
         MobileAds.initialize(this);
 
         viewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager());
-        Types.add(new SearchType(1, "레시피"));
-        Types.add(new SearchType(2, "유저"));
+        Types.add(new SearchType(1, "유저"));
+        Types.add(new SearchType(2, "레시피"));
         Types.add(new SearchType(3, "재료"));
         Types.add(new SearchType(4, "태그"));
         for (int i = 0; i < Types.size(); i++) {
