@@ -36,7 +36,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/setting_notice"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/setting_notice"
-        app:srcCompat="@drawable/ic_arrow" />
+        app:srcCompat="@drawable/ic_arrow_right_grey" />
 
     <View
         android:layout_width="match_parent"
@@ -154,7 +154,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/setting_faq"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/setting_faq"
-        app:srcCompat="@drawable/ic_arrow" />
+        app:srcCompat="@drawable/ic_arrow_right_grey" />
 
     <View
         android:layout_width="match_parent"
@@ -184,7 +184,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/setting_review"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/setting_review"
-        app:srcCompat="@drawable/ic_arrow" />
+        app:srcCompat="@drawable/ic_arrow_right_grey" />
 
     <View
         android:layout_width="match_parent"
@@ -214,7 +214,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/setting_tos"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/setting_tos"
-        app:srcCompat="@drawable/ic_arrow" />
+        app:srcCompat="@drawable/ic_arrow_right_grey" />
 
     <View
         android:layout_width="match_parent"
@@ -243,7 +243,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/setting_logout"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/setting_logout"
-        app:srcCompat="@drawable/ic_arrow" />
+        app:srcCompat="@drawable/ic_arrow_right_grey" />
 
     <View
         android:layout_width="match_parent"

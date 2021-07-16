@@ -11,7 +11,6 @@ public abstract class BasicCallback<T> implements Callback<T> {
 
     /*
        TODO
-       뭐야이거
     */
     protected BasicCallback(Context context) {
     }

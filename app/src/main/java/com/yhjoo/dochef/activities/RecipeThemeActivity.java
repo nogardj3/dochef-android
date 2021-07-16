@@ -26,21 +26,19 @@ import retrofit2.Response;
 public class RecipeThemeActivity extends BaseActivity {
     public final int VIEWHOLDER_AD = 1;
     public final int VIEWHOLDER_ITEM = 2;
+
     public enum MODE {NORMAL, TAG}
 
     ARecipethemeBinding binding;
-
     RetrofitServices.RecipeService recipeService;
-
     RecipeThemeAdapter recipeThemeAdapter;
 
     ArrayList<MultiItemTheme> recipeListItems = new ArrayList<>();
-
     String tagName;
 
     /*
         TODO
-        1. 실행 해보고 수정할거 수정하기
+        테마적용
     */
 
     @Override
@@ -48,7 +46,6 @@ public class RecipeThemeActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = ARecipethemeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.recipethemeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -60,8 +57,8 @@ public class RecipeThemeActivity extends BaseActivity {
         recipeThemeAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
         recipeThemeAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                Intent intent = new Intent(RecipeThemeActivity.this, RecipeDetailActivity.class);
-                intent.putExtra("recipeID",recipeListItems.get(position).getContent().getRecipeID());
+                Intent intent = new Intent(RecipeThemeActivity.this, RecipeDetailActivity.class)
+                        .putExtra("recipeID", recipeListItems.get(position).getContent().getRecipeID());
                 startActivity(intent);
             }
         });
@@ -69,10 +66,10 @@ public class RecipeThemeActivity extends BaseActivity {
         binding.recipethemeRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recipethemeRecycler.setAdapter(recipeThemeAdapter);
 
-        if (App.isServerAlive()) {
+        if (App.isServerAlive())
             getRecipeList();
-        } else {
-            ArrayList<Recipe> arrayList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+        else {
+            ArrayList<Recipe> arrayList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
             for (int i = 0; i < arrayList.size(); i++) {
                 recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                 if (i != 0 && i % 4 == 0)
@@ -84,7 +81,7 @@ public class RecipeThemeActivity extends BaseActivity {
     }
 
     void getRecipeList() {
-        recipeService.getRecipeByTag("매운맛","popular")
+        recipeService.getRecipeByTag("매운맛", "popular")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {

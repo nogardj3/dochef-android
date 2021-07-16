@@ -35,6 +35,6 @@ public class RecommendAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
 
         helper.setText(R.id.reciperecommend_title, item.getRecipeName());
         helper.setText(R.id.reciperecommend_nickname,
-                String.format(mContext.getResources().getString(R.string.string_format_usernickname), item.getNickname()));
+                String.format(mContext.getResources().getString(R.string.format_usernickname), item.getNickname()));
     }
 }

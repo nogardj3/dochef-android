@@ -26,8 +26,8 @@
     <string name="analytics_name_terminated">APP_TERMINATED</string>
 
     <!-- format-->
-    <string name="string_format_usernickname">By - %s</string>
-    <string name="format_upload_post">%s_%s.jpg</string>
+    <string name="format_usernickname">By - %s</string>
+    <string name="format_upload_file">%s_%s.jpg</string>
 
 
     <string name="notification_texttype1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신의 팔로워가 되었습니다.</string>

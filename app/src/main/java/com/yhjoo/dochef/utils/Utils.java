@@ -1,6 +1,16 @@
 package com.yhjoo.dochef.utils;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
+
+import androidx.core.content.ContextCompat;
+
+import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
+import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.model.UserBrief;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -10,8 +20,24 @@ import static android.util.Patterns.EMAIL_ADDRESS;
 
 
 public class Utils {
+    public static boolean checkPermission(Context context, String[] RequirePermissions) {
+        for (String a : RequirePermissions)
+            if (ContextCompat.checkSelfPermission(context, a) != PackageManager.PERMISSION_GRANTED)
+                return false;
+
+        return true;
+    }
+
     public static void log(Object... msgs) {
         Logger.d("YHJOO %s", msgs);
+    }
+
+    public static UserBrief getUserBrief(Context context) {
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+        Gson gson = new Gson();
+        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(context.getString(R.string.SP_USERINFO), null), UserBrief.class);
+
+        return userInfo;
     }
 
     public enum EMAIL_VALIDATE {VALID, NODATA, INVALID}

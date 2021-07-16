@@ -35,7 +35,7 @@ public class DataGenerator {
                 R.raw.dummy_post_5,R.raw.dummy_post_6,R.raw.dummy_post_7,
                 R.raw.dummy_post_8,R.raw.dummy_post_9};
 
-        if (type == resources.getInteger(R.integer.DUMMY_TYPE_FAQ)) {
+        if (type == resources.getInteger(R.integer.DATA_TYPE_FAQ)) {
             ArrayList<FAQ> arrayList = new ArrayList<>();
 
             for (int i = 1; i < 10; i++) {
@@ -43,7 +43,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_NOTICE)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_NOTICE)) {
             ArrayList<Notice> arrayList = new ArrayList<>();
 
 
@@ -52,7 +52,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_NOTIFICATION)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_NOTIFICATION)) {
 
             ArrayList<Notification> arrayList = new ArrayList<>();
             for (int i = 1; i < 10; i++) {
@@ -76,7 +76,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_USER_BRIEF)) {
+        } else if (type == resources.getInteger(R.integer.LOCAL_TYPE_USER_BRIEF)) {
             ArrayList<UserBrief> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
@@ -89,7 +89,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_USER_DETAIL)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL)) {
             Random r = new Random();
             UserDetail userDetail = new UserDetail(
                     "userID",
@@ -102,7 +102,7 @@ public class DataGenerator {
             );
 
             return (T) userDetail;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_POST)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_POST)) {
             ArrayList<Post> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
@@ -132,7 +132,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_COMMENTS)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_COMMENTS)) {
             ArrayList<Comment> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
@@ -147,7 +147,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPE)) {
+        } else if (type == resources.getInteger(R.integer.DATE_TYPE_RECIPE)) {
             ArrayList<Recipe> arrayList = new ArrayList<>();
             for (int i = 0; i < 20; i++) {
                 Random r = new Random();
@@ -170,7 +170,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_RECIPE_DETAIL)) {
             Random r = new Random();
             ArrayList<String> tags = new ArrayList<>();
             tags.add("태그 1");

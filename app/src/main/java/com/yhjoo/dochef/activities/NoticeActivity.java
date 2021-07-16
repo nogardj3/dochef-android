@@ -26,16 +26,16 @@ import retrofit2.Response;
 public class NoticeActivity extends BaseActivity {
     ANoticeBinding binding;
 
-    ArrayList<MultiItemEntity> noticeList = new ArrayList<>();
     RetrofitServices.BasicService basicService;
     NoticeListAdapter noticeListAdapter;
+
+    ArrayList<MultiItemEntity> noticeList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ANoticeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.noticeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -48,31 +48,32 @@ public class NoticeActivity extends BaseActivity {
         if (App.isServerAlive())
             getListFromServer();
         else
-            getListFromDummy();
+            getListFromLocal();
     }
 
     void getListFromServer() {
-        basicService.getNotice().enqueue(new BasicCallback<ArrayList<Notice>>(this) {
-            @Override
-            public void onResponse(Call<ArrayList<Notice>> call, Response<ArrayList<Notice>> res) {
-                ArrayList<Notice> resList = res.body();
-                for (Notice item : resList) {
-                    ExpandTitle title = new ExpandTitle(item.title);
-                    title.addSubItem(new ExpandContents(item.contents,item.getDateTime()));
-                    noticeList.add(title);
-                }
+        basicService.getNotice()
+                .enqueue(new BasicCallback<ArrayList<Notice>>(this) {
+                    @Override
+                    public void onResponse(Call<ArrayList<Notice>> call, Response<ArrayList<Notice>> res) {
+                        ArrayList<Notice> resList = res.body();
+                        for (Notice item : resList) {
+                            ExpandTitle title = new ExpandTitle(item.title);
+                            title.addSubItem(new ExpandContents(item.contents, item.getDateTime()));
+                            noticeList.add(title);
+                        }
 
-                noticeListAdapter.setNewData(noticeList);
-                noticeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.noticeRecycler.getParent());
-            }
-        });
+                        noticeListAdapter.setNewData(noticeList);
+                        noticeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.noticeRecycler.getParent());
+                    }
+                });
     }
 
-    void getListFromDummy(){
-        ArrayList<Notice> response = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTICE));
+    void getListFromLocal() {
+        ArrayList<Notice> response = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_NOTICE));
         for (Notice item : response) {
             ExpandTitle title = new ExpandTitle(item.title);
-            title.addSubItem(new ExpandContents(item.contents,item.getDateTime()));
+            title.addSubItem(new ExpandContents(item.contents, item.getDateTime()));
             noticeList.add(title);
         }
         noticeListAdapter.setNewData(noticeList);

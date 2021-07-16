@@ -36,6 +36,20 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
     @Override
     protected void convert(BaseViewHolder helper, MultiItemResult item) {
         switch (helper.getItemViewType()) {
+            case VIEWHOLDER_ITEM_USER:
+                UserBrief ele = (UserBrief) item.getContent();
+
+                if (App.isServerAlive()) {
+                    if (!ele.getUserImg().equals("default"))
+                        Glide.with(mContext)
+                                .load(mContext.getString(R.string.storage_image_url_profile) + ele.getUserImg())
+                                .circleCrop()
+                                .into((AppCompatImageView) helper.getView(R.id.user_img));
+                }
+
+                helper.setText(R.id.user_nickname, ele.getNickname());
+                break;
+
             case VIEWHOLDER_ITEM_RECIPE_NAME:
                 Recipe recipeItem = (Recipe) item.getContent();
 
@@ -57,22 +71,8 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                 helper.setText(R.id.reciperesult_title, recipeItem.getRecipeName());
                 helper.setTextColor(R.id.reciperesult_title, mContext.getColor(R.color.colorPrimary));
                 ((AppCompatTextView) helper.getView(R.id.reciperesult_title)).setTypeface(null, Typeface.BOLD);
-                helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.string_format_usernickname), recipeItem.getNickname()));
+                helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem.getNickname()));
 
-                break;
-
-            case VIEWHOLDER_ITEM_USER:
-                UserBrief ele = (UserBrief) item.getContent();
-
-                if (App.isServerAlive()) {
-                    if (!ele.getUserImg().equals("default"))
-                        Glide.with(mContext)
-                                .load(mContext.getString(R.string.storage_image_url_profile) + ele.getUserImg())
-                        .circleCrop()
-                                .into((AppCompatImageView) helper.getView(R.id.user_img));
-                }
-
-                helper.setText(R.id.user_nickname, ele.getNickname());
                 break;
 
             case VIEWHOLDER_ITEM_INGREDIENT:
@@ -91,7 +91,7 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                 }
 
                 helper.setText(R.id.reciperesult_title, recipeItem2.getRecipeName());
-                helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.string_format_usernickname), recipeItem2.getNickname()));
+                helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem2.getNickname()));
                 helper.setVisible(R.id.reciperesult_ingredients, true);
 
 //                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
@@ -114,7 +114,7 @@ public class ResultListAdapter extends BaseMultiItemQuickAdapter<MultiItemResult
                 }
 
                 helper.setText(R.id.reciperesult_title, recipeItem3.getRecipeName());
-                helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.string_format_usernickname), recipeItem3.getNickname()));
+                helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem3.getNickname()));
                 helper.setVisible(R.id.reciperesult_tags, true);
 
 //                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();

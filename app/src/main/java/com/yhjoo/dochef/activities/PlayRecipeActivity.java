@@ -33,7 +33,7 @@ import com.yhjoo.dochef.fragments.PlayRecipeEndFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeItemFragment;
 import com.yhjoo.dochef.fragments.PlayRecipeStartFragment;
 import com.yhjoo.dochef.model.RecipePlay;
-import com.yhjoo.dochef.utils.PermissionUtil;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -76,7 +76,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
         String[] ingredients = {"김치1", "김치2"};
         String[] tags = {"태그1", "태그2", "태그3", "태그4", "태그5"};
-        binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
+        binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
 
         recipePlays = new ArrayList<>(Arrays.asList(
                 new RecipePlay(
@@ -164,7 +164,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 Manifest.permission.RECORD_AUDIO
         };
 
-        if (!PermissionUtil.checkPermission(this, permissions))
+        if (!Utils.checkPermission(this, permissions))
             ActivityCompat.requestPermissions(this, permissions, 1);
 
         m_clsSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -184,7 +184,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
                 if (timerSet) {
                     timerSet = false;
-                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
+                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
                     binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
                 }
             }
@@ -271,7 +271,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 .duration(500)
                 .onStop(() -> {
                     binding.playrecipeTimerFab.setClickable(true);
-                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_off_black_24dp);
+                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white_off);
                     binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorSecondary, null));
                 })
                 .start();
@@ -311,7 +311,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 .duration(500)
                 .onStop(() -> {
                     binding.playrecipeTimerFab.setClickable(true);
-                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_access_alarm_black_24dp);
+                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
                     binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
                 })
                 .start();

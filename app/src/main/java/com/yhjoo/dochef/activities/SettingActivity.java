@@ -16,7 +16,7 @@ public class SettingActivity extends BaseActivity {
 
     /*
         TODO
-        1. FCM 완료 후 알림 옵션 설정
+        FCM 완료 후 알림 옵션 설정
     */
 
     @Override
@@ -53,8 +53,8 @@ public class SettingActivity extends BaseActivity {
     void goReview(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(
-                "https://play.google.com/store/apps/details?id=quvesoft.sprout"));
-        intent.setPackage("com.android.vending");
+                "https://play.google.com/store/apps/details?id=quvesoft.sprout"))
+                .setPackage("com.android.vending");
         try {
             startActivity(intent);
         } catch (Exception e) {
@@ -67,8 +67,8 @@ public class SettingActivity extends BaseActivity {
         App.getAppInstance().showToast("로그아웃");
         ChefAuth.LogOut(this);
 
-        Intent intent = new Intent(this, AccountActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(this, AccountActivity.class)
+            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         finish();

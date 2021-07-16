@@ -23,7 +23,6 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class SplashActivity extends BaseActivity {
     ASplashBinding binding;
-
     FirebaseAnalytics mFirebaseAnalytics;
 
     boolean serverAlive = false;
@@ -31,8 +30,8 @@ public class SplashActivity extends BaseActivity {
 
     /*
         TODO
-        1. check process reactiveX 사용하기
-        2. 애니메이션 다시
+        check process reactiveX 사용하기
+        애니메이션 다시
     */
 
     @Override

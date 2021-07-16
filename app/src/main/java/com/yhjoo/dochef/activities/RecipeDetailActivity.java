@@ -1,9 +1,7 @@
 package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
@@ -14,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -24,7 +21,6 @@ import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.Review;
-import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.GlideApp;
@@ -38,14 +34,12 @@ import retrofit2.Response;
 
 public class RecipeDetailActivity extends BaseActivity {
     ARecipedetailBinding binding;
-
-    ReviewListAdapter reviewListAdapter;
     RetrofitServices.RecipeService recipeService;
     RetrofitServices.ReviewService reviewService;
+    ReviewListAdapter reviewListAdapter;
 
-    RecipeDetail recipeDetailInfo;
     ArrayList<Review> reviewList;
-
+    RecipeDetail recipeDetailInfo;
     String userID;
     int recipeID;
 
@@ -63,11 +57,7 @@ public class RecipeDetailActivity extends BaseActivity {
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
         reviewService = RetrofitBuilder.create(this, RetrofitServices.ReviewService.class);
 
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        Gson gson = new Gson();
-        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
-        userID = userInfo.getUserID();
-
+        userID = Utils.getUserBrief(this).getUserID();
         recipeID = getIntent().getIntExtra("recipeID", 0);
 
         reviewListAdapter = new ReviewListAdapter();
@@ -89,7 +79,7 @@ public class RecipeDetailActivity extends BaseActivity {
             getRecipeDetail();
             getReviewList();
         } else {
-            recipeDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE_DETAIL));
+            recipeDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_RECIPE_DETAIL));
             reviewList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
 
             setTopView();
@@ -130,7 +120,6 @@ public class RecipeDetailActivity extends BaseActivity {
                         }
                     }
                 });
-
     }
 
     void setTopView() {
@@ -159,7 +148,6 @@ public class RecipeDetailActivity extends BaseActivity {
                     .into(binding.recipedetailUserimg);
         }
 
-
         binding.recipedetailRecipetitle.setText(recipeDetailInfo.getRecipeName());
         binding.recipedetailNickname.setText(recipeDetailInfo.getNickname());
         binding.recipedetailExplain.setText(recipeDetailInfo.getContents());
@@ -169,9 +157,9 @@ public class RecipeDetailActivity extends BaseActivity {
         binding.recipedetailReviewRating.setRating(recipeDetailInfo.getRating());
 
         if(recipeDetailInfo.getLikes().contains(userID) || recipeDetailInfo.getUserID().equals(userID))
-            binding.recipedetailLike.setImageResource(R.drawable.ic_favorite_24dp);
+            binding.recipedetailLike.setImageResource(R.drawable.ic_favorite_red);
         else
-            binding.recipedetailLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            binding.recipedetailLike.setImageResource(R.drawable.ic_favorite_black);
         binding.recipedetailLike.setOnClickListener((v) ->{
                     if(!recipeDetailInfo.getUserID().equals(userID))
                         setLike();
@@ -207,16 +195,14 @@ public class RecipeDetailActivity extends BaseActivity {
 
                         if (response.code() == 403)
                             App.getAppInstance().showToast("뭔가에러");
-                        else {
+                        else
                             Utils.log("count ok");
-                        }
                     }
                 });
     }
 
     void setLike(){
         int like = recipeDetailInfo.getLikes().contains(userID) ? -1 : 1;
-
         recipeService.setLikeRecipe(recipeID,userID,like)
                 .enqueue(new BasicCallback<JsonObject>(this) {
                     @Override
@@ -225,10 +211,8 @@ public class RecipeDetailActivity extends BaseActivity {
 
                         if (response.code() == 403)
                             App.getAppInstance().showToast("뭔가에러");
-                        else {
+                        else
                             getRecipeDetail();
-                            getReviewList();
-                        }
                     }
                 });
     }

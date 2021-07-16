@@ -36,6 +36,7 @@ public class MainInitFragment extends Fragment {
 
     RetrofitServices.RecipeService recipeService;
     RecommendAdapter recommendAdapter;
+
     ArrayList<Recipe> recipeList;
 
     /*
@@ -53,7 +54,6 @@ public class MainInitFragment extends Fragment {
         imgs.add(R.drawable.ad_temp_0);
         imgs.add(R.drawable.ad_temp_1);
 
-
         binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
         binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
         binding.mainRecommendMore.setOnClickListener(
@@ -70,18 +70,18 @@ public class MainInitFragment extends Fragment {
         recommendAdapter = new RecommendAdapter();
         recommendAdapter.setOnItemClickListener((adapter, view1, position)
                 -> {
-            Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
-            intent.putExtra("recipeID", recipeList.get(position).getRecipeID());
+            Intent intent = new Intent(getContext(), RecipeDetailActivity.class)
+                .putExtra("recipeID", recipeList.get(position).getRecipeID());
             startActivity(intent);
         });
         recommendAdapter.setNewData(recipeList);
         binding.mainRecommendRecyclerview.setLayoutManager(
                 new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         binding.mainRecommendRecyclerview.setAdapter(recommendAdapter);
-        if (App.isServerAlive()) {
+        if (App.isServerAlive())
             getRecipelist();
-        } else {
-            recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+        else {
+            recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
             recommendAdapter.setNewData(recipeList);
         }
 

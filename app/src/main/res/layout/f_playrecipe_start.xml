@@ -69,7 +69,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:tint="@color/colorSecondary"
-            app:srcCompat="@drawable/ic_lightbulb_outline_black_24dp" />
+            app:srcCompat="@drawable/ic_tip_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"

@@ -19,8 +19,9 @@ import java.util.ArrayList;
 public class NotificationActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener {
     ANotificationBinding binding;
 
-    ArrayList<Notification> notifications = new ArrayList<>();
     NotificationListAdapter notificationListAdapter;
+
+    ArrayList<Notification> notifications = new ArrayList<>();
 
     /*
         TODO
@@ -40,19 +41,17 @@ public class NotificationActivity extends BaseActivity implements SwipeRefreshLa
         binding.notificationSwipe.setOnRefreshListener(this);
         binding.notificationSwipe.setColorSchemeColors(this.getColor(R.color.colorPrimary));
 
-        notifications = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_NOTIFICATION));
+        notifications = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_NOTIFICATION));
 
         notificationListAdapter = new NotificationListAdapter();
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
             if (notifications.get(position).getNotificationType() != getResources().getInteger(R.integer.NOTIFICATION_TYPE_2)) {
                 Intent intent = new Intent(NotificationActivity.this, RecipeDetailActivity.class);
-//                intent.putExtra("recipeID", notifications.get(position).getRecipeID());
+//                .putExtra("recipeID", notifications.get(position).getRecipeID());
                 startActivity(intent);
             } else {
-                Intent intent = new Intent(NotificationActivity.this, HomeActivity.class);
-                intent.putExtra("MODE", HomeActivity.MODE.MY);
-                startActivity(intent);
+                startActivity(new Intent(NotificationActivity.this, HomeActivity.class));
             }
         });
         binding.notificationRecycler.setLayoutManager(new LinearLayoutManager(this));

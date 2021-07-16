@@ -2,9 +2,7 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.bumptech.glide.Glide;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -27,7 +24,6 @@ import com.yhjoo.dochef.databinding.APostdetailBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.Post;
-import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.GlideApp;
@@ -45,13 +41,15 @@ public class PostDetailActivity extends BaseActivity {
     RetrofitServices.CommentService commentService;
     CommentListAdapter commentListAdapter;
 
-    Post postInfo;
     ArrayList<Comment> commentList;
+    Post postInfo;
+
     String userID;
     int postID;
 
     /*
         TODO
+        group은 onclick 안됨 수정
     */
 
     @Override
@@ -59,22 +57,16 @@ public class PostDetailActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = APostdetailBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.postToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
         commentService = RetrofitBuilder.create(this, RetrofitServices.CommentService.class);
 
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
-        userID = userInfo.getUserID();
-
+        userID = Utils.getUserBrief(this).getUserID();
         postID = getIntent().getIntExtra("postID", -1);
 
         commentListAdapter = new CommentListAdapter(userID);
-        commentListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.postCommentRecycler.getParent());
         commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
             PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
             getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
@@ -98,8 +90,8 @@ public class PostDetailActivity extends BaseActivity {
             getPostInfo(postID);
             getCommentList(postID);
         } else {
-            postInfo = ((ArrayList<Post>) DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_POST))).get(0);
-            commentList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_COMMENTS));
+            postInfo = ((ArrayList<Post>) DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_POST))).get(0);
+            commentList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_COMMENTS));
 
             setTopView();
             commentListAdapter.setNewData(commentList);
@@ -107,13 +99,11 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     void getPostInfo(int postID) {
-        progressON(this);
         postService.getPost(postID)
                 .enqueue(new BasicCallback<Post>(this) {
                     @Override
                     public void onResponse(Call<Post> call, Response<Post> response) {
                         super.onResponse(call, response);
-                        progressOFF();
 
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("post detail 가져오기 실패");
@@ -126,19 +116,17 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     void setTopView() {
-        Utils.log(postInfo.toString());
         if (App.isServerAlive()) {
             if (!postInfo.getPostImg().equals("")) {
                 binding.postPostimg.setVisibility(View.VISIBLE);
 
                 StorageReference sr = FirebaseStorage
                         .getInstance().getReference().child("post/" + postInfo.getPostImg());
-
                 GlideApp.with(this)
                         .load(sr)
                         .into(binding.postPostimg);
             }
-            if (!postInfo.getUserImg().equals("default")){
+            if (!postInfo.getUserImg().equals("default")) {
                 StorageReference sr = FirebaseStorage
                         .getInstance().getReference().child("profile/" + postInfo.getUserImg());
                 GlideApp.with(this)
@@ -151,6 +139,7 @@ public class PostDetailActivity extends BaseActivity {
             Glide.with(this)
                     .load(Integer.parseInt(postInfo.getPostImg()))
                     .into(binding.postPostimg);
+
             Glide.with(this)
                     .load(Integer.parseInt(postInfo.getUserImg()))
                     .circleCrop()
@@ -163,20 +152,15 @@ public class PostDetailActivity extends BaseActivity {
         binding.postLikecount.setText(Integer.toString(postInfo.getLikes().size()));
         binding.postCommentcount.setText(Integer.toString(postInfo.getComments().size()));
         binding.postUserGroup.setOnClickListener(v -> {
-            Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class);
-            if (postInfo.getUserID().equals(userID))
-                intent.putExtra("MODE", HomeActivity.MODE.MY);
-            else {
-                intent.putExtra("MODE", HomeActivity.MODE.USER);
-                intent.putExtra("userID", postInfo.getUserID());
-            }
+            Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class)
+                    .putExtra("userID", postInfo.getUserID());
             startActivity(intent);
         });
 
         if (postInfo.getLikes().contains(userID))
-            binding.postLike.setImageResource(R.drawable.ic_favorite_24dp);
+            binding.postLike.setImageResource(R.drawable.ic_favorite_red);
         else
-            binding.postLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            binding.postLike.setImageResource(R.drawable.ic_favorite_black);
 
         binding.postLike.setOnClickListener(v -> toggleLikePost(userID, postID));
         binding.postOther.setVisibility(postInfo.getUserID().equals(userID) ? View.VISIBLE : View.GONE);
@@ -186,13 +170,12 @@ public class PostDetailActivity extends BaseActivity {
             popup.setOnMenuItemClickListener(item -> {
                 switch (item.getItemId()) {
                     case R.id.menu_post_owner_revise:
-                        Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class);
-                        intent.putExtra("MODE", PostWriteActivity.MODE.REVISE)
+                        Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class)
+                                .putExtra("MODE", PostWriteActivity.MODE.REVISE)
                                 .putExtra("postID", postInfo.getPostID())
                                 .putExtra("postimg", postInfo.getPostImg())
                                 .putExtra("contents", postInfo.getContents())
                                 .putExtra("tags", postInfo.getTags());
-
                         startActivity(intent);
                         break;
                     case R.id.menu_post_owner_delete:
@@ -215,7 +198,7 @@ public class PostDetailActivity extends BaseActivity {
 
         binding.postTags.removeAllViews();
         for (String tag : postInfo.getTags()) {
-            LinearLayout tagcontainer = (LinearLayout) getLayoutInflater().inflate(R.layout.v_tag_post,null);
+            LinearLayout tagcontainer = (LinearLayout) getLayoutInflater().inflate(R.layout.v_tag_post, null);
             AppCompatTextView tagview = tagcontainer.findViewById(R.id.vtag_post_text);
             tagview.setText("#" + tag);
             binding.postTags.addView(tagcontainer);
@@ -246,13 +229,12 @@ public class PostDetailActivity extends BaseActivity {
 
     void toggleLikePost(String userID, int postID) {
         int new_like;
-        Utils.log(postInfo.toString());
         if (!postInfo.getLikes().contains(userID)) {
             new_like = 1;
-            binding.postLike.setImageResource(R.drawable.ic_favorite_border_black_24dp);
+            binding.postLike.setImageResource(R.drawable.ic_favorite_black);
         } else {
             new_like = -1;
-            binding.postLike.setImageResource(R.drawable.ic_favorite_24dp);
+            binding.postLike.setImageResource(R.drawable.ic_favorite_red);
         }
 
         postService.setLikePost(userID, postID, new_like)
@@ -278,7 +260,6 @@ public class PostDetailActivity extends BaseActivity {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         super.onResponse(call, response);
-                        progressOFF();
 
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("delete post 실패");
@@ -290,18 +271,16 @@ public class PostDetailActivity extends BaseActivity {
 
     void writeComment(View v) {
         if (!binding.postCommentEdittext.getText().toString().equals("")) {
-            progressON(this);
             commentService.createComment(postID, userID,
                     binding.postCommentEdittext.getText().toString(), System.currentTimeMillis())
                     .enqueue(new BasicCallback<JsonObject>(this) {
                         @Override
                         public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                             super.onResponse(call, response);
-                            progressOFF();
 
                             if (response.code() == 500) {
                                 App.getAppInstance().showToast("comment 생성 실패");
-                            } else{
+                            } else {
                                 App.getAppInstance().showToast("comment 생성 성공");
                                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(binding.postCommentEdittext.getWindowToken(), 0);
@@ -317,18 +296,15 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     void removeComment(int commentID) {
-        progressON(this);
-
         commentService.deleteComment(commentID)
                 .enqueue(new BasicCallback<JsonObject>(this) {
                     @Override
                     public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                         super.onResponse(call, response);
-                        progressOFF();
 
                         if (response.code() == 500) {
                             App.getAppInstance().showToast("comment 삭제 실패");
-                        } else{
+                        } else {
                             App.getAppInstance().showToast("comment 삭제 성공");
                             getCommentList(postID);
                         }

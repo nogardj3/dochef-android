@@ -12,11 +12,9 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.GlideApp;
 
-import java.util.ArrayList;
-
 public class RecipeListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
     public RecipeListAdapter() {
-        super(R.layout.li_recipe_mylist, new ArrayList<>());
+        super(R.layout.li_recipe_mylist);
     }
 
     @Override
@@ -39,7 +37,7 @@ public class RecipeListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> 
 
         helper.setText(R.id.recipemylist_recipetitle, item.getRecipeName());
         helper.setText(R.id.recipemylist_nickname,
-                String.format(mContext.getResources().getString(R.string.string_format_usernickname), item.getNickname()));
+                String.format(mContext.getResources().getString(R.string.format_usernickname), item.getNickname()));
         helper.setVisible(R.id.recipemylist_mine, item.getNickname().equals("나"));
         helper.addOnClickListener(R.id.recipemylist_revise);
         helper.addOnClickListener(R.id.recipemylist_delete);

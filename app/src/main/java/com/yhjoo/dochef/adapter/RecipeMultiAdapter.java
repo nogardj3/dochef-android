@@ -15,7 +15,6 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
@@ -27,7 +26,6 @@ import com.yhjoo.dochef.utils.GlideApp;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Response;
@@ -66,7 +64,7 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
 
                 helper.setText(R.id.recipemain_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipemain_nickname,
-                        String.format(mContext.getResources().getString(R.string.string_format_usernickname), item.getContent().getNickname()));
+                        String.format(mContext.getResources().getString(R.string.format_usernickname), item.getContent().getNickname()));
                 helper.setVisible(R.id.recipemain_other_group, false);
 
                 break;
@@ -77,8 +75,8 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
 
                 RecommendAdapter recommendAdapter = new RecommendAdapter();
                 recommendAdapter.setOnItemClickListener((adapter, view, position) -> {
-                    Intent intent = new Intent(mContext, RecipeDetailActivity.class);
-                    intent.putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
+                    Intent intent = new Intent(mContext, RecipeDetailActivity.class)
+                        .putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
                     mContext.startActivity(intent);
                 });
                 RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
@@ -100,12 +98,10 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                     });
                 }
                 else{
-                    ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+                    ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
 
                     recommendAdapter.setNewData(recipes);
                 }
-
-
                 break;
 
             case VIEWHOLDER_AD:

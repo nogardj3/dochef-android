@@ -11,14 +11,13 @@
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
-        app:title="레시피"/>
+        app:title="레시피" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recipelist_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clipToPadding="false"
-        android:overScrollMode="never"
         android:paddingStart="5dp"
         android:paddingTop="10dp"
         android:paddingEnd="5dp"

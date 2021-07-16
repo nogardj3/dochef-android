@@ -8,14 +8,8 @@ import com.bumptech.glide.annotation.GlideModule;
 import com.bumptech.glide.module.AppGlideModule;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.firebase.storage.StorageReference;
-import com.orhanobut.logger.Logger;
 
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.regex.Pattern;
-
-import static android.util.Patterns.EMAIL_ADDRESS;
 
 @GlideModule
 public final class MyAppGlideModule extends AppGlideModule {

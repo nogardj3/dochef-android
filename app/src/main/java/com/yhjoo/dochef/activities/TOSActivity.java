@@ -27,7 +27,7 @@ public class TOSActivity extends BaseActivity {
 
         if (App.isServerAlive()) {
             RetrofitServices.BasicService basicService =
-                    RetrofitBuilder.createScalar(this, RetrofitServices.BasicService.class);
+                    RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
 
             basicService.getTOS()
                     .enqueue(new BasicCallback<String>(this) {

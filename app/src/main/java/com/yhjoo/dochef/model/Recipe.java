@@ -3,7 +3,6 @@ package com.yhjoo.dochef.model;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Recipe {
     @SerializedName("recipe_id")

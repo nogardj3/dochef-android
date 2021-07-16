@@ -41,7 +41,7 @@ public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme
 
                 helper.setText(R.id.recipetheme_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipetheme_nickname,
-                        String.format(mContext.getResources().getString(R.string.string_format_usernickname), item.getContent().getNickname()));
+                        String.format(mContext.getResources().getString(R.string.format_usernickname), item.getContent().getNickname()));
                 break;
 
             case VIEWHOLDER_AD:

@@ -57,7 +57,7 @@
         android:tint="@color/colorSecondary"
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_ingredient_text"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_explain"
-        app:srcCompat="@drawable/ic_lightbulb_outline_black_24dp" />
+        app:srcCompat="@drawable/ic_tip_black" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_item_tiptext"
@@ -106,7 +106,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/playrecipe_end_review"
         app:layout_constraintRight_toLeftOf="@+id/playrecipe_end_addmyrecipe"
         app:layout_constraintTop_toTopOf="@+id/playrecipe_end_review"
-        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+        app:srcCompat="@drawable/ic_favorite_black" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/playrecipe_end_addmyrecipe"
@@ -116,7 +116,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/playrecipe_end_review"
         app:layout_constraintRight_toLeftOf="@+id/playrecipe_end_share"
         app:layout_constraintTop_toTopOf="@+id/playrecipe_end_review"
-        app:srcCompat="@drawable/ic_bookmark_border_black_24dp" />
+        app:srcCompat="@drawable/ic_bookmark_black" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/playrecipe_end_share"
@@ -126,7 +126,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/playrecipe_end_review"
         app:layout_constraintRight_toLeftOf="@+id/playrecipe_end_review"
         app:layout_constraintTop_toTopOf="@+id/playrecipe_end_review"
-        app:srcCompat="@drawable/ic_share_black_24dp" />
+        app:srcCompat="@drawable/ic_alarm_white" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/playrecipe_end_review"

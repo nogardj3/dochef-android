@@ -42,14 +42,12 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
     public static final int mode_Recent = 1;
     public static final int mode_Popular = 2;
 
-    String[] recommend_tags;
-
     FMainRecipesBinding binding;
     RetrofitServices.RecipeService recipeService;
     RecipeMultiAdapter recipeMultiAdapter;
 
     ArrayList<MultiItemRecipe> recipeListItems = new ArrayList<>();
-
+    String[] recommend_tags;
     int currentMode = 1;
 
     /*
@@ -66,11 +64,11 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
         binding.fRecipeSwipe.setOnRefreshListener(this);
         binding.fRecipeSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
-        recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems,recipeService);
+        recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems, recipeService);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                Intent intent = new Intent(MainRecipesFragment.this.getContext(), RecipeDetailActivity.class);
-                intent.putExtra("recipeID", ((MultiItemRecipe)adapter.getData().get(position)).getContent().getRecipeID());
+                Intent intent = new Intent(MainRecipesFragment.this.getContext(), RecipeDetailActivity.class)
+                        .putExtra("recipeID", ((MultiItemRecipe) adapter.getData().get(position)).getContent().getRecipeID());
                 startActivity(intent);
             }
         });
@@ -80,10 +78,10 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         recommend_tags = getResources().getStringArray(R.array.recommend_tags);
         Random r = new Random();
 
-        if (App.isServerAlive()) {
+        if (App.isServerAlive())
             getRecipeList();
-        } else {
-            ArrayList<Recipe> temp = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+        else {
+            ArrayList<Recipe> temp = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
 
             for (int i = 0; i < temp.size(); i++) {
                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
@@ -182,5 +180,4 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                     });
         }
     }
-
 }

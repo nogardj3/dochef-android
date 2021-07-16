@@ -39,17 +39,17 @@ public class AccountActivity extends BaseActivity {
     enum Mode {SIGNIN, SIGNUP, SIGNUPNICK, FINDPW}
 
     AAccountBinding binding;
-    FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAnalytics mFirebaseAnalytics;
+    FirebaseAuth mAuth;
     RetrofitServices.AccountService accountService;
 
-    String idToken;
     Mode current_mode = Mode.SIGNIN;
+    String idToken;
 
     /*
         TODO
-        1. FindPW 기능 구현
+        FindPW 기능 구현
     */
 
     @Override
@@ -58,16 +58,12 @@ public class AccountActivity extends BaseActivity {
         binding = AAccountBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
         mAuth = FirebaseAuth.getInstance();
-
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
-
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         accountService = new Retrofit.Builder()
@@ -212,7 +208,7 @@ public class AccountActivity extends BaseActivity {
         else if (Utils.pwValidation(pw) == Utils.PW_VALIDATE.INVALID)
             App.getAppInstance().showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.");
         else {
-            progressON(AccountActivity.this);
+            progressON(this);
             mAuth.createUserWithEmailAndPassword(email, pw)
                     .addOnCompleteListener(authTask -> {
                         if (!authTask.isSuccessful()) {
@@ -256,10 +252,10 @@ public class AccountActivity extends BaseActivity {
         else if (Utils.nicknameValidate(nickname) == Utils.NICKNAME_VALIDATE.INVALID)
             App.getAppInstance().showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.");
         else {
-            progressON(AccountActivity.this);
+            progressON(this);
             accountService
                     .createUser(idToken, mAuth.getUid(), nickname)
-                    .enqueue(new BasicCallback<UserBrief>(AccountActivity.this) {
+                    .enqueue(new BasicCallback<UserBrief>(this) {
                         @Override
                         public void onResponse(Call<UserBrief> call, Response<UserBrief> response) {
                             super.onResponse(call, response);
@@ -279,7 +275,7 @@ public class AccountActivity extends BaseActivity {
     void checkUserInfo(String idToken) {
         accountService
                 .checkUser(idToken, mAuth.getUid())
-                .enqueue(new BasicCallback<UserBrief>(AccountActivity.this) {
+                .enqueue(new BasicCallback<UserBrief>(this) {
                     @Override
                     public void onResponse(Call<UserBrief> call, Response<UserBrief> response) {
                         super.onResponse(call, response);

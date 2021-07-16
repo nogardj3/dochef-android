@@ -27,9 +27,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                tools:visibility="visible"
                 app:constraint_referenced_ids="home_userimg_revise, home_nickname_revise, home_profiletext_revise"
-                />
+                tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/home_userimg"
@@ -40,7 +39,7 @@
                 android:background="@drawable/bg_round"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
-                app:srcCompat="@drawable/ic_default_profile" />
+                app:srcCompat="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/home_userimg_revise"
@@ -53,7 +52,7 @@
                 app:backgroundTint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="@+id/home_userimg"
                 app:layout_constraintRight_toRightOf="@+id/home_userimg"
-                app:srcCompat="@drawable/ic_build_black_24dp"
+                app:srcCompat="@drawable/ic_build_black"
                 tools:visibility="visible" />
 
             <androidx.constraintlayout.widget.Group
@@ -181,7 +180,6 @@
                 app:layout_constraintTop_toBottomOf="@+id/home_followingtext"
                 tools:visibility="visible" />
 
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
@@ -215,7 +213,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/home_nickname"
                 app:layout_constraintLeft_toRightOf="@+id/home_nickname"
                 app:layout_constraintTop_toTopOf="@+id/home_nickname"
-                app:srcCompat="@drawable/ic_build_black_24dp"
+                app:srcCompat="@drawable/ic_build_black"
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -244,7 +242,7 @@
                 app:layout_constraintBottom_toBottomOf="@+id/home_profiletext"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/home_profiletext"
-                app:srcCompat="@drawable/ic_build_black_24dp"
+                app:srcCompat="@drawable/ic_build_black"
                 tools:visibility="visible" />
 
             <androidx.recyclerview.widget.RecyclerView
@@ -252,7 +250,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:overScrollMode="never"
                 app:layout_constraintTop_toBottomOf="@+id/home_profiletext"
                 tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/li_recipe_home"
@@ -263,7 +260,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_marginTop="8dp"
-                android:overScrollMode="never"
                 app:layout_constraintTop_toBottomOf="@+id/home_recipe_recycler"
                 tools:listitem="@layout/li_timeline" />
         </androidx.constraintlayout.widget.ConstraintLayout>

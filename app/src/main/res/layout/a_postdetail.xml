@@ -18,7 +18,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/white"
-        android:overScrollMode="never"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/post_toolbar">
@@ -54,13 +53,12 @@
                 android:background="@drawable/bg_round"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_postimg"
-                app:srcCompat="@drawable/ic_default_profile" />
+                app:srcCompat="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
                 android:layout_marginLeft="10dp"
                 android:layout_toEndOf="@+id/post_userimg"
                 android:textSize="16sp"
@@ -77,9 +75,9 @@
                 android:layout_marginTop="4dp"
                 android:layout_marginRight="10dp"
                 android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@+id/post_userimg"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/post_userimg"
-                app:layout_constraintBottom_toBottomOf="@+id/post_userimg"
                 tools:text="시간" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -101,8 +99,7 @@
                 app:flexWrap="wrap"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toRightOf="@+id/post_time"
-                app:layout_constraintTop_toBottomOf="@+id/post_contents"/>
-
+                app:layout_constraintTop_toBottomOf="@+id/post_contents" />
 
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -152,7 +149,7 @@
                 android:layout_marginEnd="10dp"
                 app:layout_constraintRight_toLeftOf="@+id/post_other"
                 app:layout_constraintTop_toBottomOf="@+id/post_tags"
-                app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
+                app:srcCompat="@drawable/ic_favorite_black" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/post_other"
@@ -161,14 +158,13 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintRight_toRightOf="@+id/post_time"
                 app:layout_constraintTop_toBottomOf="@+id/post_tags"
-                app:srcCompat="@drawable/ic_more_horiz_black_24dp" />
+                app:srcCompat="@drawable/ic_more" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/post_comment_recycler"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:overScrollMode="never"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toRightOf="@id/post_time"
                 app:layout_constraintTop_toBottomOf="@+id/post_like"
@@ -181,8 +177,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
-                android:lines="3"
                 android:background="@drawable/bg_stroke_2dp"
+                android:lines="3"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toLeftOf="@+id/post_comment_ok"
                 app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler" />

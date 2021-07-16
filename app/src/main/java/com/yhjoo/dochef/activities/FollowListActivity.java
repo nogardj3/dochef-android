@@ -1,14 +1,11 @@
 package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.FollowListAdapter;
@@ -19,8 +16,6 @@ import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -33,14 +28,14 @@ public class FollowListActivity extends BaseActivity {
     RetrofitServices.UserService userService;
     FollowListAdapter followListAdapter;
 
-    String active_userid = "";
-    String target_id = "";
     MODE current_mode = MODE.FOLLOWER;
+    String active_userid;
+    String target_id;
 
     /*
         TODO
-        follower  user_id를 follow하고 있는 사람
-        following user_id가 following하고 있는 사람
+        follow btn onclick
+        follow cancel btn onclick
     */
 
     @Override
@@ -48,28 +43,21 @@ public class FollowListActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = AFollowlistBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.followlistToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
 
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
-        active_userid = userInfo.getUserID();
-
+        active_userid = Utils.getUserBrief(this).getUserID();
         target_id = getIntent().getStringExtra("userID");
         current_mode = (MODE) getIntent().getSerializableExtra("MODE");
 
         binding.followlistToolbar.setTitle(current_mode == MODE.FOLLOWER ? "팔로워" : "팔로잉");
-
         followListAdapter = new FollowListAdapter(active_userid);
         followListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.followlistRecycler.getParent());
         followListAdapter.setOnItemClickListener((adapter, view, position) -> {
-                    Intent intent = new Intent(FollowListActivity.this, HomeActivity.class);
-                    intent.putExtra("MODE", HomeActivity.MODE.USER);
-                    intent.putExtra("userID", ((UserBrief) adapter.getData().get(position)).getUserID());
+                    Intent intent = new Intent(FollowListActivity.this, HomeActivity.class)
+                            .putExtra("userID", ((UserBrief) adapter.getData().get(position)).getUserID());
                     startActivity(intent);
                 }
         );
@@ -82,14 +70,14 @@ public class FollowListActivity extends BaseActivity {
             else if (current_mode == MODE.FOLLOWING)
                 getFollowing();
         } else {
-            ArrayList<UserBrief> data = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
+            ArrayList<UserBrief> data = DataGenerator.make(getResources(), getResources().getInteger(R.integer.LOCAL_TYPE_USER_BRIEF));
             followListAdapter.setNewData(data);
         }
     }
 
-    void getFollower(){
+    void getFollower() {
         userService.getFollowers(target_id)
-                .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
+                .enqueue(new BasicCallback<ArrayList<UserBrief>>(this) {
                     @Override
                     public void onResponse(Response<ArrayList<UserBrief>> response) {
                         followListAdapter.setNewData(response.body());
@@ -98,9 +86,9 @@ public class FollowListActivity extends BaseActivity {
                 });
     }
 
-    void getFollowing(){
+    void getFollowing() {
         userService.getFollowings(target_id)
-                .enqueue(new BasicCallback<ArrayList<UserBrief>>(FollowListActivity.this) {
+                .enqueue(new BasicCallback<ArrayList<UserBrief>>(this) {
                     @Override
                     public void onResponse(Response<ArrayList<UserBrief>> response) {
                         followListAdapter.setNewData(response.body());

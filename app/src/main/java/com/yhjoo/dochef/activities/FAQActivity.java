@@ -35,7 +35,6 @@ public class FAQActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         binding = AFaqBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.faqToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -60,7 +59,7 @@ public class FAQActivity extends BaseActivity {
                         ArrayList<FAQ> resList = res.body();
                         for (FAQ item : resList) {
                             ExpandTitle title = new ExpandTitle(item.title);
-                            title.addSubItem(new ExpandContents(item.contents,0));
+                            title.addSubItem(new ExpandContents(item.contents, 0));
                             faqList.add(title);
                         }
 
@@ -71,10 +70,10 @@ public class FAQActivity extends BaseActivity {
     }
 
     void getListFromLocal() {
-        ArrayList<FAQ> faqs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_FAQ));
+        ArrayList<FAQ> faqs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_FAQ));
         for (FAQ item : faqs) {
             ExpandTitle title = new ExpandTitle(item.title);
-            ExpandContents contents = new ExpandContents(item.contents,0);
+            ExpandContents contents = new ExpandContents(item.contents, 0);
             title.addSubItem(contents);
             faqList.add(title);
         }

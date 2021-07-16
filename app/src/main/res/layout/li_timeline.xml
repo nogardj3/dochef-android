@@ -38,7 +38,7 @@
             android:background="@drawable/bg_round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timeline_postimg"
-            app:srcCompat="@drawable/ic_default_profile" />
+            app:srcCompat="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timeline_nickname"
@@ -144,7 +144,7 @@
             android:layout_marginTop="8dp"
             app:layout_constraintLeft_toLeftOf="@+id/timeline_userimg"
             app:layout_constraintTop_toBottomOf="@+id/timeline_liketext"
-            app:srcCompat="@drawable/ic_default_profile" />
+            app:srcCompat="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/timeline_comment_nickname"

@@ -1,9 +1,7 @@
 package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,7 +20,6 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.MainFragmentAdapter;
@@ -53,7 +50,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     /*
         TODO
-        1. 마지막에 정리
      */
 
     @Override
@@ -61,7 +57,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onCreate(savedInstanceState);
         binding = AMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
         setSupportActionBar(binding.mainToolbar);
 
         MobileAds.initialize(this);
@@ -69,19 +64,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
 
-        binding.mainFab.setImageResource(R.drawable.ic_low_priority_white_24dp);
 
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowTitleEnabled(false);
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.mainDrawerlayout, binding.mainToolbar, 0, 0);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, binding.mainDrawerlayout,
+                binding.mainToolbar, 0, 0);
         binding.mainDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
 
         binding.mainNavigationview.setNavigationItemSelectedListener(this);
-
         ArrayList<Fragment> fragments = new ArrayList<>();
         fragments.add(new MainInitFragment());
         fragments.add(new MainRecipesFragment());
@@ -123,14 +117,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         binding.mainFam.hideMenu(false);
                         binding.mainFam.setVisibility(View.GONE);
                         binding.mainFab.setVisibility(View.VISIBLE);
-                        binding.mainFab.setImageResource(R.drawable.ic_create_white_24dp);
+                        binding.mainFab.setImageResource(R.drawable.ic_create_white);
                         break;
                     case 3:
                         binding.mainViewpager.setCurrentItem(3);
                         binding.mainFam.hideMenu(false);
                         binding.mainFam.setVisibility(View.GONE);
                         binding.mainFab.setVisibility(View.VISIBLE);
-                        binding.mainFab.setImageResource(R.drawable.ic_create_white_24dp);
+                        binding.mainFab.setImageResource(R.drawable.ic_create_white);
                         break;
                 }
             }
@@ -144,22 +138,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
         });
 
+        binding.mainFab.setImageResource(R.drawable.ic_low_priority_white_24dp);
+
         binding.famRecent.setOnClickListener(this::recentSort);
         binding.famPopular.setOnClickListener(this::popularSort);
         binding.mainFab.setOnClickListener(this::clickFab);
 
         userName = binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_nickname);
         userImage = binding.mainNavigationview.getHeaderView(0).findViewById(R.id.navheader_userimg);
-
         userName.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-            intent.putExtra("MODE",HomeActivity.MODE.MY);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
         });
         userImage.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-            intent.putExtra("MODE",HomeActivity.MODE.MY);
-            startActivity(intent);
+            startActivity(new Intent(MainActivity.this, HomeActivity.class));
         });
     }
 
@@ -168,42 +159,29 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onResume();
 
         if (App.isServerAlive()) {
-            SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            Gson gson = new Gson();
-            UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
-
-            Utils.log(userInfo.toString());
-
-            if(!userInfo.getUserImg().equals("default"))
+            UserBrief userInfo = Utils.getUserBrief(this);
+            if (!userInfo.getUserImg().equals("default"))
                 Glide.with(this)
                         .load(getString(R.string.storage_image_url_profile) + userInfo.getUserImg())
                         .circleCrop()
                         .into(userImage);
             userName.setText(userInfo.getNickname());
-
-            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(true);
-            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(true);
-            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_notification).setVisible(true);
         } else {
-            userDetailInfo = DataGenerator.make(getResources(),getResources().getInteger(R.integer.DUMMY_TYPE_USER_DETAIL));
+            userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
 
             Glide.with(this)
                     .load(Integer.parseInt(userDetailInfo.getUserImg()))
                     .circleCrop()
                     .into(userImage);
             userName.setText(userDetailInfo.getNickname());
-
-            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myhome).setVisible(false);
-            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_myrecipe).setVisible(false);
-            binding.mainNavigationview.getMenu().findItem(R.id.main_nav_notification).setVisible(false);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (binding.mainDrawerlayout.isDrawerOpen(GravityCompat.START)) {
+        if (binding.mainDrawerlayout.isDrawerOpen(GravityCompat.START))
             binding.mainDrawerlayout.closeDrawer(GravityCompat.START);
-        } else {
+        else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
             builder.setMessage("종료하시겠습니까?")
@@ -230,11 +208,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.main_menu_search) {
-            startActivity(new Intent(MainActivity.this, SearchActivity.class));
-        }
-
+        startActivity(new Intent(this, SearchActivity.class));
         return super.onOptionsItemSelected(item);
     }
 
@@ -243,29 +217,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         int id = item.getItemId();
 
         if (id == R.id.main_nav_myhome) {
-            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-            intent.putExtra("MODE",HomeActivity.MODE.MY);
-            startActivity(intent);
+            startActivity(new Intent(this, HomeActivity.class));
         } else if (id == R.id.main_nav_myrecipe) {
-            startActivity(new Intent(MainActivity.this, RecipeMyListActivity.class));
-        } else if (id == R.id.main_nav_notification) {
+            Intent intent = new Intent(this, RecipeMyListActivity.class)
+                    .putExtra("userID", userDetailInfo.getUserID());
+            startActivity(intent);
+        } else if (id == R.id.main_nav_notification)
             startActivity(new Intent(MainActivity.this, NotificationActivity.class));
-        } else if (id == R.id.main_nav_setting) {
+        else if (id == R.id.main_nav_setting)
             startActivity(new Intent(MainActivity.this, SettingActivity.class));
-        }
 
         binding.mainDrawerlayout.closeDrawer(GravityCompat.START);
         return true;
     }
 
-    void recentSort(View v){
+    void recentSort(View v) {
         if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Recent)
             ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
 
         binding.mainFam.close(true);
     }
 
-    void popularSort(View v){
+    void popularSort(View v) {
         if (((MainRecipesFragment) mainFragmentAdapter.getItem(1)).getAlignMode() != MainRecipesFragment.mode_Popular)
             ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeAlignMode();
 
@@ -278,8 +251,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(new Intent(MainActivity.this, RecipeMakeActivity.class));
                 break;
             case 3:
-                Intent intent=new Intent(MainActivity.this, PostWriteActivity.class);
-                intent.putExtra("MODE", PostWriteActivity.MODE.WRITE);
+                Intent intent = new Intent(MainActivity.this, PostWriteActivity.class)
+                    .putExtra("MODE", PostWriteActivity.MODE.WRITE);
                 startActivity(intent);
                 break;
         }

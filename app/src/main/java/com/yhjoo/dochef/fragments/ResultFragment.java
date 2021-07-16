@@ -38,8 +38,8 @@ public class ResultFragment extends Fragment {
     private final int VIEWHOLDER_ITEM_TAG = 4;
 
     FResultBinding binding;
-    RetrofitServices.RecipeService recipeService;
     RetrofitServices.UserService userService;
+    RetrofitServices.RecipeService recipeService;
     ResultListAdapter resultListAdapter;
 
     String keyword;
@@ -47,7 +47,7 @@ public class ResultFragment extends Fragment {
 
     /*
         TODO
-        서버 확인
+        user - my인지 누군지 구분
     */
 
     @Override
@@ -56,7 +56,6 @@ public class ResultFragment extends Fragment {
         View view = binding.getRoot();
 
         type = getArguments().getInt("type");
-
 
         userService = RetrofitBuilder.create(getContext(), RetrofitServices.UserService.class);
         recipeService = RetrofitBuilder.create(getContext(), RetrofitServices.RecipeService.class);
@@ -72,14 +71,13 @@ public class ResultFragment extends Fragment {
                 case VIEWHOLDER_ITEM_RECIPE_NAME:
                 case VIEWHOLDER_ITEM_INGREDIENT:
                 case VIEWHOLDER_ITEM_TAG:
-                    Intent intent = new Intent(getContext(), RecipeDetailActivity.class);
-                    intent.putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
+                    Intent intent = new Intent(getContext(), RecipeDetailActivity.class)
+                        .putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
                     startActivity(intent);
                     break;
                 case VIEWHOLDER_ITEM_USER:
-                    Intent intent2 = new Intent(getContext(), HomeActivity.class);
-                    intent2.putExtra("userID", ((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
-                    intent2.putExtra("MODE", HomeActivity.MODE.USER);
+                    Intent intent2 = new Intent(getContext(), HomeActivity.class)
+                        .putExtra("userID", ((UserBrief) ((MultiItemResult) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
             }
@@ -171,11 +169,11 @@ public class ResultFragment extends Fragment {
             }
         } else{
             if(type == VIEWHOLDER_ITEM_USER){
-                ArrayList<UserBrief> userBriefs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_USER_BRIEF));
+                ArrayList<UserBrief> userBriefs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.LOCAL_TYPE_USER_BRIEF));
                 setUserItem(userBriefs);
             }
             else{
-                ArrayList<Recipe> recipes = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_RECIPE));
+                ArrayList<Recipe> recipes = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
                 setRecipeItem(recipes);
             }
         }

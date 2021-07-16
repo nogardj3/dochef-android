@@ -2,11 +2,9 @@ package com.yhjoo.dochef.activities;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.provider.MediaStore;
 import android.view.View;
 
@@ -20,16 +18,13 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.GlideApp;
-import com.yhjoo.dochef.utils.PermissionUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -46,16 +41,15 @@ public class PostWriteActivity extends BaseActivity {
     enum MODE {WRITE, REVISE}
 
     APostwriteBinding binding;
-    RetrofitServices.PostService postService;
     FirebaseStorage storage;
     StorageReference storageReference;
+    RetrofitServices.PostService postService;
 
-    String userID;
-    int postID;
     Uri mImageUri;
-    String image_url;
     MODE current_mode = MODE.WRITE;
-
+    String userID;
+    String image_url;
+    int postID;
 
     /*
         TODO
@@ -71,18 +65,15 @@ public class PostWriteActivity extends BaseActivity {
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        Gson gson = new Gson();
-        UserBrief userInfo = gson.fromJson(mSharedPreferences.getString(getString(R.string.SP_USERINFO), null), UserBrief.class);
-        userID = userInfo.getUserID();
-
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
 
-        current_mode = (PostWriteActivity.MODE) getIntent().getSerializableExtra("MODE");
+        userID = Utils.getUserBrief(this).getUserID();
+        current_mode = (MODE) getIntent().getSerializableExtra("MODE");
 
         if (current_mode == MODE.REVISE) {
-            binding.postwriteToolbar.setTitle("수정");
             postID = getIntent().getIntExtra("postID", -1);
+
+            binding.postwriteToolbar.setTitle("수정");
             binding.postwriteContents.setText(getIntent().getStringExtra("contents"));
 
             if (getIntent().getStringExtra("postImg") != null){
@@ -108,9 +99,9 @@ public class PostWriteActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
             if (data != null) {
-                Utils.log(data);
-                mImageUri = data.getData();
                 binding.postwritePostimg.setVisibility(View.VISIBLE);
+
+                mImageUri = data.getData();
                 Glide.with(this)
                         .load(mImageUri)
                         .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
@@ -122,12 +113,11 @@ public class PostWriteActivity extends BaseActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == CODE_PERMISSION) {
-            for (int result : grantResults) {
+            for (int result : grantResults)
                 if (result == PackageManager.PERMISSION_DENIED) {
                     App.getAppInstance().showToast("권한 거부");
                     return;
                 }
-            }
 
             mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
 
@@ -147,7 +137,7 @@ public class PostWriteActivity extends BaseActivity {
                 Manifest.permission.READ_EXTERNAL_STORAGE
         };
 
-        if (PermissionUtil.checkPermission(this, permissions)) {
+        if (Utils.checkPermission(this, permissions)) {
             mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
 
             Intent intent = new Intent(Intent.ACTION_PICK)
@@ -170,7 +160,7 @@ public class PostWriteActivity extends BaseActivity {
 
         image_url = "";
         if(mImageUri != null){
-            image_url= String.format(getString(R.string.format_upload_post),
+            image_url= String.format(getString(R.string.format_upload_file),
                     userID, Long.toString(System.currentTimeMillis()));
         }
         if (current_mode == MODE.WRITE) {

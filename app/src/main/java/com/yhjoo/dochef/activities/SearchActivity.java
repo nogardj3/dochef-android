@@ -25,8 +25,6 @@ public class SearchActivity extends BaseActivity {
 
     /*
         TODO
-        1. search type 개선
-        2. 홈버튼 뭐지
     */
 
     @Override

@@ -24,7 +24,6 @@
             android:id="@+id/notification_recycler"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:overScrollMode="never"
             tools:listitem="@layout/li_notification" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
