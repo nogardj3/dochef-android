@@ -5,37 +5,33 @@
     android:layout_width="230dp"
     android:layout_height="170dp"
     android:background="@color/colorPrimary"
-    android:gravity="bottom"
-    android:paddingBottom="20dp">
+    android:gravity="bottom">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/navheader_userimg"
         android:layout_width="85dp"
         android:layout_height="85dp"
-        android:layout_marginStart="10dp"
         android:background="@drawable/bg_round"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@id/navheader_nickname"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/navheader_nickname"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/ic_profile_black" />
 
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/navheader_nickname"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxLines="1"
+        android:layout_marginBottom="12dp"
         android:paddingLeft="10dp"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/navheader_userimg"
-        app:layout_constraintLeft_toRightOf="@+id/navheader_userimg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/navheader_userimg"
         tools:text="닉네임" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

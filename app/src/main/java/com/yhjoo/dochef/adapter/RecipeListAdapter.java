@@ -1,16 +1,10 @@
 package com.yhjoo.dochef.adapter;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.GlideApp;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 
 public class RecipeListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
     public RecipeListAdapter() {
@@ -19,21 +13,8 @@ public class RecipeListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> 
 
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
-        if(App.isServerAlive()) {
-            StorageReference sr = FirebaseStorage
-                    .getInstance().getReference().child("recipe/" + item.getRecipeImg());
-
-            GlideApp.with(mContext)
-                    .load(sr)
-                    .centerCrop()
-                    .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
-        }
-        else{
-            Glide.with(mContext)
-                .load(Integer.parseInt(item.getRecipeImg()))
-                .centerCrop()
-                .into((AppCompatImageView) helper.getView(R.id.recipemylist_recipeimg));
-        }
+        ImageLoadUtil.loadRecipeImage(
+                mContext,item.getRecipeImg(), helper.getView(R.id.recipemylist_recipeimg));
 
         helper.setText(R.id.recipemylist_recipetitle, item.getRecipeName());
         helper.setText(R.id.recipemylist_nickname,

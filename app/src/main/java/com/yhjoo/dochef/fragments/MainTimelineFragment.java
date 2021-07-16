@@ -38,7 +38,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
     /*
         TODO
         group은 onclick 안됨 수정
-        swipe refresh 왜 안됨
+        태그 백그라운드 넣지 말고, 그냥 색깔만
     */
 
     @Override

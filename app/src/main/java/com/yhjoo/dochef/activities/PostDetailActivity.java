@@ -13,9 +13,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.appcompat.widget.PopupMenu;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -26,7 +23,7 @@ import com.yhjoo.dochef.model.Comment;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.GlideApp;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -116,35 +113,8 @@ public class PostDetailActivity extends BaseActivity {
     }
 
     void setTopView() {
-        if (App.isServerAlive()) {
-            if (!postInfo.getPostImg().equals("")) {
-                binding.postPostimg.setVisibility(View.VISIBLE);
-
-                StorageReference sr = FirebaseStorage
-                        .getInstance().getReference().child("post/" + postInfo.getPostImg());
-                GlideApp.with(this)
-                        .load(sr)
-                        .into(binding.postPostimg);
-            }
-            if (!postInfo.getUserImg().equals("default")) {
-                StorageReference sr = FirebaseStorage
-                        .getInstance().getReference().child("profile/" + postInfo.getUserImg());
-                GlideApp.with(this)
-                        .load(sr)
-                        .circleCrop()
-                        .into(binding.postUserimg);
-            }
-        } else {
-            binding.postPostimg.setVisibility(View.VISIBLE);
-            Glide.with(this)
-                    .load(Integer.parseInt(postInfo.getPostImg()))
-                    .into(binding.postPostimg);
-
-            Glide.with(this)
-                    .load(Integer.parseInt(postInfo.getUserImg()))
-                    .circleCrop()
-                    .into(binding.postUserimg);
-        }
+        ImageLoadUtil.loadPostImage(this, postInfo.getPostImg(), binding.postPostimg);
+        ImageLoadUtil.loadUserImage(this, postInfo.getUserImg(), binding.postUserimg);
 
         binding.postNickname.setText(postInfo.getNickname());
         binding.postContents.setText(postInfo.getContents());

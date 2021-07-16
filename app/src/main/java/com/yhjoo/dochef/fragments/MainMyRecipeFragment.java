@@ -46,9 +46,10 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
     /*
         TODO
-        get recipe by userId sort by datetime desc
-        like recipe 추가 -> 뷰 내거 아님 남거 추가
-
+        디자인 다시
+            nickname 빼고 my, 남거
+            rating view datetime
+            sort by latest
     */
 
     @Override
@@ -84,17 +85,14 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
             ArrayList<Recipe> temp = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
 
             for (int i = 0; i < temp.size(); i++) {
-                recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
-
-                int tt = i % 4;
-                int ttt = i / 4 % 2;
-                if (i != 0 && tt == 0) {
-                    if (ttt == 0)
+                if (i != 0 && i % 4 == 0) {
+                    if (i / 4 % 2 == 0)
                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
                                 recommend_tags[r.nextInt(recommend_tags.length)]));
                     else
                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                 }
+                recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
             }
 
             recipeMultiAdapter.setNewData(recipeListItems);
@@ -124,17 +122,14 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
                             recipeListItems.clear();
                             for (int i = 0; i < temp.size(); i++) {
-                                recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
-
-                                int tt = i % 4;
-                                int ttt = i / 4 % 2;
-                                if (i != 0 && tt == 0) {
-                                    if (ttt == 0)
+                                if (i != 0 && i % 4 == 0) {
+                                    if (i / 4 % 2 == 0)
                                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
                                                 recommend_tags[r.nextInt(recommend_tags.length)]));
                                     else
                                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                                 }
+                                recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
                             }
 
                             recipeMultiAdapter.setNewData(recipeListItems);

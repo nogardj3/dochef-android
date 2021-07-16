@@ -27,7 +27,7 @@ public class RecipeThemeActivity extends BaseActivity {
     public final int VIEWHOLDER_AD = 1;
     public final int VIEWHOLDER_ITEM = 2;
 
-    public enum MODE {NORMAL, TAG}
+    public enum MODE {POPULAR, TAG}
 
     ARecipethemeBinding binding;
     RetrofitServices.RecipeService recipeService;
@@ -35,6 +35,8 @@ public class RecipeThemeActivity extends BaseActivity {
 
     ArrayList<MultiItemTheme> recipeListItems = new ArrayList<>();
     String tagName;
+
+    MODE currentMode;
 
     /*
         TODO
@@ -51,6 +53,13 @@ public class RecipeThemeActivity extends BaseActivity {
 
         MobileAds.initialize(this);
 
+        if(getIntent().getStringExtra("tag") == null)
+            currentMode = MODE.POPULAR;
+        else{
+            currentMode = MODE.TAG;
+            tagName = getIntent().getStringExtra("tag");
+        }
+
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
 
         recipeThemeAdapter = new RecipeThemeAdapter(recipeListItems);
@@ -66,14 +75,18 @@ public class RecipeThemeActivity extends BaseActivity {
         binding.recipethemeRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recipethemeRecycler.setAdapter(recipeThemeAdapter);
 
-        if (App.isServerAlive())
-            getRecipeList();
+        if (App.isServerAlive()){
+            if(currentMode == MODE.POPULAR)
+                getRecipeList();
+            else
+                getRecipeListbyTag();
+        }
         else {
             ArrayList<Recipe> arrayList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
             for (int i = 0; i < arrayList.size(); i++) {
-                recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                 if (i != 0 && i % 4 == 0)
                     recipeListItems.add(new MultiItemTheme(VIEWHOLDER_AD, 2));
+                recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
             }
 
             recipeThemeAdapter.setNewData(recipeListItems);
@@ -81,7 +94,7 @@ public class RecipeThemeActivity extends BaseActivity {
     }
 
     void getRecipeList() {
-        recipeService.getRecipeByTag("매운맛", "popular")
+        recipeService.getRecipes("popular")
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
@@ -92,9 +105,33 @@ public class RecipeThemeActivity extends BaseActivity {
                         else {
                             ArrayList<Recipe> arrayList = response.body();
                             for (int i = 0; i < arrayList.size(); i++) {
-                                recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                                 if (i != 0 && i % 4 == 0)
                                     recipeListItems.add(new MultiItemTheme(VIEWHOLDER_AD, 2));
+                                recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
+                            }
+
+                            recipeThemeAdapter.setNewData(recipeListItems);
+                            recipeThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
+                        }
+                    }
+                });
+    }
+
+    void getRecipeListbyTag() {
+        recipeService.getRecipeByTag(tagName, "popular")
+                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
+                    @Override
+                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                        super.onResponse(call, response);
+
+                        if (response.code() == 403)
+                            App.getAppInstance().showToast("뭔가에러");
+                        else {
+                            ArrayList<Recipe> arrayList = response.body();
+                            for (int i = 0; i < arrayList.size(); i++) {
+                                if (i != 0 && i % 4 == 0)
+                                    recipeListItems.add(new MultiItemTheme(VIEWHOLDER_AD, 2));
+                                recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
                             }
 
                             recipeThemeAdapter.setNewData(recipeListItems);

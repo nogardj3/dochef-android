@@ -1,41 +1,32 @@
 package com.yhjoo.dochef.adapter;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.GlideApp;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.Utils;
 
 public class RecipeHorizontalAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder> {
-    public RecipeHorizontalAdapter() {
+    String userID;
+
+    public RecipeHorizontalAdapter(String userID) {
         super(R.layout.li_recipe_home);
+        this.userID = userID;
     }
 
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
-        if (App.isServerAlive()) {
-            StorageReference sr = FirebaseStorage
-                    .getInstance().getReference().child("recipe/" + item.getRecipeImg());
+        ImageLoadUtil.loadRecipeImage(mContext,item.getRecipeImg(), helper.getView(R.id.recipehome_recipeimg));
 
-            GlideApp.with(mContext)
-                    .load(sr)
-                    .centerCrop()
-                    .into((AppCompatImageView) helper.getView(R.id.recipehome_recipeimg));
+        helper.setText(R.id.recipehome_name, item.getRecipeName());
+        if (item.getUserID().equals(userID)) {
+            helper.setVisible(R.id.recipehome_my, true);
+            helper.setVisible(R.id.recipehome_is_favorite, false);
         } else {
-            Glide.with(mContext)
-                    .load(Integer.valueOf(item.getRecipeImg()))
-                    .centerCrop()
-                    .into((AppCompatImageView) helper.getView(R.id.recipehome_recipeimg));
+            helper.setVisible(R.id.recipehome_my, false);
+            helper.setVisible(R.id.recipehome_is_favorite, true);
         }
-
-
         helper.setVisible(R.id.recipehome_new, Utils.checkNew(item.getDatetime()));
     }
 }

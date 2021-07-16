@@ -1,15 +1,12 @@
 package com.yhjoo.dochef.adapter;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.MultiItemTheme;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 
 import java.util.List;
 
@@ -27,17 +24,8 @@ public class RecipeThemeAdapter extends BaseMultiItemQuickAdapter<MultiItemTheme
     protected void convert(BaseViewHolder helper, MultiItemTheme item) {
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
-                if (App.isServerAlive()) {
-                    Glide.with(mContext)
-                            .load(item.getContent().getRecipeImg())
-                            .centerCrop()
-                            .into((AppCompatImageView) helper.getView(R.id.recipetheme_img));
-                } else {
-                    Glide.with(mContext)
-                            .load(Integer.parseInt(item.getContent().getRecipeImg()))
-                            .centerCrop()
-                            .into((AppCompatImageView) helper.getView(R.id.recipetheme_img));
-                }
+                ImageLoadUtil.loadRecipeImage(
+                        mContext,item.getContent().getRecipeImg(),helper.getView(R.id.recipetheme_img));
 
                 helper.setText(R.id.recipetheme_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipetheme_nickname,

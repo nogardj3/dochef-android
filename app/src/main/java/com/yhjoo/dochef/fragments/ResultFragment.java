@@ -185,10 +185,9 @@ public class ResultFragment extends Fragment {
         if (type == VIEWHOLDER_ITEM_USER) {
         } else{
             for (int i = 0; i < recipes.size(); i++) {
-                multiItemResults.add(new MultiItemResult<>(type, recipes.get(i)));
-
                 if (i != 0 && i % 4 == 0)
                     multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
+                multiItemResults.add(new MultiItemResult<>(type, recipes.get(i)));
             }
         }
     }
@@ -196,10 +195,9 @@ public class ResultFragment extends Fragment {
     void setUserItem(ArrayList<UserBrief> userBriefs){
         ArrayList<MultiItemResult> multiItemResults = new ArrayList<>();
         for (int i = 0; i < userBriefs.size(); i++) {
-            multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_ITEM_USER, userBriefs.get(i)));
-
             if (i != 0 && i % 4 == 0)
                 multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_AD));
+            multiItemResults.add(new MultiItemResult<>(VIEWHOLDER_ITEM_USER, userBriefs.get(i)));
         }
 
         resultListAdapter.setNewData(multiItemResults);

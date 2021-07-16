@@ -15,9 +15,11 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.PostListAdapter;
@@ -29,6 +31,7 @@ import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -42,11 +45,12 @@ public class HomeActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
     private final int EXTRA_RQ_PICKFROMGALLERY = 200;
 
-    enum MODE {MY, USER}
+    private enum MODE {MY, USER}
 
-    enum OPERATION {VIEW, REVISE}
+    private enum OPERATION {VIEW, REVISE}
 
     AHomeBinding binding;
+    StorageReference storageReference;
     RetrofitServices.UserService userService;
     RetrofitServices.RecipeService recipeService;
     RetrofitServices.PostService postService;
@@ -60,14 +64,18 @@ public class HomeActivity extends BaseActivity {
 
     MODE currentMode;
     OPERATION currentOperation = OPERATION.VIEW;
+    String image_url;
     String userID;
 
     /*
         TODO
+        firebase storage profile image
         revise 구현 - 각각 말고 완료 누를 때 적용하기
-        recipe, post emptyview
-        user, my enum 없애기
-        follow 확인
+        디자인
+            툴바 홈-> 이름
+            프로필 수정 위로 옮기기
+            내 홈이면 버튼 없애기
+
     */
 
     @Override
@@ -78,18 +86,22 @@ public class HomeActivity extends BaseActivity {
         setSupportActionBar(binding.homeToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        storageReference = FirebaseStorage.getInstance().getReference();
+
         userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
         recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
 
-        userID = Utils.getUserBrief(this).getUserID();
-        if(getIntent().getStringExtra("userID").equals("")
-                || getIntent().getStringExtra("userID").equals(userID))
+        if (getIntent().getStringExtra("userID") == null
+                || getIntent().getStringExtra("userID").equals(userID)) {
             currentMode = MODE.MY;
-        else
+            userID = Utils.getUserBrief(this).getUserID();
+        } else {
             currentMode = MODE.USER;
+            userID = getIntent().getStringExtra("userID");
+        }
 
-        recipeHorizontalAdapter = new RecipeHorizontalAdapter();
+        recipeHorizontalAdapter = new RecipeHorizontalAdapter(userID);
         recipeHorizontalAdapter.setOnItemClickListener((adapter, view, position) -> {
             Intent intent = new Intent(HomeActivity.this, RecipeDetailActivity.class)
                     .putExtra("recipeID", recipeList.get(position).getRecipeID());
@@ -116,6 +128,11 @@ public class HomeActivity extends BaseActivity {
             }
         });
         binding.homePostRecycler.setAdapter(postListAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         if (App.isServerAlive()) {
             getUserDetailInfo(userID);
@@ -138,10 +155,7 @@ public class HomeActivity extends BaseActivity {
         if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
             if (data != null) {
                 mImageUri = data.getData();
-                Glide.with(this)
-                        .load(mImageUri)
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
-                        .into(binding.homeUserimg);
+                binding.homeUserimg.setImageURI(mImageUri);
             }
     }
 
@@ -206,8 +220,9 @@ public class HomeActivity extends BaseActivity {
                             App.getAppInstance().showToast("뭔가에러");
                         else {
                             recipeList = response.body();
+                            Utils.log(recipeList.size());
                             recipeHorizontalAdapter.setNewData(recipeList);
-                            recipeHorizontalAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.homeRecipeRecycler.getParent());
+                            recipeHorizontalAdapter.setEmptyView(R.layout.rv_empty_recipe, (ViewGroup) binding.homeRecipeRecycler.getParent());
                         }
                     }
                 });
@@ -225,25 +240,14 @@ public class HomeActivity extends BaseActivity {
                         else {
                             postList = response.body();
                             postListAdapter.setNewData(postList);
-                            postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.homePostRecycler.getParent());
+                            postListAdapter.setEmptyView(R.layout.rv_empty_post, (ViewGroup) binding.homePostRecycler.getParent());
                         }
                     }
                 });
     }
 
     void setUserInfo() {
-        if (App.isServerAlive()) {
-            if (!userDetailInfo.getUserImg().equals("default"))
-                Glide.with(this)
-                        .load(getString(R.string.storage_image_url_profile) + userDetailInfo.getUserImg())
-                        .circleCrop()
-                        .into(binding.homeUserimg);
-        } else {
-            Glide.with(this)
-                    .load(Integer.parseInt(userDetailInfo.getUserImg()))
-                    .circleCrop()
-                    .into(binding.homeUserimg);
-        }
+        ImageLoadUtil.loadUserImage(this, userDetailInfo.getUserImg(), binding.homeUserimg);
 
         binding.homeNickname.setText(userDetailInfo.getNickname());
         binding.homeProfiletext.setText(userDetailInfo.getProfileText());
@@ -272,8 +276,8 @@ public class HomeActivity extends BaseActivity {
         }));
         binding.homeFollowingcount.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class)
-                .putExtra("MODE", FollowListActivity.MODE.FOLLOWING)
-                .putExtra("userID", userDetailInfo.getUserID());
+                    .putExtra("MODE", FollowListActivity.MODE.FOLLOWING)
+                    .putExtra("userID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
 
@@ -313,12 +317,9 @@ public class HomeActivity extends BaseActivity {
                         startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
                     } else
                         ActivityCompat.requestPermissions(HomeActivity.this, permissions, CODE_PERMISSION);
-                } else if (which == 1){
+                } else if (which == 1) {
                     mImageUri = null;
-                    Glide.with(this)
-                            .load("")
-                            .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
-                            .into(binding.homeUserimg);
+                    binding.homeUserimg.setImageDrawable(null);
                 }
                 dialog.dismiss();
             }).show();
@@ -355,5 +356,42 @@ public class HomeActivity extends BaseActivity {
                     })
                     .setNegativeButton("취소", (dialog, which) -> dialog.dismiss()).show();
         }
+    }
+
+    void updateProfile(){
+        progressON(this);
+        image_url = "";
+        if (mImageUri != null) {
+            image_url = String.format(getString(R.string.format_upload_file),
+                    userID, Long.toString(System.currentTimeMillis()));
+        }
+
+        StorageReference ref = storageReference.child(image_url);
+        ref.putFile(mImageUri)
+                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        userService.updateProfile(
+//                                userID,
+//                                image_url,
+//                                binding.postwriteContents.getText().toString(),
+//                                System.currentTimeMillis(),
+//                                tags)
+//                                .enqueue(new BasicCallback<JsonObject>(PostWriteActivity.this) {
+//                                    @Override
+//                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
+//                                        super.onResponse(call, response);
+//
+//                                        if (response.code() == 500) {
+//                                            App.getAppInstance().showToast("post 등록 실패");
+//                                        } else {
+//                                            App.getAppInstance().showToast("글이 등록되었습니다.");
+//                                            progressOFF();
+//                                            finish();
+//                                        }
+//                                    }
+//                                });
+                    }
+                });
     }
 }

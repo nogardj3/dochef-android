@@ -15,7 +15,6 @@ import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.bumptech.glide.Glide;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -29,13 +28,16 @@ import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.model.UserDetail;
+import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
+
+import retrofit2.Response;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     AMainBinding binding;
@@ -43,13 +45,22 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     RetrofitServices.UserService userService;
     MainFragmentAdapter mainFragmentAdapter;
 
-    UserDetail userDetailInfo;
-
     AppCompatTextView userName;
     AppCompatImageView userImage;
 
+    UserDetail userDetailInfo;
+    String userID;
+
+
     /*
         TODO
+        firebase storage profile image
+        로고 아이콘빼고 텍스트로
+        fragment adapter
+            bottom으로 바꾸기
+            floating action button -> menu item
+            fragment추가 -> drawer에 있는거 옮기기 (알림은 위로 올라간다
+
      */
 
     @Override
@@ -64,6 +75,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
 
+        userID = Utils.getUserBrief(this).getUserID();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white);
@@ -159,20 +171,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         super.onResume();
 
         if (App.isServerAlive()) {
-            UserBrief userInfo = Utils.getUserBrief(this);
-            if (!userInfo.getUserImg().equals("default"))
-                Glide.with(this)
-                        .load(getString(R.string.storage_image_url_profile) + userInfo.getUserImg())
-                        .circleCrop()
-                        .into(userImage);
-            userName.setText(userInfo.getNickname());
+            getUserDetail();
         } else {
             userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
 
-            Glide.with(this)
-                    .load(Integer.parseInt(userDetailInfo.getUserImg()))
-                    .circleCrop()
-                    .into(userImage);
+            ImageLoadUtil.loadUserImage(this, userDetailInfo.getUserImg(), userImage);
+
             userName.setText(userDetailInfo.getNickname());
         }
     }
@@ -252,9 +256,24 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 break;
             case 3:
                 Intent intent = new Intent(MainActivity.this, PostWriteActivity.class)
-                    .putExtra("MODE", PostWriteActivity.MODE.WRITE);
+                        .putExtra("MODE", PostWriteActivity.MODE.WRITE);
                 startActivity(intent);
                 break;
         }
+    }
+
+    void getUserDetail() {
+        userService.getUserDetail(userID)
+                .enqueue(new BasicCallback<UserDetail>(this) {
+                    @Override
+                    public void onResponse(Response<UserDetail> response) {
+                        userDetailInfo = response.body();
+
+                        ImageLoadUtil.loadUserImage(
+                                MainActivity.this, userDetailInfo.getUserImg(), userImage);
+
+                        userName.setText(userDetailInfo.getNickname());
+                    }
+                });
     }
 }

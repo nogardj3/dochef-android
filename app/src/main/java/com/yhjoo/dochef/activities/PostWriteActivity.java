@@ -11,20 +11,20 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.gson.JsonObject;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.GlideApp;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -41,7 +41,6 @@ public class PostWriteActivity extends BaseActivity {
     enum MODE {WRITE, REVISE}
 
     APostwriteBinding binding;
-    FirebaseStorage storage;
     StorageReference storageReference;
     RetrofitServices.PostService postService;
 
@@ -62,8 +61,7 @@ public class PostWriteActivity extends BaseActivity {
         binding = APostwriteBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
+        storageReference = FirebaseStorage.getInstance().getReference();
 
         postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
 
@@ -76,12 +74,9 @@ public class PostWriteActivity extends BaseActivity {
             binding.postwriteToolbar.setTitle("수정");
             binding.postwriteContents.setText(getIntent().getStringExtra("contents"));
 
-            if (getIntent().getStringExtra("postImg") != null){
-                StorageReference sr = FirebaseStorage
-                        .getInstance().getReference().child("post/" + getIntent().getStringExtra("postImg"));
-                GlideApp.with(this)
-                        .load(sr)
-                        .into(binding.postwritePostimg);
+            if (getIntent().getStringExtra("postImg") != null) {
+                ImageLoadUtil.loadPostImage(
+                        this,getIntent().getStringExtra("postImg"),binding.postwritePostimg);
             }
 
             ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");
@@ -99,13 +94,13 @@ public class PostWriteActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
             if (data != null) {
-                binding.postwritePostimg.setVisibility(View.VISIBLE);
-
                 mImageUri = data.getData();
-                Glide.with(this)
-                        .load(mImageUri)
-                        .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE).skipMemoryCache(true))
-                        .into(binding.postwritePostimg);
+
+                CropImage.activity(mImageUri)
+                        .setGuidelines(CropImageView.Guidelines.ON)
+                        .start(this);
+
+                binding.postwritePostimg.setImageURI(mImageUri);
             }
     }
 
@@ -123,11 +118,7 @@ public class PostWriteActivity extends BaseActivity {
 
             Intent intent = new Intent(Intent.ACTION_PICK)
                     .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                    .putExtra("crop", "true")
-                    .putExtra("aspectX", 3)
-                    .putExtra("aspectY", 2)
-                    .putExtra("scale", true)
-                    .putExtra("output", mImageUri);
+                    .putExtra("crop", "true");
             startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
         }
     }
@@ -154,13 +145,13 @@ public class PostWriteActivity extends BaseActivity {
 
     void createOrUpdatePost(View v) {
         ArrayList<String> tags = new ArrayList<>();
-        for (String a: binding.postwriteTags.getTags()) {
+        for (String a : binding.postwriteTags.getTags()) {
             tags.add(a);
         }
 
         image_url = "";
-        if(mImageUri != null){
-            image_url= String.format(getString(R.string.format_upload_file),
+        if (mImageUri != null) {
+            image_url = String.format(getString(R.string.format_upload_file),
                     userID, Long.toString(System.currentTimeMillis()));
         }
         if (current_mode == MODE.WRITE) {

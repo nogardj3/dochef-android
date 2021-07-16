@@ -2,6 +2,8 @@ package com.yhjoo.dochef.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.ArrayList;
+
 public class UserDetail {
     @SerializedName("user_id")
     private String userID;
@@ -13,17 +15,20 @@ public class UserDetail {
     private String profileText;
     @SerializedName("recipe_count")
     private int recipeCount;
+    @SerializedName("follow")
+    private ArrayList<String> follow;
     @SerializedName("follower_count")
     private int followerCount;
     @SerializedName("following_count")
     private int followingCount;
 
-    public UserDetail(String userID, String userImg, String nickname, String profileText, int recipeCount, int followerCount, int followingCount) {
+    public UserDetail(String userID, String userImg, String nickname, String profileText, int recipeCount, ArrayList<String> follow, int followerCount, int followingCount) {
         this.userID = userID;
         this.userImg = userImg;
         this.nickname = nickname;
         this.profileText = profileText;
         this.recipeCount = recipeCount;
+        this.follow = follow;
         this.followerCount = followerCount;
         this.followingCount = followingCount;
     }
@@ -48,6 +53,10 @@ public class UserDetail {
         return recipeCount;
     }
 
+    public ArrayList<String> getFollow() {
+        return follow;
+    }
+
     public int getFollowerCount() {
         return followerCount;
     }
@@ -64,6 +73,7 @@ public class UserDetail {
                 ", nickname='" + nickname + '\'' +
                 ", profileText='" + profileText + '\'' +
                 ", recipeCount=" + recipeCount +
+                ", follow=" + follow +
                 ", followerCount=" + followerCount +
                 ", followingCount=" + followingCount +
                 '}';

@@ -5,7 +5,6 @@ import android.text.Html;
 import androidx.appcompat.widget.AppCompatImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.yhjoo.dochef.R;
@@ -20,7 +19,7 @@ public class NotificationListAdapter extends BaseQuickAdapter<Notification, Base
     protected void convert(BaseViewHolder helper, Notification item) {
         Glide.with(mContext)
                 .load(Integer.valueOf(item.getUserImg()))
-                .apply(RequestOptions.circleCropTransform())
+                .circleCrop()
                 .into((AppCompatImageView) helper.getView(R.id.notification_userimg));
 
         if (item.getNotificationType() == mContext.getResources().getInteger(R.integer.NOTIFICATION_TYPE_1))

@@ -63,7 +63,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/search_btn_back"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/search_btn_back"
-                    app:srcCompat="@drawable/ic_search_white" />
+                    app:srcCompat="@drawable/ic_search_black" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

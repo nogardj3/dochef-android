@@ -2,17 +2,13 @@ package com.yhjoo.dochef.adapter;
 
 import android.content.Intent;
 
-import androidx.appcompat.widget.AppCompatImageView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
@@ -22,7 +18,7 @@ import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.GlideApp;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +44,8 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
     protected void convert(BaseViewHolder helper, MultiItemRecipe item) {
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
-                if (App.isServerAlive()) {
-                    StorageReference sr = FirebaseStorage
-                            .getInstance().getReference().child("recipe/" + item.getContent().getRecipeImg());
-
-                    GlideApp.with(mContext)
-                            .load(sr)
-                            .centerCrop()
-                            .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
-                } else
-                    Glide.with(mContext)
-                            .load(Integer.parseInt(item.getContent().getRecipeImg()))
-                            .centerCrop()
-                            .into((AppCompatImageView) helper.getView(R.id.recipemain_recipeimg));
+                ImageLoadUtil.loadRecipeImage(
+                        mContext, item.getContent().getRecipeImg(), helper.getView(R.id.recipemain_recipeimg));
 
                 helper.setText(R.id.recipemain_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipemain_nickname,
@@ -71,33 +56,36 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
 
             case VIEWHOLDER_PAGER:
                 helper.setText(R.id.recommend_title, item.getPager_title());
-                helper.getView(R.id.recommend_more).setOnClickListener(v -> mContext.startActivity(new Intent(mContext, RecipeThemeActivity.class)));
+                helper.getView(R.id.recommend_more).setOnClickListener(v -> {
+                    Intent intent = new Intent(mContext, RecipeThemeActivity.class)
+                            .putExtra("tag", item.getPager_title());
+                    mContext.startActivity(intent);
+                });
 
                 RecommendAdapter recommendAdapter = new RecommendAdapter();
                 recommendAdapter.setOnItemClickListener((adapter, view, position) -> {
                     Intent intent = new Intent(mContext, RecipeDetailActivity.class)
-                        .putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
+                            .putExtra("recipeID", ((Recipe) adapter.getData().get(position)).getRecipeID());
                     mContext.startActivity(intent);
                 });
                 RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(recommendAdapter);
-                if(App.isServerAlive()){
-                    recipeService.getRecipeByTag(item.getPager_title(),"popular")
+                if (App.isServerAlive()) {
+                    recipeService.getRecipeByTag(item.getPager_title(), "popular")
                             .enqueue(new BasicCallback<ArrayList<Recipe>>(mContext) {
-                        @Override
-                        public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                            super.onResponse(call, response);
+                                @Override
+                                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+                                    super.onResponse(call, response);
 
-                            if (response.code() == 403)
-                                App.getAppInstance().showToast("뭔가에러");
-                            else {
-                                recommendAdapter.setNewData(response.body());
-                            }
-                        }
-                    });
-                }
-                else{
+                                    if (response.code() == 403)
+                                        App.getAppInstance().showToast("뭔가에러");
+                                    else {
+                                        recommendAdapter.setNewData(response.body());
+                                    }
+                                }
+                            });
+                } else {
                     ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
 
                     recommendAdapter.setNewData(recipes);

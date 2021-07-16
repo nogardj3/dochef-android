@@ -41,6 +41,9 @@ public class MainInitFragment extends Fragment {
 
     /*
         TODO
+        인기급상승레시피 -> Dochef가 만든 레시피 (유명인의 레시피)
+            nickname 없애고, rating, view_count
+            sort by view_count
     */
 
     @Override

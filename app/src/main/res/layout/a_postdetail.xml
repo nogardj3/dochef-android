@@ -32,12 +32,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
-                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="1"
-                tools:src="@raw/dummy_post_0"
-                tools:visibility="visible" />
+                tools:src="@raw/dummy_post_0"/>
 
             <androidx.constraintlayout.widget.Group
                 android:id="@+id/post_user_group"

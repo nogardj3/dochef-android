@@ -33,7 +33,11 @@ public class RecipeMyListActivity extends BaseActivity {
 
     /*
         TODO
-        좋아한것도 불러와지나?
+        삭제하기 1. 남의거 = like 빼고 리로드 2. 내거 = 레시피 삭제
+        디자인
+            datetime 추가
+            리뷰 수
+            남의거는 수정 안되는걸로
     */
 
     @Override

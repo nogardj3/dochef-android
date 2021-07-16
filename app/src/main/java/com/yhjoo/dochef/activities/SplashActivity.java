@@ -31,7 +31,9 @@ public class SplashActivity extends BaseActivity {
     /*
         TODO
         check process reactiveX 사용하기
-        애니메이션 다시
+        디자인
+            애니메이션 개유치함 -> 로고 빼고 텍스트스타일, fading정도만
+
     */
 
     @Override

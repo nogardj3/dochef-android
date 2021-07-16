@@ -91,12 +91,15 @@ public class DataGenerator {
             return (T) arrayList;
         } else if (type == resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL)) {
             Random r = new Random();
+            ArrayList<String> follow = new ArrayList<>();
+            follow.add("유저1");
             UserDetail userDetail = new UserDetail(
                     "userID",
                     Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                     "유저",
                     "유저 소개글",
                     1,
+                    follow,
                     1,
                     1
             );

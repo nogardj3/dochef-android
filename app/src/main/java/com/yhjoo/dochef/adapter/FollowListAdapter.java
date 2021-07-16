@@ -1,16 +1,15 @@
 package com.yhjoo.dochef.adapter;
 
-import androidx.appcompat.widget.AppCompatImageView;
-
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.UserBrief;
-import com.yhjoo.dochef.utils.Utils;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
+
+import java.util.ArrayList;
 
 public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolder> {
+    ArrayList<String> activeUserFollow;
     String userID;
 
     public FollowListAdapter(String userID) {
@@ -18,27 +17,23 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
         this.userID = userID;
     }
 
+    public void setActiveUserFollow(ArrayList<String> activeUserFollow) {
+        this.activeUserFollow = activeUserFollow;
+    }
+
     @Override
     protected void convert(BaseViewHolder helper, UserBrief item) {
-        if (App.isServerAlive()) {
-            if (!item.getUserImg().equals("default")) {
-                Glide.with(mContext)
-                        .load(mContext.getString(R.string.storage_image_url_profile) + item.getUserImg())
-                        .circleCrop()
-                        .into((AppCompatImageView) helper.getView(R.id.user_img));
-            }
-        } else
-            Glide.with(mContext)
-                    .load(Integer.valueOf(item.getUserImg()))
-                    .circleCrop()
-                    .into((AppCompatImageView) helper.getView(R.id.user_img));
+        ImageLoadUtil.loadUserImage(mContext,item.getUserImg(),helper.getView(R.id.user_img));
 
-        Utils.log(item);
         if (!item.getUserID().equals(userID)) {
-            if(item.getFollow().contains(userID))
+            if(activeUserFollow.contains(item.getUserID())){
                 helper.setVisible(R.id.user_follow_btn, true);
-            else
+                helper.setVisible(R.id.user_followcancel_btn, false);
+            }
+            else {
+                helper.setVisible(R.id.user_follow_btn, false);
                 helper.setVisible(R.id.user_followcancel_btn, true);
+            }
             helper.addOnClickListener(R.id.user_followcancel_btn);
             helper.addOnClickListener(R.id.user_follow_btn);
         }

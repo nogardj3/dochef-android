@@ -9,9 +9,6 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.bumptech.glide.Glide;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -23,7 +20,7 @@ import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.Review;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.GlideApp;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
@@ -123,30 +120,8 @@ public class RecipeDetailActivity extends BaseActivity {
     }
 
     void setTopView() {
-        if (App.isServerAlive()) {
-            StorageReference pathReference = FirebaseStorage.getInstance()
-                    .getReference()
-                    .child("recipe/" + recipeDetailInfo.getRecipeImg());
-
-            GlideApp.with(this)
-                    .load(pathReference)
-                    .centerCrop()
-                    .into(binding.recipedetailMainImg);
-            if (!recipeDetailInfo.getUserImg().equals("default"))
-                Glide.with(this)
-                        .load(getString(R.string.storage_image_url_profile) + recipeDetailInfo.getRecipeImg())
-                        .circleCrop()
-                        .into(binding.recipedetailUserimg);
-        } else {
-            Glide.with(this)
-                    .load(Integer.parseInt(recipeDetailInfo.getRecipeImg()))
-                    .centerCrop()
-                    .into(binding.recipedetailMainImg);
-            Glide.with(this)
-                    .load(Integer.parseInt(recipeDetailInfo.getUserImg()))
-                    .circleCrop()
-                    .into(binding.recipedetailUserimg);
-        }
+        ImageLoadUtil.loadRecipeImage(this,recipeDetailInfo.getRecipeImg(), binding.recipedetailMainImg);
+        ImageLoadUtil.loadUserImage(this,recipeDetailInfo.getUserImg(), binding.recipedetailUserimg);
 
         binding.recipedetailRecipetitle.setText(recipeDetailInfo.getRecipeName());
         binding.recipedetailNickname.setText(recipeDetailInfo.getNickname());

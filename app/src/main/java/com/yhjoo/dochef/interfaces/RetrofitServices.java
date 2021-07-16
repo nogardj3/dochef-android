@@ -62,12 +62,12 @@ public class RetrofitServices {
 
         @FormUrlEncoded
         @POST("user/subscribe")
-        Call<ArrayList<UserBrief>> subscribeUser(@Field("user_id") String user_id,
+        Call<JsonObject> subscribeUser(@Field("user_id") String user_id,
                                                  @Field("target_id") String target_id);
 
         @FormUrlEncoded
         @POST("user/unsubscribe")
-        Call<ArrayList<UserBrief>> unsubscribeUser(@Field("user_id") String user_id,
+        Call<JsonObject> unsubscribeUser(@Field("user_id") String user_id,
                                                    @Field("target_id") String target_id);
     }
 
