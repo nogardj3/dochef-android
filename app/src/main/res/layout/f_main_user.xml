@@ -12,6 +12,7 @@
         android:layout_marginTop="10dp"
         android:overScrollMode="never"
         app:layout_constraintDimensionRatio="w,1:2"
+
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -33,9 +34,10 @@
         android:id="@+id/main_recommend_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        tools:text="Chef의 레시피"
+        android:layout_marginStart="5dp"
+        android:text="인기 급상승 레시피"
         android:textColor="@color/black"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_adviewpager_indicator" />
 

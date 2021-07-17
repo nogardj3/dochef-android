@@ -37,8 +37,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
 
     /*
         TODO
-        group은 onclick 안됨 수정
-        태그 백그라운드 넣지 말고, 그냥 색깔만
     */
 
     @Override
@@ -65,14 +63,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                     Intent intent = new Intent(getContext(), HomeActivity.class)
                         .putExtra("userID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                     startActivity(intent);
-                    break;
-
-                case R.id.timeline_comment_group:
-                case R.id.timeline_contents:
-                case R.id.timeline_postimg:
-                    Intent intent2 = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class)
-                        .putExtra("postID", ((Post) baseQuickAdapter.getData().get(i)).getPostID());
-                    startActivity(intent2);
                     break;
             }
         });

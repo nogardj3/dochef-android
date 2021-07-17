@@ -3,9 +3,44 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/main_menu_notification"
+        android:icon="@drawable/ic_notifications_white"
+        android:orderInCategory="1"
+        android:title="notification"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/main_menu_search"
         android:icon="@drawable/ic_search_white"
-        android:orderInCategory="100"
+        android:orderInCategory="2"
         android:title="search"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/main_menu_sort"
+        android:icon="@drawable/ic_sort_white"
+        android:orderInCategory="1"
+        android:title="sort"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/main_menu_write_recipe"
+        android:icon="@drawable/ic_add_circle_white"
+        android:orderInCategory="1"
+        android:title="write_recipe"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/main_menu_write_post"
+        android:icon="@drawable/ic_post_add_white"
+        android:orderInCategory="1"
+        android:title="write_post"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/main_menu_setting"
+        android:icon="@drawable/ic_settings_white"
+        android:orderInCategory="1"
+        android:title="setting"
         app:showAsAction="ifRoom" />
 </menu>

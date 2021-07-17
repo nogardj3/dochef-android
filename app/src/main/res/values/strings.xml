@@ -30,6 +30,7 @@
     <string name="analytics_name_terminated">APP_TERMINATED</string>
 
     <!-- format-->
+    <string name="format_recommend_title">&lt;b&gt;%s&lt;/b&gt;의 레시피</string>
     <string name="format_usernickname">By - %s</string>
     <string name="format_follower">팔로워 : %s</string>
     <string name="format_upload_file">%s_%s.jpg</string>

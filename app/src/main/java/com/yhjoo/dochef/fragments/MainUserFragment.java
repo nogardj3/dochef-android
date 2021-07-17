@@ -2,7 +2,6 @@ package com.yhjoo.dochef.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
 import retrofit2.Response;
 
-public class MainInitFragment extends Fragment {
+public class MainUserFragment extends Fragment {
     FMainInitBinding binding;
 
     RetrofitServices.RecipeService recipeService;
@@ -42,7 +41,7 @@ public class MainInitFragment extends Fragment {
 
     /*
         TODO
-        나중에 sampledb 만들어지면 밑에거로 바꾸기
+        구현 
     */
 
     @Override
@@ -58,8 +57,6 @@ public class MainInitFragment extends Fragment {
 
         binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
         binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
-        binding.mainRecommendText.setText(Html.fromHtml(
-                String.format(getString(R.string.format_recommend_title),"Chef"),Html.FROM_HTML_MODE_LEGACY));
         binding.mainRecommendMore.setOnClickListener(
                 v -> startActivity(new Intent(getContext(), RecipeThemeActivity.class)));
 
@@ -107,21 +104,5 @@ public class MainInitFragment extends Fragment {
                         }
                     }
                 });
-
-        // TODO
-//        recipeService.getRecipeByName( "CHEF","popular")
-//                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
-//                    @Override
-//                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-//                        super.onResponse(call, response);
-//
-//                        if (response.code() == 403)
-//                            App.getAppInstance().showToast("뭔가에러");
-//                        else {
-//                            recipeList = response.body();
-//                            recipeHorizontalAdapter.setNewData(recipeList);
-//                        }
-//                    }
-//                });
     }
 }

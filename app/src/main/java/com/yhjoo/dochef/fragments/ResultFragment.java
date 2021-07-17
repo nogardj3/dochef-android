@@ -48,7 +48,6 @@ public class ResultFragment extends Fragment {
 
     /*
         TODO
-        user - my인지 누군지 구분
     */
 
     @Override

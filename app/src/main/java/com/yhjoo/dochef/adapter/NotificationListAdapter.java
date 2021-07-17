@@ -11,10 +11,6 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.model.Notification;
 
 public class NotificationListAdapter extends BaseQuickAdapter<Notification, BaseViewHolder> {
-    /*
-        TODO
-        구현
-     */
     public NotificationListAdapter() {
         super(R.layout.li_notification);
     }

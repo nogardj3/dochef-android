@@ -109,6 +109,9 @@ public class Utils {
         long current_millis = new Date().getTime();
         long diff_sec = (current_millis - millis) / 1000;
 
+        log(diff_sec / 60 / 60 / 24);
+        log(diff_sec / 60 / 60 );
+
         return diff_sec / 60 / 60 / 24 < 3;
     }
 }

@@ -40,6 +40,9 @@ public class RecipeThemeActivity extends BaseActivity {
 
     /*
         TODO
+        recommend에서 넘어옴
+        recommend는 10개까지만, 여기는 다보여줌
+        recommend 디자인에 + 하기
     */
 
     @Override

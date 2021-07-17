@@ -35,10 +35,6 @@ public class FollowListActivity extends BaseActivity {
     String active_userid;
     String target_id;
 
-    /*
-        TODO
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

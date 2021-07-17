@@ -42,6 +42,7 @@ public class RecipeDetailActivity extends BaseActivity {
 
     /*
         TODO
+        useractivity 넘어가기 - userimage, 리뷰
     */
 
     @Override

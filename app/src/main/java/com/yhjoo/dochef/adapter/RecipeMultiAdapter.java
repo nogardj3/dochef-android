@@ -19,6 +19,7 @@ import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +33,28 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
     public static final int VIEWHOLDER_ITEM = 3;
     public RetrofitServices.RecipeService recipeService;
 
+    public String userid = "";
+    public boolean showNew = false;
+    public boolean showYours = false;
+
     public RecipeMultiAdapter(List<MultiItemRecipe> data, RetrofitServices.RecipeService recipeService) {
         super(data);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
         addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_main);
         this.recipeService = recipeService;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
+
+    public void setShowNew(boolean showNew) {
+        this.showNew = showNew;
+    }
+
+    public void setShowYours(boolean showYours) {
+        this.showYours = showYours;
     }
 
     @Override
@@ -50,7 +67,19 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 helper.setText(R.id.recipemain_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipemain_nickname,
                         String.format(mContext.getResources().getString(R.string.format_usernickname), item.getContent().getNickname()));
-                helper.setVisible(R.id.recipemain_other_group, false);
+                helper.setText(R.id.recipemain_date, Utils.convertMillisToText(item.getContent().getDatetime()));
+                helper.setText(R.id.recipemain_rating, Integer.toString(item.getContent().getRating()));
+                helper.setText(R.id.recipemain_view, Integer.toString(item.getContent().getView_count()));
+
+                if(showNew)
+                    helper.setVisible(R.id.recipemain_new,Utils.checkNew(item.getContent().getDatetime()));
+                else
+                    helper.setVisible(R.id.recipemain_new,false);
+
+                if(showYours)
+                    helper.setVisible(R.id.recipemain_yours, !userid.equals(item.getContent().getUserID()));
+                else
+                    helper.setVisible(R.id.recipemain_yours,false);
 
                 break;
 

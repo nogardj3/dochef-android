@@ -39,8 +39,7 @@ import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_ITEM;
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_PAGER;
 
 public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    public static final int mode_Recent = 1;
-    public static final int mode_Popular = 2;
+    public enum SORT {LATEST, POPULAR, RATING}
 
     FMainRecipesBinding binding;
     RetrofitServices.RecipeService recipeService;
@@ -48,14 +47,11 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     ArrayList<MultiItemRecipe> recipeListItems = new ArrayList<>();
     String[] recommend_tags;
-    int currentMode = 1;
+    SORT currentMode = SORT.LATEST;
 
     /*
         TODO
-        인기레시피 -> 분류별 레시피
-            별점순 = rating, view_count    sort by rating
-            조회순 = rating, view_count    sort by view_count
-            최신순 = rating, datetime      sort by latest
+        recommend 매운맛만되어있는데 나중에 바꾸기
     */
 
     @Override
@@ -68,6 +64,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         binding.fRecipeSwipe.setOnRefreshListener(this);
         binding.fRecipeSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
         recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems, recipeService);
+        recipeMultiAdapter.setShowNew(true);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
                 Intent intent = new Intent(MainRecipesFragment.this.getContext(), RecipeDetailActivity.class)
@@ -82,15 +79,16 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         Random r = new Random();
 
         if (App.isServerAlive())
-            getRecipeList();
+            getRecipeList(currentMode);
         else {
             ArrayList<Recipe> temp = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
 
             for (int i = 0; i < temp.size(); i++) {
                 if (i != 0 && i % 4 == 0) {
                     if (i / 4 % 2 == 0)
-                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
-                                recommend_tags[r.nextInt(recommend_tags.length)]));
+                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,recommend_tags[0]));
+//                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
+//                                recommend_tags[r.nextInt(recommend_tags.length)]));
                     else
                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                 }
@@ -103,11 +101,19 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(this::getRecipeList, 1000);
+        new Handler().postDelayed(() -> getRecipeList(currentMode),1000);
     }
 
-    void getRecipeList() {
-        recipeService.getRecipes("popular")
+    void getRecipeList(SORT sort) {
+        String sortmode = "";
+        if(sort == SORT.LATEST)
+            sortmode = "latest";
+        else if(sort == SORT.POPULAR)
+            sortmode = "popular";
+        else if(sort == SORT.RATING)
+            sortmode = "rating";
+
+        recipeService.getRecipes(sortmode)
                 .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
                     @Override
                     public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
@@ -124,7 +130,9 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                                 if (i != 0 && i % 4 == 0) {
                                     if (i / 4 % 2 == 0)
                                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
-                                                recommend_tags[r.nextInt(recommend_tags.length)]));
+                                                recommend_tags[0]));
+//                                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
+//                                                recommend_tags[r.nextInt(recommend_tags.length)]));
                                     else
                                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                                 }
@@ -133,46 +141,21 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
                             recipeMultiAdapter.setNewData(recipeListItems);
                             recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fRecipeRecycler.getParent());
+                            binding.fRecipeRecycler.getLayoutManager().scrollToPosition(0);
                             binding.fRecipeSwipe.setRefreshing(false);
                         }
                     }
                 });
     }
 
-    public int getAlignMode() {
-        return currentMode;
-    }
+    public void changeSortMode(SORT sort) {
+        if (currentMode != sort) {
+            recipeMultiAdapter.setNewData(new ArrayList<>());
+            recipeMultiAdapter.notifyDataSetChanged();
+            recipeMultiAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.fRecipeRecycler.getParent());
 
-    public void changeAlignMode() {
-        Utils.log("change align mode");
-        if (currentMode == mode_Recent) {
-            currentMode = mode_Popular;
-            recipeMultiAdapter.setNewData(new ArrayList<>());
-            recipeMultiAdapter.notifyDataSetChanged();
-//            recipeMultiAdapter.setEmptyView(R.layout.rv_loading);
-            Observable.timer(1, TimeUnit.SECONDS)
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(count -> {
-                        App.getAppInstance().showToast("인기순");
-                        recipeMultiAdapter.setNewData(recipeListItems);
-                        recipeMultiAdapter.notifyDataSetChanged();
-                        binding.fRecipeRecycler.getLayoutManager().scrollToPosition(0);
-                    });
-        } else if (currentMode == mode_Popular) {
-            currentMode = mode_Recent;
-            recipeMultiAdapter.setNewData(new ArrayList<>());
-            recipeMultiAdapter.notifyDataSetChanged();
-//            recipeMultiAdapter.setEmptyView(R.layout.rv_loading);
-            Observable.timer(1, TimeUnit.SECONDS)
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(count -> {
-                        App.getAppInstance().showToast("최신순");
-                        recipeMultiAdapter.setNewData(recipeListItems);
-                        recipeMultiAdapter.notifyDataSetChanged();
-                        binding.fRecipeRecycler.getLayoutManager().scrollToPosition(0);
-                    });
+            currentMode = sort;
+            getRecipeList(currentMode);
         }
     }
 }

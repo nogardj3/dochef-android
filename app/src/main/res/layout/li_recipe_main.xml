@@ -14,13 +14,34 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/recipemain_recipeimg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             tools:src="@raw/dummy_recipe_1" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recipemain_new"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="2dp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_new"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/recipemain_yours"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="4dp"
+            android:visibility="gone"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_favorite_red"/>
 
         <View
             android:layout_width="match_parent"
@@ -54,14 +75,8 @@
             app:layout_constraintRight_toRightOf="parent"
             tools:text="닉네임" />
 
-        <androidx.constraintlayout.widget.Group
-            android:id="@+id/recipemain_other_group"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:constraint_referenced_ids="recipemain_date_text,recipemain_viewscountimage,recipemain_viewscount,recipemain_new" />
-
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipemain_date_text"
+            android:id="@+id/recipemain_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -73,35 +88,47 @@
             tools:text="1일 전" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipemain_viewscountimage"
+            android:id="@+id/recipemain_viewimg"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="4dp"
             android:tint="@color/white"
-            app:layout_constraintBottom_toTopOf="@+id/recipemain_date_text"
-            app:layout_constraintRight_toLeftOf="@+id/recipemain_viewscount"
+            app:layout_constraintBottom_toTopOf="@+id/recipemain_date"
+            app:layout_constraintRight_toLeftOf="@+id/recipemain_view"
             app:srcCompat="@drawable/ic_view_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipemain_viewscount"
+            android:id="@+id/recipemain_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            app:layout_constraintBottom_toBottomOf="@+id/recipemain_viewscountimage"
-            app:layout_constraintRight_toRightOf="@+id/recipemain_date_text"
-            app:layout_constraintTop_toTopOf="@+id/recipemain_viewscountimage"
+            app:layout_constraintBottom_toBottomOf="@+id/recipemain_viewimg"
+            app:layout_constraintRight_toRightOf="@+id/recipemain_date"
+            app:layout_constraintTop_toTopOf="@+id/recipemain_viewimg"
             tools:text="0" />
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipemain_new"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginTop="2dp"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_new"
-            tools:visibility="visible" />
+            android:id="@+id/recipemain_ratingimg"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="4dp"
+            android:tint="@color/white"
+            app:layout_constraintBottom_toTopOf="@+id/recipemain_date"
+            app:layout_constraintRight_toLeftOf="@+id/recipemain_rating"
+            app:tint="@color/colorPrimary"
+            app:srcCompat="@drawable/ic_star_white" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipemain_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_marginRight="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/recipemain_viewimg"
+            app:layout_constraintRight_toLeftOf="@+id/recipemain_viewimg"
+            app:layout_constraintTop_toTopOf="@+id/recipemain_viewimg"
+            tools:text="0" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

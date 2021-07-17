@@ -46,10 +46,6 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
     /*
         TODO
-        디자인 다시
-            nickname 빼고 my, 남거
-            rating view datetime
-            sort by latest
     */
 
     @Override
@@ -66,6 +62,8 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
         recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems, recipeService);
         recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fMyrecipeRecycler.getParent());
+        recipeMultiAdapter.setUserid(userID);
+        recipeMultiAdapter.setShowYours(true);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
                 Intent intent = new Intent(MainMyRecipeFragment.this.getContext(), RecipeDetailActivity.class)

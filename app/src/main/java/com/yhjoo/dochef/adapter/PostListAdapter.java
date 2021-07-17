@@ -29,10 +29,8 @@ public class PostListAdapter extends BaseQuickAdapter<Post, BaseViewHolder> {
         helper.setText(R.id.timeline_commentcount, Integer.toString(item.getComments().size()));
         helper.setText(R.id.timeline_contents, " " + item.getContents());
         helper.setText(R.id.timeline_time, Utils.convertMillisToText(item.getDateTime()));
-        helper.addOnClickListener(R.id.timeline_user_group);
-        helper.addOnClickListener(R.id.timeline_comment_group);
-        helper.addOnClickListener(R.id.timeline_contents);
-        helper.addOnClickListener(R.id.timeline_postimg);
+        helper.addOnClickListener(R.id.timeline_userimg);
+        helper.addOnClickListener(R.id.timeline_nickname);
 
         ((FlexboxLayout) helper.getView(R.id.timeline_tags)).removeAllViews();
         for (String tag : item.getTags()) {
