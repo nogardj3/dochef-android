@@ -13,8 +13,11 @@ import androidx.appcompat.widget.AppCompatEditText;
 
 import com.yhjoo.dochef.R;
 
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+
 public class BaseActivity extends AppCompatActivity {
     AppCompatDialog progressDialog;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -48,6 +51,9 @@ public class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         progressOFF();
+        if (compositeDisposable != null && !compositeDisposable.isDisposed())
+            compositeDisposable.clear();
+
     }
 
     void progressON(Activity activity) {
@@ -57,7 +63,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
 
-        if (progressDialog == null || !progressDialog.isShowing()){
+        if (progressDialog == null || !progressDialog.isShowing()) {
             progressDialog = new AppCompatDialog(activity);
             progressDialog.setCancelable(false);
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

@@ -24,11 +24,16 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.AAccountBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.functions.Consumer;
 import retrofit2.Call;
+import retrofit2.HttpException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -42,14 +47,14 @@ public class AccountActivity extends BaseActivity {
     GoogleSignInClient mGoogleSignInClient;
     FirebaseAnalytics mFirebaseAnalytics;
     FirebaseAuth mAuth;
-    RetrofitServices.AccountService accountService;
+    RxRetrofitServices.AccountService accountService;
 
     Mode current_mode = Mode.SIGNIN;
     String idToken;
 
     /*
         TODO
-        FindPW 기능 구현
+        FindPW 구현
     */
 
     @Override
@@ -66,17 +71,14 @@ public class AccountActivity extends BaseActivity {
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        accountService = new Retrofit.Builder()
-                .baseUrl(getString(R.string.server_url))
-                .addConverterFactory(GsonConverterFactory.create())
-                .build().create(RetrofitServices.AccountService.class);
+        accountService = RxRetrofitBuilder.create(this, RxRetrofitServices.AccountService.class);
 
-        binding.accountSigninOk.setOnClickListener(this::signIn);
+        binding.accountSigninOk.setOnClickListener(this::signInWithEmailPW);
         binding.accountSigninGoogle.setOnClickListener(this::tryGoogleSignIn);
         binding.accountSigninSignup.setOnClickListener(v -> startMode(Mode.SIGNUP, ""));
         binding.accountSigninFindpw.setOnClickListener(v -> startMode(Mode.FINDPW, ""));
-        binding.accountSignupOk.setOnClickListener(this::signUpWithEmailPW);
-        binding.accountSignupnickOk.setOnClickListener(this::signUp);
+        binding.accountSignupOk.setOnClickListener(this::startSignUp);
+        binding.accountSignupnickOk.setOnClickListener(this::signUpWithEmailPW);
     }
 
     @Override
@@ -112,15 +114,17 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    void signIn(View v) {
+    void signInWithEmailPW(View v) {
         String signin_email = binding.accountSigninEmail.getText().toString();
         String signin_pw = binding.accountSigninPassword.getText().toString();
 
-        if (Utils.emailValidation(signin_email) == Utils.EMAIL_VALIDATE.NODATA || Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.NODATA)
+        if (Utils.emailValidation(signin_email) == Utils.EMAIL_VALIDATE.NODATA
+                || Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.NODATA)
             App.getAppInstance().showToast("이메일과 비밀번호를 모두 입력해주세요.");
         else if (Utils.emailValidation(signin_email) == Utils.EMAIL_VALIDATE.INVALID)
             App.getAppInstance().showToast("이메일 형식이 올바르지 않습니다.");
-        else if (Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.SHORT || Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.LONG)
+        else if (Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.SHORT
+                || Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.LONG)
             App.getAppInstance().showToast("비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요.");
         else if (Utils.pwValidation(signin_pw) == Utils.PW_VALIDATE.INVALID)
             App.getAppInstance().showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.");
@@ -195,7 +199,7 @@ public class AccountActivity extends BaseActivity {
                 });
     }
 
-    void signUpWithEmailPW(View v) {
+    void startSignUp(View v) {
         String email = binding.accountSignupEmail.getText().toString();
         String pw = binding.accountSignupPassword.getText().toString();
 
@@ -241,7 +245,7 @@ public class AccountActivity extends BaseActivity {
         }
     }
 
-    void signUp(View v) {
+    void signUpWithEmailPW(View v) {
         String nickname = binding.accountSignupnickNickname.getText().toString();
 
         if (Utils.nicknameValidate(nickname) == Utils.NICKNAME_VALIDATE.NODATA)
@@ -253,41 +257,49 @@ public class AccountActivity extends BaseActivity {
             App.getAppInstance().showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.");
         else {
             progressON(this);
-            accountService
-                    .createUser(idToken, mAuth.getUid(), nickname)
-                    .enqueue(new BasicCallback<UserBrief>(this) {
-                        @Override
-                        public void onResponse(Call<UserBrief> call, Response<UserBrief> response) {
-                            super.onResponse(call, response);
-                            progressOFF();
 
-                            if (response.code() == 403)
-                                App.getAppInstance().showToast("이미 존재하는 닉네임입니다.");
-                            else {
+            compositeDisposable.add(
+                    accountService.createUser(idToken, mAuth.getUid(), nickname)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(response -> {
                                 App.getAppInstance().showToast("회원 가입 되었습니다.");
                                 startMain(response.body());
-                            }
-                        }
-                    });
+                            }, throwable -> {
+                                throwable.printStackTrace();
+                                if(throwable instanceof HttpException){
+                                    int code = ((HttpException) throwable).code();
+
+                                    if (code == 403)
+                                        App.getAppInstance().showToast("이미 존재하는 닉네임입니다.");
+                                }
+
+                                progressOFF();
+                            })
+            );
+
         }
     }
 
     void checkUserInfo(String idToken) {
-        accountService
-                .checkUser(idToken, mAuth.getUid())
-                .enqueue(new BasicCallback<UserBrief>(this) {
-                    @Override
-                    public void onResponse(Call<UserBrief> call, Response<UserBrief> response) {
-                        super.onResponse(call, response);
-                        progressOFF();
+        compositeDisposable.add(
+                accountService.checkUser(idToken, mAuth.getUid())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(response -> {
+                        startMain(response.body());
+                    }, e -> {
+                        e.printStackTrace();
+                        if(e instanceof HttpException){
+                            int code = ((HttpException) e).code();
 
-                        if (response.code() == 404) {
-                            App.getAppInstance().showToast("닉네임을 입력해주세요.");
-                            startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
-                        } else
-                            startMain(response.body());
-                    }
-                });
+                            if (code == 404) {
+                                App.getAppInstance().showToast("닉네임을 입력해주세요.");
+                                startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
+                            }
+                        }
+
+                        progressOFF();
+                    })
+        );
     }
 
     void startMode(AccountActivity.Mode mode, String token) {

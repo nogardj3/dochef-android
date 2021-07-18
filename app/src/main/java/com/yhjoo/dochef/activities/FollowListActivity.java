@@ -2,36 +2,46 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.JsonObject;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.FollowListAdapter;
 import com.yhjoo.dochef.databinding.AFollowlistBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.UserBrief;
 import com.yhjoo.dochef.model.UserDetail;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.annotations.NonNull;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.functions.Function;
+import io.reactivex.rxjava3.observers.DisposableSingleObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Response;
 
 public class FollowListActivity extends BaseActivity {
     public enum MODE {FOLLOWER, FOLLOWING}
 
     AFollowlistBinding binding;
-    RetrofitServices.UserService userService;
+    RxRetrofitServices.UserService rxUserService;
     FollowListAdapter followListAdapter;
 
     MODE current_mode = MODE.FOLLOWER;
-    ArrayList<String> activeUserFollow;
+    UserDetail userDetailInfo;
+    ArrayList<UserBrief> userList;
+
     String active_userid;
     String target_id;
 
@@ -43,7 +53,7 @@ public class FollowListActivity extends BaseActivity {
         setSupportActionBar(binding.followlistToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
+        rxUserService = RxRetrofitBuilder.create(this, RxRetrofitServices.UserService.class);
 
         active_userid = Utils.getUserBrief(this).getUserID();
         target_id = getIntent().getStringExtra("userID");
@@ -59,91 +69,75 @@ public class FollowListActivity extends BaseActivity {
                     startActivity(intent);
                 }
         );
-        followListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-                    String target = ((UserBrief) adapter.getData().get(position)).getUserID();
-                    if (view.getId() == R.id.user_followcancel_btn)
-                        subscirbeUser(target);
-                    else if (view.getId() == R.id.user_follow_btn)
-                        unsubscirbeUser(target);
-
-                }
-        );
+        followListAdapter.setOnItemChildClickListener(this::onListItemClick);
         binding.followlistRecycler.setLayoutManager(new LinearLayoutManager(this));
         binding.followlistRecycler.setAdapter(followListAdapter);
 
-
-        if (App.isServerAlive())
-            getActiveUserInfo();
-        else {
-            ArrayList<UserBrief> data = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_BRIEF));
-            activeUserFollow = data.get(0).getFollow();
-            followListAdapter.setActiveUserFollow(activeUserFollow);
-
+        if (App.isServerAlive()){
+            Single<Response<ArrayList<UserBrief>>> modeSingle;
             if (current_mode == MODE.FOLLOWER)
-                getFollower();
-            else if (current_mode == MODE.FOLLOWING)
-                getFollowing();
+                modeSingle = rxUserService.getFollowers(target_id)
+                        .observeOn(AndroidSchedulers.mainThread());
+            else
+                modeSingle = rxUserService.getFollowings(target_id)
+                        .observeOn(AndroidSchedulers.mainThread());
+
+            compositeDisposable.add(
+                    rxUserService.getUserDetail(active_userid)
+                            .flatMap((Function<Response<UserDetail>, Single<Response<ArrayList<UserBrief>>>>)
+                                    response -> {
+                                        userDetailInfo = response.body();
+                                        return modeSingle;
+                                    }
+                            )
+                            .subscribe(response->{
+                                userList = response.body();
+                                setListData();
+                            }, Throwable::printStackTrace)
+            );
+        }
+        else {
+            userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
+            userList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_BRIEF));
+
+            setListData();
         }
     }
 
-    void getActiveUserInfo() {
-        userService.getUserDetail(active_userid)
-                .enqueue(new BasicCallback<UserDetail>(this) {
-                    @Override
-                    public void onResponse(Response<UserDetail> response) {
-                        activeUserFollow = response.body().getFollow();
-                        Utils.log(activeUserFollow.toString());
+    void onListItemClick(BaseQuickAdapter adapter, View view, int position) {
+        String target = ((UserBrief) adapter.getData().get(position)).getUserID();
 
-                        followListAdapter.setActiveUserFollow(activeUserFollow);
-                        if (current_mode == MODE.FOLLOWER)
-                            getFollower();
-                        else if (current_mode == MODE.FOLLOWING)
-                            getFollowing();
-                    }
-                });
+        Single<Response<JsonObject>> subORunsub = view.getId() == R.id.user_followcancel_btn ?
+                rxUserService.subscribeUser(active_userid, target):
+                rxUserService.unsubscribeUser(active_userid, target);
+
+        Single<Response<ArrayList<UserBrief>>> modeSingle = current_mode == MODE.FOLLOWER ?
+                rxUserService.getFollowers(target_id)
+                        .observeOn(AndroidSchedulers.mainThread()):
+                rxUserService.getFollowings(target_id)
+                        .observeOn(AndroidSchedulers.mainThread());
+
+        compositeDisposable.add(
+                subORunsub
+                        .flatMap((Function<Response<JsonObject>, Single<Response<UserDetail>>>)
+                                response -> rxUserService.getUserDetail(active_userid))
+                        .flatMap((Function<Response<UserDetail>, Single<Response<ArrayList<UserBrief>>>>)
+                                response -> {
+                                    userDetailInfo = response.body();
+                                    return modeSingle;
+                                }
+                        )
+                        .subscribe(response->{
+                            userList = response.body();
+                            setListData();
+                        }, Throwable::printStackTrace)
+        );
     }
 
-    void getFollower() {
-        userService.getFollowers(target_id)
-                .enqueue(new BasicCallback<ArrayList<UserBrief>>(this) {
-                    @Override
-                    public void onResponse(Response<ArrayList<UserBrief>> response) {
-                        Utils.log(activeUserFollow.toString());
+    void setListData() {
+        followListAdapter.setActiveUserFollow(userDetailInfo.getFollow());
 
-                        followListAdapter.setNewData(response.body());
-                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
-                    }
-                });
-    }
-
-    void getFollowing() {
-        userService.getFollowings(target_id)
-                .enqueue(new BasicCallback<ArrayList<UserBrief>>(this) {
-                    @Override
-                    public void onResponse(Response<ArrayList<UserBrief>> response) {
-                        followListAdapter.setNewData(response.body());
-                        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
-                    }
-                });
-    }
-
-    void subscirbeUser(String target_id) {
-        userService.subscribeUser(active_userid, target_id)
-                .enqueue(new BasicCallback<JsonObject>(this) {
-                    @Override
-                    public void onResponse(Response<JsonObject> response) {
-                        getActiveUserInfo();
-                    }
-                });
-    }
-
-    void unsubscirbeUser(String target_id) {
-        userService.unsubscribeUser(active_userid, target_id)
-                .enqueue(new BasicCallback<JsonObject>(this) {
-                    @Override
-                    public void onResponse(Response<JsonObject> response) {
-                        getActiveUserInfo();
-                    }
-                });
+        followListAdapter.setNewData(userList);
+        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
     }
 }

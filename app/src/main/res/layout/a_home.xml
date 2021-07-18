@@ -55,12 +55,6 @@
                 app:srcCompat="@drawable/ic_build_black"
                 tools:visibility="visible" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/home_recipegroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="home_recipecount, home_recipetext" />
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/home_recipecount"
                 android:layout_width="0dp"
@@ -88,12 +82,15 @@
                 app:layout_constraintRight_toRightOf="@id/home_recipecount"
                 app:layout_constraintTop_toBottomOf="@+id/home_recipecount" />
 
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/home_followergroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="home_followercount, home_followertext" />
+            <View
+                android:id="@+id/home_recipewrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintTop_toTopOf="@+id/home_recipecount"
+                app:layout_constraintBottom_toBottomOf="@+id/home_recipetext"
+                app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
+                app:layout_constraintRight_toRightOf="@+id/home_recipecount"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/home_followercount"
@@ -120,11 +117,15 @@
                 app:layout_constraintRight_toRightOf="@+id/home_followercount"
                 app:layout_constraintTop_toBottomOf="@+id/home_followercount" />
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/home_followinggroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="home_followinggroup, home_followingtext" />
+            <View
+                android:id="@+id/home_followerwrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintTop_toTopOf="@+id/home_followercount"
+                app:layout_constraintBottom_toBottomOf="@+id/home_followertext"
+                app:layout_constraintLeft_toLeftOf="@+id/home_followercount"
+                app:layout_constraintRight_toRightOf="@+id/home_followercount"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/home_followingcount"
@@ -151,6 +152,16 @@
                 app:layout_constraintLeft_toLeftOf="@+id/home_followingcount"
                 app:layout_constraintRight_toRightOf="@+id/home_followingcount"
                 app:layout_constraintTop_toBottomOf="@+id/home_followingcount" />
+
+            <View
+                android:id="@+id/home_followingwrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintTop_toTopOf="@+id/home_followingcount"
+                app:layout_constraintBottom_toBottomOf="@+id/home_followingtext"
+                app:layout_constraintLeft_toLeftOf="@+id/home_followingcount"
+                app:layout_constraintRight_toRightOf="@+id/home_followingcount"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/home_revise_btn"

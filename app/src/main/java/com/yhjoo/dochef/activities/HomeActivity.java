@@ -24,20 +24,22 @@ import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.PostListAdapter;
 import com.yhjoo.dochef.adapter.RecipeHorizontalHomeAdapter;
 import com.yhjoo.dochef.databinding.AHomeBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserDetail;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
-import retrofit2.Call;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Function;
 import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
@@ -50,19 +52,19 @@ public class HomeActivity extends BaseActivity {
 
     AHomeBinding binding;
     StorageReference storageReference;
-    RetrofitServices.UserService userService;
-    RetrofitServices.RecipeService recipeService;
-    RetrofitServices.PostService postService;
+    RxRetrofitServices.UserService userService;
+    RxRetrofitServices.RecipeService recipeService;
+    RxRetrofitServices.PostService postService;
     RecipeHorizontalHomeAdapter recipeHorizontalHomeAdapter;
     PostListAdapter postListAdapter;
 
-    ArrayList<Recipe> recipeList = new ArrayList<>();
-    ArrayList<Post> postList = new ArrayList<>();
+    ArrayList<Recipe> recipeList;
+    ArrayList<Post> postList;
     UserDetail userDetailInfo;
-    Uri mImageUri;
 
     MODE currentMode;
     OPERATION currentOperation = OPERATION.VIEW;
+    Uri mImageUri;
     String image_url;
     String currentUserID;
 
@@ -83,9 +85,9 @@ public class HomeActivity extends BaseActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
-        recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
-        postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
+        userService = RxRetrofitBuilder.create(this, RxRetrofitServices.UserService.class);
+        recipeService = RxRetrofitBuilder.create(this, RxRetrofitServices.RecipeService.class);
+        postService = RxRetrofitBuilder.create(this, RxRetrofitServices.PostService.class);
 
         String userID = Utils.getUserBrief(this).getUserID();
         if (getIntent().getStringExtra("userID") == null
@@ -131,9 +133,7 @@ public class HomeActivity extends BaseActivity {
         super.onResume();
 
         if (App.isServerAlive()) {
-            getUserDetailInfo(currentUserID);
-            getRecipeList(currentUserID);
-            getPostList(currentUserID);
+            refreshData();
         } else {
             userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
             recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
@@ -189,97 +189,76 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    void getUserDetailInfo(String userID) {
-        userService.getUserDetail(userID)
-                .enqueue(new BasicCallback<UserDetail>(this) {
-                    @Override
-                    public void onResponse(Call<UserDetail> call, Response<UserDetail> response) {
-                        super.onResponse(call, response);
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
-                            userDetailInfo = response.body();
-                            binding.homeToolbar.setTitle(userDetailInfo.getNickname());
-                            setUserInfo();
-                        }
-                    }
-                });
-    }
+    void refreshData() {
+        compositeDisposable.add(
+                userService.getUserDetail(currentUserID)
+                        .flatMap((Function<Response<UserDetail>, Single<Response<ArrayList<Recipe>>>>)
+                                response -> {
+                                    userDetailInfo = response.body();
+                                    return recipeService.getRecipeByUserID(currentUserID, "latest");
+                                })
+                        .flatMap((Function<Response<ArrayList<Recipe>>, Single<Response<ArrayList<Post>>>>)
+                                response -> {
+                                    List<Recipe> res = response.body().subList(0, Math.min(response.body().size(), 10));
+                                    recipeList = new ArrayList<>(res);
 
-    void getRecipeList(String userID) {
-        recipeService.getRecipeByUserID(userID, "latest")
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
-
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
-                            recipeList = response.body();
-                            Utils.log(recipeList.size());
-                            recipeHorizontalHomeAdapter.setNewData(recipeList);
-                            recipeHorizontalHomeAdapter.setEmptyView(R.layout.rv_empty_recipe, (ViewGroup) binding.homeRecipeRecycler.getParent());
-                        }
-                    }
-                });
-    }
-
-    void getPostList(String userID) {
-        postService.getPostListByUserID(userID)
-                .enqueue(new BasicCallback<ArrayList<Post>>(this) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Post>> call, Response<ArrayList<Post>> response) {
-                        super.onResponse(call, response);
-
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
+                                    return postService.getPostListByUserID(currentUserID)
+                                            .observeOn(AndroidSchedulers.mainThread());
+                                })
+                        .subscribe(response -> {
                             postList = response.body();
+
+                            // UserInfo
+                            setUserInfo();
+
+                            // RecipeList
+                            recipeHorizontalHomeAdapter.setNewData(recipeList);
+                            recipeHorizontalHomeAdapter.setEmptyView(
+                                    R.layout.rv_empty_recipe, (ViewGroup) binding.homeRecipeRecycler.getParent());
+
+                            // PostList
                             postListAdapter.setNewData(postList);
-                            postListAdapter.setEmptyView(R.layout.rv_empty_post, (ViewGroup) binding.homePostRecycler.getParent());
-                        }
-                    }
-                });
+                            postListAdapter.setEmptyView(
+                                    R.layout.rv_empty_post, (ViewGroup) binding.homePostRecycler.getParent());
+                        }, Throwable::printStackTrace)
+        );
     }
 
     void setUserInfo() {
         ImageLoadUtil.loadUserImage(this, userDetailInfo.getUserImg(), binding.homeUserimg);
 
+        binding.homeToolbar.setTitle(userDetailInfo.getNickname());
         binding.homeNickname.setText(userDetailInfo.getNickname());
         binding.homeProfiletext.setText(userDetailInfo.getProfileText());
         binding.homeRecipecount.setText(Integer.toString(userDetailInfo.getRecipeCount()));
         binding.homeFollowercount.setText(Integer.toString(userDetailInfo.getFollowerCount()));
         binding.homeFollowingcount.setText(Integer.toString(userDetailInfo.getFollowingCount()));
 
-        if (currentMode == MODE.MY)
-            binding.homeReviseBtn.setVisibility(View.VISIBLE);
-        else
-            binding.homeFollowBtn.setVisibility(View.VISIBLE);
+        binding.homeFollowBtn.setVisibility(currentMode == MODE.USER ? View.VISIBLE : View.GONE);
 
         binding.homeUserimgRevise.setOnClickListener(this::reviseProfileImage);
         binding.homeNicknameRevise.setOnClickListener(this::reviseNickname);
         binding.homeUserimgRevise.setOnClickListener(this::reviseContents);
-        binding.homeRecipecount.setOnClickListener((v -> {
+        binding.homeReviseBtn.setOnClickListener(this::changeOperation);
+        binding.homeRecipewrapper.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, RecipeMyListActivity.class)
                     .putExtra("userID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
-        binding.homeFollowercount.setOnClickListener((v -> {
+        binding.homeFollowerwrapper.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class)
                     .putExtra("MODE", FollowListActivity.MODE.FOLLOWER)
                     .putExtra("userID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
-        binding.homeFollowingcount.setOnClickListener((v -> {
+        binding.homeFollowingwrapper.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, FollowListActivity.class)
                     .putExtra("MODE", FollowListActivity.MODE.FOLLOWING)
                     .putExtra("userID", userDetailInfo.getUserID());
             startActivity(intent);
         }));
-
-        binding.homeReviseBtn.setOnClickListener(this::changeOperation);
     }
+
 
     void changeOperation(View v) {
         if (currentOperation == OPERATION.VIEW) {
@@ -355,7 +334,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    void updateProfile(){
+    void updateProfile() {
         progressON(this);
         image_url = "";
         if (mImageUri != null) {

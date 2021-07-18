@@ -2,12 +2,11 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
@@ -16,13 +15,11 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.skydoves.powermenu.MenuAnimation;
 import com.skydoves.powermenu.PowerMenu;
 import com.skydoves.powermenu.PowerMenuItem;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.MainFragmentAdapter;
 import com.yhjoo.dochef.databinding.AMainBinding;
@@ -31,21 +28,16 @@ import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
 import com.yhjoo.dochef.fragments.MainUserFragment;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.UserDetail;
-import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
-import retrofit2.Response;
+public class MainActivity extends BaseActivity {
+    int[] tabIcons = new int[]{R.drawable.ic_home_white, R.drawable.ic_hot_white,
+            R.drawable.ic_favorite_white, R.drawable.ic_article_white, R.drawable.ic_person_white};
 
-public class MainActivity extends BaseActivity{
     AMainBinding binding;
     FirebaseAnalytics mFirebaseAnalytics;
-    RetrofitServices.UserService userService;
     MainFragmentAdapter mainFragmentAdapter;
     PowerMenu powerMenu;
 
@@ -58,10 +50,8 @@ public class MainActivity extends BaseActivity{
 
     String userID;
 
-
     /*
         TODO
-        alertdialog -> powermenu
      */
 
     @Override
@@ -76,8 +66,6 @@ public class MainActivity extends BaseActivity{
 
         MobileAds.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        userService = RetrofitBuilder.create(this, RetrofitServices.UserService.class);
 
         userID = Utils.getUserBrief(this).getUserID();
 
@@ -98,11 +86,10 @@ public class MainActivity extends BaseActivity{
         binding.mainViewpager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(binding.mainTablayout));
         binding.mainViewpager.setAdapter(mainFragmentAdapter);
 
-        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setIcon(R.drawable.ic_home_white));
-        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setIcon(R.drawable.ic_hot_white));
-        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setIcon(R.drawable.ic_favorite_white));
-        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setIcon(R.drawable.ic_article_white));
-        binding.mainTablayout.addTab(binding.mainTablayout.newTab().setIcon(R.drawable.ic_person_white));
+        for (int drawable : tabIcons) {
+            binding.mainTablayout.addTab(binding.mainTablayout.newTab().setIcon(drawable));
+        }
+
         binding.mainTablayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -137,43 +124,39 @@ public class MainActivity extends BaseActivity{
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {            }
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
 
         powerMenu = new PowerMenu.Builder(this)
-                .addItem(new PowerMenuItem("최신순", true)) // add an item.
-                .addItem(new PowerMenuItem("인기순", false)) // aad an item list.
-                .addItem(new PowerMenuItem("별점순", false)) // aad an item list.
-                .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT) // Animation start point (TOP | LEFT).
-                .setMenuRadius(10f) // sets the corner radius.
-                .setMenuShadow(0f) // sets the shadow.
+                .addItem(new PowerMenuItem("최신순", true))
+                .addItem(new PowerMenuItem("인기순", false))
+                .addItem(new PowerMenuItem("별점순", false))
+                .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+                .setMenuRadius(10f)
+                .setMenuShadow(0f)
                 .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setSelectedTextColor(Color.WHITE)
                 .setTextGravity(Gravity.CENTER)
-                .setTextTypeface(Typeface.create("sans-serif-medium", Typeface.BOLD))
                 .setMenuColor(Color.WHITE)
                 .setSelectedMenuColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setBackgroundAlpha(0f)
                 .build();
+
         powerMenu.setOnMenuItemClickListener((position, item) -> {
-            if(position == 0)
+            if (position == 0)
                 sortMenu(MainRecipesFragment.SORT.LATEST);
-            else if(position == 1)
+            else if (position == 1)
                 sortMenu(MainRecipesFragment.SORT.POPULAR);
-            else if(position == 2)
+            else if (position == 2)
                 sortMenu(MainRecipesFragment.SORT.RATING);
             powerMenu.setSelectedPosition(position);
             powerMenu.dismiss();
         });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
     }
 
     @Override
@@ -217,12 +200,11 @@ public class MainActivity extends BaseActivity{
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch(item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.main_menu_notification:
                 startActivity(new Intent(this, NotificationActivity.class));
                 break;
             case R.id.main_menu_sort:
-
                 powerMenu.showAsAnchorRightBottom(binding.mainToolbar);
                 break;
             case R.id.main_menu_write_recipe:
@@ -243,7 +225,7 @@ public class MainActivity extends BaseActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    void sortMenu(MainRecipesFragment.SORT sort){
+    void sortMenu(MainRecipesFragment.SORT sort) {
         ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeSortMode(sort);
     }
 }

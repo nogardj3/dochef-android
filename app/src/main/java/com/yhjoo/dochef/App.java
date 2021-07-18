@@ -5,12 +5,20 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+
+import java.io.IOException;
+import java.net.SocketException;
+
+import io.reactivex.rxjava3.exceptions.UndeliverableException;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 
 public class App extends Application {
@@ -36,6 +44,39 @@ public class App extends Application {
         super.onCreate();
 
         Logger.addLogAdapter(new AndroidLogAdapter());
+
+        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
+                                          @Override
+                                          public void accept(Throwable throwable) throws Throwable {
+
+                                          }
+                                      }
+
+        );
+
+
+        RxJavaPlugins.setErrorHandler(e -> {
+            if (e instanceof UndeliverableException) {
+                e = e.getCause();
+            }
+            if ((e instanceof IOException) || (e instanceof SocketException)) {
+                // fine, irrelevant network problem or API that throws on cancellation
+                return;
+            }
+            if (e instanceof InterruptedException) {
+                // fine, some blocking code was interrupted by a dispose call
+                return;
+            }
+            if ((e instanceof NullPointerException) || (e instanceof IllegalArgumentException)) {
+                // that's likely a bug in the application Thread.currentThread().getUncaughtExceptionHandler() .uncaughtException(Thread.currentThread(), e);
+                return;
+            }
+            if (e instanceof IllegalStateException) { // that's a bug in RxJava or in a custom operator
+                Thread.currentThread().getUncaughtExceptionHandler().uncaughtException(Thread.currentThread(), e);
+                return;
+            }
+            Log.e("RxJava_HOOK", "Undeliverable exception received, not sure what to do" + e.getMessage());
+        });
 
         appInstance = this;
 

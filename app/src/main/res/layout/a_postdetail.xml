@@ -37,12 +37,6 @@
                 app:layout_constraintWidth_percent="1"
                 tools:src="@raw/dummy_post_0"/>
 
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/post_user_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:constraint_referenced_ids="post_nickname, post_userimg" />
-
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/post_userimg"
                 android:layout_width="30dp"
@@ -65,6 +59,16 @@
                 app:layout_constraintLeft_toRightOf="@+id/post_userimg"
                 app:layout_constraintTop_toTopOf="@+id/post_userimg"
                 tools:text="닉네임" />
+
+            <View
+                android:id="@+id/post_user_wrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintTop_toTopOf="@+id/post_userimg"
+                app:layout_constraintBottom_toBottomOf="@+id/post_userimg"
+                app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
+                app:layout_constraintRight_toRightOf="@+id/post_nickname"/>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_time"

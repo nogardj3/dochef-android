@@ -47,7 +47,6 @@ public class ImageLoadUtil {
 
     public static void loadPostImage(Context context, String filename, AppCompatImageView appCompatImageView) {
         if (App.isServerAlive()) {
-            Utils.log(filename);
             if(!filename.equals("")) {
                 StorageReference post_sr = FirebaseStorage.getInstance().getReference()
                         .child(context.getString(R.string.storage_path_post) + filename);

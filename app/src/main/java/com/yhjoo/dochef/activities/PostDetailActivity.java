@@ -46,8 +46,8 @@ public class PostDetailActivity extends BaseActivity {
 
     /*
         TODO
-        popupmenu -> powermenu
-        group은 onclick 안됨 수정
+        글쓴자가 댓글 수정, 삭제
+        포스트 주인의 답글 추가, 수정, 삭제
     */
 
     @Override
@@ -66,20 +66,20 @@ public class PostDetailActivity extends BaseActivity {
 
         commentListAdapter = new CommentListAdapter(userID);
         commentListAdapter.setOnItemChildClickListener((baseQuickAdapter, view, position) -> {
-//            PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
-//            getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
-//            popup.setOnMenuItemClickListener(item -> {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
-//                builder.setMessage("삭제 하시겠습니까?")
-//                        .setPositiveButton("확인", (dialog, which) -> {
-//                            dialog.dismiss();
-//                            removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID());
-//                        })
-//                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
-//                        .show();
-//                return false;
-//            });
-//            popup.show();
+            PopupMenu popup = new PopupMenu(PostDetailActivity.this, view);
+            getMenuInflater().inflate(R.menu.menu_comment_owner, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
+                builder.setMessage("삭제 하시겠습니까?")
+                        .setPositiveButton("확인", (dialog, which) -> {
+                            dialog.dismiss();
+                            removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID());
+                        })
+                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                        .show();
+                return false;
+            });
+            popup.show();
         });
         binding.postCommentRecycler.setLayoutManager(new LinearLayoutManager(this));
         binding.postCommentRecycler.setAdapter(commentListAdapter);
@@ -122,7 +122,7 @@ public class PostDetailActivity extends BaseActivity {
         binding.postTime.setText(Utils.convertMillisToText(postInfo.getDateTime()));
         binding.postLikecount.setText(Integer.toString(postInfo.getLikes().size()));
         binding.postCommentcount.setText(Integer.toString(postInfo.getComments().size()));
-        binding.postUserGroup.setOnClickListener(v -> {
+        binding.postUserWrapper.setOnClickListener(v -> {
             Intent intent = new Intent(PostDetailActivity.this, HomeActivity.class)
                     .putExtra("userID", postInfo.getUserID());
             startActivity(intent);
@@ -136,35 +136,35 @@ public class PostDetailActivity extends BaseActivity {
         binding.postLike.setOnClickListener(v -> toggleLikePost(userID, postID));
         binding.postOther.setVisibility(postInfo.getUserID().equals(userID) ? View.VISIBLE : View.GONE);
         binding.postOther.setOnClickListener(v -> {
-//            PopupMenu popup = new PopupMenu(PostDetailActivity.this, v);
-//            PostDetailActivity.this.getMenuInflater().inflate(R.menu.menu_post_owner, popup.getMenu());
-//            popup.setOnMenuItemClickListener(item -> {
-//                switch (item.getItemId()) {
-//                    case R.id.menu_post_owner_revise:
-//                        Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class)
-//                                .putExtra("MODE", PostWriteActivity.MODE.REVISE)
-//                                .putExtra("postID", postInfo.getPostID())
-//                                .putExtra("postimg", postInfo.getPostImg())
-//                                .putExtra("contents", postInfo.getContents())
-//                                .putExtra("tags", postInfo.getTags());
-//                        startActivity(intent);
-//                        break;
-//                    case R.id.menu_post_owner_delete:
-//                        App.getAppInstance().showToast("삭제");
-//                        AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
-//                        builder.setMessage("삭제하시겠습니까?")
-//                                .setPositiveButton("확인", (dialog, which) -> {
-//                                    deletePost(postID);
-//                                    dialog.dismiss();
-//                                    finish();
-//                                })
-//                                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
-//                                .show();
-//                        break;
-//                }
-//                return false;
-//            });
-//            popup.show();
+            PopupMenu popup = new PopupMenu(PostDetailActivity.this, v);
+            PostDetailActivity.this.getMenuInflater().inflate(R.menu.menu_post_owner, popup.getMenu());
+            popup.setOnMenuItemClickListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.menu_post_owner_revise:
+                        Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class)
+                                .putExtra("MODE", PostWriteActivity.MODE.REVISE)
+                                .putExtra("postID", postInfo.getPostID())
+                                .putExtra("postimg", postInfo.getPostImg())
+                                .putExtra("contents", postInfo.getContents())
+                                .putExtra("tags", postInfo.getTags());
+                        startActivity(intent);
+                        break;
+                    case R.id.menu_post_owner_delete:
+                        App.getAppInstance().showToast("삭제");
+                        AlertDialog.Builder builder = new AlertDialog.Builder(PostDetailActivity.this);
+                        builder.setMessage("삭제하시겠습니까?")
+                                .setPositiveButton("확인", (dialog, which) -> {
+                                    deletePost(postID);
+                                    dialog.dismiss();
+                                    finish();
+                                })
+                                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
+                                .show();
+                        break;
+                }
+                return false;
+            });
+            popup.show();
         });
 
         binding.postTags.removeAllViews();
