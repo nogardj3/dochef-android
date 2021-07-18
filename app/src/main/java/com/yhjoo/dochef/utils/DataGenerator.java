@@ -76,7 +76,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        } else if (type == resources.getInteger(R.integer.LOCAL_TYPE_USER_BRIEF)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF)) {
             ArrayList<UserBrief> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
@@ -204,7 +204,7 @@ public class DataGenerator {
             );
 
             return (T) recipeDetail;
-        } else if (type == resources.getInteger(R.integer.DUMMY_TYPE_REVIEW)) {
+        } else if (type == resources.getInteger(R.integer.DATA_TYPE_REVIEW)) {
             ArrayList<Review> arrayList = new ArrayList<>();
             for (int i = 0; i < 10; i++) {
                 Random r = new Random();
@@ -216,6 +216,10 @@ public class DataGenerator {
 
             return (T) arrayList;
         }
-        return (T) new Object();
+        else{
+            Utils.log("no type");
+            return (T) new Object();
+        }
+
     }
 }

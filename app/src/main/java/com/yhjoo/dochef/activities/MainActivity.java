@@ -42,7 +42,7 @@ import java.util.ArrayList;
 
 import retrofit2.Response;
 
-public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends BaseActivity{
     AMainBinding binding;
     FirebaseAnalytics mFirebaseAnalytics;
     RetrofitServices.UserService userService;
@@ -56,13 +56,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     MenuItem menu_write_post;
     MenuItem menu_setting;
 
-    UserDetail userDetailInfo;
     String userID;
 
 
     /*
         TODO
-        drawer -> userfragment로
+        alertdialog -> powermenu
      */
 
     @Override
@@ -175,15 +174,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public void onResume() {
         super.onResume();
 
-        if (App.isServerAlive()) {
-            getUserDetail();
-        } else {
-            userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
-
-//            ImageLoadUtil.loadUserImage(this, userDetailInfo.getUserImg(), userImage);
-//
-//            userName.setText(userDetailInfo.getNickname());
-        }
     }
 
     @Override
@@ -253,53 +243,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.main_nav_myhome) {
-            startActivity(new Intent(this, HomeActivity.class));
-        } else if (id == R.id.main_nav_myrecipe) {
-            Intent intent = new Intent(this, RecipeMyListActivity.class)
-                    .putExtra("userID", userDetailInfo.getUserID());
-            startActivity(intent);
-        } else if (id == R.id.main_nav_notification)
-            startActivity(new Intent(MainActivity.this, NotificationActivity.class));
-        else if (id == R.id.main_nav_setting)
-            startActivity(new Intent(MainActivity.this, SettingActivity.class));
-
-        return true;
-    }
-
     void sortMenu(MainRecipesFragment.SORT sort){
         ((MainRecipesFragment) mainFragmentAdapter.getItem(1)).changeSortMode(sort);
-    }
-
-    void clickFab(View v) {
-        switch (binding.mainViewpager.getCurrentItem()) {
-            case 2:
-                startActivity(new Intent(MainActivity.this, RecipeMakeActivity.class));
-                break;
-            case 3:
-                Intent intent = new Intent(MainActivity.this, PostWriteActivity.class)
-                        .putExtra("MODE", PostWriteActivity.MODE.WRITE);
-                startActivity(intent);
-                break;
-        }
-    }
-
-    void getUserDetail() {
-        userService.getUserDetail(userID)
-                .enqueue(new BasicCallback<UserDetail>(this) {
-                    @Override
-                    public void onResponse(Response<UserDetail> response) {
-                        userDetailInfo = response.body();
-
-//                        ImageLoadUtil.loadUserImage(
-//                                MainActivity.this, userDetailInfo.getUserImg(), userImage);
-//
-//                        userName.setText(userDetailInfo.getNickname());
-                    }
-                });
     }
 }

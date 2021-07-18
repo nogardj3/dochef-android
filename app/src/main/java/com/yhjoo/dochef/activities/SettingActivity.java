@@ -28,13 +28,12 @@ public class SettingActivity extends BaseActivity {
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        binding.settingVersionText.setText(BuildConfig.VERSION_NAME);
         binding.settingNotice.setOnClickListener(this::startNotice);
-        binding.settingFaq.setOnClickListener(this::startFAQ);
-        binding.settingTos.setOnClickListener(this::startTOS);
         binding.settingNotificationAllText.setOnClickListener(this::toggleNotificationAll);
         binding.settingNotification1Text.setOnClickListener(this::toggleNotificationItem);
-        binding.settingReview.setOnClickListener(this::goReview);
+        binding.settingVersion.setText(BuildConfig.VERSION_NAME);
+        binding.settingFaq.setOnClickListener(this::startFAQ);
+        binding.settingTos.setOnClickListener(this::startTOS);
         binding.settingLogout.setOnClickListener(this::signOut);
     }
 
@@ -48,19 +47,6 @@ public class SettingActivity extends BaseActivity {
 
     void startTOS(View view) {
         startActivity(new Intent(SettingActivity.this, TOSActivity.class));
-    }
-
-    void goReview(View view) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(
-                "https://play.google.com/store/apps/details?id=quvesoft.sprout"))
-                .setPackage("com.android.vending");
-        try {
-            startActivity(intent);
-        } catch (Exception e) {
-            Utils.log(e.toString());
-            App.getAppInstance().showToast("스토어 열기 실패");
-        }
     }
 
     void signOut(View view) {

@@ -8,6 +8,6 @@
         android:id="@+id/result_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/li_user" />
+        tools:listitem="@layout/li_follow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -75,7 +75,7 @@ public class FollowListActivity extends BaseActivity {
         if (App.isServerAlive())
             getActiveUserInfo();
         else {
-            ArrayList<UserBrief> data = DataGenerator.make(getResources(), getResources().getInteger(R.integer.LOCAL_TYPE_USER_BRIEF));
+            ArrayList<UserBrief> data = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_BRIEF));
             activeUserFollow = data.get(0).getFollow();
             followListAdapter.setActiveUserFollow(activeUserFollow);
 

@@ -68,6 +68,7 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
+        revise 기능
         디자인
             내 홈이면 수정 버튼 없애기, 툴바 메뉴에 수정 추가, 수정 완료 추가
     */
@@ -134,9 +135,9 @@ public class HomeActivity extends BaseActivity {
             getRecipeList(currentUserID);
             getPostList(currentUserID);
         } else {
-            userDetailInfo = DataGenerator.make(getResources(), R.integer.DATA_TYPE_RECIPE_DETAIL);
-            recipeList = DataGenerator.make(getResources(), R.integer.DATE_TYPE_RECIPE);
-            postList = DataGenerator.make(getResources(), R.integer.DATA_TYPE_POST);
+            userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
+            recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
+            postList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_POST));
 
             setUserInfo();
             recipeHorizontalHomeAdapter.setNewData(recipeList);

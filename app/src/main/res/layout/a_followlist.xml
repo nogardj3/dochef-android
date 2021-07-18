@@ -19,6 +19,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/followlist_toolbar"
-        tools:listitem="@layout/li_user" />
+        tools:listitem="@layout/li_follow" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

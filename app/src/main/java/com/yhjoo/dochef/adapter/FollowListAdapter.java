@@ -13,7 +13,7 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
     String userID;
 
     public FollowListAdapter(String userID) {
-        super(R.layout.li_user);
+        super(R.layout.li_follow);
         this.userID = userID;
     }
 

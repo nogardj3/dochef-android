@@ -77,7 +77,7 @@ public class RecipeDetailActivity extends BaseActivity {
             getReviewList();
         } else {
             recipeDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_RECIPE_DETAIL));
-            reviewList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DUMMY_TYPE_REVIEW));
+            reviewList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_REVIEW));
 
             setTopView();
             reviewListAdapter.setNewData(reviewList);

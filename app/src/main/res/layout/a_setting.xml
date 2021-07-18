@@ -162,37 +162,6 @@
         android:background="@color/grey"
         app:layout_constraintBottom_toBottomOf="@+id/setting_faq" />
 
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/setting_review"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="18dp"
-        android:text="리뷰 작성"
-        android:textColor="@color/grey_text"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setting_faq" />
-
-    <androidx.appcompat.widget.AppCompatImageView
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="10dp"
-        android:tint="@color/colorPrimary"
-        app:layout_constraintBottom_toBottomOf="@+id/setting_review"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/setting_review"
-        app:srcCompat="@drawable/ic_arrow_right_grey" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/grey"
-        app:layout_constraintBottom_toBottomOf="@+id/setting_review" />
-
-
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/setting_tos"
         android:layout_width="0dp"
@@ -204,7 +173,7 @@
         android:textColor="@color/grey_text"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/setting_review" />
+        app:layout_constraintTop_toBottomOf="@+id/setting_faq" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:layout_width="24dp"

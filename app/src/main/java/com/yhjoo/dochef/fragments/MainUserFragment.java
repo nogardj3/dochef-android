@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,16 +13,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.HomeActivity;
+import com.yhjoo.dochef.activities.MainActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
+import com.yhjoo.dochef.activities.RecipeMyListActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
+import com.yhjoo.dochef.activities.SettingActivity;
 import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
 import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
+import com.yhjoo.dochef.databinding.FMainUserBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
+import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -32,76 +41,82 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class MainUserFragment extends Fragment {
-    FMainInitBinding binding;
+    FMainUserBinding binding;
 
-    RetrofitServices.RecipeService recipeService;
-    RecipeHorizontalAdapter recipeHorizontalAdapter;
+    RetrofitServices.UserService userService;
 
-    ArrayList<Recipe> recipeList;
+    UserDetail userDetailInfo;
+    String userID;
 
     /*
         TODO
-        구현 
     */
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FMainInitBinding.inflate(inflater, container, false);
+        binding = FMainUserBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        recipeService = RetrofitBuilder.create(this.getContext(), RetrofitServices.RecipeService.class);
+        userService = RetrofitBuilder.create(getContext(), RetrofitServices.UserService.class);
 
-        ArrayList<Integer> imgs = new ArrayList<>();
-        imgs.add(R.drawable.ad_temp_0);
-        imgs.add(R.drawable.ad_temp_1);
+        userID = Utils.getUserBrief(getContext()).getUserID();
 
-        binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
-        binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
-        binding.mainRecommendMore.setOnClickListener(
-                v -> startActivity(new Intent(getContext(), RecipeThemeActivity.class)));
+        binding.fmainUserHome.setOnClickListener(this::goHome);
+        binding.fmainUserRecipe.setOnClickListener(this::goMyRecipe);
+        binding.fmainUserSetting.setOnClickListener(this::goSetting);
+        binding.fmainUserReview.setOnClickListener(this::goReview);
 
-        Observable.interval(5, TimeUnit.SECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(count -> binding.mainAdviewpager
-                        .setCurrentItem(binding.mainAdviewpager.getCurrentItem() == imgs.size() - 1
-                                ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
+        if (App.isServerAlive()) {
+            getUserDetail();
+        } else {
+            userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
 
+            ImageLoadUtil.loadUserImage(getContext(), userDetailInfo.getUserImg(), binding.fmainUserImg);
 
-        recipeHorizontalAdapter = new RecipeHorizontalAdapter();
-        recipeHorizontalAdapter.setOnItemClickListener((adapter, view1, position)
-                -> {
-            Intent intent = new Intent(getContext(), RecipeDetailActivity.class)
-                .putExtra("recipeID", recipeList.get(position).getRecipeID());
-            startActivity(intent);
-        });
-        recipeHorizontalAdapter.setNewData(recipeList);
-        binding.mainRecommendRecyclerview.setLayoutManager(
-                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        binding.mainRecommendRecyclerview.setAdapter(recipeHorizontalAdapter);
-        if (App.isServerAlive())
-            getRecipelist();
-        else {
-            recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-            recipeHorizontalAdapter.setNewData(recipeList);
+            binding.fmainUserNickname.setText(userDetailInfo.getNickname());
         }
 
         return view;
     }
 
-    void getRecipelist() {
-        recipeService.getRecipes("popular")
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
+    void goHome(View view){
+        startActivity(new Intent(getContext(), HomeActivity.class));
+    }
 
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
-                            recipeList = response.body();
-                            recipeHorizontalAdapter.setNewData(recipeList);
-                        }
+    void goMyRecipe(View view){
+        Intent intent = new Intent(getContext(), RecipeMyListActivity.class)
+                .putExtra("userID", userDetailInfo.getUserID());
+        startActivity(intent);
+    }
+
+    void goSetting(View view){
+        startActivity(new Intent(getContext(), SettingActivity.class));
+    }
+
+    void goReview(View view) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(
+                "https://play.google.com/store/apps/details?id=quvesoft.sprout"))
+                .setPackage("com.android.vending");
+        try {
+            startActivity(intent);
+        } catch (Exception e) {
+            Utils.log(e.toString());
+            App.getAppInstance().showToast("스토어 열기 실패");
+        }
+    }
+
+    void getUserDetail() {
+        userService.getUserDetail(userID)
+                .enqueue(new BasicCallback<UserDetail>(getContext()) {
+                    @Override
+                    public void onResponse(Response<UserDetail> response) {
+                        userDetailInfo = response.body();
+
+                        ImageLoadUtil.loadUserImage(
+                                MainUserFragment.this.getContext(), userDetailInfo.getUserImg(), binding.fmainUserImg);
+
+                        binding.fmainUserNickname.setText(userDetailInfo.getNickname());
                     }
                 });
     }

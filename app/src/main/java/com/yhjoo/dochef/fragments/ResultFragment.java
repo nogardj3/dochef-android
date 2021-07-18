@@ -61,7 +61,7 @@ public class ResultFragment extends Fragment {
         recipeService = RetrofitBuilder.create(getContext(), RetrofitServices.RecipeService.class);
 
         if (type == VIEWHOLDER_ITEM_USER)
-            searchListAdapter = new SearchListAdapter(type, new ArrayList<>(), R.layout.li_user);
+            searchListAdapter = new SearchListAdapter(type, new ArrayList<>(), R.layout.li_follow);
         else
             searchListAdapter = new SearchListAdapter(type, new ArrayList<>(), R.layout.li_recipe_result);
 
@@ -174,7 +174,7 @@ public class ResultFragment extends Fragment {
             }
         } else{
             if(type == VIEWHOLDER_ITEM_USER){
-                ArrayList<UserBrief> userBriefs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.LOCAL_TYPE_USER_BRIEF));
+                ArrayList<UserBrief> userBriefs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_BRIEF));
                 setUserItem(userBriefs);
             }
             else{
