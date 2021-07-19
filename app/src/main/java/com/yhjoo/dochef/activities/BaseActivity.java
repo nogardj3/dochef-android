@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.yhjoo.dochef.R;
 
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
@@ -24,6 +25,11 @@ public class BaseActivity extends AppCompatActivity {
         onBackPressed();
         return true;
     }
+
+    /*
+        TODO
+        Dialog 통일하기
+    */
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -77,5 +83,28 @@ public class BaseActivity extends AppCompatActivity {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
+    }
+
+    public static MaterialDialog createConfirmDialog(Context context, String title, String content,
+                                                     MaterialDialog.SingleButtonCallback confirmListener) {
+
+        MaterialDialog dialog = new MaterialDialog.Builder(context)
+                .positiveColorRes(R.color.grey_text)
+                .negativeColorRes(R.color.grey_text)
+                .titleColorRes(R.color.black)
+                .contentColorRes(R.color.black)
+                .positiveText("확인")
+                .negativeText("취소")
+                .onPositive(confirmListener)
+                .onNegative((dialog1, which) -> {
+                    dialog1.dismiss();
+                }).build();
+
+        if (title != null && !title.equals(""))
+            dialog.setTitle(title);
+        if (content != null && !content.equals(""))
+            dialog.setContent(content);
+
+        return dialog;
     }
 }

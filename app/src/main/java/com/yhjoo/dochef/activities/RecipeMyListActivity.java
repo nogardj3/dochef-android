@@ -2,42 +2,41 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.appcompat.app.AlertDialog;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.adapter.RecipeLinearListAdapter;
+import com.yhjoo.dochef.adapter.RecipeMyListAdapter;
 import com.yhjoo.dochef.databinding.ARecipelistBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class RecipeMyListActivity extends BaseActivity {
     ARecipelistBinding binding;
-    RetrofitServices.RecipeService recipeService;
-    RecipeLinearListAdapter recipeLinearListAdapter;
+    RxRetrofitServices.RecipeService recipeService;
+    RecipeMyListAdapter recipeMyListAdapter;
+
+    MenuItem addMenu;
 
     ArrayList<Recipe> recipeList = new ArrayList<>();
     String userID;
 
     /*
         TODO
-        삭제하기 1. 남의거 = like 빼고 리로드 2. 내거 = 레시피 삭제
-        디자인
-            datetime 추가
-            리뷰 수
-            남의거는 수정 안되는걸로
     */
 
     @Override
@@ -48,55 +47,84 @@ public class RecipeMyListActivity extends BaseActivity {
         setSupportActionBar(binding.recipelistToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
+        recipeService = RxRetrofitBuilder.create(this, RxRetrofitServices.RecipeService.class);
 
         userID = Utils.getUserBrief(this).getUserID();
 
-        recipeLinearListAdapter = new RecipeLinearListAdapter();
-        recipeLinearListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
-        recipeLinearListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
-            if (view.getId() == R.id.recipemylist_revise) {
-                Intent intent = new Intent(RecipeMyListActivity.this, RecipeMakeActivity.class)
-                    .putExtra("OPERATION", RecipeMakeActivity.OPERATION.REVISE);
+        recipeMyListAdapter = new RecipeMyListAdapter(userID);
+        recipeMyListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
+        recipeMyListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+
+                Intent intent = new Intent(RecipeMyListActivity.this, RecipeDetailActivity.class)
+                        .putExtra("recipeID", recipeList.get(position).getRecipeID());
                 startActivity(intent);
-            } else if (view.getId() == R.id.recipemylist_delete) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(RecipeMyListActivity.this);
-                builder.setMessage("삭제하시겠습니까?")
-                        .setPositiveButton("확인", (dialog, which) -> {
-                            adapter.getData().remove(position);
-                            adapter.notifyItemRemoved(position);
-                            dialog.dismiss();
-                        })
-                        .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
-                        .show();
+            }
+        });
+        recipeMyListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            if (view.getId() == R.id.recipemylist_yours) {
+                createConfirmDialog(this,
+                        null, "레시피를 삭제하시겠습니까?",
+                        (dialog1, which) -> {
+                            cancelLikeRecipe(((Recipe) adapter.getData().get(position)).getRecipeID());
+                            dialog1.dismiss();
+                        }).show();
             }
         });
         binding.recipelistRecycler.setLayoutManager(new LinearLayoutManager(this));
-        binding.recipelistRecycler.setAdapter(recipeLinearListAdapter);
+        binding.recipelistRecycler.setAdapter(recipeMyListAdapter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         if (App.isServerAlive())
-            getRecipeList();
+            loadData();
         else {
             recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-            recipeLinearListAdapter.setNewData(recipeList);
+
+            recipeMyListAdapter.setNewData(recipeList);
         }
     }
 
-    void getRecipeList() {
-        recipeService.getRecipeByUserID(userID,"latest")
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_recipe_add, menu);
 
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
+        addMenu = menu.findItem(R.id.menu_recipe_add);
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_recipe_add)
+            startActivity(new Intent(this, RecipeMakeActivity.class));
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    void loadData() {
+        compositeDisposable.add(
+                recipeService.getRecipeByUserID(userID, "latest")
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
                             recipeList = response.body();
-                            recipeLinearListAdapter.setNewData(recipeList);
-                            recipeLinearListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipelistRecycler.getParent());
-                        }
-                    }
-                });
+                            recipeMyListAdapter.setNewData(recipeList);
+                            recipeMyListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipelistRecycler.getParent());
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
+    }
+
+    void cancelLikeRecipe(int recipeid) {
+        compositeDisposable.add(
+                recipeService.setLikeRecipe(recipeid, userID, -1)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            loadData();
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 }

@@ -23,14 +23,10 @@ import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
-import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
 import retrofit2.Call;
 import retrofit2.Response;
 

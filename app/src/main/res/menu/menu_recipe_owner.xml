@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_post_owner_revise"
+        android:id="@+id/menu_recipe_owner_revise"
         android:title="수정"
         android:icon="@drawable/ic_create_white"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/menu_post_owner_delete"
-        android:title="삭제"
+        android:id="@+id/menu_recipe_owner_delete"
         android:icon="@drawable/ic_delete_white"
+        android:title="삭제"
         app:showAsAction="ifRoom" />
 </menu>

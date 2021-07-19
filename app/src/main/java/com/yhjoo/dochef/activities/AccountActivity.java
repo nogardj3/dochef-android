@@ -23,20 +23,13 @@ import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.AAccountBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.UserBrief;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.functions.Consumer;
-import retrofit2.Call;
 import retrofit2.HttpException;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class AccountActivity extends BaseActivity {
     private final int RC_SIGN_IN = 9001;
@@ -51,11 +44,6 @@ public class AccountActivity extends BaseActivity {
 
     Mode current_mode = Mode.SIGNIN;
     String idToken;
-
-    /*
-        TODO
-        FindPW 구현
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

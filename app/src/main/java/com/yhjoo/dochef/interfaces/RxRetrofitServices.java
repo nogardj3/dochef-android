@@ -16,7 +16,6 @@ import com.yhjoo.dochef.model.UserDetail;
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.core.Single;
-import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -33,7 +32,10 @@ public class RxRetrofitServices {
         Single<Response<ArrayList<FAQ>>> getFAQ();
 
         @GET("tos")
-        Single<Response<String>>  getTOS();
+        Single<Response<JsonObject>>  getTOS();
+
+        @GET("alive")
+        Single<Response<JsonObject>>  checkAlive();
     }
 
     public interface AccountService {
@@ -102,7 +104,7 @@ public class RxRetrofitServices {
         Single<Response<JsonObject>> setLikeRecipe(@Field("recipe_id") int recipeId, @Field("user_id") String userId , @Field("like") int like);
 
         @FormUrlEncoded
-        @POST("review/create")
+        @POST("recipe/create")
         Single<Response<JsonObject>> createRecipe(@Field("user_id") String userID,
                                       @Field("recipe_name") String recipeName,
                                       @Field("recipe_img") String recipeImg,
@@ -113,9 +115,6 @@ public class RxRetrofitServices {
                                       @Field("tags") String[] tags,
                                       @Field("phase") RecipePhase[] phases);
 
-        @FormUrlEncoded
-        @POST("review/delete")
-        Single<Response<JsonObject>> deleteRecipe(@Field("recipe_id") int recipeId);
     }
 
     public interface ReviewService {

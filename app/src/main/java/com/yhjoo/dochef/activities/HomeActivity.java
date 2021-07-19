@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -15,6 +17,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -46,7 +49,7 @@ public class HomeActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
     private final int EXTRA_RQ_PICKFROMGALLERY = 200;
 
-    private enum MODE {MY, USER}
+    private enum MODE {OWNER, OTHERS}
 
     private enum OPERATION {VIEW, REVISE}
 
@@ -57,6 +60,9 @@ public class HomeActivity extends BaseActivity {
     RxRetrofitServices.PostService postService;
     RecipeHorizontalHomeAdapter recipeHorizontalHomeAdapter;
     PostListAdapter postListAdapter;
+
+    MenuItem reviseMenu;
+    MenuItem okMenu;
 
     ArrayList<Recipe> recipeList;
     ArrayList<Post> postList;
@@ -70,9 +76,7 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
-        revise 기능
-        디자인
-            내 홈이면 수정 버튼 없애기, 툴바 메뉴에 수정 추가, 수정 완료 추가
+        revise - nickname, contents = dialog, image = selectable dialog
     */
 
     @Override
@@ -92,10 +96,10 @@ public class HomeActivity extends BaseActivity {
         String userID = Utils.getUserBrief(this).getUserID();
         if (getIntent().getStringExtra("userID") == null
                 || getIntent().getStringExtra("userID").equals(userID)) {
-            currentMode = MODE.MY;
+            currentMode = MODE.OWNER;
             currentUserID = userID;
         } else {
-            currentMode = MODE.USER;
+            currentMode = MODE.OTHERS;
             currentUserID = getIntent().getStringExtra("userID");
         }
 
@@ -133,7 +137,7 @@ public class HomeActivity extends BaseActivity {
         super.onResume();
 
         if (App.isServerAlive()) {
-            refreshData();
+            loadList();
         } else {
             userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
             recipeList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
@@ -143,6 +147,28 @@ public class HomeActivity extends BaseActivity {
             recipeHorizontalHomeAdapter.setNewData(recipeList);
             postListAdapter.setNewData(postList);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (currentMode == MODE.OWNER) {
+            getMenuInflater().inflate(R.menu.menu_home_owner, menu);
+
+            reviseMenu = menu.findItem(R.id.menu_home_owner_revise);
+            okMenu = menu.findItem(R.id.menu_home_owner_revise_ok);
+        }
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_home_owner_revise) {
+            changeOperation();
+        } else if (item.getItemId() == R.id.menu_home_owner_revise_ok) {
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -157,12 +183,9 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        if (currentOperation == OPERATION.REVISE) {
-            currentOperation = OPERATION.VIEW;
-
-            binding.homeReviseBtn.setText("프로필 수정");
-            binding.homeRevisegroup.setVisibility(View.GONE);
-        } else
+        if (currentOperation == OPERATION.REVISE)
+            changeOperation();
+        else
             super.onBackPressed();
     }
 
@@ -189,7 +212,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    void refreshData() {
+    void loadList() {
         compositeDisposable.add(
                 userService.getUserDetail(currentUserID)
                         .flatMap((Function<Response<UserDetail>, Single<Response<ArrayList<Recipe>>>>)
@@ -208,19 +231,16 @@ public class HomeActivity extends BaseActivity {
                         .subscribe(response -> {
                             postList = response.body();
 
-                            // UserInfo
                             setUserInfo();
 
-                            // RecipeList
                             recipeHorizontalHomeAdapter.setNewData(recipeList);
                             recipeHorizontalHomeAdapter.setEmptyView(
                                     R.layout.rv_empty_recipe, (ViewGroup) binding.homeRecipeRecycler.getParent());
 
-                            // PostList
                             postListAdapter.setNewData(postList);
                             postListAdapter.setEmptyView(
                                     R.layout.rv_empty_post, (ViewGroup) binding.homePostRecycler.getParent());
-                        }, Throwable::printStackTrace)
+                        }, RxRetrofitBuilder.defaultConsumer())
         );
     }
 
@@ -234,12 +254,11 @@ public class HomeActivity extends BaseActivity {
         binding.homeFollowercount.setText(Integer.toString(userDetailInfo.getFollowerCount()));
         binding.homeFollowingcount.setText(Integer.toString(userDetailInfo.getFollowingCount()));
 
-        binding.homeFollowBtn.setVisibility(currentMode == MODE.USER ? View.VISIBLE : View.GONE);
+        binding.homeFollowBtn.setVisibility(currentMode == MODE.OTHERS ? View.VISIBLE : View.GONE);
 
         binding.homeUserimgRevise.setOnClickListener(this::reviseProfileImage);
-        binding.homeNicknameRevise.setOnClickListener(this::reviseNickname);
-        binding.homeUserimgRevise.setOnClickListener(this::reviseContents);
-        binding.homeReviseBtn.setOnClickListener(this::changeOperation);
+        binding.homeNicknameRevise.setOnClickListener(this::clickReviseNickname);
+        binding.homeProfiletextRevise.setOnClickListener(this::clickReviseContents);
         binding.homeRecipewrapper.setOnClickListener((v -> {
             Intent intent = new Intent(HomeActivity.this, RecipeMyListActivity.class)
                     .putExtra("userID", userDetailInfo.getUserID());
@@ -260,68 +279,82 @@ public class HomeActivity extends BaseActivity {
     }
 
 
-    void changeOperation(View v) {
+    void changeOperation() {
         if (currentOperation == OPERATION.VIEW) {
             currentOperation = OPERATION.REVISE;
-            binding.homeReviseBtn.setText("변경 완료");
             binding.homeRevisegroup.setVisibility(View.VISIBLE);
         } else if (currentOperation == OPERATION.REVISE) {
             currentOperation = OPERATION.VIEW;
             binding.homeRevisegroup.setVisibility(View.GONE);
+
+            createConfirmDialog(this,
+                    null, "변경이 취소됩니다.",
+                    (dialog1, which) -> {
+                        changeOperation();
+                        dialog1.dismiss();
+                    }).show();
         }
     }
 
     void reviseProfileImage(View v) {
         if (currentOperation == OPERATION.REVISE) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setItems(new String[]{"이미지 변경", "삭제"}, (dialog, which) -> {
-                if (which == 0) {
-                    final String[] permissions = {
-                            Manifest.permission.READ_EXTERNAL_STORAGE
-                    };
+            MaterialDialog dialog = new MaterialDialog.Builder(this)
+                    .items("이미지 변경", "삭제")
+                    .itemsColorRes(R.color.black)
+                    .itemsCallback((dialog1, itemView, position, text) -> {
+                        if (position == 0) {
+                            final String[] permissions = {
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                            };
 
-                    if (Utils.checkPermission(HomeActivity.this, permissions)) {
-                        mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
+                            if (Utils.checkPermission(HomeActivity.this, permissions)) {
+                                mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
 
-                        Intent intent = new Intent(Intent.ACTION_PICK)
-                                .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                                .putExtra("crop", "true")
-                                .putExtra("aspectX", 1)
-                                .putExtra("aspectY", 1)
-                                .putExtra("scale", true)
-                                .putExtra("output", mImageUri);
-                        startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
-                    } else
-                        ActivityCompat.requestPermissions(HomeActivity.this, permissions, CODE_PERMISSION);
-                } else if (which == 1) {
-                    mImageUri = null;
-                    binding.homeUserimg.setImageDrawable(null);
-                }
-                dialog.dismiss();
-            }).show();
+                                Intent intent = new Intent(Intent.ACTION_PICK)
+                                        .setType(MediaStore.Images.Media.CONTENT_TYPE)
+                                        .putExtra("crop", "true")
+                                        .putExtra("aspectX", 1)
+                                        .putExtra("aspectY", 1)
+                                        .putExtra("scale", true)
+                                        .putExtra("output", mImageUri);
+                                startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
+                            } else
+                                ActivityCompat.requestPermissions(HomeActivity.this, permissions, CODE_PERMISSION);
+                        } else if (position == 1) {
+                            mImageUri = null;
+                            binding.homeUserimg.setImageDrawable(null);
+                        }
+                        dialog1.dismiss();
+                    }).build();
+            dialog.show();
         }
     }
 
-    void reviseNickname(View v) {
+    void clickReviseNickname(View v) {
         if (currentOperation == OPERATION.REVISE) {
             AppCompatEditText editText = (AppCompatEditText) getLayoutInflater().inflate(R.layout.v_home_nickname, null);
             editText.setHint(binding.homeNickname.getText());
-            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setTitle("닉네임 변경")
-                    .setView(editText)
-                    .setPositiveButton("확인", (dialog, which) -> {
+
+            // TODO
+            // 이거 인풋 다이얼로그
+            createConfirmDialog(this,
+                    null, "닉네임을 변경합니다.",
+                    (dialog1, which) -> {
                         binding.homeNickname.setText(editText.getText().toString());
                         App.getAppInstance().showToast("변경되었습니다.");
-                        dialog.dismiss();
-                    })
-                    .setNegativeButton("취소", (dialog, which) -> dialog.dismiss()).show();
+                        dialog1.dismiss();
+                    }).show();
         }
     }
 
-    void reviseContents(View v) {
+    void clickReviseContents(View v) {
         if (currentOperation == OPERATION.REVISE) {
             AppCompatEditText editText = (AppCompatEditText) getLayoutInflater().inflate(R.layout.v_home_profile, null);
             editText.setHint(binding.homeProfiletext.getText());
+
+
+            // TODO
+            // 이거 인풋 다이얼로그
             AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
             builder.setTitle("프로필 변경")
                     .setView(editText)

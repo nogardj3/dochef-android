@@ -9,22 +9,14 @@ import android.view.ViewGroup;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.HomeActivity;
-import com.yhjoo.dochef.activities.MainActivity;
-import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeMyListActivity;
-import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.activities.SettingActivity;
-import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
-import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter;
-import com.yhjoo.dochef.databinding.FMainInitBinding;
 import com.yhjoo.dochef.databinding.FMainUserBinding;
 import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
@@ -32,12 +24,6 @@ import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.core.Observable;
-import retrofit2.Call;
 import retrofit2.Response;
 
 public class MainUserFragment extends Fragment {

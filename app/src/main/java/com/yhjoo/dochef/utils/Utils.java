@@ -20,6 +20,12 @@ import static android.util.Patterns.EMAIL_ADDRESS;
 
 
 public class Utils {
+    public enum EMAIL_VALIDATE {VALID, NODATA, INVALID}
+
+    public enum PW_VALIDATE {VALID, NODATA, SHORT, LONG, INVALID}
+
+    public enum NICKNAME_VALIDATE {VALID, NODATA, SHORT, LONG, INVALID}
+
     public static boolean checkPermission(Context context, String[] RequirePermissions) {
         for (String a : RequirePermissions)
             if (ContextCompat.checkSelfPermission(context, a) != PackageManager.PERMISSION_GRANTED)
@@ -39,12 +45,6 @@ public class Utils {
         return gson.fromJson(mSharedPreferences.getString(
                 context.getString(R.string.SP_USERINFO), null), UserBrief.class);
     }
-
-    public enum EMAIL_VALIDATE {VALID, NODATA, INVALID}
-
-    public enum PW_VALIDATE {VALID, NODATA, SHORT, LONG, INVALID}
-
-    public enum NICKNAME_VALIDATE {VALID, NODATA, SHORT, LONG, INVALID}
 
     public static EMAIL_VALIDATE emailValidation(String email) {
         if (email.length() == 0)

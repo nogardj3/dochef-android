@@ -6,12 +6,10 @@ import android.text.Html;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.ATosBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class TOSActivity extends BaseActivity {
     ATosBinding binding;
@@ -24,19 +22,24 @@ public class TOSActivity extends BaseActivity {
 
         setSupportActionBar(binding.toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         if (App.isServerAlive()) {
-            RetrofitServices.BasicService basicService =
-                    RetrofitBuilder.create(this, RetrofitServices.BasicService.class);
+            RxRetrofitServices.BasicService basicService =
+                    RxRetrofitBuilder.create(this, RxRetrofitServices.BasicService.class);
 
-            basicService.getTOS()
-                    .enqueue(new BasicCallback<String>(this) {
-                        @Override
-                        public void onResponse(Call<String> call, Response<String> res) {
-                            String tos_text = res.body();
-                            binding.tosText.setText(Html.fromHtml(tos_text, Html.FROM_HTML_MODE_LEGACY));
-                        }
-                    });
+            compositeDisposable.add(
+                    basicService.getTOS()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(response -> {
+                                String tos_text = response.body().get("message").toString();
+                                binding.tosText.setText(Html.fromHtml(tos_text, Html.FROM_HTML_MODE_LEGACY));
+                            }, RxRetrofitBuilder.defaultConsumer())
+            );
         } else
             binding.tosText.setText(Html.fromHtml(getString(R.string.tos_text_dummy), Html.FROM_HTML_MODE_LEGACY));
     }

@@ -1,25 +1,21 @@
 package com.yhjoo.dochef.activities;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.mikhaellopez.rxanimation.RxAnimation;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.ASplashBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.utils.ChefAuth;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import retrofit2.Call;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class SplashActivity extends BaseActivity {
     ASplashBinding binding;
@@ -30,10 +26,6 @@ public class SplashActivity extends BaseActivity {
 
     /*
         TODO
-        check process reactiveX 사용하기
-        디자인
-            애니메이션 개유치함 -> 로고 빼고 텍스트스타일, fading정도만
-
     */
 
     @Override
@@ -43,6 +35,7 @@ public class SplashActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+
 
         checkServerAlive();
         checkIsAutoLogin();
@@ -60,20 +53,11 @@ public class SplashActivity extends BaseActivity {
 
         ViewAnimator.animate(binding.splashLogo)
                 .alpha(0.0f, 1.0f)
-                .duration(200)
-                .andAnimate(binding.splashLogo)
-                .translationY(-1000, 0)
-                .duration(200)
-                .decelerate()
-                .thenAnimate(binding.splashLogo)
-                .swing()
-                .duration(200)
-                .thenAnimate(binding.splashLogo2)
-                .alpha(0.0f, 1.0f)
                 .accelerate()
-                .duration(200)
-                .thenAnimate(binding.splashLogo2)
-                .duration(200)
+                .duration(500)
+                .thenAnimate(binding.splashLogo)
+                .alpha(1.0f, 1.0f)
+                .duration(300)
                 .onStop(this::goWhere)
                 .start();
     }
@@ -96,33 +80,21 @@ public class SplashActivity extends BaseActivity {
     }
 
     void checkServerAlive() {
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(500, TimeUnit.MILLISECONDS)
-                .build();
+        RxRetrofitServices.BasicService basicService =
+                RxRetrofitBuilder.create(this, RxRetrofitServices.BasicService.class);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(getString(R.string.server_url))
-                .client(okHttpClient)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-
-        RetrofitServices.BasicService basicService = retrofit.create(RetrofitServices.BasicService.class);
-
-        basicService.getTOS()
-                .enqueue(new BasicCallback<String>(this) {
-                    @Override
-                    public void onResponse(Call<String> call, Response<String> res) {
-                        App.setIsServerAlive(true);
-                        serverAlive = true;
-                    }
-
-                    @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        t.printStackTrace();
-                        App.setIsServerAlive(false);
-                        serverAlive = false;
-                    }
-                });
+        compositeDisposable.add(
+                basicService.checkAlive()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response -> {
+                    App.setIsServerAlive(true);
+                    serverAlive = true;
+                },throwable -> {
+                    throwable.printStackTrace();
+                    App.setIsServerAlive(false);
+                    serverAlive = false;
+                })
+        );
     }
 
     void checkIsAutoLogin() {

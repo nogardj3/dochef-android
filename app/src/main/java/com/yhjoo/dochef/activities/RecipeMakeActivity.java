@@ -5,7 +5,7 @@ import android.os.Bundle;
 import com.yhjoo.dochef.databinding.ARecipemakeBinding;
 
 public class RecipeMakeActivity extends BaseActivity {
-    enum OPERATION {WRITE, REVISE}
+    enum MODE {WRITE, REVISE}
 
     ARecipemakeBinding binding;
 

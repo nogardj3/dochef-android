@@ -17,5 +17,6 @@ public class ReviewListAdapter extends BaseQuickAdapter<Review, BaseViewHolder> 
         helper.setText(R.id.review_contents, item.getContents());
         helper.setText(R.id.review_datetext, Utils.convertMillisToText(item.getDateTime()));
         helper.setRating(R.id.review_rating, item.getRating());
+        helper.addOnClickListener(R.id.review_user_wrapper);
     }
 }

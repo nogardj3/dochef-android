@@ -11,27 +11,22 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
-import com.google.gson.JsonObject;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
-import com.yhjoo.dochef.utils.BasicCallback;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class PostWriteActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
@@ -41,7 +36,7 @@ public class PostWriteActivity extends BaseActivity {
 
     APostwriteBinding binding;
     StorageReference storageReference;
-    RetrofitServices.PostService postService;
+    RxRetrofitServices.PostService postService;
 
     Uri mImageUri;
     MODE current_mode = MODE.WRITE;
@@ -51,7 +46,7 @@ public class PostWriteActivity extends BaseActivity {
 
     /*
         TODO
-        REVISE 시 최초 통신해서 데이터 가져오는걸로
+        upload image
     */
 
     @Override
@@ -62,7 +57,7 @@ public class PostWriteActivity extends BaseActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
-        postService = RetrofitBuilder.create(this, RetrofitServices.PostService.class);
+        postService = RxRetrofitBuilder.create(this, RxRetrofitServices.PostService.class);
 
         userID = Utils.getUserBrief(this).getUserID();
         current_mode = (MODE) getIntent().getSerializableExtra("MODE");
@@ -75,17 +70,16 @@ public class PostWriteActivity extends BaseActivity {
 
             if (getIntent().getStringExtra("postImg") != null) {
                 ImageLoadUtil.loadPostImage(
-                        this,getIntent().getStringExtra("postImg"),binding.postwritePostimg);
+                        this, getIntent().getStringExtra("postImg"), binding.postwritePostimg);
             }
 
-            ArrayList<String> tags = (ArrayList<String>) getIntent().getSerializableExtra("tags");
-            binding.postwriteTags.setTags((String[]) tags.toArray());
+            binding.postwriteTags.setTags(getIntent().getStringArrayExtra("tags"));
         }
         setSupportActionBar(binding.postwriteToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         binding.postwritePostimgAdd.setOnClickListener(this::addImage);
-        binding.postwriteOk.setOnClickListener(this::createOrUpdatePost);
+        binding.postwriteOk.setOnClickListener(this::doneClicked);
     }
 
     @Override
@@ -142,7 +136,7 @@ public class PostWriteActivity extends BaseActivity {
             ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
     }
 
-    void createOrUpdatePost(View v) {
+    void doneClicked(View v) {
         ArrayList<String> tags = new ArrayList<>();
         tags.addAll(binding.postwriteTags.getTags());
 
@@ -151,54 +145,40 @@ public class PostWriteActivity extends BaseActivity {
             image_url = String.format(getString(R.string.format_upload_file),
                     userID, Long.toString(System.currentTimeMillis()));
         }
-        if (current_mode == MODE.WRITE) {
+
+        if (image_url != null && !image_url.equals("")) {
             StorageReference ref = storageReference.child(image_url);
             ref.putFile(mImageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            postService.createPost(
-                                    userID,
-                                    image_url,
-                                    binding.postwriteContents.getText().toString(),
-                                    System.currentTimeMillis(),
-                                    tags)
-                                    .enqueue(new BasicCallback<JsonObject>(PostWriteActivity.this) {
-                                        @Override
-                                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                                            super.onResponse(call, response);
-
-                                            if (response.code() == 500) {
-                                                App.getAppInstance().showToast("post 등록 실패");
-                                            } else {
-                                                App.getAppInstance().showToast("글이 등록되었습니다.");
-                                                finish();
-                                            }
-                                        }
-                                    });
-                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        createORupdatePost(tags);
                     });
-        } else {
-            postService.updatePost(
-                    postID,
-                    image_url,
-                    binding.postwriteContents.getText().toString(),
-                    System.currentTimeMillis(),
-                    tags)
-                    .enqueue(new BasicCallback<JsonObject>(this) {
-                        @Override
-                        public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                            super.onResponse(call, response);
+        }
+        else
+            createORupdatePost(tags);
+    }
 
-                            if (response.code() == 500) {
-                                App.getAppInstance().showToast("comment 가져오기 실패");
-                            } else {
+    void createORupdatePost(ArrayList<String> tags){
+        if (current_mode == MODE.WRITE)
+            compositeDisposable.add(
+                    postService.createPost(userID, image_url,
+                            binding.postwriteContents.getText().toString(),
+                            System.currentTimeMillis(), tags)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(response -> {
+                                App.getAppInstance().showToast("글이 등록되었습니다.");
+                                finish();
+                            }, RxRetrofitBuilder.defaultConsumer())
+            );
+        else
+            compositeDisposable.add(
+                    postService.updatePost(postID, image_url,
+                            binding.postwriteContents.getText().toString(),
+                            System.currentTimeMillis(), tags)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(response -> {
                                 App.getAppInstance().showToast("업데이트 되었습니다.");
                                 finish();
-                            }
-                        }
-                    });
-
-        }
+                            }, RxRetrofitBuilder.defaultConsumer())
+            );
     }
 }

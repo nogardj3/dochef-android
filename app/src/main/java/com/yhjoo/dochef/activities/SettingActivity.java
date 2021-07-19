@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 
@@ -9,7 +8,6 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.BuildConfig;
 import com.yhjoo.dochef.databinding.ASettingBinding;
 import com.yhjoo.dochef.utils.ChefAuth;
-import com.yhjoo.dochef.utils.Utils;
 
 public class SettingActivity extends BaseActivity {
     ASettingBinding binding;

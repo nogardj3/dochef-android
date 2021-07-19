@@ -37,6 +37,9 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
     public boolean showNew = false;
     public boolean showYours = false;
 
+    // TODO
+    // 이거 좀 아닌듯
+
     public RecipeMultiAdapter(List<MultiItemRecipe> data, RetrofitServices.RecipeService recipeService) {
         super(data);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);

@@ -2,14 +2,12 @@ package com.yhjoo.dochef.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
@@ -161,10 +159,9 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        builder.setMessage("종료하시겠습니까?")
-                .setPositiveButton("종료", (dialog, which) -> {
+        createConfirmDialog(this,
+                null, "종료하시겠습니까?",
+                (dialog, which) -> {
                     Bundle bundle = new Bundle();
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_terminated));
                     bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_terminated));
@@ -173,9 +170,7 @@ public class MainActivity extends BaseActivity {
 
                     dialog.dismiss();
                     finish();
-                })
-                .setNegativeButton("취소", (dialog, which) -> dialog.dismiss())
-                .show();
+                }).show();
     }
 
 

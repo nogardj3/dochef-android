@@ -35,6 +35,16 @@
         app:layout_constraintTop_toTopOf="@+id/review_userimg"
         tools:text="닉네임" />
 
+    <View
+        android:id="@+id/review_user_wrapper"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:foreground="?selectableItemBackground"
+        app:layout_constraintTop_toTopOf="@+id/review_userimg"
+        app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
+        app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
+        app:layout_constraintRight_toRightOf="@+id/review_nickname"/>
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/review_datetext"
         android:layout_width="wrap_content"

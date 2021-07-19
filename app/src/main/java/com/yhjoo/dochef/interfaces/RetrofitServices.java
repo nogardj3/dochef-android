@@ -31,7 +31,7 @@ public class RetrofitServices {
         Call<ArrayList<FAQ>> getFAQ();
 
         @GET("tos")
-        Call<String> getTOS();
+        Call<JsonObject> getTOS();
     }
 
     public interface AccountService {

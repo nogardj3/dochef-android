@@ -59,6 +59,17 @@
             app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg"
             tools:text="닉네임" />
 
+        <View
+            android:id="@+id/recipedetail_user_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg"
+            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
+            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_userimg"
+            app:layout_constraintRight_toRightOf="@+id/recipedetail_nickname"/>
+
+
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipedetail_explain"
             android:layout_width="0dp"

@@ -23,12 +23,8 @@ import com.yhjoo.dochef.utils.Utils;
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
-import io.reactivex.rxjava3.annotations.NonNull;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.functions.Function;
-import io.reactivex.rxjava3.observers.DisposableSingleObserver;
-import io.reactivex.rxjava3.schedulers.Schedulers;
 import retrofit2.Response;
 
 public class FollowListActivity extends BaseActivity {
@@ -93,7 +89,7 @@ public class FollowListActivity extends BaseActivity {
                             .subscribe(response->{
                                 userList = response.body();
                                 setListData();
-                            }, Throwable::printStackTrace)
+                            }, RxRetrofitBuilder.defaultConsumer())
             );
         }
         else {
@@ -130,7 +126,7 @@ public class FollowListActivity extends BaseActivity {
                         .subscribe(response->{
                             userList = response.body();
                             setListData();
-                        }, Throwable::printStackTrace)
+                        }, RxRetrofitBuilder.defaultConsumer())
         );
     }
 

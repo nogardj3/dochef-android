@@ -42,7 +42,7 @@ public class MainInitFragment extends Fragment {
 
     /*
         TODO
-        나중에 sampledb 만들어지면 밑에거로 바꾸기
+        나중에 sampledb 만들어지면 TODO로 바꾸기
     */
 
     @Override
@@ -59,9 +59,14 @@ public class MainInitFragment extends Fragment {
         binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
         binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
         binding.mainRecommendText.setText(Html.fromHtml(
-                String.format(getString(R.string.format_recommend_title),"Chef"),Html.FROM_HTML_MODE_LEGACY));
+                String.format(getString(R.string.format_recommend_title), "Chef"), Html.FROM_HTML_MODE_LEGACY));
         binding.mainRecommendMore.setOnClickListener(
-                v -> startActivity(new Intent(getContext(), RecipeThemeActivity.class)));
+                v -> {
+                    //TODO
+//                    Intent intent = new Intent(getContext(), RecipeThemeActivity.class)
+//                            .putExtra("userID",recipeList.get(0).getUserID());
+                    startActivity(new Intent(getContext(), RecipeThemeActivity.class));
+                });
 
         Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -75,7 +80,7 @@ public class MainInitFragment extends Fragment {
         recipeHorizontalAdapter.setOnItemClickListener((adapter, view1, position)
                 -> {
             Intent intent = new Intent(getContext(), RecipeDetailActivity.class)
-                .putExtra("recipeID", recipeList.get(position).getRecipeID());
+                    .putExtra("recipeID", recipeList.get(position).getRecipeID());
             startActivity(intent);
         });
         recipeHorizontalAdapter.setNewData(recipeList);
@@ -119,6 +124,8 @@ public class MainInitFragment extends Fragment {
 //                            App.getAppInstance().showToast("뭔가에러");
 //                        else {
 //                            recipeList = response.body();
+//        Html.fromHtml(
+//                String.format(getString(R.string.format_recommend_title),recipeList.get(0).getNickname()),Html.FROM_HTML_MODE_LEGACY);
 //                            recipeHorizontalAdapter.setNewData(recipeList);
 //                        }
 //                    }

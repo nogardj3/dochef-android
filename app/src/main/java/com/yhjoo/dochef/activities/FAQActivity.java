@@ -42,22 +42,27 @@ public class FAQActivity extends BaseActivity {
         FAQListAdapter = new FAQListAdapter(faqList);
         binding.faqRecycler.setAdapter(FAQListAdapter);
         binding.faqRecycler.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         if (App.isServerAlive()) {
             compositeDisposable.add(
                     basicService.getFAQ()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
-                                setListData(response.body());
-                            }, Throwable::printStackTrace)
+                                loadList(response.body());
+                            }, RxRetrofitBuilder.defaultConsumer())
             );
         } else {
             ArrayList<FAQ> faqs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_FAQ));
-            setListData(faqs);
+            loadList(faqs);
         }
     }
 
-    void setListData(ArrayList<FAQ> resList) {
+    void loadList(ArrayList<FAQ> resList) {
         for (FAQ item : resList) {
             ExpandTitle title = new ExpandTitle(item.title);
             title.addSubItem(new ExpandContents(item.contents, 0));

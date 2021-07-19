@@ -75,7 +75,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
         String[] ingredients = {"김치1", "김치2"};
         String[] tags = {"태그1", "태그2", "태그3", "태그4", "태그5"};
-        binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
+//        binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
 
         recipePlays = new ArrayList<>(Arrays.asList(
                 new RecipePlay(
@@ -183,8 +183,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
                 if (timerSet) {
                     timerSet = false;
-                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
-                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
+//                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
+//                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
                 }
             }
 
@@ -270,8 +270,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 .duration(500)
                 .onStop(() -> {
                     binding.playrecipeTimerFab.setClickable(true);
-                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white_off);
-                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorSecondary, null));
+//                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white_off);
+//                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorSecondary, null));
                 })
                 .start();
         countDownTimer = new CountDownTimer(5000, 1000) {
@@ -310,8 +310,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 .duration(500)
                 .onStop(() -> {
                     binding.playrecipeTimerFab.setClickable(true);
-                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
-                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
+//                    binding.playrecipeTimerFab.setImageResource(R.drawable.ic_alarm_white);
+//                    binding.playrecipeTimerFab.setColorNormal(getResources().getColor(R.color.colorPrimary, null));
                 })
                 .start();
 

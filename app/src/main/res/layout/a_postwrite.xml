@@ -51,11 +51,10 @@
                 android:layout_height="36dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="8dp"
-                android:background="@drawable/bg_add_btn"
-                android:padding="4dp"
+                app:tint="@color/grey_text"
                 app:layout_constraintBottom_toBottomOf="@+id/postwrite_postimg"
                 app:layout_constraintRight_toRightOf="parent"
-                app:srcCompat="@drawable/fab_add" />
+                app:srcCompat="@drawable/ic_add_circle_white" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/postwrite_contents_text"

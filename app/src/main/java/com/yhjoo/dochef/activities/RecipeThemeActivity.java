@@ -11,16 +11,16 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.RecipeMultiThemeAdapter;
 import com.yhjoo.dochef.databinding.ARecipethemeBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.MultiItemTheme;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Response;
 
 public class RecipeThemeActivity extends BaseActivity {
@@ -30,7 +30,7 @@ public class RecipeThemeActivity extends BaseActivity {
     public enum MODE {POPULAR, TAG}
 
     ARecipethemeBinding binding;
-    RetrofitServices.RecipeService recipeService;
+    RxRetrofitServices.RecipeService recipeService;
     RecipeMultiThemeAdapter recipeMultiThemeAdapter;
 
     ArrayList<MultiItemTheme> recipeListItems = new ArrayList<>();
@@ -40,9 +40,6 @@ public class RecipeThemeActivity extends BaseActivity {
 
     /*
         TODO
-        recommend에서 넘어옴
-        recommend는 10개까지만, 여기는 다보여줌
-        recommend 디자인에 + 하기
     */
 
     @Override
@@ -62,7 +59,7 @@ public class RecipeThemeActivity extends BaseActivity {
             tagName = getIntent().getStringExtra("tag");
         }
 
-        recipeService = RetrofitBuilder.create(this, RetrofitServices.RecipeService.class);
+        recipeService = RxRetrofitBuilder.create(this, RxRetrofitServices.RecipeService.class);
 
         recipeMultiThemeAdapter = new RecipeMultiThemeAdapter(recipeListItems);
         recipeMultiThemeAdapter.setSpanSizeLookup((gridLayoutManager, position) -> recipeListItems.get(position).getSpanSize());
@@ -77,11 +74,15 @@ public class RecipeThemeActivity extends BaseActivity {
         binding.recipethemeRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recipethemeRecycler.setAdapter(recipeMultiThemeAdapter);
 
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
         if (App.isServerAlive()){
-            if(currentMode == MODE.POPULAR)
-                getRecipeList();
-            else
-                getRecipeListbyTag();
+            loadData();
         }
         else {
             ArrayList<Recipe> arrayList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
@@ -95,17 +96,22 @@ public class RecipeThemeActivity extends BaseActivity {
         }
     }
 
-    void getRecipeList() {
-        recipeService.getRecipes("popular")
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
+    void loadData(){
+        Single<Response<ArrayList<Recipe>>> recipeSingle;
 
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
+        if(currentMode == MODE.POPULAR)
+            recipeSingle = recipeService.getRecipes("popular")
+                    .observeOn(AndroidSchedulers.mainThread());
+        else
+            recipeSingle = recipeService.getRecipeByTag(tagName, "popular")
+                    .observeOn(AndroidSchedulers.mainThread());
+
+        compositeDisposable.add(
+                recipeSingle
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
                             ArrayList<Recipe> arrayList = response.body();
+
                             for (int i = 0; i < arrayList.size(); i++) {
                                 if (i != 0 && i % 4 == 0)
                                     recipeListItems.add(new MultiItemTheme(VIEWHOLDER_AD, 2));
@@ -114,32 +120,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
                             recipeMultiThemeAdapter.setNewData(recipeListItems);
                             recipeMultiThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
-                        }
-                    }
-                });
-    }
-
-    void getRecipeListbyTag() {
-        recipeService.getRecipeByTag(tagName, "popular")
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
-
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
-                            ArrayList<Recipe> arrayList = response.body();
-                            for (int i = 0; i < arrayList.size(); i++) {
-                                if (i != 0 && i % 4 == 0)
-                                    recipeListItems.add(new MultiItemTheme(VIEWHOLDER_AD, 2));
-                                recipeListItems.add(new MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList.get(i)));
-                            }
-
-                            recipeMultiThemeAdapter.setNewData(recipeListItems);
-                            recipeMultiThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
-                        }
-                    }
-                });
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 }
