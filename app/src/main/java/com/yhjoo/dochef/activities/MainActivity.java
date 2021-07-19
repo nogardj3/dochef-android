@@ -48,10 +48,6 @@ public class MainActivity extends BaseActivity {
 
     String userID;
 
-    /*
-        TODO
-     */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

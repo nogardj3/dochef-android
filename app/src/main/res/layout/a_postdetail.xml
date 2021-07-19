@@ -171,6 +171,9 @@
                 android:layout_marginRight="12dp"
                 android:background="@drawable/bg_stroke_2dp"
                 android:lines="3"
+                android:theme="@style/BaseTheme.EditTextStyle"
+                android:textSize="16dp"
+                android:backgroundTint="@null"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toLeftOf="@+id/post_comment_ok"
                 app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler" />

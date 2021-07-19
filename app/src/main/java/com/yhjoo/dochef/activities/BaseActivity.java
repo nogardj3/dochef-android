@@ -20,16 +20,15 @@ public class BaseActivity extends AppCompatActivity {
     AppCompatDialog progressDialog;
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
+    public CompositeDisposable getCompositeDisposable() {
+        return compositeDisposable;
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         onBackPressed();
         return true;
     }
-
-    /*
-        TODO
-        Dialog 통일하기
-    */
 
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

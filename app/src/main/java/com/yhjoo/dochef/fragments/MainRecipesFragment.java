@@ -14,21 +14,20 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.BaseActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.adapter.RecipeMultiAdapter;
 import com.yhjoo.dochef.databinding.FMainRecipesBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-import retrofit2.Call;
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_AD;
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_ITEM;
@@ -38,7 +37,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
     public enum SORT {LATEST, POPULAR, RATING}
 
     FMainRecipesBinding binding;
-    RetrofitServices.RecipeService recipeService;
+    RxRetrofitServices.RecipeService recipeService;
     RecipeMultiAdapter recipeMultiAdapter;
 
     ArrayList<MultiItemRecipe> recipeListItems = new ArrayList<>();
@@ -47,7 +46,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     /*
         TODO
-        recommend 매운맛만되어있는데 나중에 바꾸기
+        multiadapter
     */
 
     @Override
@@ -55,11 +54,13 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         binding = FMainRecipesBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        recipeService = RetrofitBuilder.create(this.getContext(), RetrofitServices.RecipeService.class);
+        recipeService = RxRetrofitBuilder.create(this.getContext(),
+                RxRetrofitServices.RecipeService.class);
 
         binding.fRecipeSwipe.setOnRefreshListener(this);
         binding.fRecipeSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
-        recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems, recipeService);
+        recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems);
+        recipeMultiAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.fRecipeRecycler.getParent());
         recipeMultiAdapter.setShowNew(true);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
@@ -72,12 +73,25 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         binding.fRecipeRecycler.setAdapter(recipeMultiAdapter);
 
         recommend_tags = getResources().getStringArray(R.array.recommend_tags);
-        Random r = new Random();
+
+        return view;
+    }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(() -> getRecipeList(currentMode),1000);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
 
         if (App.isServerAlive())
             getRecipeList(currentMode);
         else {
-            ArrayList<Recipe> temp = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
+            ArrayList<Recipe> temp = DataGenerator.make(getResources(),
+                    getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
+            Random r = new Random();
 
             for (int i = 0; i < temp.size(); i++) {
                 if (i != 0 && i % 4 == 0) {
@@ -91,13 +105,6 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
             }
         }
-
-        return view;
-    }
-
-    @Override
-    public void onRefresh() {
-        new Handler().postDelayed(() -> getRecipeList(currentMode),1000);
     }
 
     void getRecipeList(SORT sort) {
@@ -109,15 +116,10 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         else if(sort == SORT.RATING)
             sortmode = "rating";
 
-        recipeService.getRecipes(sortmode)
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
-
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
+        ((BaseActivity) getActivity()).getCompositeDisposable().add(
+                recipeService.getRecipes(sortmode)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
                             ArrayList<Recipe> arrayList = response.body();
                             Random r = new Random();
 
@@ -139,9 +141,8 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                             recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fRecipeRecycler.getParent());
                             binding.fRecipeRecycler.getLayoutManager().scrollToPosition(0);
                             binding.fRecipeSwipe.setRefreshing(false);
-                        }
-                    }
-                });
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 
     public void changeSortMode(SORT sort) {

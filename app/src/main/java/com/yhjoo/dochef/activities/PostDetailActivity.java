@@ -51,11 +51,6 @@ public class PostDetailActivity extends BaseActivity {
     String userID;
     int postID;
 
-    /*
-        TODO
-        글쓴자의 Comment 수정
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -12,9 +12,27 @@
         <item name="alertDialogTheme">@style/BaseTheme.AlertDialogStyle</item>
     </style>
 
-    <style name="BaseTheme.EditTextStyle">
-        <item name="colorControlNormal">@color/white</item>
+    <style name="BaseTheme.EditTextStyle" parent="BaseTheme">
+        <!-- 버블컬러-->
         <item name="colorControlActivated">@color/colorPrimary</item>
+        <!-- 힌트컬러-->
+        <item name="android:textColorHint">@color/grey_text</item>
+        <!-- 드래그부분 컬러-->
+        <item name="android:textColorHighlight">@color/grey</item>
+        <!-- background 적용된 곳의 tint-->
+
+        <item name="background">@null</item>
+        <item name="android:background">@null</item>
+        <item name="backgroundColor">@null</item>
+        <item name="android:colorBackground">@null</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:backgroundTint">@null</item>
+        <item name="editTextBackground">@null</item>
+        <item name="android:editTextBackground">@null</item>
+
+
+        <item name="colorControlNormal">@android:color/holo_green_dark</item>
+        <item name="colorAccent">@android:color/holo_purple</item>
     </style>
 
     <style name="BaseTheme.EditTextStyle_post">

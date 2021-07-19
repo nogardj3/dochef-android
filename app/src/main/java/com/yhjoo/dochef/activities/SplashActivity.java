@@ -22,10 +22,6 @@ public class SplashActivity extends BaseActivity {
     boolean serverAlive = false;
     boolean isLogin = false;
 
-    /*
-        TODO
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

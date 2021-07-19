@@ -12,23 +12,24 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.BaseActivity;
 import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.SearchActivity;
 import com.yhjoo.dochef.adapter.SearchListAdapter;
 import com.yhjoo.dochef.databinding.FResultBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.SearchResult;
 import com.yhjoo.dochef.model.UserBrief;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import retrofit2.Response;
 
 public class ResultFragment extends Fragment {
@@ -39,8 +40,8 @@ public class ResultFragment extends Fragment {
     private final int VIEWHOLDER_ITEM_TAG = 4;
 
     FResultBinding binding;
-    RetrofitServices.UserService userService;
-    RetrofitServices.RecipeService recipeService;
+    RxRetrofitServices.UserService userService;
+    RxRetrofitServices.RecipeService recipeService;
     SearchListAdapter searchListAdapter;
 
     String keyword;
@@ -57,8 +58,8 @@ public class ResultFragment extends Fragment {
 
         type = getArguments().getInt("type");
 
-        userService = RetrofitBuilder.create(getContext(), RetrofitServices.UserService.class);
-        recipeService = RetrofitBuilder.create(getContext(), RetrofitServices.RecipeService.class);
+        userService = RxRetrofitBuilder.create(getContext(), RxRetrofitServices.UserService.class);
+        recipeService = RxRetrofitBuilder.create(getContext(), RxRetrofitServices.RecipeService.class);
 
         if (type == VIEWHOLDER_ITEM_USER)
             searchListAdapter = new SearchListAdapter(type, new ArrayList<>(), R.layout.li_follow);
@@ -72,12 +73,12 @@ public class ResultFragment extends Fragment {
                 case VIEWHOLDER_ITEM_INGREDIENT:
                 case VIEWHOLDER_ITEM_TAG:
                     Intent intent = new Intent(getContext(), RecipeDetailActivity.class)
-                        .putExtra("recipeID", ((Recipe)adapter.getData().get(position)).getRecipeID());
+                            .putExtra("recipeID", ((Recipe) adapter.getData().get(position)).getRecipeID());
                     startActivity(intent);
                     break;
                 case VIEWHOLDER_ITEM_USER:
                     Intent intent2 = new Intent(getContext(), HomeActivity.class)
-                        .putExtra("userID", ((UserBrief) ((SearchResult) adapter.getData().get(position)).getContent()).getUserID());
+                            .putExtra("userID", ((UserBrief) ((SearchResult) adapter.getData().get(position)).getContent()).getUserID());
                     Utils.log(((UserBrief) ((SearchResult) adapter.getData().get(position)).getContent()).getUserID());
                     startActivity(intent2);
                     break;
@@ -112,72 +113,40 @@ public class ResultFragment extends Fragment {
 
     void loadList() {
         if (App.isServerAlive()) {
-            if(type== searchListAdapter.VIEWHOLDER_ITEM_USER){
-                userService.getUserByNickname(keyword)
-                        .enqueue(new BasicCallback<ArrayList<UserBrief>>(getContext()) {
-                            @Override
-                            public void onResponse(Call<ArrayList<UserBrief>> call, Response<ArrayList<UserBrief>> response) {
-                                super.onResponse(call, response);
-                                if (response.code() == 500) {
-                                    App.getAppInstance().showToast("user list 가져오기 실패");
-                                } else {
+            if (type == searchListAdapter.VIEWHOLDER_ITEM_USER) {
+                ((BaseActivity) getActivity()).getCompositeDisposable().add(
+                        userService.getUserByNickname(keyword)
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(response -> {
                                     setUserItem(response.body());
                                     searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                                }
-                            }
-                        });
-            }
-            else if (type== searchListAdapter.VIEWHOLDER_ITEM_RECIPE_NAME){
-                recipeService.getRecipeByName(keyword,"popular")
-                        .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
-                            @Override
-                            public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                                super.onResponse(call, response);
-                                if (response.code() == 500) {
-                                    App.getAppInstance().showToast("user list 가져오기 실패");
-                                } else {
+
+                                }, RxRetrofitBuilder.defaultConsumer())
+                );
+            } else {
+                Single<Response<ArrayList<Recipe>>> selectedService;
+
+                if (type == searchListAdapter.VIEWHOLDER_ITEM_RECIPE_NAME)
+                    selectedService = recipeService.getRecipeByName(keyword, "popular");
+                else if (type == searchListAdapter.VIEWHOLDER_ITEM_TAG)
+                    selectedService = recipeService.getRecipeByTag(keyword, "popular");
+                else
+                    selectedService = recipeService.getRecipeByIngredient(keyword, "popular");
+
+                ((BaseActivity) getActivity()).getCompositeDisposable().add(
+                        selectedService
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(response -> {
                                     setRecipeItem(response.body());
                                     searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                                }
-                            }
-                        });
+                                }, RxRetrofitBuilder.defaultConsumer())
+                );
             }
-            else if (type== searchListAdapter.VIEWHOLDER_ITEM_TAG){
-                recipeService.getRecipeByTag(keyword,"popular")
-                        .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
-                            @Override
-                            public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                                super.onResponse(call, response);
-                                if (response.code() == 500) {
-                                    App.getAppInstance().showToast("user list 가져오기 실패");
-                                } else {
-                                    setRecipeItem(response.body());
-                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                                }
-                            }
-                        });
-            }
-            else if (type== searchListAdapter.VIEWHOLDER_ITEM_INGREDIENT){
-                recipeService.getRecipeByIngredient(keyword,"popular")
-                        .enqueue(new BasicCallback<ArrayList<Recipe>>(getContext()) {
-                            @Override
-                            public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                                super.onResponse(call, response);
-                                if (response.code() == 500) {
-                                    App.getAppInstance().showToast("user list 가져오기 실패");
-                                } else {
-                                    setRecipeItem(response.body());
-                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
-                                }
-                            }
-                        });
-            }
-        } else{
-            if(type == VIEWHOLDER_ITEM_USER){
+        } else {
+            if (type == VIEWHOLDER_ITEM_USER) {
                 ArrayList<UserBrief> userBriefs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_BRIEF));
                 setUserItem(userBriefs);
-            }
-            else{
+            } else {
                 ArrayList<Recipe> recipes = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
                 setRecipeItem(recipes);
             }
@@ -188,7 +157,7 @@ public class ResultFragment extends Fragment {
     void setRecipeItem(ArrayList<Recipe> recipes) {
         ArrayList<SearchResult> searchResults = new ArrayList<>();
         if (type == VIEWHOLDER_ITEM_USER) {
-        } else{
+        } else {
             for (int i = 0; i < recipes.size(); i++) {
                 if (i != 0 && i % 4 == 0)
                     searchResults.add(new SearchResult<>(VIEWHOLDER_AD));
@@ -197,7 +166,7 @@ public class ResultFragment extends Fragment {
         }
     }
 
-    void setUserItem(ArrayList<UserBrief> userBriefs){
+    void setUserItem(ArrayList<UserBrief> userBriefs) {
         ArrayList<SearchResult> searchResults = new ArrayList<>();
         for (int i = 0; i < userBriefs.size(); i++) {
             if (i != 0 && i % 4 == 0)

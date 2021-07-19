@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.net.SocketException;
 
 import io.reactivex.rxjava3.exceptions.UndeliverableException;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.plugins.RxJavaPlugins;
 
 
@@ -44,16 +43,6 @@ public class App extends Application {
         super.onCreate();
 
         Logger.addLogAdapter(new AndroidLogAdapter());
-
-        RxJavaPlugins.setErrorHandler(new Consumer<Throwable>() {
-                                          @Override
-                                          public void accept(Throwable throwable) throws Throwable {
-
-                                          }
-                                      }
-
-        );
-
 
         RxJavaPlugins.setErrorHandler(e -> {
             if (e instanceof UndeliverableException) {

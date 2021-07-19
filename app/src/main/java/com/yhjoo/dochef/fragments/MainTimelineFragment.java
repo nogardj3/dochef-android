@@ -14,23 +14,23 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.BaseActivity;
 import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.PostDetailActivity;
 import com.yhjoo.dochef.adapter.PostListAdapter;
 import com.yhjoo.dochef.databinding.FMainTimelineBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.Post;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 
 import java.util.ArrayList;
 
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     FMainTimelineBinding binding;
-    RetrofitServices.PostService postService;
+    RxRetrofitServices.PostService postService;
     PostListAdapter postListAdapter;
 
     ArrayList<Post> postList;
@@ -44,8 +44,8 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
         binding = FMainTimelineBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
 
-        postService =
-                RetrofitBuilder.create(getContext(), RetrofitServices.PostService.class);
+        postService = RxRetrofitBuilder.create(getContext(),
+                RxRetrofitServices.PostService.class);
 
         binding.timelineSwipe.setOnRefreshListener(this);
         binding.timelineSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimary, null));
@@ -92,22 +92,17 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
     }
 
     void getPostList() {
-        postService
-                .getPostList()
-                .enqueue(new BasicCallback<ArrayList<Post>>(this.getContext()) {
-                    @Override
-                    public void onResponse(Response<ArrayList<Post>> response) {
-                        if (response.code() == 500) {
-                            App.getAppInstance().showToast("post detail 가져오기 실패");
-                        } else {
+        ((BaseActivity) getActivity()).getCompositeDisposable().add(
+                postService.getPostList()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
                             postList = response.body();
                             postListAdapter.setNewData(response.body());
                             postListAdapter.notifyDataSetChanged();
                             postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.timelineSwipe.getParent());
 
                             new Handler().postDelayed(() -> binding.timelineSwipe.setRefreshing(false), 1000);
-                        }
-                    }
-                });
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 }

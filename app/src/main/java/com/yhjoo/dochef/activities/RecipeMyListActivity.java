@@ -35,10 +35,6 @@ public class RecipeMyListActivity extends BaseActivity {
     ArrayList<Recipe> recipeList = new ArrayList<>();
     String userID;
 
-    /*
-        TODO
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -9,43 +9,30 @@ import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
 import com.yhjoo.dochef.model.MultiItemRecipe;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.BasicCallback;
-import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.Utils;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecipe, BaseViewHolder> {
     public static final int VIEWHOLDER_AD = 1;
     public static final int VIEWHOLDER_PAGER = 2;
     public static final int VIEWHOLDER_ITEM = 3;
-    public RetrofitServices.RecipeService recipeService;
 
     public String userid = "";
     public boolean showNew = false;
     public boolean showYours = false;
 
-    // TODO
-    // 이거 좀 아닌듯
-
-    public RecipeMultiAdapter(List<MultiItemRecipe> data, RetrofitServices.RecipeService recipeService) {
+    public RecipeMultiAdapter(List<MultiItemRecipe> data) {
         super(data);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);
         addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
         addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_main);
-        this.recipeService = recipeService;
     }
 
     public void setUserid(String userid) {
@@ -103,25 +90,25 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
                 recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
                 recyclerView.setAdapter(recipeHorizontalAdapter);
-                if (App.isServerAlive()) {
-                    recipeService.getRecipeByTag(item.getPager_title(), "popular")
-                            .enqueue(new BasicCallback<ArrayList<Recipe>>(mContext) {
-                                @Override
-                                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                                    super.onResponse(call, response);
-
-                                    if (response.code() == 403)
-                                        App.getAppInstance().showToast("뭔가에러");
-                                    else {
-                                        recipeHorizontalAdapter.setNewData(response.body());
-                                    }
-                                }
-                            });
-                } else {
-                    ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-
-                    recipeHorizontalAdapter.setNewData(recipes);
-                }
+//                if (App.isServerAlive()) {
+//                    recipeService.getRecipeByTag(item.getPager_title(), "popular")
+//                            .enqueue(new BasicCallback<ArrayList<Recipe>>(mContext) {
+//                                @Override
+//                                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
+//                                    super.onResponse(call, response);
+//
+//                                    if (response.code() == 403)
+//                                        App.getAppInstance().showToast("뭔가에러");
+//                                    else {
+//                                        recipeHorizontalAdapter.setNewData(response.body());
+//                                    }
+//                                }
+//                            });
+//                } else {
+//                    ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
+//
+//                    recipeHorizontalAdapter.setNewData(recipes);
+//                }
                 break;
 
             case VIEWHOLDER_AD:

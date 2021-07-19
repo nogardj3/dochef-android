@@ -13,29 +13,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.BaseActivity;
 import com.yhjoo.dochef.activities.RecipeDetailActivity;
 import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.adapter.MainAdPagerAdapter;
 import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter;
 import com.yhjoo.dochef.databinding.FMainInitBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.Recipe;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.core.Observable;
-import retrofit2.Call;
-import retrofit2.Response;
 
 public class MainInitFragment extends Fragment {
     FMainInitBinding binding;
 
-    RetrofitServices.RecipeService recipeService;
+    RxRetrofitServices.RecipeService recipeService;
     RecipeHorizontalAdapter recipeHorizontalAdapter;
 
     ArrayList<Recipe> recipeList;
@@ -50,7 +48,8 @@ public class MainInitFragment extends Fragment {
         binding = FMainInitBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        recipeService = RetrofitBuilder.create(this.getContext(), RetrofitServices.RecipeService.class);
+        recipeService = RxRetrofitBuilder.create(this.getContext(),
+                RxRetrofitServices.RecipeService.class);
 
         ArrayList<Integer> imgs = new ArrayList<>();
         imgs.add(R.drawable.ad_temp_0);
@@ -98,37 +97,17 @@ public class MainInitFragment extends Fragment {
     }
 
     void getRecipelist() {
-        recipeService.getRecipes("popular")
-                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
-                    @Override
-                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-                        super.onResponse(call, response);
-
-                        if (response.code() == 403)
-                            App.getAppInstance().showToast("뭔가에러");
-                        else {
+        ((BaseActivity) getActivity()).getCompositeDisposable().add(
+                // Todo
+                // recipeService.getRecipeByName( "CHEF","popular")
+                recipeService.getRecipes("popular")
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
                             recipeList = response.body();
+                            // Html.fromHtml(
+                            // String.format(getString(R.string.format_recommend_title),recipeList.get(0).getNickname()),Html.FROM_HTML_MODE_LEGACY);
                             recipeHorizontalAdapter.setNewData(recipeList);
-                        }
-                    }
-                });
-
-        // TODO
-//        recipeService.getRecipeByName( "CHEF","popular")
-//                .enqueue(new BasicCallback<ArrayList<Recipe>>(this.getContext()) {
-//                    @Override
-//                    public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-//                        super.onResponse(call, response);
-//
-//                        if (response.code() == 403)
-//                            App.getAppInstance().showToast("뭔가에러");
-//                        else {
-//                            recipeList = response.body();
-//        Html.fromHtml(
-//                String.format(getString(R.string.format_recommend_title),recipeList.get(0).getNickname()),Html.FROM_HTML_MODE_LEGACY);
-//                            recipeHorizontalAdapter.setNewData(recipeList);
-//                        }
-//                    }
-//                });
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 }

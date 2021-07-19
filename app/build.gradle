@@ -73,13 +73,13 @@ dependencies {
 
     // components
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.25'
+    implementation "com.github.skydoves:powermenu:2.2.0"
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
     implementation 'com.github.florent37:viewanimator:1.1.0'
     implementation 'com.github.JakeWharton:ViewPagerIndicator:2.4.1@aar'
     implementation 'com.github.bhargavms:PodSLider:1.2.0'
     implementation 'com.github.mabbas007:TagsEditText:1.0.5'
-    implementation "com.github.skydoves:powermenu:2.2.0"
-    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
-    implementation 'com.afollestad.material-dialogs:commons:0.9.6.0'
 
 
     testImplementation 'junit:junit:4.+'

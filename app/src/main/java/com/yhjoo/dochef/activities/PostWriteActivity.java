@@ -46,7 +46,7 @@ public class PostWriteActivity extends BaseActivity {
 
     /*
         TODO
-        upload image
+        revise 프로세스 확인
     */
 
     @Override
@@ -85,16 +85,19 @@ public class PostWriteActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
-            if (data != null) {
-                mImageUri = data.getData();
 
-                CropImage.activity(mImageUri)
-                        .setGuidelines(CropImageView.Guidelines.ON)
-                        .start(this);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mImageUri = result.getUri();
 
                 binding.postwritePostimg.setImageURI(mImageUri);
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                error.printStackTrace();
             }
+        }
+
     }
 
     @Override
@@ -107,12 +110,12 @@ public class PostWriteActivity extends BaseActivity {
                     return;
                 }
 
-            mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
-
-            Intent intent = new Intent(Intent.ACTION_PICK)
-                    .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                    .putExtra("crop", "true");
-            startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
+            CropImage.activity(mImageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .setRequestedSize(1080,1080)
+                    .setOutputUri(mImageUri)
+                    .start(this);
         }
     }
 
@@ -124,14 +127,12 @@ public class PostWriteActivity extends BaseActivity {
         if (Utils.checkPermission(this, permissions)) {
             mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
 
-            Intent intent = new Intent(Intent.ACTION_PICK)
-                    .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                    .putExtra("crop", "true")
-                    .putExtra("aspectX", 3)
-                    .putExtra("aspectY", 2)
-                    .putExtra("scale", true)
-                    .putExtra("output", mImageUri);
-            startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1,1)
+                    .setRequestedSize(1080,1080)
+                    .setOutputUri(mImageUri)
+                    .start(this);
         } else
             ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
     }

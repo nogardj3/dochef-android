@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
@@ -81,7 +80,7 @@ public class HomeActivity extends BaseActivity {
 
     /*
         TODO
-        revise - nickname, contents = dialog, image = selectable dialog
+        revise 프로세스 확인
     */
 
     @Override
@@ -237,7 +236,7 @@ public class HomeActivity extends BaseActivity {
         }
     }
 
-    void setNormalView(){
+    void setNormalView() {
 
     }
 
@@ -343,39 +342,33 @@ public class HomeActivity extends BaseActivity {
 
     void clickReviseNickname(View v) {
         if (currentOperation == OPERATION.REVISE) {
-            AppCompatEditText editText = (AppCompatEditText) getLayoutInflater().inflate(R.layout.v_home_nickname, null);
-            editText.setHint(binding.homeNickname.getText());
-
             MaterialDialog materialDialog = new MaterialDialog.Builder(this)
                     .autoDismiss(false)
                     .title("닉네임 변경")
                     .inputType(InputType.TYPE_CLASS_TEXT)
-                    .inputRange(4,12)
+                    .inputRange(4, 12)
                     .input("닉네임", binding.homeNickname.getText().toString(), (dialog, input) -> {
                     })
                     .positiveText("확인")
                     .positiveColorRes(R.color.grey_text)
                     .onPositive((dialog, which) -> {
-                        if(dialog.getInputEditText().getText() == null){
+                        if (dialog.getInputEditText().getText() == null) {
                             App.getAppInstance().showToast("닉네임을 입력 해 주세요.");
-                        }
-                        else if(dialog.getInputEditText().getText().toString().length() > 12){
+                        } else if (dialog.getInputEditText().getText().toString().length() > 12) {
                             App.getAppInstance().showToast("12자 이하 입력 해 주세요.");
-                        }
-                        else{
+                        } else {
                             compositeDisposable.add(
                                     accountService.checkNickname(dialog.getInputEditText().getText().toString())
-                                    .observeOn(AndroidSchedulers.mainThread())
-                                    .subscribe(response->{
-                                        String msg =  response.body().get("msg").getAsString();
-                                        Utils.log(msg);
-                                        if(msg.equals("ok")){
-                                            binding.homeNickname.setText(dialog.getInputEditText().getText().toString());
-                                            dialog.dismiss();
-                                        }
-                                        else
-                                            App.getAppInstance().showToast("이미 존재합니다.");
-                                    }, RxRetrofitBuilder.defaultConsumer())
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribe(response -> {
+                                                String msg = response.body().get("msg").getAsString();
+                                                Utils.log(msg);
+                                                if (msg.equals("ok")) {
+                                                    binding.homeNickname.setText(dialog.getInputEditText().getText().toString());
+                                                    dialog.dismiss();
+                                                } else
+                                                    App.getAppInstance().showToast("이미 존재합니다.");
+                                            }, RxRetrofitBuilder.defaultConsumer())
                             );
                         }
                     })
@@ -386,35 +379,29 @@ public class HomeActivity extends BaseActivity {
                     })
                     .build();
 
-                materialDialog.show();
+            materialDialog.show();
         }
     }
 
     void clickReviseContents(View v) {
         if (currentOperation == OPERATION.REVISE) {
-            AppCompatEditText editText = (AppCompatEditText) getLayoutInflater().inflate(R.layout.v_home_profile, null);
-            editText.setHint(binding.homeProfiletext.getText());
-
             MaterialDialog materialDialog = new MaterialDialog.Builder(this)
                     .autoDismiss(false)
                     .title("프로필 변경")
                     .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
-                    .inputRange(0,60)
+                    .inputRange(0, 60)
                     .input("프로필", binding.homeProfiletext.getText().toString(), (dialog, input) -> {
                     })
                     .positiveText("확인")
                     .positiveColorRes(R.color.grey_text)
                     .onPositive((dialog, which) -> {
-                        if(dialog.getInputEditText().getText() == null){
+                        if (dialog.getInputEditText().getText() == null) {
                             App.getAppInstance().showToast("프로필을 입력 해 주세요.");
-                        }
-                        else if(dialog.getInputEditText().getText().toString().length() > 60){
+                        } else if (dialog.getInputEditText().getText().toString().length() > 60) {
                             App.getAppInstance().showToast("60자 이하 입력 해 주세요.");
-                        }
-                        else if(dialog.getInputEditText().getLineCount() >4){
+                        } else if (dialog.getInputEditText().getLineCount() > 4) {
                             App.getAppInstance().showToast("4줄 이하 입력 해 주세요.");
-                        }
-                        else{
+                        } else {
                             binding.homeProfiletext.setText(dialog.getInputEditText().getText().toString());
                             dialog.dismiss();
                         }

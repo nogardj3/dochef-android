@@ -12,24 +12,24 @@ import androidx.fragment.app.Fragment;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.BaseActivity;
 import com.yhjoo.dochef.activities.HomeActivity;
 import com.yhjoo.dochef.activities.RecipeMyListActivity;
 import com.yhjoo.dochef.activities.SettingActivity;
 import com.yhjoo.dochef.databinding.FMainUserBinding;
-import com.yhjoo.dochef.interfaces.RetrofitServices;
+import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.UserDetail;
-import com.yhjoo.dochef.utils.BasicCallback;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
-import com.yhjoo.dochef.utils.RetrofitBuilder;
+import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
-import retrofit2.Response;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class MainUserFragment extends Fragment {
     FMainUserBinding binding;
 
-    RetrofitServices.UserService userService;
+    RxRetrofitServices.UserService userService;
 
     UserDetail userDetailInfo;
     String userID;
@@ -43,7 +43,7 @@ public class MainUserFragment extends Fragment {
         binding = FMainUserBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
 
-        userService = RetrofitBuilder.create(getContext(), RetrofitServices.UserService.class);
+        userService = RxRetrofitBuilder.create(getContext(), RxRetrofitServices.UserService.class);
 
         userID = Utils.getUserBrief(getContext()).getUserID();
 
@@ -52,17 +52,21 @@ public class MainUserFragment extends Fragment {
         binding.fmainUserSetting.setOnClickListener(this::goSetting);
         binding.fmainUserReview.setOnClickListener(this::goReview);
 
-        if (App.isServerAlive()) {
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (App.isServerAlive())
             getUserDetail();
-        } else {
+        else {
             userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
 
             ImageLoadUtil.loadUserImage(getContext(), userDetailInfo.getUserImg(), binding.fmainUserImg);
-
             binding.fmainUserNickname.setText(userDetailInfo.getNickname());
         }
-
-        return view;
     }
 
     void goHome(View view){
@@ -93,17 +97,16 @@ public class MainUserFragment extends Fragment {
     }
 
     void getUserDetail() {
-        userService.getUserDetail(userID)
-                .enqueue(new BasicCallback<UserDetail>(getContext()) {
-                    @Override
-                    public void onResponse(Response<UserDetail> response) {
-                        userDetailInfo = response.body();
+        ((BaseActivity) getActivity()).getCompositeDisposable().add(
+                userService.getUserDetail(userID)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            userDetailInfo = response.body();
 
-                        ImageLoadUtil.loadUserImage(
-                                MainUserFragment.this.getContext(), userDetailInfo.getUserImg(), binding.fmainUserImg);
-
-                        binding.fmainUserNickname.setText(userDetailInfo.getNickname());
-                    }
-                });
+                            ImageLoadUtil.loadUserImage(
+                                    MainUserFragment.this.getContext(), userDetailInfo.getUserImg(), binding.fmainUserImg);
+                            binding.fmainUserNickname.setText(userDetailInfo.getNickname());
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 }

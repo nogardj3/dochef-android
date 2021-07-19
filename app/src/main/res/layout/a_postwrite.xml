@@ -70,15 +70,14 @@
                 android:id="@+id/postwrite_contents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@null"
-                android:backgroundTint="@null"
                 android:gravity="top"
                 android:hint="글 내용"
                 android:minLines="4"
                 android:paddingLeft="4dp"
                 android:paddingTop="4dp"
-                android:textCursorDrawable="@color/colorPrimary"
                 android:theme="@style/BaseTheme.EditTextStyle"
+                android:background="@android:color/transparent"
+                android:backgroundTint="@null"
                 app:layout_constraintTop_toBottomOf="@+id/postwrite_contents_text" />
 
             <androidx.appcompat.widget.AppCompatTextView

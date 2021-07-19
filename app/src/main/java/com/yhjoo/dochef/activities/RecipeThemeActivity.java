@@ -40,6 +40,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
     /*
         TODO
+        multiadapter
     */
 
     @Override
@@ -73,8 +74,6 @@ public class RecipeThemeActivity extends BaseActivity {
 
         binding.recipethemeRecycler.setLayoutManager(new GridLayoutManager(this, 2));
         binding.recipethemeRecycler.setAdapter(recipeMultiThemeAdapter);
-
-
     }
 
     @Override
