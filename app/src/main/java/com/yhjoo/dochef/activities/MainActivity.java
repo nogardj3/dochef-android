@@ -168,7 +168,6 @@ public class MainActivity extends BaseActivity {
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text));
                     mFirebaseAnalytics.logEvent(getString(R.string.analytics_event_terminated), bundle);
 
-                    dialog.dismiss();
                     finish();
                 }).show();
     }

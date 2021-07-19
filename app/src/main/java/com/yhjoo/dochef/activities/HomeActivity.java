@@ -6,13 +6,13 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -55,6 +55,7 @@ public class HomeActivity extends BaseActivity {
 
     AHomeBinding binding;
     StorageReference storageReference;
+    RxRetrofitServices.AccountService accountService;
     RxRetrofitServices.UserService userService;
     RxRetrofitServices.RecipeService recipeService;
     RxRetrofitServices.PostService postService;
@@ -74,6 +75,10 @@ public class HomeActivity extends BaseActivity {
     String image_url;
     String currentUserID;
 
+    boolean revise_img_changed;
+    String revise_before_nickname;
+    String revise_before_profile;
+
     /*
         TODO
         revise - nickname, contents = dialog, image = selectable dialog
@@ -89,6 +94,7 @@ public class HomeActivity extends BaseActivity {
 
         storageReference = FirebaseStorage.getInstance().getReference();
 
+        accountService = RxRetrofitBuilder.create(this, RxRetrofitServices.AccountService.class);
         userService = RxRetrofitBuilder.create(this, RxRetrofitServices.UserService.class);
         recipeService = RxRetrofitBuilder.create(this, RxRetrofitServices.RecipeService.class);
         postService = RxRetrofitBuilder.create(this, RxRetrofitServices.PostService.class);
@@ -162,11 +168,38 @@ public class HomeActivity extends BaseActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        if (currentOperation == OPERATION.REVISE) {
+            createConfirmDialog(this,
+                    null, "변경이 취소됩니다.",
+                    (dialog1, which) -> {
+                        // TODO
+                        // restore Data
+                        currentOperation = OPERATION.VIEW;
+                        reviseMenu.setVisible(true);
+                        okMenu.setVisible(false);
+                        binding.homeRevisegroup.setVisibility(View.GONE);
+                    }
+            )
+                    .show();
+        } else
+            super.onBackPressed();
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.menu_home_owner_revise) {
-            changeOperation();
-        } else if (item.getItemId() == R.id.menu_home_owner_revise_ok) {
+            currentOperation = OPERATION.REVISE;
+            reviseMenu.setVisible(false);
+            okMenu.setVisible(true);
+            binding.homeRevisegroup.setVisibility(View.VISIBLE);
 
+            revise_img_changed = false;
+            revise_before_nickname = binding.homeNickname.getText().toString();
+            revise_before_profile = binding.homeNickname.getText().toString();
+        } else if (item.getItemId() == R.id.menu_home_owner_revise_ok) {
+            // TODO
+            // 서버에 기록한다
         }
         return super.onOptionsItemSelected(item);
     }
@@ -179,14 +212,6 @@ public class HomeActivity extends BaseActivity {
                 mImageUri = data.getData();
                 binding.homeUserimg.setImageURI(mImageUri);
             }
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (currentOperation == OPERATION.REVISE)
-            changeOperation();
-        else
-            super.onBackPressed();
     }
 
     @Override
@@ -210,6 +235,10 @@ public class HomeActivity extends BaseActivity {
                     .putExtra("output", mImageUri);
             startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
         }
+    }
+
+    void setNormalView(){
+
     }
 
     void loadList() {
@@ -278,24 +307,6 @@ public class HomeActivity extends BaseActivity {
         }));
     }
 
-
-    void changeOperation() {
-        if (currentOperation == OPERATION.VIEW) {
-            currentOperation = OPERATION.REVISE;
-            binding.homeRevisegroup.setVisibility(View.VISIBLE);
-        } else if (currentOperation == OPERATION.REVISE) {
-            currentOperation = OPERATION.VIEW;
-            binding.homeRevisegroup.setVisibility(View.GONE);
-
-            createConfirmDialog(this,
-                    null, "변경이 취소됩니다.",
-                    (dialog1, which) -> {
-                        changeOperation();
-                        dialog1.dismiss();
-                    }).show();
-        }
-    }
-
     void reviseProfileImage(View v) {
         if (currentOperation == OPERATION.REVISE) {
             MaterialDialog dialog = new MaterialDialog.Builder(this)
@@ -322,7 +333,7 @@ public class HomeActivity extends BaseActivity {
                                 ActivityCompat.requestPermissions(HomeActivity.this, permissions, CODE_PERMISSION);
                         } else if (position == 1) {
                             mImageUri = null;
-                            binding.homeUserimg.setImageDrawable(null);
+                            binding.homeUserimg.setImageResource(R.drawable.ic_profile_black);
                         }
                         dialog1.dismiss();
                     }).build();
@@ -335,15 +346,47 @@ public class HomeActivity extends BaseActivity {
             AppCompatEditText editText = (AppCompatEditText) getLayoutInflater().inflate(R.layout.v_home_nickname, null);
             editText.setHint(binding.homeNickname.getText());
 
-            // TODO
-            // 이거 인풋 다이얼로그
-            createConfirmDialog(this,
-                    null, "닉네임을 변경합니다.",
-                    (dialog1, which) -> {
-                        binding.homeNickname.setText(editText.getText().toString());
-                        App.getAppInstance().showToast("변경되었습니다.");
-                        dialog1.dismiss();
-                    }).show();
+            MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+                    .autoDismiss(false)
+                    .title("닉네임 변경")
+                    .inputType(InputType.TYPE_CLASS_TEXT)
+                    .inputRange(4,12)
+                    .input("닉네임", binding.homeNickname.getText().toString(), (dialog, input) -> {
+                    })
+                    .positiveText("확인")
+                    .positiveColorRes(R.color.grey_text)
+                    .onPositive((dialog, which) -> {
+                        if(dialog.getInputEditText().getText() == null){
+                            App.getAppInstance().showToast("닉네임을 입력 해 주세요.");
+                        }
+                        else if(dialog.getInputEditText().getText().toString().length() > 12){
+                            App.getAppInstance().showToast("12자 이하 입력 해 주세요.");
+                        }
+                        else{
+                            compositeDisposable.add(
+                                    accountService.checkNickname(dialog.getInputEditText().getText().toString())
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(response->{
+                                        String msg =  response.body().get("msg").getAsString();
+                                        Utils.log(msg);
+                                        if(msg.equals("ok")){
+                                            binding.homeNickname.setText(dialog.getInputEditText().getText().toString());
+                                            dialog.dismiss();
+                                        }
+                                        else
+                                            App.getAppInstance().showToast("이미 존재합니다.");
+                                    }, RxRetrofitBuilder.defaultConsumer())
+                            );
+                        }
+                    })
+                    .negativeText("취소")
+                    .negativeColorRes(R.color.grey_text)
+                    .onNegative((dialog, which) -> {
+                        dialog.dismiss();
+                    })
+                    .build();
+
+                materialDialog.show();
         }
     }
 
@@ -352,18 +395,38 @@ public class HomeActivity extends BaseActivity {
             AppCompatEditText editText = (AppCompatEditText) getLayoutInflater().inflate(R.layout.v_home_profile, null);
             editText.setHint(binding.homeProfiletext.getText());
 
-
-            // TODO
-            // 이거 인풋 다이얼로그
-            AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-            builder.setTitle("프로필 변경")
-                    .setView(editText)
-                    .setPositiveButton("확인", (dialog, which) -> {
-                        binding.homeProfiletext.setText(editText.getText().toString());
-                        App.getAppInstance().showToast("변경되었습니다.");
+            MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+                    .autoDismiss(false)
+                    .title("프로필 변경")
+                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+                    .inputRange(0,60)
+                    .input("프로필", binding.homeProfiletext.getText().toString(), (dialog, input) -> {
+                    })
+                    .positiveText("확인")
+                    .positiveColorRes(R.color.grey_text)
+                    .onPositive((dialog, which) -> {
+                        if(dialog.getInputEditText().getText() == null){
+                            App.getAppInstance().showToast("프로필을 입력 해 주세요.");
+                        }
+                        else if(dialog.getInputEditText().getText().toString().length() > 60){
+                            App.getAppInstance().showToast("60자 이하 입력 해 주세요.");
+                        }
+                        else if(dialog.getInputEditText().getLineCount() >4){
+                            App.getAppInstance().showToast("4줄 이하 입력 해 주세요.");
+                        }
+                        else{
+                            binding.homeProfiletext.setText(dialog.getInputEditText().getText().toString());
+                            dialog.dismiss();
+                        }
+                    })
+                    .negativeText("취소")
+                    .negativeColorRes(R.color.grey_text)
+                    .onNegative((dialog, which) -> {
                         dialog.dismiss();
                     })
-                    .setNegativeButton("취소", (dialog, which) -> dialog.dismiss()).show();
+                    .build();
+
+            materialDialog.show();
         }
     }
 

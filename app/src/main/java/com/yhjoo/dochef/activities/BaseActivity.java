@@ -96,9 +96,7 @@ public class BaseActivity extends AppCompatActivity {
                 .positiveText("확인")
                 .negativeText("취소")
                 .onPositive(confirmListener)
-                .onNegative((dialog1, which) -> {
-                    dialog1.dismiss();
-                }).build();
+                .build();
 
         if (title != null && !title.equals(""))
             dialog.setTitle(title);

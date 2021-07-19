@@ -36,7 +36,7 @@ public class TOSActivity extends BaseActivity {
                     basicService.getTOS()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
-                                String tos_text = response.body().get("message").toString();
+                                String tos_text = response.body().get("message").getAsString();
                                 binding.tosText.setText(Html.fromHtml(tos_text, Html.FROM_HTML_MODE_LEGACY));
                             }, RxRetrofitBuilder.defaultConsumer())
             );

@@ -39,6 +39,9 @@ public class RxRetrofitServices {
     }
 
     public interface AccountService {
+        @GET("user/check/nickname")
+        Single<Response<JsonObject>> checkNickname(@Query("nickname") String nickname);
+
         @FormUrlEncoded
         @POST("user/check/")
         Single<Response<UserBrief>> checkUser(@Field("user_token") String token,

@@ -1,12 +1,10 @@
 package com.yhjoo.dochef.activities;
 
-import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.github.florent37.viewanimator.ViewAnimator;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.mikhaellopez.rxanimation.RxAnimation;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.ASplashBinding;
@@ -35,7 +33,6 @@ public class SplashActivity extends BaseActivity {
         setContentView(binding.getRoot());
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
 
         checkServerAlive();
         checkIsAutoLogin();
@@ -85,15 +82,15 @@ public class SplashActivity extends BaseActivity {
 
         compositeDisposable.add(
                 basicService.checkAlive()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response -> {
-                    App.setIsServerAlive(true);
-                    serverAlive = true;
-                },throwable -> {
-                    throwable.printStackTrace();
-                    App.setIsServerAlive(false);
-                    serverAlive = false;
-                })
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            App.setIsServerAlive(true);
+                            serverAlive = true;
+                        }, throwable -> {
+                            throwable.printStackTrace();
+                            App.setIsServerAlive(false);
+                            serverAlive = false;
+                        })
         );
     }
 

@@ -87,10 +87,9 @@ public class PostDetailActivity extends BaseActivity {
             powerMenu.setOnMenuItemClickListener((pos, item) -> {
                 if (pos == 0) {
                     createConfirmDialog(this,
-                            null, "삭제 하시겠습니까?", (dialog1, which) -> {
-                                removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID());
-                                dialog1.dismiss();
-                            }).show();
+                            null, "삭제 하시겠습니까?", (dialog1, which) ->
+                                    removeComment(((Comment) baseQuickAdapter.getItem(position)).getCommentID()))
+                            .show();
 
                     powerMenu.dismiss();
                 }
@@ -142,11 +141,9 @@ public class PostDetailActivity extends BaseActivity {
                         compositeDisposable.add(
                                 postService.deletePost(postID)
                                         .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(response -> {
-                                            finish();
-                                        }, RxRetrofitBuilder.defaultConsumer())
+                                        .subscribe(response -> finish()
+                                                , RxRetrofitBuilder.defaultConsumer())
                         );
-                        dialog1.dismiss();
                     }).show();
         }
 

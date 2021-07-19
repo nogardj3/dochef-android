@@ -66,10 +66,9 @@ public class RecipeMyListActivity extends BaseActivity {
             if (view.getId() == R.id.recipemylist_yours) {
                 createConfirmDialog(this,
                         null, "레시피를 삭제하시겠습니까?",
-                        (dialog1, which) -> {
-                            cancelLikeRecipe(((Recipe) adapter.getData().get(position)).getRecipeID());
-                            dialog1.dismiss();
-                        }).show();
+                        (dialog1, which) ->
+                                cancelLikeRecipe(((Recipe) adapter.getData().get(position)).getRecipeID()))
+                        .show();
             }
         });
         binding.recipelistRecycler.setLayoutManager(new LinearLayoutManager(this));
