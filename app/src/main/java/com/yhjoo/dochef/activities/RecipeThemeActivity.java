@@ -40,7 +40,6 @@ public class RecipeThemeActivity extends BaseActivity {
 
     /*
         TODO
-        multiadapter
     */
 
     @Override

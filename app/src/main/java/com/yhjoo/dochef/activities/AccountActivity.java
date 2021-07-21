@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
@@ -44,6 +45,7 @@ public class AccountActivity extends BaseActivity {
 
     Mode current_mode = Mode.SIGNIN;
     String idToken;
+    String fcmToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +60,17 @@ public class AccountActivity extends BaseActivity {
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Utils.log(task.getException());
+                        return;
+                    }
+
+                    String token = task.getResult();
+                    Utils.log(token);
+                    fcmToken = token;
+                });
 
         accountService = RxRetrofitBuilder.create(this, RxRetrofitServices.AccountService.class);
 
@@ -270,7 +283,7 @@ public class AccountActivity extends BaseActivity {
 
     void checkUserInfo(String idToken) {
         compositeDisposable.add(
-                accountService.checkUser(idToken, mAuth.getUid())
+                accountService.checkUser(idToken, mAuth.getUid(),fcmToken)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response -> {
                         startMain(response.body());

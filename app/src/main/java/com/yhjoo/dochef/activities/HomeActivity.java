@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,10 +16,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.PostListAdapter;
@@ -31,11 +32,11 @@ import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.UserDetail;
 import com.yhjoo.dochef.utils.DataGenerator;
+import com.yhjoo.dochef.utils.GlideApp;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,8 @@ import retrofit2.Response;
 
 public class HomeActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
-    private final int EXTRA_RQ_PICKFROMGALLERY = 200;
+    private final int IMG_WIDTH = 360;
+    private final int IMG_HEIGHT = 360;
 
     private enum MODE {OWNER, OTHERS}
 
@@ -135,11 +137,6 @@ public class HomeActivity extends BaseActivity {
             }
         });
         binding.homePostRecycler.setAdapter(postListAdapter);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
 
         if (App.isServerAlive()) {
             loadList();
@@ -172,12 +169,14 @@ public class HomeActivity extends BaseActivity {
             createConfirmDialog(this,
                     null, "변경이 취소됩니다.",
                     (dialog1, which) -> {
-                        // TODO
-                        // restore Data
                         currentOperation = OPERATION.VIEW;
                         reviseMenu.setVisible(true);
                         okMenu.setVisible(false);
                         binding.homeRevisegroup.setVisibility(View.GONE);
+
+                        ImageLoadUtil.loadUserImage(this, userDetailInfo.getUserImg(), binding.homeUserimg);
+                        binding.homeNickname.setText(userDetailInfo.getNickname());
+                        binding.homeProfiletext.setText(userDetailInfo.getProfileText());
                     }
             )
                     .show();
@@ -192,13 +191,8 @@ public class HomeActivity extends BaseActivity {
             reviseMenu.setVisible(false);
             okMenu.setVisible(true);
             binding.homeRevisegroup.setVisibility(View.VISIBLE);
-
-            revise_img_changed = false;
-            revise_before_nickname = binding.homeNickname.getText().toString();
-            revise_before_profile = binding.homeNickname.getText().toString();
         } else if (item.getItemId() == R.id.menu_home_owner_revise_ok) {
-            // TODO
-            // 서버에 기록한다
+            updateProfile();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -206,11 +200,24 @@ public class HomeActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == EXTRA_RQ_PICKFROMGALLERY)
-            if (data != null) {
-                mImageUri = data.getData();
-                binding.homeUserimg.setImageURI(mImageUri);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+                mImageUri = result.getUri();
+
+                Utils.log(result.getUri());
+                GlideApp.with(this)
+                        .load(mImageUri)
+                        .circleCrop()
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(binding.homeUserimg);
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                error.printStackTrace();
             }
+        }
     }
 
     @Override
@@ -223,21 +230,15 @@ public class HomeActivity extends BaseActivity {
                     return;
                 }
 
-            mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
-
-            Intent intent = new Intent(Intent.ACTION_PICK)
-                    .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                    .putExtra("crop", "true")
-                    .putExtra("aspectX", 1)
-                    .putExtra("aspectY", 1)
-                    .putExtra("scale", true)
-                    .putExtra("output", mImageUri);
-            startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
+            CropImage.activity(mImageUri)
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1, 1)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
+                    .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    .setOutputUri(mImageUri)
+                    .start(this);
         }
-    }
-
-    void setNormalView() {
-
     }
 
     void loadList() {
@@ -307,150 +308,129 @@ public class HomeActivity extends BaseActivity {
     }
 
     void reviseProfileImage(View v) {
-        if (currentOperation == OPERATION.REVISE) {
-            MaterialDialog dialog = new MaterialDialog.Builder(this)
-                    .items("이미지 변경", "삭제")
-                    .itemsColorRes(R.color.black)
-                    .itemsCallback((dialog1, itemView, position, text) -> {
-                        if (position == 0) {
-                            final String[] permissions = {
-                                    Manifest.permission.READ_EXTERNAL_STORAGE
-                            };
+        final String[] permissions = {
+                Manifest.permission.READ_EXTERNAL_STORAGE
+        };
 
-                            if (Utils.checkPermission(HomeActivity.this, permissions)) {
-                                mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
-
-                                Intent intent = new Intent(Intent.ACTION_PICK)
-                                        .setType(MediaStore.Images.Media.CONTENT_TYPE)
-                                        .putExtra("crop", "true")
-                                        .putExtra("aspectX", 1)
-                                        .putExtra("aspectY", 1)
-                                        .putExtra("scale", true)
-                                        .putExtra("output", mImageUri);
-                                startActivityForResult(intent, EXTRA_RQ_PICKFROMGALLERY);
-                            } else
-                                ActivityCompat.requestPermissions(HomeActivity.this, permissions, CODE_PERMISSION);
-                        } else if (position == 1) {
-                            mImageUri = null;
-                            binding.homeUserimg.setImageResource(R.drawable.ic_profile_black);
-                        }
-                        dialog1.dismiss();
-                    }).build();
-            dialog.show();
-        }
+        if (Utils.checkPermission(this, permissions)) {
+            CropImage.activity()
+                    .setGuidelines(CropImageView.Guidelines.ON)
+                    .setAspectRatio(1, 1)
+                    .setOutputUri(mImageUri)
+                    .setCropShape(CropImageView.CropShape.OVAL)
+                    .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
+                    .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    .start(this);
+        } else
+            ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION);
     }
 
     void clickReviseNickname(View v) {
-        if (currentOperation == OPERATION.REVISE) {
-            MaterialDialog materialDialog = new MaterialDialog.Builder(this)
-                    .autoDismiss(false)
-                    .title("닉네임 변경")
-                    .inputType(InputType.TYPE_CLASS_TEXT)
-                    .inputRange(4, 12)
-                    .input("닉네임", binding.homeNickname.getText().toString(), (dialog, input) -> {
-                    })
-                    .positiveText("확인")
-                    .positiveColorRes(R.color.grey_text)
-                    .onPositive((dialog, which) -> {
-                        if (dialog.getInputEditText().getText() == null) {
-                            App.getAppInstance().showToast("닉네임을 입력 해 주세요.");
-                        } else if (dialog.getInputEditText().getText().toString().length() > 12) {
-                            App.getAppInstance().showToast("12자 이하 입력 해 주세요.");
-                        } else {
-                            compositeDisposable.add(
-                                    accountService.checkNickname(dialog.getInputEditText().getText().toString())
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribe(response -> {
-                                                String msg = response.body().get("msg").getAsString();
-                                                Utils.log(msg);
-                                                if (msg.equals("ok")) {
-                                                    binding.homeNickname.setText(dialog.getInputEditText().getText().toString());
-                                                    dialog.dismiss();
-                                                } else
-                                                    App.getAppInstance().showToast("이미 존재합니다.");
-                                            }, RxRetrofitBuilder.defaultConsumer())
-                            );
-                        }
-                    })
-                    .negativeText("취소")
-                    .negativeColorRes(R.color.grey_text)
-                    .onNegative((dialog, which) -> {
-                        dialog.dismiss();
-                    })
-                    .build();
+        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+                .autoDismiss(false)
+                .title("닉네임 변경")
+                .inputType(InputType.TYPE_CLASS_TEXT)
+                .inputRange(4, 12)
+                .input("닉네임", binding.homeNickname.getText().toString(), (dialog, input) -> {
+                })
+                .positiveText("확인")
+                .positiveColorRes(R.color.grey_text)
+                .onPositive((dialog, which) -> {
+                    if (dialog.getInputEditText().getText() == null) {
+                        App.getAppInstance().showToast("닉네임을 입력 해 주세요.");
+                    } else if (dialog.getInputEditText().getText().toString().length() > 12) {
+                        App.getAppInstance().showToast("12자 이하 입력 해 주세요.");
+                    } else {
+                        compositeDisposable.add(
+                                accountService.checkNickname(dialog.getInputEditText().getText().toString())
+                                        .observeOn(AndroidSchedulers.mainThread())
+                                        .subscribe(response -> {
+                                            String msg = response.body().get("msg").getAsString();
+                                            Utils.log(msg);
+                                            if (msg.equals("ok")) {
+                                                binding.homeNickname.setText(dialog.getInputEditText().getText().toString());
+                                                dialog.dismiss();
+                                            } else
+                                                App.getAppInstance().showToast("이미 존재합니다.");
+                                        }, RxRetrofitBuilder.defaultConsumer())
+                        );
+                    }
+                })
+                .negativeText("취소")
+                .negativeColorRes(R.color.grey_text)
+                .onNegative((dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .build();
 
-            materialDialog.show();
-        }
+        materialDialog.show();
     }
 
     void clickReviseContents(View v) {
-        if (currentOperation == OPERATION.REVISE) {
-            MaterialDialog materialDialog = new MaterialDialog.Builder(this)
-                    .autoDismiss(false)
-                    .title("프로필 변경")
-                    .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
-                    .inputRange(0, 60)
-                    .input("프로필", binding.homeProfiletext.getText().toString(), (dialog, input) -> {
-                    })
-                    .positiveText("확인")
-                    .positiveColorRes(R.color.grey_text)
-                    .onPositive((dialog, which) -> {
-                        if (dialog.getInputEditText().getText() == null) {
-                            App.getAppInstance().showToast("프로필을 입력 해 주세요.");
-                        } else if (dialog.getInputEditText().getText().toString().length() > 60) {
-                            App.getAppInstance().showToast("60자 이하 입력 해 주세요.");
-                        } else if (dialog.getInputEditText().getLineCount() > 4) {
-                            App.getAppInstance().showToast("4줄 이하 입력 해 주세요.");
-                        } else {
-                            binding.homeProfiletext.setText(dialog.getInputEditText().getText().toString());
-                            dialog.dismiss();
-                        }
-                    })
-                    .negativeText("취소")
-                    .negativeColorRes(R.color.grey_text)
-                    .onNegative((dialog, which) -> {
+        MaterialDialog materialDialog = new MaterialDialog.Builder(this)
+                .autoDismiss(false)
+                .title("프로필 변경")
+                .inputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE)
+                .inputRange(0, 60)
+                .input("프로필", binding.homeProfiletext.getText().toString(), (dialog, input) -> {
+                })
+                .positiveText("확인")
+                .positiveColorRes(R.color.grey_text)
+                .onPositive((dialog, which) -> {
+                    if (dialog.getInputEditText().getText() == null) {
+                        App.getAppInstance().showToast("프로필을 입력 해 주세요.");
+                    } else if (dialog.getInputEditText().getText().toString().length() > 60) {
+                        App.getAppInstance().showToast("60자 이하 입력 해 주세요.");
+                    } else if (dialog.getInputEditText().getLineCount() > 4) {
+                        App.getAppInstance().showToast("4줄 이하 입력 해 주세요.");
+                    } else {
+                        binding.homeProfiletext.setText(dialog.getInputEditText().getText().toString());
                         dialog.dismiss();
-                    })
-                    .build();
+                    }
+                })
+                .negativeText("취소")
+                .negativeColorRes(R.color.grey_text)
+                .onNegative((dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .build();
 
-            materialDialog.show();
-        }
+        materialDialog.show();
     }
 
     void updateProfile() {
         progressON(this);
+
         image_url = "";
         if (mImageUri != null) {
             image_url = String.format(getString(R.string.format_upload_file),
                     currentUserID, Long.toString(System.currentTimeMillis()));
-        }
+            StorageReference ref = storageReference.child(getString(R.string.storage_path_profile) + image_url);
+            ref.putFile(mImageUri)
+                    .addOnSuccessListener(taskSnapshot -> {
+                        updateToServer();
+                    });
+        } else
+            updateToServer();
+    }
 
-        StorageReference ref = storageReference.child(image_url);
-        ref.putFile(mImageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        userService.updateProfile(
-//                                userID,
-//                                image_url,
-//                                binding.postwriteContents.getText().toString(),
-//                                System.currentTimeMillis(),
-//                                tags)
-//                                .enqueue(new BasicCallback<JsonObject>(PostWriteActivity.this) {
-//                                    @Override
-//                                    public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-//                                        super.onResponse(call, response);
-//
-//                                        if (response.code() == 500) {
-//                                            App.getAppInstance().showToast("post 등록 실패");
-//                                        } else {
-//                                            App.getAppInstance().showToast("글이 등록되었습니다.");
-//                                            progressOFF();
-//                                            finish();
-//                                        }
-//                                    }
-//                                });
-                    }
-                });
+    void updateToServer() {
+        compositeDisposable.add(
+                accountService.updateUser(userDetailInfo.getUserID(), image_url,
+                        binding.homeNickname.getText().toString(),
+                        binding.homeProfiletext.getText().toString())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> {
+                            App.getAppInstance().showToast("업데이트 되었습니다.");
+
+                            currentOperation = OPERATION.VIEW;
+                            reviseMenu.setVisible(false);
+                            okMenu.setVisible(true);
+                            binding.homeRevisegroup.setVisibility(View.VISIBLE);
+
+                            mImageUri = null;
+                            progressOFF();
+                        }, RxRetrofitBuilder.defaultConsumer())
+        );
     }
 }

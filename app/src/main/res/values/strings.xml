@@ -1,10 +1,16 @@
 <resources>
     <string name="app_name">DoChef</string>
 
-    <string name="SP_ACTIVATEDDEVICE">AutoLogin</string>
+    <string name="SP_ACTIVATEDDEVICE">AutoLogin</string> <!-- TODO 이거 관련된것들 수정-->
     <string name="SP_USERINFO">UserInfo</string>
+    <string name="SP_CHANNEL">NotificationChannelCreated</string>
+    <string name="SP_NOTI_ADMIN">NotificationActiveAdmin</string>
+    <string name="SP_NOTI_COMMENT">NotificationActiveComment</string>
+    <string name="SP_NOTI_REVIEW">NotificationActiveReview</string>
+    <string name="SP_NOTI_NEWRECIPE">NotificationActiveNewRecipe</string>
+    <string name="SP_NOTI_FOLLOW">NotificationActiveFollow</string>
 
-    <!-- local server-->
+    <!-- server-->
     <string name="server_url">http://10.0.2.2:4000/chef/</string>
 
     <!-- admob 테스트용-->
@@ -15,10 +21,8 @@
     <string name="storage_path_recipe">recipe/</string>
     <string name="storage_path_post">post/</string>
 
-
-    <!-- analytics-->
+    <!-- analytics -->
     <string name="analytics_type_text">text</string>
-    <string name="analytics_type_image">image</string>
     <string name="analytics_event_terminated">app_terminated</string>
     <string name="analytics_id_start">0</string>
     <string name="analytics_id_signup">1</string>
@@ -29,18 +33,23 @@
     <string name="analytics_name_signin">APP_SIGNIN</string>
     <string name="analytics_name_terminated">APP_TERMINATED</string>
 
-    <!-- format-->
+    <!-- format -->
     <string name="format_recommend_title">&lt;b&gt;%s&lt;/b&gt;의 레시피</string>
     <string name="format_usernickname">By - %s</string>
     <string name="format_follower">팔로워 : %s</string>
     <string name="format_upload_file">%s_%s.jpg</string>
 
-
-    <string name="notification_texttype1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신의 팔로워가 되었습니다.</string>
-    <string name="notification_texttype2">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;에 새로운 리뷰가 등록되었습니다.</string>
-    <string name="notification_texttype3">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;의 새로운 메뉴 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt;가 등록되었습니다.</string>
-    <string name="notification_texttype4">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt; 리뷰에 답글을 달았습니다.</string>
-    <string name="notification_texttype5">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt; 에 댓글을 달았습니다.</string>
+    <!-- notification -->
+    <string name="notification_channel_id">default</string>
+    <!-- 0번은 시스템 notification -->
+    <!-- 다중 사용자 nickname, user_img, recipe_name -->
+    <string name="format_noti_type_1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;의 새로운 메뉴 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt;가 등록되었습니다.</string>
+    <!-- 단일 사용자 nickname, user_img, recipe_name -->
+    <string name="format_noti_type_2">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt; 에 리뷰를 달았습니다.</string>
+    <!-- 단일 사용자 nickname, user_img, post_name -->
+    <string name="format_noti_type_3">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt; 에 댓글을 달았습니다.</string>
+    <!-- 단일 사용자 nickname, user_img -->
+    <string name="format_noti_type_4">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신을 팔로우 합니다.</string>
 
     <string name="tos_text_dummy">이용 약관</string>
 </resources>

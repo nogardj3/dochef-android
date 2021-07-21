@@ -50,7 +50,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     SensorManager m_clsSensorManager;
     Sensor m_clsSensor;
     MediaPlayer player;
-    TextToSpeech textToSpeech;
     SpeechRecognizer mRecognizer;
 
     ArrayList<RecipePlay> recipePlays;
@@ -60,8 +59,9 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
     /*
         TODO
-        1. TTS, sensor등 확인
-        2. 서버 데이터 추가 및 기능 구현
+        센서근접 -> 음성인식 -> 인식결과에 따라 행동
+        시작/다음/이전/타이머 시작/타이머 정지
+         
     */
 
     @Override
@@ -70,8 +70,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         binding = APlayrecipeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        textToSpeech = new TextToSpeech(this, status -> {
-        });
 
         String[] ingredients = {"김치1", "김치2"};
         String[] tags = {"태그1", "태그2", "태그3", "태그4", "태그5"};
@@ -221,7 +219,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        textToSpeech.shutdown();
         m_clsSensorManager.unregisterListener(this);
     }
 
@@ -234,31 +231,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         float dbDistance = event.values[0];
 
         if (dbDistance <= 2) {
-            if (!textToSpeech.isSpeaking()) {
-                HashMap<String, String> map = new HashMap<>();
-                map.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, String.valueOf(System.currentTimeMillis()));
-                textToSpeech.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onStart(String utteranceId) {
-                        Log.w("dd", "start " + utteranceId);
-                    }
-
-                    @Override
-                    public void onStop(String utteranceId, boolean interrupted) {
-                        super.onStop(utteranceId, interrupted);
-                    }
-
-                    @Override
-                    public void onDone(String utteranceId) {
-                        startListening();
-                    }
-
-                    @Override
-                    public void onError(String utteranceId) {
-                    }
-                });
-                textToSpeech.speak("알림이 울린 후 말하세요.", TextToSpeech.QUEUE_FLUSH, map);
-            }
         }
     }
 
@@ -380,7 +352,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                                         String temp = "";
                                         for (int i = 0; i < recipePlays.get(binding.playrecipeViewpager.getCurrentItem()).getIngredients().length; i++)
                                             temp += (recipePlays.get(binding.playrecipeViewpager.getCurrentItem()).getIngredients()[i] + " ");
-                                        textToSpeech.speak(temp, TextToSpeech.QUEUE_FLUSH, null);
                                     }
                                     break;
                                 case "시작":

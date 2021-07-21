@@ -11,6 +11,7 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -19,6 +20,7 @@ import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.APostwriteBinding;
 import com.yhjoo.dochef.interfaces.RxRetrofitServices;
+import com.yhjoo.dochef.utils.GlideApp;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
@@ -30,7 +32,8 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class PostWriteActivity extends BaseActivity {
     private final int CODE_PERMISSION = 22;
-    private final int EXTRA_RQ_PICKFROMGALLERY = 200;
+    private final int IMG_WIDTH = 1080;
+    private final int IMG_HEIGHT = 1080;
 
     enum MODE {WRITE, REVISE}
 
@@ -69,6 +72,7 @@ public class PostWriteActivity extends BaseActivity {
             binding.postwriteContents.setText(getIntent().getStringExtra("contents"));
 
             if (getIntent().getStringExtra("postImg") != null) {
+                Utils.log(getIntent().getStringExtra("postImg"));
                 ImageLoadUtil.loadPostImage(
                         this, getIntent().getStringExtra("postImg"), binding.postwritePostimg);
             }
@@ -91,13 +95,16 @@ public class PostWriteActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
 
-                binding.postwritePostimg.setImageURI(mImageUri);
+                GlideApp.with(this)
+                        .load(mImageUri)
+                        .diskCacheStrategy(DiskCacheStrategy.NONE)
+                        .skipMemoryCache(true)
+                        .into(binding.postwritePostimg);
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
                 error.printStackTrace();
             }
         }
-
     }
 
     @Override
@@ -113,7 +120,7 @@ public class PostWriteActivity extends BaseActivity {
             CropImage.activity(mImageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1,1)
-                    .setRequestedSize(1080,1080)
+                    .setRequestedSize(IMG_WIDTH,IMG_HEIGHT)
                     .setOutputUri(mImageUri)
                     .start(this);
         }
@@ -125,12 +132,10 @@ public class PostWriteActivity extends BaseActivity {
         };
 
         if (Utils.checkPermission(this, permissions)) {
-            mImageUri = Uri.fromFile(new File(getExternalCacheDir(), "filterimage"));
-
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
                     .setAspectRatio(1,1)
-                    .setRequestedSize(1080,1080)
+                    .setMaxCropResultSize(IMG_WIDTH,IMG_HEIGHT)
                     .setOutputUri(mImageUri)
                     .start(this);
         } else
@@ -148,7 +153,8 @@ public class PostWriteActivity extends BaseActivity {
         }
 
         if (image_url != null && !image_url.equals("")) {
-            StorageReference ref = storageReference.child(image_url);
+            progressON(this);
+            StorageReference ref = storageReference.child(getString(R.string.storage_path_post) +  image_url);
             ref.putFile(mImageUri)
                     .addOnSuccessListener(taskSnapshot -> {
                         createORupdatePost(tags);
@@ -167,6 +173,7 @@ public class PostWriteActivity extends BaseActivity {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
                                 App.getAppInstance().showToast("글이 등록되었습니다.");
+                                progressOFF();
                                 finish();
                             }, RxRetrofitBuilder.defaultConsumer())
             );
@@ -178,6 +185,7 @@ public class PostWriteActivity extends BaseActivity {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
                                 App.getAppInstance().showToast("업데이트 되었습니다.");
+                                progressOFF();
                                 finish();
                             }, RxRetrofitBuilder.defaultConsumer())
             );

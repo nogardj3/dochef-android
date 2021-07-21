@@ -124,7 +124,7 @@ public class PostDetailActivity extends BaseActivity {
             Intent intent = new Intent(PostDetailActivity.this, PostWriteActivity.class)
                     .putExtra("MODE", PostWriteActivity.MODE.REVISE)
                     .putExtra("postID", postInfo.getPostID())
-                    .putExtra("postimg", postInfo.getPostImg())
+                    .putExtra("postImg", postInfo.getPostImg())
                     .putExtra("contents", postInfo.getContents())
                     .putExtra("tags", postInfo.getTags().toArray(new String[0]));
             startActivity(intent);

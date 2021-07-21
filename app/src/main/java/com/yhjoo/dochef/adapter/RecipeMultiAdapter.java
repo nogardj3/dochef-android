@@ -21,8 +21,7 @@ import java.util.List;
 
 public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecipe, BaseViewHolder> {
     public static final int VIEWHOLDER_AD = 1;
-    public static final int VIEWHOLDER_PAGER = 2;
-    public static final int VIEWHOLDER_ITEM = 3;
+    public static final int VIEWHOLDER_ITEM = 2;
 
     public String userid = "";
     public boolean showNew = false;
@@ -31,7 +30,6 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
     public RecipeMultiAdapter(List<MultiItemRecipe> data) {
         super(data);
         addItemType(VIEWHOLDER_AD, R.layout.li_adview);
-        addItemType(VIEWHOLDER_PAGER, R.layout.v_recommend);
         addItemType(VIEWHOLDER_ITEM, R.layout.li_recipe_main);
     }
 
@@ -71,44 +69,6 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 else
                     helper.setVisible(R.id.recipemain_yours,false);
 
-                break;
-
-            case VIEWHOLDER_PAGER:
-                helper.setText(R.id.recommend_title, item.getPager_title());
-                helper.getView(R.id.recommend_more).setOnClickListener(v -> {
-                    Intent intent = new Intent(mContext, RecipeThemeActivity.class)
-                            .putExtra("tag", item.getPager_title());
-                    mContext.startActivity(intent);
-                });
-
-                RecipeHorizontalAdapter recipeHorizontalAdapter = new RecipeHorizontalAdapter();
-                recipeHorizontalAdapter.setOnItemClickListener((adapter, view, position) -> {
-                    Intent intent = new Intent(mContext, RecipeDetailActivity.class)
-                            .putExtra("recipeID", ((Recipe) adapter.getData().get(position)).getRecipeID());
-                    mContext.startActivity(intent);
-                });
-                RecyclerView recyclerView = helper.getView(R.id.recommend_recyclerview);
-                recyclerView.setLayoutManager(new LinearLayoutManager(mContext, LinearLayoutManager.HORIZONTAL, false));
-                recyclerView.setAdapter(recipeHorizontalAdapter);
-//                if (App.isServerAlive()) {
-//                    recipeService.getRecipeByTag(item.getPager_title(), "popular")
-//                            .enqueue(new BasicCallback<ArrayList<Recipe>>(mContext) {
-//                                @Override
-//                                public void onResponse(Call<ArrayList<Recipe>> call, Response<ArrayList<Recipe>> response) {
-//                                    super.onResponse(call, response);
-//
-//                                    if (response.code() == 403)
-//                                        App.getAppInstance().showToast("뭔가에러");
-//                                    else {
-//                                        recipeHorizontalAdapter.setNewData(response.body());
-//                                    }
-//                                }
-//                            });
-//                } else {
-//                    ArrayList<Recipe> recipes = DataGenerator.make(mContext.getResources(), mContext.getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-//
-//                    recipeHorizontalAdapter.setNewData(recipes);
-//                }
                 break;
 
             case VIEWHOLDER_AD:

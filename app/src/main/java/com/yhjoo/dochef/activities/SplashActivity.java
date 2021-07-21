@@ -1,10 +1,20 @@
 package com.yhjoo.dochef.activities;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.github.florent37.viewanimator.ViewAnimator;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.ASplashBinding;
@@ -32,6 +42,7 @@ public class SplashActivity extends BaseActivity {
 
         checkServerAlive();
         checkIsAutoLogin();
+        createChannel();
     }
 
     @Override
@@ -100,5 +111,32 @@ public class SplashActivity extends BaseActivity {
 
     void startMain() {
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
+    }
+
+    void createChannel(){
+        SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        boolean channel_created = mSharedPreferences.getBoolean("channel_created",false);
+        Utils.log(channel_created);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channel_created) {
+            String CHANNEL_ID = getString(R.string.notification_channel_id);
+            String name = "기본채널";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, importance);
+            NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            notificationManager.createNotificationChannel(mChannel);
+
+            FirebaseMessaging.getInstance().subscribeToTopic("admin")
+                    .addOnCompleteListener(task -> {
+                        if (!task.isSuccessful()) {
+                            task.getException().printStackTrace();
+                            Utils.log(task.getException().toString());
+                        }
+                    });
+
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putBoolean("channel_created", true);
+            editor.apply();
+        }
     }
 }

@@ -45,13 +45,21 @@ public class RxRetrofitServices {
         @FormUrlEncoded
         @POST("user/check/")
         Single<Response<UserBrief>> checkUser(@Field("user_token") String token,
-                                  @Field("user_id") String uid);
+                                  @Field("user_id") String uid, @Field("user_fcm_token") String fcmtoken);
 
         @FormUrlEncoded
         @POST("user/signup")
         Single<Response<UserBrief>> createUser(@Field("user_token") String token,
                                    @Field("user_id") String uid,
                                    @Field("nickname") String nickname);
+
+
+        @FormUrlEncoded
+        @POST("user/update")
+        Single<Response<JsonObject>> updateUser(@Field("user_id") String userID,
+                                                @Field("user_img") String userImg,
+                                                @Field("nickname") String nickname,
+                                                @Field("bio") String bio);
     }
 
     public interface UserService {

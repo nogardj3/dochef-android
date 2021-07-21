@@ -74,9 +74,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
 
     @Override
     public void onRefresh() {
-        binding.timelineSwipe.setRefreshing(true);
-        binding.timelineSwipe.setEnabled(false);
-        getPostList();
+        new Handler().postDelayed(this::getPostList, 1000);
     }
 
     @Override
@@ -87,7 +85,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
         else {
             postList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_POST));
             postListAdapter.setNewData(postList);
-            postListAdapter.notifyDataSetChanged();
         }
     }
 
@@ -98,7 +95,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                         .subscribe(response -> {
                             postList = response.body();
                             postListAdapter.setNewData(response.body());
-                            postListAdapter.notifyDataSetChanged();
                             postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.timelineSwipe.getParent());
 
                             new Handler().postDelayed(() -> binding.timelineSwipe.setRefreshing(false), 1000);

@@ -4,6 +4,7 @@ import android.content.Context;
 
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.yhjoo.dochef.App;

@@ -31,7 +31,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_AD;
 import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_ITEM;
-import static com.yhjoo.dochef.adapter.RecipeMultiAdapter.VIEWHOLDER_PAGER;
 
 public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     public enum SORT {LATEST, POPULAR, RATING}
@@ -91,15 +90,10 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
         else {
             ArrayList<Recipe> temp = DataGenerator.make(getResources(),
                     getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
-            Random r = new Random();
 
             for (int i = 0; i < temp.size(); i++) {
                 if (i != 0 && i % 4 == 0) {
                     if (i / 4 % 2 == 0)
-                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,recommend_tags[0]));
-//                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
-//                                recommend_tags[r.nextInt(recommend_tags.length)]));
-                    else
                         recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                 }
                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, temp.get(i)));
@@ -126,13 +120,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                             recipeListItems.clear();
                             for (int i = 0; i < arrayList.size(); i++) {
                                 if (i != 0 && i % 4 == 0) {
-                                    if (i / 4 % 2 == 0)
-                                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
-                                                recommend_tags[0]));
-//                                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_PAGER,
-//                                                recommend_tags[r.nextInt(recommend_tags.length)]));
-                                    else
-                                        recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
+                                    recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_AD));
                                 }
                                 recipeListItems.add(new MultiItemRecipe(VIEWHOLDER_ITEM, arrayList.get(i)));
                             }
