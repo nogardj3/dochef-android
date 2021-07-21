@@ -36,15 +36,6 @@
 
     <!-- notification -->
     <string name="notification_channel_id">default</string>
-    <!-- 0번은 시스템 notification -->
-    <!-- 다중 사용자 nickname, user_img, recipe_name -->
-    <string name="format_noti_type_1">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;의 새로운 메뉴 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt;가 등록되었습니다.</string>
-    <!-- 단일 사용자 nickname, user_img, recipe_name -->
-    <string name="format_noti_type_2">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt; 에 리뷰를 달았습니다.</string>
-    <!-- 단일 사용자 nickname, user_img, post_name -->
-    <string name="format_noti_type_3">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 &lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %2$s&lt;/b&gt;&lt;/font&gt; 에 댓글을 달았습니다.</string>
-    <!-- 단일 사용자 nickname, user_img -->
-    <string name="format_noti_type_4">&lt;font color=\&#39;red\&#39;&gt;&lt;b&gt; %1$s&lt;/b&gt;&lt;/font&gt;가 당신을 팔로우 합니다.</string>
 
     <string name="tos_text_dummy">이용 약관</string>
 </resources>

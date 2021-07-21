@@ -1,19 +1,11 @@
 package com.yhjoo.dochef.adapter;
 
-import android.content.Intent;
-
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yhjoo.dochef.R;
-import com.yhjoo.dochef.activities.RecipeDetailActivity;
-import com.yhjoo.dochef.activities.RecipeThemeActivity;
 import com.yhjoo.dochef.model.MultiItemRecipe;
-import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.Utils;
 

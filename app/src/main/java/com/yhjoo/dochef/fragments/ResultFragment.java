@@ -156,14 +156,14 @@ public class ResultFragment extends Fragment {
 
     void setRecipeItem(ArrayList<Recipe> recipes) {
         ArrayList<SearchResult> searchResults = new ArrayList<>();
-        if (type == VIEWHOLDER_ITEM_USER) {
-        } else {
-            for (int i = 0; i < recipes.size(); i++) {
-                if (i != 0 && i % 4 == 0)
-                    searchResults.add(new SearchResult<>(VIEWHOLDER_AD));
-                searchResults.add(new SearchResult<>(type, recipes.get(i)));
-            }
+        for (int i = 0; i < recipes.size(); i++) {
+            if (i != 0 && i % 4 == 0)
+                searchResults.add(new SearchResult<>(VIEWHOLDER_AD));
+            searchResults.add(new SearchResult<>(type, recipes.get(i)));
         }
+
+        searchListAdapter.setNewData(searchResults);
+        searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
     }
 
     void setUserItem(ArrayList<UserBrief> userBriefs) {

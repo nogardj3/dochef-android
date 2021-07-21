@@ -16,7 +16,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -358,9 +357,7 @@ public class HomeActivity extends BaseActivity {
                 })
                 .negativeText("취소")
                 .negativeColorRes(R.color.grey_text)
-                .onNegative((dialog, which) -> {
-                    dialog.dismiss();
-                })
+                .onNegative((dialog, which) -> dialog.dismiss())
                 .build();
 
         materialDialog.show();
@@ -390,9 +387,7 @@ public class HomeActivity extends BaseActivity {
                 })
                 .negativeText("취소")
                 .negativeColorRes(R.color.grey_text)
-                .onNegative((dialog, which) -> {
-                    dialog.dismiss();
-                })
+                .onNegative((dialog, which) -> dialog.dismiss())
                 .build();
 
         materialDialog.show();
@@ -407,9 +402,7 @@ public class HomeActivity extends BaseActivity {
                     currentUserID, Long.toString(System.currentTimeMillis()));
             StorageReference ref = storageReference.child(getString(R.string.storage_path_profile) + image_url);
             ref.putFile(mImageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        updateToServer();
-                    });
+                    .addOnSuccessListener(taskSnapshot -> updateToServer());
         } else
             updateToServer();
     }

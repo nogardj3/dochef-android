@@ -52,9 +52,7 @@ public class FAQActivity extends BaseActivity {
             compositeDisposable.add(
                     basicService.getFAQ()
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(response -> {
-                                loadList(response.body());
-                            }, RxRetrofitBuilder.defaultConsumer())
+                            .subscribe(response -> loadList(response.body()), RxRetrofitBuilder.defaultConsumer())
             );
         } else {
             ArrayList<FAQ> faqs = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_FAQ));

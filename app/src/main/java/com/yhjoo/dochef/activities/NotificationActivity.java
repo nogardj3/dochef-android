@@ -8,14 +8,12 @@ import android.os.Bundle;
 import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.NotificationListAdapter;
 import com.yhjoo.dochef.databinding.ANotificationBinding;
 import com.yhjoo.dochef.model.Notification;
-import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.ChefSQLite;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.Utils;

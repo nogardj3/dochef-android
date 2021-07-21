@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -25,7 +24,6 @@ import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -143,8 +141,7 @@ public class PostWriteActivity extends BaseActivity {
     }
 
     void doneClicked(View v) {
-        ArrayList<String> tags = new ArrayList<>();
-        tags.addAll(binding.postwriteTags.getTags());
+        ArrayList<String> tags = new ArrayList<>(binding.postwriteTags.getTags());
 
         image_url = "";
         if (mImageUri != null) {
@@ -156,9 +153,7 @@ public class PostWriteActivity extends BaseActivity {
             progressON(this);
             StorageReference ref = storageReference.child(getString(R.string.storage_path_post) +  image_url);
             ref.putFile(mImageUri)
-                    .addOnSuccessListener(taskSnapshot -> {
-                        createORupdatePost(tags);
-                    });
+                    .addOnSuccessListener(taskSnapshot -> createORupdatePost(tags));
         }
         else
             createORupdatePost(tags);

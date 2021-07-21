@@ -285,9 +285,7 @@ public class AccountActivity extends BaseActivity {
         compositeDisposable.add(
                 accountService.checkUser(idToken, mAuth.getUid(),fcmToken)
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> {
-                        startMain(response.body());
-                    }, e -> {
+                    .subscribe(response -> startMain(response.body()), e -> {
                         e.printStackTrace();
                         if(e instanceof HttpException){
                             int code = ((HttpException) e).code();

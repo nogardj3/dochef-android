@@ -132,14 +132,12 @@ public class PostDetailActivity extends BaseActivity {
             App.getAppInstance().showToast("삭제");
             createConfirmDialog(this,
                     null, "삭제하시겠습니까?",
-                    (dialog1, which) -> {
-                        compositeDisposable.add(
-                                postService.deletePost(postID)
-                                        .observeOn(AndroidSchedulers.mainThread())
-                                        .subscribe(response -> finish()
-                                                , RxRetrofitBuilder.defaultConsumer())
-                        );
-                    }).show();
+                    (dialog1, which) -> compositeDisposable.add(
+                            postService.deletePost(postID)
+                                    .observeOn(AndroidSchedulers.mainThread())
+                                    .subscribe(response -> finish()
+                                            , RxRetrofitBuilder.defaultConsumer())
+                    )).show();
         }
 
         return super.onOptionsItemSelected(item);

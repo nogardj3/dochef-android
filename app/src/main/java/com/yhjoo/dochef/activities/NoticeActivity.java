@@ -53,9 +53,7 @@ public class NoticeActivity extends BaseActivity {
             compositeDisposable.add(
                     basicService.getNotice()
                             .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(response -> {
-                                loadList(response.body());
-                            }, RxRetrofitBuilder.defaultConsumer())
+                            .subscribe(response -> loadList(response.body()), RxRetrofitBuilder.defaultConsumer())
             );
         }else{
             ArrayList<Notice> response = DataGenerator.make(getResources(),

@@ -4,13 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.adapter.RecipeMyListAdapter;
@@ -49,14 +47,10 @@ public class RecipeMyListActivity extends BaseActivity {
 
         recipeMyListAdapter = new RecipeMyListAdapter(userID);
         recipeMyListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.recipelistRecycler.getParent());
-        recipeMyListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-
-                Intent intent = new Intent(RecipeMyListActivity.this, RecipeDetailActivity.class)
-                        .putExtra("recipeID", recipeList.get(position).getRecipeID());
-                startActivity(intent);
-            }
+        recipeMyListAdapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent(RecipeMyListActivity.this, RecipeDetailActivity.class)
+                    .putExtra("recipeID", recipeList.get(position).getRecipeID());
+            startActivity(intent);
         });
         recipeMyListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             if (view.getId() == R.id.recipemylist_yours) {
@@ -117,9 +111,7 @@ public class RecipeMyListActivity extends BaseActivity {
         compositeDisposable.add(
                 recipeService.setLikeRecipe(recipeid, userID, -1)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response -> {
-                            loadData();
-                        }, RxRetrofitBuilder.defaultConsumer())
+                        .subscribe(response -> loadData(), RxRetrofitBuilder.defaultConsumer())
         );
     }
 }

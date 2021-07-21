@@ -16,7 +16,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0.5"
-        app:srcCompat="@drawable/logo_red" />
+        app:srcCompat="@drawable/logo" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/account_signin_group"
