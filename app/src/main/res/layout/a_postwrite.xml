@@ -100,7 +100,6 @@
                 android:layout_height="wrap_content"
                 android:animateLayoutChanges="true"
                 android:paddingTop="4dp"
-                android:textCursorDrawable="@drawable/tag_cursor_post"
                 android:theme="@style/BaseTheme.EditTextStyle_post"
                 app:allowSpaceInTag="true"
                 app:layout_constraintLeft_toLeftOf="parent"

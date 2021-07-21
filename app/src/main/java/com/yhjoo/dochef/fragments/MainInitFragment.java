@@ -52,8 +52,8 @@ public class MainInitFragment extends Fragment {
                 RxRetrofitServices.RecipeService.class);
 
         ArrayList<Integer> imgs = new ArrayList<>();
-        imgs.add(R.drawable.ad_temp_0);
-        imgs.add(R.drawable.ad_temp_1);
+        imgs.add(R.raw.ad_temp_0);
+        imgs.add(R.raw.ad_temp_1);
 
         binding.mainAdviewpager.setAdapter(new MainAdPagerAdapter(getContext(), imgs));
         binding.mainAdviewpagerIndicator.setViewPager(binding.mainAdviewpager);
