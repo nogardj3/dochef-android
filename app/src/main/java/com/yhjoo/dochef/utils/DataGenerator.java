@@ -58,21 +58,37 @@ public class DataGenerator {
             for (int i = 1; i < 10; i++) {
                 Random r = new Random();
 
-                arrayList.add(new Notification(resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
+                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
+                        "recipe_detail",
+                        "1",
+                        "팔로워 XXX이 새 레시피가 등록되었습니다.",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
-                        "유저 " + i,
-                        null,
-                        "12:00"));
-                arrayList.add(new Notification(resources.getInteger(R.integer.NOTIFICATION_TYPE_2),
+                        System.currentTimeMillis(),
+                        r.nextInt(2)));
+
+                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_2),
+                        "recipe_detail",
+                        "1",
+                        "XXX에 새 리뷰가 등록되었습니다.",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
-                        null,
-                        "레시피 " + i,
-                        "8시간 전"));
-                arrayList.add(new Notification(resources.getInteger(R.integer.NOTIFICATION_TYPE_3),
+                        System.currentTimeMillis() - i * 1000000,
+                        r.nextInt(2)));
+
+                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_3),
+                        "post",
+                        "1",
+                        "XXX에 댓글이 등록되었습니다.",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
-                        "yy",
-                        "레시피 " + i,
-                        "4월 14일"));
+                        System.currentTimeMillis() - i * 2000000,
+                        r.nextInt(2)));
+
+                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_4),
+                        "home",
+                        "1",
+                        "XXX가 당신을 팔로우합니다.",
+                        Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
+                        System.currentTimeMillis() - i * 3000000,
+                        r.nextInt(2)));
             }
 
             return (T) arrayList;

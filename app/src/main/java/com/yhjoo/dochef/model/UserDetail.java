@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class UserDetail {
     @SerializedName("user_id")
     private String userID;
-    @SerializedName("profile_img_url")
+    @SerializedName("user_profile_img")
     private String userImg;
     @SerializedName("nickname")
     private String nickname;

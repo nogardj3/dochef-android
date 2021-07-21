@@ -43,6 +43,7 @@ public class SplashActivity extends BaseActivity {
         checkServerAlive();
         checkIsAutoLogin();
         createChannel();
+
     }
 
     @Override
@@ -132,6 +133,7 @@ public class SplashActivity extends BaseActivity {
                             task.getException().printStackTrace();
                             Utils.log(task.getException().toString());
                         }
+                        Utils.log(task.isSuccessful());
                     });
 
             SharedPreferences.Editor editor = mSharedPreferences.edit();

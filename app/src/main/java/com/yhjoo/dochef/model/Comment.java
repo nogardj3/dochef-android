@@ -11,7 +11,7 @@ public class Comment {
     private String userID;
     @SerializedName("nickname")
     private String nickName;
-    @SerializedName("profile_img_url")
+    @SerializedName("user_profile_img")
     private String userImg;
     @SerializedName("contents")
     private String contents;

@@ -4,11 +4,6 @@
     <string name="SP_ACTIVATEDDEVICE">AutoLogin</string> <!-- TODO 이거 관련된것들 수정-->
     <string name="SP_USERINFO">UserInfo</string>
     <string name="SP_CHANNEL">NotificationChannelCreated</string>
-    <string name="SP_NOTI_ADMIN">NotificationActiveAdmin</string>
-    <string name="SP_NOTI_COMMENT">NotificationActiveComment</string>
-    <string name="SP_NOTI_REVIEW">NotificationActiveReview</string>
-    <string name="SP_NOTI_NEWRECIPE">NotificationActiveNewRecipe</string>
-    <string name="SP_NOTI_FOLLOW">NotificationActiveFollow</string>
 
     <!-- server-->
     <string name="server_url">http://10.0.2.2:4000/chef/</string>

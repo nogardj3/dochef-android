@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="NOTIFICATION_TYPE_1">0</integer>
-    <integer name="NOTIFICATION_TYPE_2">1</integer>
-    <integer name="NOTIFICATION_TYPE_3">2</integer>
-    <integer name="NOTIFICATION_TYPE_4">3</integer>
-    <integer name="NOTIFICATION_TYPE_5">4</integer>
+    <integer name="NOTIFICATION_TYPE_1">1</integer>
+    <integer name="NOTIFICATION_TYPE_2">2</integer>
+    <integer name="NOTIFICATION_TYPE_3">3</integer>
+    <integer name="NOTIFICATION_TYPE_4">4</integer>
     <integer name="RECIPEITEM_TYPE_START">0</integer>
     <integer name="RECIPEITEM_TYPE_ITEM">1</integer>
     <integer name="RECIPEITEM_TYPE_FINISH">2</integer>

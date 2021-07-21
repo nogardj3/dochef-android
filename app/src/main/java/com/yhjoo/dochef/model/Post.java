@@ -24,7 +24,7 @@ public class Post implements Serializable {
     private ArrayList<String> likes;
     @SerializedName("nickname")
     private String nickname;
-    @SerializedName("profile_img_url")
+    @SerializedName("user_profile_img")
     private String userImg;
 
     public Post(int postID, String userID, String nickname, String userImg, String postImg, long dateTime, String contents, ArrayList<String> tags, ArrayList<Comment> comments, ArrayList<String> likes) {

@@ -14,7 +14,7 @@ public class RecipeDetail implements Serializable {
     private String userID;
     @SerializedName("nickname")
     private String nickname;
-    @SerializedName("profile_img_url")
+    @SerializedName("user_profile_img")
     private String userImg;
     @SerializedName("recipe_img")
     private String recipeImg;
