@@ -18,7 +18,7 @@ public class RecipeMyListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
         ImageLoadUtil.loadRecipeImage(
-                mContext,item.getRecipeImg(), helper.getView(R.id.recipemylist_recipeimg));
+                mContext, item.getRecipeImg(), helper.getView(R.id.recipemylist_recipeimg));
 
         helper.setText(R.id.recipemylist_recipetitle, item.getRecipeName());
         helper.setText(R.id.recipemylist_nickname,

@@ -35,10 +35,6 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
 
     ArrayList<Post> postList;
 
-    /*
-        TODO
-    */
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FMainTimelineBinding.inflate(getLayoutInflater());
@@ -53,7 +49,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
         postListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.timelineRecycler.getParent());
         postListAdapter.setOnItemClickListener((adapter, view1, position) -> {
             Intent intent = new Intent(MainTimelineFragment.this.getContext(), PostDetailActivity.class)
-                .putExtra("postID", ((Post) adapter.getData().get(position)).getPostID());
+                    .putExtra("postID", ((Post) adapter.getData().get(position)).getPostID());
             startActivity(intent);
         });
         postListAdapter.setOnItemChildClickListener((baseQuickAdapter, view12, i) -> {
@@ -61,7 +57,7 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                 case R.id.timeline_userimg:
                 case R.id.timeline_nickname:
                     Intent intent = new Intent(getContext(), HomeActivity.class)
-                        .putExtra("userID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
+                            .putExtra("userID", ((Post) baseQuickAdapter.getData().get(i)).getUserID());
                     startActivity(intent);
                     break;
             }

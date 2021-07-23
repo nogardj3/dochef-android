@@ -49,20 +49,20 @@ public class NoticeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        if (App.isServerAlive()){
+        if (App.isServerAlive()) {
             compositeDisposable.add(
                     basicService.getNotice()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> loadList(response.body()), RxRetrofitBuilder.defaultConsumer())
             );
-        }else{
+        } else {
             ArrayList<Notice> response = DataGenerator.make(getResources(),
                     getResources().getInteger(R.integer.DATA_TYPE_NOTICE));
             loadList(response);
         }
     }
 
-    void loadList(ArrayList<Notice> resList){
+    void loadList(ArrayList<Notice> resList) {
         for (Notice item : resList) {
             ExpandTitle title = new ExpandTitle(item.title);
             title.addSubItem(new ExpandContents(item.contents, 0));

@@ -23,17 +23,17 @@ import java.util.Random;
 public class DataGenerator {
     public static <T> T make(Resources resources, int type) {
         int[] img_recipes = {R.raw.dummy_recipe_0, R.raw.dummy_recipe_1,
-                R.raw.dummy_recipe_2,R.raw.dummy_recipe_3, R.raw.dummy_recipe_4,
-                R.raw.dummy_recipe_5,R.raw.dummy_recipe_6, R.raw.dummy_recipe_7,
-                R.raw.dummy_recipe_8,R.raw.dummy_recipe_9};
+                R.raw.dummy_recipe_2, R.raw.dummy_recipe_3, R.raw.dummy_recipe_4,
+                R.raw.dummy_recipe_5, R.raw.dummy_recipe_6, R.raw.dummy_recipe_7,
+                R.raw.dummy_recipe_8, R.raw.dummy_recipe_9};
         int[] img_profiles = {R.raw.dummy_profile_0, R.raw.dummy_profile_1,
-                R.raw.dummy_profile_2,R.raw.dummy_profile_3,R.raw.dummy_profile_4,
-                R.raw.dummy_profile_5,R.raw.dummy_profile_6,R.raw.dummy_profile_7,
-                R.raw.dummy_profile_8,R.raw.dummy_profile_9};
+                R.raw.dummy_profile_2, R.raw.dummy_profile_3, R.raw.dummy_profile_4,
+                R.raw.dummy_profile_5, R.raw.dummy_profile_6, R.raw.dummy_profile_7,
+                R.raw.dummy_profile_8, R.raw.dummy_profile_9};
         int[] img_posts = {R.raw.dummy_post_0, R.raw.dummy_post_1,
-                R.raw.dummy_post_2,R.raw.dummy_post_3,R.raw.dummy_post_4,
-                R.raw.dummy_post_5,R.raw.dummy_post_6,R.raw.dummy_post_7,
-                R.raw.dummy_post_8,R.raw.dummy_post_9};
+                R.raw.dummy_post_2, R.raw.dummy_post_3, R.raw.dummy_post_4,
+                R.raw.dummy_post_5, R.raw.dummy_post_6, R.raw.dummy_post_7,
+                R.raw.dummy_post_8, R.raw.dummy_post_9};
 
         if (type == resources.getInteger(R.integer.DATA_TYPE_FAQ)) {
             ArrayList<FAQ> arrayList = new ArrayList<>();
@@ -58,7 +58,7 @@ public class DataGenerator {
             for (int i = 1; i < 10; i++) {
                 Random r = new Random();
 
-                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
+                arrayList.add(new Notification(i, resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
                         "recipe_detail",
                         "1",
                         "팔로워 XXX이 새 레시피가 등록되었습니다.",
@@ -66,7 +66,7 @@ public class DataGenerator {
                         System.currentTimeMillis(),
                         r.nextInt(2)));
 
-                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_2),
+                arrayList.add(new Notification(i, resources.getInteger(R.integer.NOTIFICATION_TYPE_2),
                         "recipe_detail",
                         "1",
                         "XXX에 새 리뷰가 등록되었습니다.",
@@ -74,7 +74,7 @@ public class DataGenerator {
                         System.currentTimeMillis() - i * 1000000,
                         r.nextInt(2)));
 
-                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_3),
+                arrayList.add(new Notification(i, resources.getInteger(R.integer.NOTIFICATION_TYPE_3),
                         "post",
                         "1",
                         "XXX에 댓글이 등록되었습니다.",
@@ -82,7 +82,7 @@ public class DataGenerator {
                         System.currentTimeMillis() - i * 2000000,
                         r.nextInt(2)));
 
-                arrayList.add(new Notification(i,resources.getInteger(R.integer.NOTIFICATION_TYPE_4),
+                arrayList.add(new Notification(i, resources.getInteger(R.integer.NOTIFICATION_TYPE_4),
                         "home",
                         "1",
                         "XXX가 당신을 팔로우합니다.",
@@ -101,7 +101,7 @@ public class DataGenerator {
                 arrayList.add(new UserBrief("userID",
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                         "nickname",
-                        follow,1));
+                        follow, 1));
             }
 
             return (T) arrayList;
@@ -182,7 +182,7 @@ public class DataGenerator {
                         Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                         Integer.toString(img_recipes[r.nextInt(img_recipes.length)]),
                         "내용 " + i, System.currentTimeMillis() - (1000 * 1000 * i),
-                        i + "분", i, r.nextInt(6),ingredients, tags
+                        i + "분", i, r.nextInt(6), ingredients, tags
                 );
 
                 arrayList.add(recipe);
@@ -215,7 +215,7 @@ public class DataGenerator {
                     Integer.toString(img_profiles[r.nextInt(img_profiles.length)]),
                     Integer.toString(img_recipes[r.nextInt(img_recipes.length)]),
                     "내용 " + 1, System.currentTimeMillis() - (1000 * 1000),
-                    1 + "분", 1, likes ,r.nextInt(6),
+                    1 + "분", 1, likes, r.nextInt(6),
                     ingredients, tags, phases
             );
 
@@ -231,8 +231,7 @@ public class DataGenerator {
             }
 
             return (T) arrayList;
-        }
-        else{
+        } else {
             Utils.log("no type");
             return (T) new Object();
         }

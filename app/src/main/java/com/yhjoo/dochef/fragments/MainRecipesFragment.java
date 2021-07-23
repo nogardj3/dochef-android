@@ -45,7 +45,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     /*
         TODO
-        multiadapter
+        Recommend multi adapter 변경
     */
 
     @Override
@@ -78,7 +78,7 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     @Override
     public void onRefresh() {
-        new Handler().postDelayed(() -> getRecipeList(currentMode),1000);
+        new Handler().postDelayed(() -> getRecipeList(currentMode), 1000);
     }
 
     @Override
@@ -103,11 +103,11 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
 
     void getRecipeList(SORT sort) {
         String sortmode = "";
-        if(sort == SORT.LATEST)
+        if (sort == SORT.LATEST)
             sortmode = "latest";
-        else if(sort == SORT.POPULAR)
+        else if (sort == SORT.POPULAR)
             sortmode = "popular";
-        else if(sort == SORT.RATING)
+        else if (sort == SORT.RATING)
             sortmode = "rating";
 
         ((BaseActivity) getActivity()).getCompositeDisposable().add(

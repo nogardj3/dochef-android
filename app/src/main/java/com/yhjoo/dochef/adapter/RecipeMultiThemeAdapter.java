@@ -25,12 +25,12 @@ public class RecipeMultiThemeAdapter extends BaseMultiItemQuickAdapter<MultiItem
         switch (helper.getItemViewType()) {
             case VIEWHOLDER_ITEM:
                 ImageLoadUtil.loadRecipeImage(
-                        mContext,item.getContent().getRecipeImg(),helper.getView(R.id.recipetheme_img));
+                        mContext, item.getContent().getRecipeImg(), helper.getView(R.id.recipetheme_img));
 
                 helper.setText(R.id.recipetheme_title, item.getContent().getRecipeName());
                 helper.setText(R.id.recipetheme_nickname,
                         String.format(mContext.getResources().getString(R.string.format_usernickname), item.getContent().getNickname()));
-                helper.setText(R.id.recipetheme_rating,Integer.toString(item.getContent().getRating()));
+                helper.setText(R.id.recipetheme_rating, Integer.toString(item.getContent().getRating()));
                 break;
 
             case VIEWHOLDER_AD:

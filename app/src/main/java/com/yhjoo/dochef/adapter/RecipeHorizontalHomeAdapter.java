@@ -17,7 +17,7 @@ public class RecipeHorizontalHomeAdapter extends BaseQuickAdapter<Recipe, BaseVi
 
     @Override
     protected void convert(BaseViewHolder helper, Recipe item) {
-        ImageLoadUtil.loadRecipeImage(mContext,item.getRecipeImg(), helper.getView(R.id.recipehome_recipeimg));
+        ImageLoadUtil.loadRecipeImage(mContext, item.getRecipeImg(), helper.getView(R.id.recipehome_recipeimg));
 
         helper.setText(R.id.recipehome_name, item.getRecipeName());
         if (item.getUserID().equals(userID)) {

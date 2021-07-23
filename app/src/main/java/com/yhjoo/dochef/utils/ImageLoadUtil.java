@@ -13,7 +13,7 @@ import com.yhjoo.dochef.R;
 public class ImageLoadUtil {
     public static void loadUserImage(Context context, String filename, AppCompatImageView appCompatImageView) {
         if (App.isServerAlive()) {
-            if(!filename.equals("")){
+            if (!filename.equals("")) {
                 StorageReference profile_sr = FirebaseStorage.getInstance().getReference()
                         .child(context.getString(R.string.storage_path_profile) + filename);
 
@@ -22,8 +22,7 @@ public class ImageLoadUtil {
                         .circleCrop()
                         .into(appCompatImageView);
             }
-        }
-        else
+        } else
             GlideApp.with(context)
                     .load(Integer.valueOf(filename))
                     .circleCrop()
@@ -38,8 +37,7 @@ public class ImageLoadUtil {
             GlideApp.with(context)
                     .load(recipe_sr)
                     .into(appCompatImageView);
-        }
-        else
+        } else
             GlideApp.with(context)
                     .load(Integer.valueOf(filename))
                     .into(appCompatImageView);
@@ -47,7 +45,7 @@ public class ImageLoadUtil {
 
     public static void loadPostImage(Context context, String filename, AppCompatImageView appCompatImageView) {
         if (App.isServerAlive()) {
-            if(!filename.equals("")) {
+            if (!filename.equals("")) {
                 StorageReference post_sr = FirebaseStorage.getInstance().getReference()
                         .child(context.getString(R.string.storage_path_post) + filename);
 
@@ -55,8 +53,7 @@ public class ImageLoadUtil {
                         .load(post_sr)
                         .into(appCompatImageView);
             }
-        }
-        else
+        } else
             GlideApp.with(context)
                     .load(Integer.valueOf(filename))
                     .into(appCompatImageView);

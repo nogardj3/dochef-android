@@ -40,6 +40,7 @@ public class RecipeThemeActivity extends BaseActivity {
 
     /*
         TODO
+        Recommend multi adapter 변경
     */
 
     @Override
@@ -52,9 +53,9 @@ public class RecipeThemeActivity extends BaseActivity {
 
         MobileAds.initialize(this);
 
-        if(getIntent().getStringExtra("tag") == null)
+        if (getIntent().getStringExtra("tag") == null)
             currentMode = MODE.POPULAR;
-        else{
+        else {
             currentMode = MODE.TAG;
             tagName = getIntent().getStringExtra("tag");
         }
@@ -79,10 +80,9 @@ public class RecipeThemeActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
 
-        if (App.isServerAlive()){
+        if (App.isServerAlive()) {
             loadData();
-        }
-        else {
+        } else {
             ArrayList<Recipe> arrayList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATE_TYPE_RECIPE));
             for (int i = 0; i < arrayList.size(); i++) {
                 if (i != 0 && i % 4 == 0)
@@ -94,10 +94,10 @@ public class RecipeThemeActivity extends BaseActivity {
         }
     }
 
-    void loadData(){
+    void loadData() {
         Single<Response<ArrayList<Recipe>>> recipeSingle;
 
-        if(currentMode == MODE.POPULAR)
+        if (currentMode == MODE.POPULAR)
             recipeSingle = recipeService.getRecipes("popular")
                     .observeOn(AndroidSchedulers.mainThread());
         else

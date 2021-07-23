@@ -4,10 +4,12 @@
     <integer name="NOTIFICATION_TYPE_2">2</integer>
     <integer name="NOTIFICATION_TYPE_3">3</integer>
     <integer name="NOTIFICATION_TYPE_4">4</integer>
+
     <integer name="RECIPEITEM_TYPE_START">0</integer>
     <integer name="RECIPEITEM_TYPE_ITEM">1</integer>
     <integer name="RECIPEITEM_TYPE_FINISH">2</integer>
 
+<!-- data generate-->
     <integer name="DATA_TYPE_FAQ">0</integer>
     <integer name="DATA_TYPE_NOTICE">1</integer>
     <integer name="DATA_TYPE_NOTIFICATION">2</integer>
@@ -18,5 +20,4 @@
     <integer name="DATE_TYPE_RECIPE">7</integer>
     <integer name="DATA_TYPE_RECIPE_DETAIL">8</integer>
     <integer name="DATA_TYPE_REVIEW">9</integer>
-
 </resources>

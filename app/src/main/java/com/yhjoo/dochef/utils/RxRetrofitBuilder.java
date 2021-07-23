@@ -26,24 +26,22 @@ public final class RxRetrofitBuilder {
         return create(context, service, false, "");
     }
 
-
     /*
        TODO
        server http error code 정리하고 이거 정리
     */
-    public static Consumer<Throwable> defaultConsumer(){
+    public static Consumer<Throwable> defaultConsumer() {
         return throwable -> {
             throwable.printStackTrace();
 
-            if(throwable instanceof HttpException){
+            if (throwable instanceof HttpException) {
                 int code = ((HttpException) throwable).code();
 
                 if (code == 403)
                     Utils.log("403 에러 뭐지");
                 if (code == 404)
                     Utils.log("404 에러 뭐지");
-            }
-            else{
+            } else {
                 Utils.log("알 수 없는 에러");
             }
         };

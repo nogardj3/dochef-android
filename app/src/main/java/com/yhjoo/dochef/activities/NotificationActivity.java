@@ -20,18 +20,12 @@ import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
-public class NotificationActivity extends BaseActivity{
+public class NotificationActivity extends BaseActivity {
     ANotificationBinding binding;
-
+    ChefSQLite chefSQLite;
     NotificationListAdapter notificationListAdapter;
 
     ArrayList<Notification> notifications = new ArrayList<>();
-
-    ChefSQLite chefSQLite;
-    /*
-        TODO
-        액션 -> 서버보냄 -> 클라이언트에 보냄 -> 서버에서 오는거 받아서 뷰 처리
-    */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,14 +42,14 @@ public class NotificationActivity extends BaseActivity{
         notificationListAdapter = new NotificationListAdapter();
         notificationListAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.notificationRecycler.getParent());
         notificationListAdapter.setOnItemClickListener((adapter, view, position) -> {
-            if(App.isServerAlive()){
+            if (App.isServerAlive()) {
                 SQLiteDatabase db2 = chefSQLite.getWritableDatabase();
 
                 ContentValues values = new ContentValues();
                 values.put(ChefSQLite.NotificationEntry.COLUMN_NAME_READ, 1);
 
                 String selection = ChefSQLite.NotificationEntry._ID + " LIKE ?";
-                String[] selectionArgs = { Integer.toString(notifications.get(position).get_id()) };
+                String[] selectionArgs = {Integer.toString(notifications.get(position).get_id())};
 
                 int count = db2.update(
                         ChefSQLite.NotificationEntry.TABLE_NAME,
@@ -75,8 +69,7 @@ public class NotificationActivity extends BaseActivity{
                     Intent intent = new Intent(NotificationActivity.this, PostDetailActivity.class)
                             .putExtra("postID", Integer.parseInt(notifications.get(position).getIntent_data()));
                     startActivity(intent);
-                }
-                else if (noti_type == getResources().getInteger(R.integer.NOTIFICATION_TYPE_4)) {
+                } else if (noti_type == getResources().getInteger(R.integer.NOTIFICATION_TYPE_4)) {
                     Intent intent = new Intent(NotificationActivity.this, HomeActivity.class)
                             .putExtra("postID", notifications.get(position).getIntent_data());
                     startActivity(intent);
@@ -148,7 +141,7 @@ public class NotificationActivity extends BaseActivity{
         }
         cursor.close();
 
-        for (Notification noti :res) {
+        for (Notification noti : res) {
             Utils.log(noti.toString());
         }
 

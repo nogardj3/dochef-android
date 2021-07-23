@@ -51,15 +51,15 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 helper.setText(R.id.recipemain_rating, Integer.toString(item.getContent().getRating()));
                 helper.setText(R.id.recipemain_view, Integer.toString(item.getContent().getView_count()));
 
-                if(showNew)
-                    helper.setVisible(R.id.recipemain_new,Utils.checkNew(item.getContent().getDatetime()));
+                if (showNew)
+                    helper.setVisible(R.id.recipemain_new, Utils.checkNew(item.getContent().getDatetime()));
                 else
-                    helper.setVisible(R.id.recipemain_new,false);
+                    helper.setVisible(R.id.recipemain_new, false);
 
-                if(showYours)
+                if (showYours)
                     helper.setVisible(R.id.recipemain_yours, !userid.equals(item.getContent().getUserID()));
                 else
-                    helper.setVisible(R.id.recipemain_yours,false);
+                    helper.setVisible(R.id.recipemain_yours, false);
 
                 break;
 

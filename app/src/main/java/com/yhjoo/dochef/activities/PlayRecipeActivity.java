@@ -58,7 +58,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         TODO
         센서근접 -> 음성인식 -> 인식결과에 따라 행동
         시작/다음/이전/타이머 시작/타이머 정지
-         
     */
 
     @Override

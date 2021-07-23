@@ -25,6 +25,7 @@ public class SearchActivity extends BaseActivity {
 
     /*
         TODO
+        Recipe 검색 목록 서버 연동 확인
     */
 
     @Override
@@ -66,7 +67,7 @@ public class SearchActivity extends BaseActivity {
         return keyword;
     }
 
-    void onClickSearch(View v){
+    void onClickSearch(View v) {
         if (binding.searchEdittext.getText().toString().trim().length() == 0) {
             App.getAppInstance().showToast("한 글자 이상 입력해주세요.");
         } else {
@@ -93,7 +94,7 @@ public class SearchActivity extends BaseActivity {
         }
     }
 
-    void onClickBack(View v){
+    void onClickBack(View v) {
         finish();
     }
 }

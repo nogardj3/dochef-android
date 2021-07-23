@@ -80,8 +80,6 @@ public class Post implements Serializable {
         return tags;
     }
 
-
-
     @Override
     public String toString() {
         return "Post{" +

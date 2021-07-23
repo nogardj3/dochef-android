@@ -10,7 +10,7 @@ public class Notification {
     private final long dateTime;
     private final int read;
 
-    public Notification(int _id,int type, String intent_name, String intent_data, String contents, String image, long dateTime, int read) {
+    public Notification(int _id, int type, String intent_name, String intent_data, String contents, String image, long dateTime, int read) {
         this._id = _id;
         this.type = type;
         this.intent_name = intent_name;

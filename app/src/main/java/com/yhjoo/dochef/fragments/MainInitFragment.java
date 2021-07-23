@@ -40,7 +40,7 @@ public class MainInitFragment extends Fragment {
 
     /*
         TODO
-        나중에 sampledb 만들어지면 TODO로 바꾸기
+        sampledb 만들어지면 TODO로 바꾸기
     */
 
     @Override
@@ -70,9 +70,7 @@ public class MainInitFragment extends Fragment {
         Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(count -> binding.mainAdviewpager
-                        .setCurrentItem(binding.mainAdviewpager.getCurrentItem() == imgs.size() - 1
-                                ? 0 : binding.mainAdviewpager.getCurrentItem() + 1));
+                .subscribe(count -> binding.mainAdviewpager.setCurrentItem(count.intValue() % 2));
 
 
         recipeHorizontalAdapter = new RecipeHorizontalAdapter();

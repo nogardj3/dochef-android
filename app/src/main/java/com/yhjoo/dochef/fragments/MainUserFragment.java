@@ -34,10 +34,6 @@ public class MainUserFragment extends Fragment {
     UserDetail userDetailInfo;
     String userID;
 
-    /*
-        TODO
-    */
-
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = FMainUserBinding.inflate(inflater, container, false);
@@ -69,17 +65,17 @@ public class MainUserFragment extends Fragment {
         }
     }
 
-    void goHome(View view){
+    void goHome(View view) {
         startActivity(new Intent(getContext(), HomeActivity.class));
     }
 
-    void goMyRecipe(View view){
+    void goMyRecipe(View view) {
         Intent intent = new Intent(getContext(), RecipeMyListActivity.class)
                 .putExtra("userID", userDetailInfo.getUserID());
         startActivity(intent);
     }
 
-    void goSetting(View view){
+    void goSetting(View view) {
         startActivity(new Intent(getContext(), SettingActivity.class));
     }
 

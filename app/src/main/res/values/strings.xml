@@ -1,22 +1,22 @@
 <resources>
     <string name="app_name">DoChef</string>
 
-    <string name="SP_ACTIVATEDDEVICE">AutoLogin</string> <!-- TODO 이거 관련된것들 수정-->
+    <string name="SP_ACTIVATEDDEVICE">AutoLogin</string>
     <string name="SP_USERINFO">UserInfo</string>
     <string name="SP_CHANNEL">NotificationChannelCreated</string>
 
-    <!-- server-->
+    <!-- server -->
     <string name="server_url">http://10.0.2.2:4000/chef/</string>
 
-    <!-- admob 테스트용-->
+    <!-- admob test -->
     <string name="admob_banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
 
-    <!-- storage path -->
+    <!-- firebase storage path -->
     <string name="storage_path_profile">profile/</string>
     <string name="storage_path_recipe">recipe/</string>
     <string name="storage_path_post">post/</string>
 
-    <!-- analytics -->
+    <!-- firebase analytics -->
     <string name="analytics_type_text">text</string>
     <string name="analytics_event_terminated">app_terminated</string>
     <string name="analytics_id_start">0</string>
@@ -37,5 +37,4 @@
     <!-- notification -->
     <string name="notification_channel_id">default</string>
 
-    <string name="tos_text_dummy">이용 약관</string>
 </resources>

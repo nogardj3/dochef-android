@@ -69,7 +69,7 @@ public class FollowListActivity extends BaseActivity {
         binding.followlistRecycler.setLayoutManager(new LinearLayoutManager(this));
         binding.followlistRecycler.setAdapter(followListAdapter);
 
-        if (App.isServerAlive()){
+        if (App.isServerAlive()) {
             Single<Response<ArrayList<UserBrief>>> modeSingle;
             if (current_mode == MODE.FOLLOWER)
                 modeSingle = rxUserService.getFollowers(target_id)
@@ -86,13 +86,12 @@ public class FollowListActivity extends BaseActivity {
                                         return modeSingle;
                                     }
                             )
-                            .subscribe(response->{
+                            .subscribe(response -> {
                                 userList = response.body();
                                 setListData();
                             }, RxRetrofitBuilder.defaultConsumer())
             );
-        }
-        else {
+        } else {
             userDetailInfo = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_DETAIL));
             userList = DataGenerator.make(getResources(), getResources().getInteger(R.integer.DATA_TYPE_USER_BRIEF));
 
@@ -104,12 +103,12 @@ public class FollowListActivity extends BaseActivity {
         String target = ((UserBrief) adapter.getData().get(position)).getUserID();
 
         Single<Response<JsonObject>> subORunsub = view.getId() == R.id.user_followcancel_btn ?
-                rxUserService.subscribeUser(active_userid, target):
+                rxUserService.subscribeUser(active_userid, target) :
                 rxUserService.unsubscribeUser(active_userid, target);
 
         Single<Response<ArrayList<UserBrief>>> modeSingle = current_mode == MODE.FOLLOWER ?
                 rxUserService.getFollowers(target_id)
-                        .observeOn(AndroidSchedulers.mainThread()):
+                        .observeOn(AndroidSchedulers.mainThread()) :
                 rxUserService.getFollowings(target_id)
                         .observeOn(AndroidSchedulers.mainThread());
 
@@ -123,7 +122,7 @@ public class FollowListActivity extends BaseActivity {
                                     return modeSingle;
                                 }
                         )
-                        .subscribe(response->{
+                        .subscribe(response -> {
                             userList = response.body();
                             setListData();
                         }, RxRetrofitBuilder.defaultConsumer())

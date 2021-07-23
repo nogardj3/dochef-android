@@ -75,15 +75,6 @@ public class HomeActivity extends BaseActivity {
     String image_url;
     String currentUserID;
 
-    boolean revise_img_changed;
-    String revise_before_nickname;
-    String revise_before_profile;
-
-    /*
-        TODO
-        revise 프로세스 확인
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

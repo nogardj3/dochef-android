@@ -32,21 +32,21 @@ public class ChefMessagingService extends FirebaseMessagingService {
 
             String type = remoteMessage.getData().get("type");
 
-            if(!type.equals("0"))
+            if (!type.equals("0"))
                 addDB(remoteMessage.getData());
 
             SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-            boolean settingEnable =  mSharedPreferences.getBoolean(
-                    getResources().getStringArray(R.array.sp_noti)[Integer.parseInt(type)],true);
+            boolean settingEnable = mSharedPreferences.getBoolean(
+                    getResources().getStringArray(R.array.sp_noti)[Integer.parseInt(type)], true);
 
-            if(settingEnable)
+            if (settingEnable)
                 sendNotification(remoteMessage.getNotification().getTitle(), remoteMessage.getNotification().getBody());
         }
     }
 
-    private void addDB(Map<String,String> data){
-        ChefSQLite chefSQLite = new ChefSQLite(this,ChefSQLite.DATABASE_NAME,
-                null,ChefSQLite.DATABASE_VERSION);
+    private void addDB(Map<String, String> data) {
+        ChefSQLite chefSQLite = new ChefSQLite(this, ChefSQLite.DATABASE_NAME,
+                null, ChefSQLite.DATABASE_VERSION);
 
         SQLiteDatabase db = chefSQLite.getWritableDatabase();
         ContentValues values = new ContentValues();

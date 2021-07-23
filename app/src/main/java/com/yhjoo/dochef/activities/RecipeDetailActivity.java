@@ -61,7 +61,7 @@ public class RecipeDetailActivity extends BaseActivity {
         reviewListAdapter = new ReviewListAdapter();
         reviewListAdapter.setOnItemChildClickListener((adapter, view, position) -> {
             Intent intent = new Intent(RecipeDetailActivity.this, HomeActivity.class)
-                    .putExtra("userID", ((Review)adapter.getData().get(position)).getUserID());
+                    .putExtra("userID", ((Review) adapter.getData().get(position)).getUserID());
             startActivity(intent);
         });
         binding.recipedetailReviewRecycler.setLayoutManager(new LinearLayoutManager(this) {
@@ -96,7 +96,7 @@ public class RecipeDetailActivity extends BaseActivity {
         }
     }
 
-    void loadData(){
+    void loadData() {
         compositeDisposable.add(
                 recipeService.getRecipeDetail(recipeID)
                         .flatMap((Function<Response<RecipeDetail>, Single<Response<ArrayList<Review>>>>)

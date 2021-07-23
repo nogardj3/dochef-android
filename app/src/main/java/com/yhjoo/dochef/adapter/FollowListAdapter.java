@@ -23,14 +23,13 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
 
     @Override
     protected void convert(BaseViewHolder helper, UserBrief item) {
-        ImageLoadUtil.loadUserImage(mContext,item.getUserImg(),helper.getView(R.id.user_img));
+        ImageLoadUtil.loadUserImage(mContext, item.getUserImg(), helper.getView(R.id.user_img));
 
         if (!item.getUserID().equals(userID)) {
-            if(activeUserFollow.contains(item.getUserID())){
+            if (activeUserFollow.contains(item.getUserID())) {
                 helper.setVisible(R.id.user_follow_btn, true);
                 helper.setVisible(R.id.user_followcancel_btn, false);
-            }
-            else {
+            } else {
                 helper.setVisible(R.id.user_follow_btn, false);
                 helper.setVisible(R.id.user_followcancel_btn, true);
             }
@@ -39,7 +38,7 @@ public class FollowListAdapter extends BaseQuickAdapter<UserBrief, BaseViewHolde
         }
 
         helper.setText(R.id.user_follower_count, String.format(
-                mContext.getString(R.string.format_follower),Integer.toString(item.getFollower_count())
+                mContext.getString(R.string.format_follower), Integer.toString(item.getFollower_count())
         ));
         helper.setText(R.id.user_nickname, item.getNickname());
     }

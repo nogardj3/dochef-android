@@ -32,10 +32,10 @@ public class RxRetrofitServices {
         Single<Response<ArrayList<FAQ>>> getFAQ();
 
         @GET("tos")
-        Single<Response<JsonObject>>  getTOS();
+        Single<Response<JsonObject>> getTOS();
 
         @GET("alive")
-        Single<Response<JsonObject>>  checkAlive();
+        Single<Response<JsonObject>> checkAlive();
     }
 
     public interface AccountService {
@@ -45,13 +45,13 @@ public class RxRetrofitServices {
         @FormUrlEncoded
         @POST("user/check/")
         Single<Response<UserBrief>> checkUser(@Field("user_token") String token,
-                                  @Field("user_id") String uid, @Field("user_fcm_token") String fcmtoken);
+                                              @Field("user_id") String uid, @Field("user_fcm_token") String fcmtoken);
 
         @FormUrlEncoded
         @POST("user/signup")
         Single<Response<UserBrief>> createUser(@Field("user_token") String token,
-                                   @Field("user_id") String uid,
-                                   @Field("nickname") String nickname);
+                                               @Field("user_id") String uid,
+                                               @Field("nickname") String nickname);
 
 
         @FormUrlEncoded
@@ -78,12 +78,12 @@ public class RxRetrofitServices {
         @FormUrlEncoded
         @POST("user/subscribe")
         Single<Response<JsonObject>> subscribeUser(@Field("user_id") String user_id,
-                                                 @Field("target_id") String target_id);
+                                                   @Field("target_id") String target_id);
 
         @FormUrlEncoded
         @POST("user/unsubscribe")
         Single<Response<JsonObject>> unsubscribeUser(@Field("user_id") String user_id,
-                                                   @Field("target_id") String target_id);
+                                                     @Field("target_id") String target_id);
     }
 
     public interface RecipeService {
@@ -112,19 +112,19 @@ public class RxRetrofitServices {
 
         @FormUrlEncoded
         @POST("recipe/like")
-        Single<Response<JsonObject>> setLikeRecipe(@Field("recipe_id") int recipeId, @Field("user_id") String userId , @Field("like") int like);
+        Single<Response<JsonObject>> setLikeRecipe(@Field("recipe_id") int recipeId, @Field("user_id") String userId, @Field("like") int like);
 
         @FormUrlEncoded
         @POST("recipe/create")
         Single<Response<JsonObject>> createRecipe(@Field("user_id") String userID,
-                                      @Field("recipe_name") String recipeName,
-                                      @Field("recipe_img") String recipeImg,
-                                      @Field("contents") String contents,
-                                      @Field("datetime") long datetime,
-                                      @Field("amount_time") String amountTime,
-                                      @Field("ingredients") Ingredient[] ingredients,
-                                      @Field("tags") String[] tags,
-                                      @Field("phase") RecipePhase[] phases);
+                                                  @Field("recipe_name") String recipeName,
+                                                  @Field("recipe_img") String recipeImg,
+                                                  @Field("contents") String contents,
+                                                  @Field("datetime") long datetime,
+                                                  @Field("amount_time") String amountTime,
+                                                  @Field("ingredients") Ingredient[] ingredients,
+                                                  @Field("tags") String[] tags,
+                                                  @Field("phase") RecipePhase[] phases);
 
     }
 
@@ -155,24 +155,24 @@ public class RxRetrofitServices {
         @FormUrlEncoded
         @POST("post/like")
         Single<Response<JsonObject>> setLikePost(@Field("user_id") String userID,
-                                     @Field("post_id") int postID,
-                                     @Field("like") int like);
+                                                 @Field("post_id") int postID,
+                                                 @Field("like") int like);
 
         @FormUrlEncoded
         @POST("post/create")
         Single<Response<JsonObject>> createPost(@Field("user_id") String userID,
-                                    @Field("post_img") String postImgs,
-                                    @Field("contents") String contents,
-                                    @Field("datetime") long datetime,
-                                    @Field("tags") ArrayList<String> tags);
+                                                @Field("post_img") String postImgs,
+                                                @Field("contents") String contents,
+                                                @Field("datetime") long datetime,
+                                                @Field("tags") ArrayList<String> tags);
 
         @FormUrlEncoded
         @POST("post/update")
         Single<Response<JsonObject>> updatePost(@Field("post_id") int postID,
-                                    @Field("post_img") String postImgs,
-                                    @Field("contents") String contents,
-                                    @Field("datetime") long datetime,
-                                    @Field("tags") ArrayList<String> tags);
+                                                @Field("post_img") String postImgs,
+                                                @Field("contents") String contents,
+                                                @Field("datetime") long datetime,
+                                                @Field("tags") ArrayList<String> tags);
 
         @FormUrlEncoded
         @POST("post/delete")
@@ -186,9 +186,9 @@ public class RxRetrofitServices {
         @FormUrlEncoded
         @POST("comment/create")
         Single<Response<JsonObject>> createComment(@Field("post_id") int postID,
-                                       @Field("user_id") String userID,
-                                       @Field("contents") String contents,
-                                       @Field("datetime") long dateTime);
+                                                   @Field("user_id") String userID,
+                                                   @Field("contents") String contents,
+                                                   @Field("datetime") long dateTime);
 
         @FormUrlEncoded
         @POST("comment/delete")

@@ -110,9 +110,9 @@ public class SplashActivity extends BaseActivity {
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
     }
 
-    void createChannel(){
+    void createChannel() {
         SharedPreferences mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        boolean channel_created = mSharedPreferences.getBoolean("channel_created",false);
+        boolean channel_created = mSharedPreferences.getBoolean("channel_created", false);
         Utils.log(channel_created);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channel_created) {

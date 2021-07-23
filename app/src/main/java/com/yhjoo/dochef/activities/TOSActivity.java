@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Html;
 
 import com.yhjoo.dochef.App;
-import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.ATosBinding;
 import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.utils.RxRetrofitBuilder;
@@ -41,6 +40,6 @@ public class TOSActivity extends BaseActivity {
                             }, RxRetrofitBuilder.defaultConsumer())
             );
         } else
-            binding.tosText.setText(Html.fromHtml(getString(R.string.tos_text_dummy), Html.FROM_HTML_MODE_LEGACY));
+            binding.tosText.setText("이용약관");
     }
 }

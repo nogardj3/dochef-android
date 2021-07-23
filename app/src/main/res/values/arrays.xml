@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+<!-- recommend template -->
     <string-array name="recommend_tags">
         <item>매운맛</item>
         <item>짠맛</item>

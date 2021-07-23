@@ -45,11 +45,6 @@ public class PostWriteActivity extends BaseActivity {
     String image_url;
     int postID;
 
-    /*
-        TODO
-        revise 프로세스 확인
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,7 +83,7 @@ public class PostWriteActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
@@ -117,8 +112,8 @@ public class PostWriteActivity extends BaseActivity {
 
             CropImage.activity(mImageUri)
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
-                    .setRequestedSize(IMG_WIDTH,IMG_HEIGHT)
+                    .setAspectRatio(1, 1)
+                    .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
                     .setOutputUri(mImageUri)
                     .start(this);
         }
@@ -132,8 +127,8 @@ public class PostWriteActivity extends BaseActivity {
         if (Utils.checkPermission(this, permissions)) {
             CropImage.activity()
                     .setGuidelines(CropImageView.Guidelines.ON)
-                    .setAspectRatio(1,1)
-                    .setMaxCropResultSize(IMG_WIDTH,IMG_HEIGHT)
+                    .setAspectRatio(1, 1)
+                    .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
                     .setOutputUri(mImageUri)
                     .start(this);
         } else
@@ -151,15 +146,14 @@ public class PostWriteActivity extends BaseActivity {
 
         if (image_url != null && !image_url.equals("")) {
             progressON(this);
-            StorageReference ref = storageReference.child(getString(R.string.storage_path_post) +  image_url);
+            StorageReference ref = storageReference.child(getString(R.string.storage_path_post) + image_url);
             ref.putFile(mImageUri)
                     .addOnSuccessListener(taskSnapshot -> createORupdatePost(tags));
-        }
-        else
+        } else
             createORupdatePost(tags);
     }
 
-    void createORupdatePost(ArrayList<String> tags){
+    void createORupdatePost(ArrayList<String> tags) {
         if (current_mode == MODE.WRITE)
             compositeDisposable.add(
                     postService.createPost(userID, image_url,

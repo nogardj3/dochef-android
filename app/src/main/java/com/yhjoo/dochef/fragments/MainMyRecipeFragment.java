@@ -44,7 +44,7 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
     /*
         TODO
-        multiadapter
+        Recommend multi adapter 변경
     */
 
     @Override
@@ -67,7 +67,7 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
                 Intent intent = new Intent(MainMyRecipeFragment.this.getContext(), RecipeDetailActivity.class)
-                    .putExtra("recipeID", recipeListItems.get(position).getContent().getRecipeID());
+                        .putExtra("recipeID", recipeListItems.get(position).getContent().getRecipeID());
                 startActivity(intent);
             }
         });
@@ -108,7 +108,7 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
     void getRecipelist() {
         ((BaseActivity) getActivity()).getCompositeDisposable().add(
                 recipeService.getRecipeByUserID(userID, "latest")
-                .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(response -> {
                             ArrayList<Recipe> temp = response.body();
                             Random r = new Random();

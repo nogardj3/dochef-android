@@ -35,11 +35,11 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
             case VIEWHOLDER_ITEM_USER:
                 UserBrief ele = (UserBrief) item.getContent();
 
-                ImageLoadUtil.loadUserImage(mContext, ele.getUserImg(),helper.getView(R.id.user_img));
+                ImageLoadUtil.loadUserImage(mContext, ele.getUserImg(), helper.getView(R.id.user_img));
 
                 helper.setText(R.id.user_nickname, ele.getNickname());
                 helper.setText(R.id.user_follower_count, String.format(
-                    mContext.getString(R.string.format_follower),Integer.toString(ele.getFollower_count())
+                        mContext.getString(R.string.format_follower), Integer.toString(ele.getFollower_count())
                 ));
                 break;
 
@@ -47,7 +47,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
                 Recipe recipeItem = (Recipe) item.getContent();
 
                 ImageLoadUtil.loadRecipeImage(
-                        mContext,recipeItem.getRecipeImg(),helper.getView(R.id.reciperesult_recipeimg));
+                        mContext, recipeItem.getRecipeImg(), helper.getView(R.id.reciperesult_recipeimg));
 
                 helper.setText(R.id.reciperesult_title, recipeItem.getRecipeName());
                 helper.setTextColor(R.id.reciperesult_title, mContext.getColor(R.color.colorPrimary));
@@ -60,7 +60,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
                 Recipe recipeItem2 = (Recipe) item.getContent();
 
                 ImageLoadUtil.loadRecipeImage(
-                        mContext,recipeItem2.getRecipeImg(),helper.getView(R.id.reciperesult_recipeimg));
+                        mContext, recipeItem2.getRecipeImg(), helper.getView(R.id.reciperesult_recipeimg));
 
                 helper.setText(R.id.reciperesult_title, recipeItem2.getRecipeName());
                 helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem2.getNickname()));
@@ -74,7 +74,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
                 Recipe recipeItem3 = (Recipe) item.getContent();
 
                 ImageLoadUtil.loadRecipeImage(
-                        mContext,recipeItem3.getRecipeImg(),helper.getView(R.id.reciperesult_recipeimg));
+                        mContext, recipeItem3.getRecipeImg(), helper.getView(R.id.reciperesult_recipeimg));
 
 
                 helper.setText(R.id.reciperesult_title, recipeItem3.getRecipeName());

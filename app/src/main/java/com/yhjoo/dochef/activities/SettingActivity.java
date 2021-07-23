@@ -21,11 +21,6 @@ public class SettingActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     String[] sp_array;
 
-    /*
-        TODO
-        FCM 완료 후 알림 옵션 설정
-    */
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,11 +40,11 @@ public class SettingActivity extends BaseActivity {
         binding.settingLogout.setOnClickListener(this::signOut);
 
         binding.settingNotificationAllCheck.setOnClickListener((v -> toggleAllnotification()));
-        binding.settingNotification0Check.setOnClickListener((v -> toggleNotification(0,null)));
-        binding.settingNotification1Check.setOnClickListener((v -> toggleNotification(1,null)));
-        binding.settingNotification2Check.setOnClickListener((v -> toggleNotification(2,null)));
-        binding.settingNotification3Check.setOnClickListener((v -> toggleNotification(3,null)));
-        binding.settingNotification4Check.setOnClickListener((v -> toggleNotification(4,null)));
+        binding.settingNotification0Check.setOnClickListener((v -> toggleNotification(0, null)));
+        binding.settingNotification1Check.setOnClickListener((v -> toggleNotification(1, null)));
+        binding.settingNotification2Check.setOnClickListener((v -> toggleNotification(2, null)));
+        binding.settingNotification3Check.setOnClickListener((v -> toggleNotification(3, null)));
+        binding.settingNotification4Check.setOnClickListener((v -> toggleNotification(4, null)));
 
         getNotiSettings();
     }
@@ -71,32 +66,32 @@ public class SettingActivity extends BaseActivity {
         ChefAuth.LogOut(this);
 
         Intent intent = new Intent(this, AccountActivity.class)
-            .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
         finish();
     }
 
-    void getNotiSettings(){
+    void getNotiSettings() {
         binding.settingNotificationAllCheck.setChecked(false);
-        binding.settingNotification0Check.setChecked(mSharedPreferences.getBoolean(sp_array[0],true));
-        binding.settingNotification1Check.setChecked(mSharedPreferences.getBoolean(sp_array[1],true));
-        binding.settingNotification2Check.setChecked(mSharedPreferences.getBoolean(sp_array[2],true));
-        binding.settingNotification3Check.setChecked(mSharedPreferences.getBoolean(sp_array[3],true));
-        binding.settingNotification4Check.setChecked(mSharedPreferences.getBoolean(sp_array[4],true));
+        binding.settingNotification0Check.setChecked(mSharedPreferences.getBoolean(sp_array[0], true));
+        binding.settingNotification1Check.setChecked(mSharedPreferences.getBoolean(sp_array[1], true));
+        binding.settingNotification2Check.setChecked(mSharedPreferences.getBoolean(sp_array[2], true));
+        binding.settingNotification3Check.setChecked(mSharedPreferences.getBoolean(sp_array[3], true));
+        binding.settingNotification4Check.setChecked(mSharedPreferences.getBoolean(sp_array[4], true));
     }
 
     void toggleAllnotification() {
-        toggleNotification(0,binding.settingNotificationAllCheck.isChecked());
-        toggleNotification(1,binding.settingNotificationAllCheck.isChecked());
-        toggleNotification(2,binding.settingNotificationAllCheck.isChecked());
-        toggleNotification(3,binding.settingNotificationAllCheck.isChecked());
-        toggleNotification(4,binding.settingNotificationAllCheck.isChecked());
+        toggleNotification(0, binding.settingNotificationAllCheck.isChecked());
+        toggleNotification(1, binding.settingNotificationAllCheck.isChecked());
+        toggleNotification(2, binding.settingNotificationAllCheck.isChecked());
+        toggleNotification(3, binding.settingNotificationAllCheck.isChecked());
+        toggleNotification(4, binding.settingNotificationAllCheck.isChecked());
     }
 
-    void toggleNotification(int position,@Nullable Boolean check) {
+    void toggleNotification(int position, @Nullable Boolean check) {
         AppCompatCheckBox target;
-        switch(position){
+        switch (position) {
             case 0:
                 target = binding.settingNotification0Check;
                 break;
@@ -116,13 +111,13 @@ public class SettingActivity extends BaseActivity {
                 throw new IllegalStateException("Unexpected value: " + position);
         }
 
-        if(check!=null){
+        if (check != null) {
             target.setChecked(check);
         }
         Utils.log(target.isChecked());
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(sp_array[position],target.isChecked());
+        editor.putBoolean(sp_array[position], target.isChecked());
         editor.apply();
     }
 }

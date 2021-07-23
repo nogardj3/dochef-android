@@ -267,7 +267,7 @@ public class AccountActivity extends BaseActivity {
                                 startMain(response.body());
                             }, throwable -> {
                                 throwable.printStackTrace();
-                                if(throwable instanceof HttpException){
+                                if (throwable instanceof HttpException) {
                                     int code = ((HttpException) throwable).code();
 
                                     if (code == 403)
@@ -283,21 +283,21 @@ public class AccountActivity extends BaseActivity {
 
     void checkUserInfo(String idToken) {
         compositeDisposable.add(
-                accountService.checkUser(idToken, mAuth.getUid(),fcmToken)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(response -> startMain(response.body()), e -> {
-                        e.printStackTrace();
-                        if(e instanceof HttpException){
-                            int code = ((HttpException) e).code();
+                accountService.checkUser(idToken, mAuth.getUid(), fcmToken)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(response -> startMain(response.body()), e -> {
+                            e.printStackTrace();
+                            if (e instanceof HttpException) {
+                                int code = ((HttpException) e).code();
 
-                            if (code == 404) {
-                                App.getAppInstance().showToast("닉네임을 입력해주세요.");
-                                startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
+                                if (code == 404) {
+                                    App.getAppInstance().showToast("닉네임을 입력해주세요.");
+                                    startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
+                                }
                             }
-                        }
 
-                        progressOFF();
-                    })
+                            progressOFF();
+                        })
         );
     }
 
