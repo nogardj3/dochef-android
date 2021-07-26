@@ -26,10 +26,6 @@ public final class RxRetrofitBuilder {
         return create(context, service, false, "");
     }
 
-    /*
-       TODO
-       server http error code 정리하고 이거 정리
-    */
     public static Consumer<Throwable> defaultConsumer() {
         return throwable -> {
             throwable.printStackTrace();
@@ -37,10 +33,12 @@ public final class RxRetrofitBuilder {
             if (throwable instanceof HttpException) {
                 int code = ((HttpException) throwable).code();
 
-                if (code == 403)
-                    Utils.log("403 에러 뭐지");
                 if (code == 404)
-                    Utils.log("404 에러 뭐지");
+                    Utils.log("404 Not found");
+                else if (code == 409)
+                    Utils.log("409 Already Exists");
+                else if (code == 500)
+                    Utils.log("500 Internal Error");
             } else {
                 Utils.log("알 수 없는 에러");
             }
