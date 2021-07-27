@@ -7,22 +7,22 @@
     android:paddingVertical="2dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/v_ingredient_name"
+        android:id="@+id/v_ingredientplay_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
-        android:textColor="@color/grey_text"
+        android:textColor="@color/white"
         android:textSize="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="재료" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/v_ingredient_amount"
+        android:id="@+id/v_ingredientplay_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
-        android:textColor="@color/grey_text"
+        android:textColor="@color/white"
         android:textSize="12dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"

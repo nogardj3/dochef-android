@@ -6,33 +6,23 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RecipePhase implements Serializable {
-    @SerializedName("phase_type")
-    private int phase_type;
     @SerializedName("recipe_img")
     private String recipe_img;
     @SerializedName("contents")
     private String contents;
+    @SerializedName("tips")
+    private ArrayList<String> tips;
     @SerializedName("time_amount")
     private String time_amount;
     @SerializedName("ingredients")
     private ArrayList<Ingredient> ingredients;
-    @SerializedName("tips")
-    private ArrayList<String> tips;
 
-    public RecipePhase(int phase_type, String recipe_img, String contents, String time_amount, ArrayList<Ingredient> ingredients, ArrayList<String> tips) {
-        this.phase_type = phase_type;
+    public RecipePhase(String recipe_img, String contents, ArrayList<String> tips, String time_amount, ArrayList<Ingredient> ingredients) {
         this.recipe_img = recipe_img;
         this.contents = contents;
+        this.tips = tips;
         this.time_amount = time_amount;
         this.ingredients = ingredients;
-        this.tips = tips;
-    }
-
-    public RecipePhase() {
-    }
-
-    public int getPhase_type() {
-        return phase_type;
     }
 
     public String getRecipe_img() {
@@ -43,6 +33,10 @@ public class RecipePhase implements Serializable {
         return contents;
     }
 
+    public ArrayList<String> getTips() {
+        return tips;
+    }
+
     public String getTime_amount() {
         return time_amount;
     }
@@ -51,19 +45,14 @@ public class RecipePhase implements Serializable {
         return ingredients;
     }
 
-    public ArrayList<String> getTips() {
-        return tips;
-    }
-
     @Override
     public String toString() {
         return "RecipePhase{" +
-                "phase_type=" + phase_type +
-                ", recipe_img='" + recipe_img + '\'' +
+                "recipe_img='" + recipe_img + '\'' +
                 ", contents='" + contents + '\'' +
+                ", tips=" + tips +
                 ", time_amount='" + time_amount + '\'' +
                 ", ingredients=" + ingredients +
-                ", tips=" + tips +
                 '}';
     }
 }

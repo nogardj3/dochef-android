@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- 풀 이미지-->
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/playrecipe_start_img"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:foreground="@drawable/bg_translucent" />
+        android:foreground="@drawable/bg_translucent"
+        android:scaleType="centerCrop"
+        tools:src="@raw/tempimg_playrecipestart" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_start_title"
@@ -25,58 +26,68 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="레시피" />
 
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
+        app:layout_constraintRight_toRightOf="@+id/playrecipe_start_contents"
+        app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_title" />
+
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/playrecipe_start_explain"
-        android:layout_width="wrap_content"
+        android:id="@+id/playrecipe_start_contents"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
+        android:gravity="left"
+        android:maxLines="4"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_title"
-        tools:text="내용\n\n\n" />
+        tools:text="내용\n\n" />
+
+    <com.google.android.flexbox.FlexboxLayout
+        android:id="@+id/playrecipe_start_tags"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:flexWrap="wrap"
+        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
+        app:layout_constraintRight_toLeftOf="@+id/playrecipe_start_contents"
+        app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_contents"/>
+
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0.5dp"
+        android:layout_marginTop="4dp"
+        android:background="@color/grey"
+        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
+        app:layout_constraintRight_toRightOf="@+id/playrecipe_start_contents"
+        app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_tags" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_start_ingredienttext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="8dp"
         android:text="모든 재료"
         android:textColor="@color/white"
         android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"
-        app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_explain" />
+        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
+        app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_tags" />
 
     <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/playrecipe_start_ingredients"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         app:flexDirection="column"
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"
+        app:layout_constraintRight_toRightOf="@+id/playrecipe_start_contents"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_ingredienttext" />
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"
-        app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_ingredients">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:tint="@color/colorSecondary"
-            app:srcCompat="@drawable/ic_tip_black" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:text="팁"
-            android:textColor="@color/white" />
-    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

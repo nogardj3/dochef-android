@@ -133,7 +133,11 @@ public class RxRetrofitServices {
         Single<Response<ArrayList<Review>>> getReview(@Query("recipe_id") int recipeId);
 
         @GET("review/create")
-        Single<Response<JsonObject>> createReview(@Query("recipe_id") int recipeId);
+        Single<Response<JsonObject>> createReview(@Field("recipe_id") int recipeID,
+                                                  @Field("user_id") String userID,
+                                                  @Field("contents") String contents,
+                                                  @Field("rating") long rating,
+                                                  @Field("datetime") long dateTime);
 
         @GET("review/delete")
         Single<Response<JsonObject>> deleteReview(@Query("recipe_id") int recipeId);

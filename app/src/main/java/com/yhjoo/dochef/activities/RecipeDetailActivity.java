@@ -138,8 +138,12 @@ public class RecipeDetailActivity extends BaseActivity {
             if (!recipeDetailInfo.getUserID().equals(userID))
                 setLike();
         });
-        binding.recipedetailStartrecipe.setOnClickListener((v) ->
-                startActivity(new Intent(this, PlayRecipeActivity.class)));
+        binding.recipedetailStartrecipe.setOnClickListener((v) -> {
+
+            Intent intent = new Intent(this, PlayRecipeActivity.class)
+                    .putExtra("recipeID", recipeDetailInfo.getRecipeID());
+            startActivity(intent);
+        });
         binding.recipedetailUserWrapper.setOnClickListener((v) -> {
             Intent intent = new Intent(this, HomeActivity.class)
                     .putExtra("userID", recipeDetailInfo.getUserID());

@@ -204,10 +204,26 @@ public class DataGenerator {
             likes.add("유저 1");
             likes.add("유저 2");
 
+            ArrayList<String> tips = new ArrayList<>();
+            tips.add("팁 1");
+            tips.add("팁 2");
+            tips.add("팁 2");
+            tips.add("팁 2");
+            tips.add("팁 2");
+            tips.add("팁 2");
+            tips.add("팁 2");
+
             ArrayList<RecipePhase> phases = new ArrayList<>();
             RecipePhase phase = new RecipePhase(
-
+                    Integer.toString(R.raw.tempimg_playrecipestart),
+                    "햄과\n대파1줄을\n총총\n썰어주세요",
+                    tips,
+                    "1분",
+                    ingredients
             );
+            phases.add(phase);
+            phases.add(phase);
+            phases.add(phase);
             phases.add(phase);
 
             RecipeDetail recipeDetail = new RecipeDetail(

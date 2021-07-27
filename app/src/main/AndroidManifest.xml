@@ -68,7 +68,7 @@
         <activity
             android:name="com.yhjoo.dochef.activities.PlayRecipeActivity"
             android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name="com.yhjoo.dochef.activities.PostDetailActivity"
