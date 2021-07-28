@@ -78,7 +78,6 @@ dependencies {
     implementation 'com.github.florent37:viewanimator:1.1.0'
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'
     implementation 'com.github.rehmanmuradali:ticker:1.0.1'
-
     implementation 'com.layer-net:step-indicator:1.1.0'
     implementation 'com.github.mabbas007:TagsEditText:1.0.5'
 
