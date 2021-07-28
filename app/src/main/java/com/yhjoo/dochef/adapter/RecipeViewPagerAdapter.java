@@ -8,7 +8,6 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.yhjoo.dochef.model.RecipeDetail;
 import com.yhjoo.dochef.model.RecipePhase;
-import com.yhjoo.dochef.model.RecipePlay;
 
 import java.util.ArrayList;
 import java.util.List;

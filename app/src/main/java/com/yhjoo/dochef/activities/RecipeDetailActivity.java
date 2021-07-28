@@ -76,8 +76,6 @@ public class RecipeDetailActivity extends BaseActivity {
             }
         });
         binding.recipedetailReviewRecycler.setAdapter(reviewListAdapter);
-
-        addCount();
     }
 
     @Override
@@ -97,25 +95,26 @@ public class RecipeDetailActivity extends BaseActivity {
     }
 
     void loadData() {
-        compositeDisposable.add(
-                recipeService.getRecipeDetail(recipeID)
-                        .flatMap((Function<Response<RecipeDetail>, Single<Response<ArrayList<Review>>>>)
-                                response -> {
-                                    recipeDetailInfo = response.body();
-                                    return reviewService.getReview(recipeID)
-                                            .observeOn(AndroidSchedulers.mainThread());
-                                }
-                        )
-                        .subscribe(response -> {
-                            reviewList = response.body();
+        recipeService.getRecipeDetail(recipeID)
+                .flatMap((Function<Response<RecipeDetail>, Single<Response<ArrayList<Review>>>>)
+                        response -> {
+                            recipeDetailInfo = response.body();
+                            return reviewService.getReview(recipeID)
+                                    .subscribeOn(AndroidSchedulers.mainThread())
+                                    .observeOn(AndroidSchedulers.mainThread());
+                        }
+                )
+                .subscribe(response -> {
+                    reviewList = response.body();
 
-                            setTopView();
-                            reviewListAdapter.setNewData(reviewList);
-                            reviewListAdapter.setEmptyView(R.layout.rv_empty_review,
-                                    (ViewGroup) binding.recipedetailReviewRecycler.getParent());
-                        }, RxRetrofitBuilder.defaultConsumer())
+                    setTopView();
+                    reviewListAdapter.setNewData(reviewList);
+                    reviewListAdapter.setEmptyView(R.layout.rv_empty_review,
+                            (ViewGroup) binding.recipedetailReviewRecycler.getParent());
 
-        );
+
+                }, RxRetrofitBuilder.defaultConsumer())
+                ;
     }
 
     void setTopView() {
@@ -125,9 +124,10 @@ public class RecipeDetailActivity extends BaseActivity {
         binding.recipedetailRecipetitle.setText(recipeDetailInfo.getRecipeName());
         binding.recipedetailNickname.setText(recipeDetailInfo.getNickname());
         binding.recipedetailExplain.setText(recipeDetailInfo.getContents());
+
         binding.recipedetailLikecount.setText(Integer.toString(recipeDetailInfo.getLikes().size()));
         binding.recipedetailViewcount.setText(Integer.toString(recipeDetailInfo.getView_count()));
-        binding.recipedetailReviewRatingText.setText(Integer.toString(recipeDetailInfo.getRating()));
+        binding.recipedetailReviewRatingText.setText(String.format("%.1f",recipeDetailInfo.getRating()));
         binding.recipedetailReviewRating.setRating(recipeDetailInfo.getRating());
 
         if (recipeDetailInfo.getLikes().contains(userID) || recipeDetailInfo.getUserID().equals(userID))
@@ -140,8 +140,9 @@ public class RecipeDetailActivity extends BaseActivity {
         });
         binding.recipedetailStartrecipe.setOnClickListener((v) -> {
 
+            Utils.log("wowowowowowoow");
             Intent intent = new Intent(this, PlayRecipeActivity.class)
-                    .putExtra("recipeID", recipeDetailInfo.getRecipeID());
+                    .putExtra("recipe", recipeDetailInfo);
             startActivity(intent);
         });
         binding.recipedetailUserWrapper.setOnClickListener((v) -> {

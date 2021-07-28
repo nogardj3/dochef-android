@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 import io.reactivex.rxjava3.core.Single;
 import retrofit2.Response;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -114,17 +115,18 @@ public class RxRetrofitServices {
         @POST("recipe/like")
         Single<Response<JsonObject>> setLikeRecipe(@Field("recipe_id") int recipeId, @Field("user_id") String userId, @Field("like") int like);
 
-        @FormUrlEncoded
         @POST("recipe/create")
-        Single<Response<JsonObject>> createRecipe(@Field("user_id") String userID,
-                                                  @Field("recipe_name") String recipeName,
-                                                  @Field("recipe_img") String recipeImg,
-                                                  @Field("contents") String contents,
-                                                  @Field("datetime") long datetime,
-                                                  @Field("amount_time") String amountTime,
-                                                  @Field("ingredients") Ingredient[] ingredients,
-                                                  @Field("tags") String[] tags,
-                                                  @Field("phase") RecipePhase[] phases);
+        Single<Response<JsonObject>> createRecipe(@Body RecipeDetail recipeDetail
+//                @Field("user_id") String userID,
+//                                                  @Field("recipe_name") String recipeName,
+//                                                  @Field("recipe_img") String recipeImg,
+//                                                  @Field("contents") String contents,
+//                                                  @Field("datetime") long datetime,
+//                                                  @Field("amount_time") String amountTime,
+//                                                  @Field("ingredients") ArrayList<Ingredient> ingredients,
+//                                                  @Field("tags") ArrayList<String> tags,
+//                                                  @Field("phase") ArrayList<RecipePhase> phases
+        );
 
     }
 
@@ -132,14 +134,16 @@ public class RxRetrofitServices {
         @GET("review/")
         Single<Response<ArrayList<Review>>> getReview(@Query("recipe_id") int recipeId);
 
-        @GET("review/create")
+        @FormUrlEncoded
+        @POST("review/create")
         Single<Response<JsonObject>> createReview(@Field("recipe_id") int recipeID,
                                                   @Field("user_id") String userID,
                                                   @Field("contents") String contents,
                                                   @Field("rating") long rating,
                                                   @Field("datetime") long dateTime);
 
-        @GET("review/delete")
+        @FormUrlEncoded
+        @POST("review/delete")
         Single<Response<JsonObject>> deleteReview(@Query("recipe_id") int recipeId);
     }
 

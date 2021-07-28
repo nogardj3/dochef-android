@@ -22,4 +22,14 @@ public class Ingredient implements Serializable {
     public String getAmount() {
         return amount;
     }
+
+    @Override
+    public String toString() {
+        return "Ingredient{" +
+                "name='" + name + '\'' +
+                ", amount='" + amount + '\'' +
+                '}';
+    }
+
+
 }

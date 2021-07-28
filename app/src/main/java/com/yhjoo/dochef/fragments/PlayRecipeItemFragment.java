@@ -4,20 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding;
 import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.RecipePhase;
-import com.yhjoo.dochef.model.RecipePlay;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 import com.yhjoo.dochef.utils.Utils;
 

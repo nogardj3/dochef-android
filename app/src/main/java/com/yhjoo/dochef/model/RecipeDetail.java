@@ -29,7 +29,7 @@ public class RecipeDetail implements Serializable {
     @SerializedName("likes")
     private ArrayList<String> likes;
     @SerializedName("rating")
-    private int rating;
+    private float rating;
     @SerializedName("ingredients")
     private ArrayList<Ingredient> ingredients;
     @SerializedName("tags")
@@ -37,7 +37,7 @@ public class RecipeDetail implements Serializable {
     @SerializedName("phase")
     private ArrayList<RecipePhase> phases;
 
-    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, ArrayList<String> likes, int rating, ArrayList<Ingredient> ingredients, ArrayList<String> tags, ArrayList<RecipePhase> phases) {
+    public RecipeDetail(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, ArrayList<String> likes, float rating, ArrayList<Ingredient> ingredients, ArrayList<String> tags, ArrayList<RecipePhase> phases) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -99,7 +99,7 @@ public class RecipeDetail implements Serializable {
         return likes;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 

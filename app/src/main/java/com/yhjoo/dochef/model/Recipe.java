@@ -26,13 +26,13 @@ public class Recipe {
     @SerializedName("view_count")
     private int view_count;
     @SerializedName("rating")
-    private int rating;
+    private float rating;
     @SerializedName("ingredients")
     private ArrayList<Ingredient> ingredient;
     @SerializedName("tags")
     private ArrayList<String> tags;
 
-    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, int rating, ArrayList<Ingredient> ingredient, ArrayList<String> tags) {
+    public Recipe(int recipeID, String recipeName, String userID, String nickname, String userImg, String recipeImg, String contents, long datetime, String amount_time, int view_count, float rating, ArrayList<Ingredient> ingredient, ArrayList<String> tags) {
         this.recipeID = recipeID;
         this.recipeName = recipeName;
         this.userID = userID;
@@ -88,7 +88,7 @@ public class Recipe {
         return view_count;
     }
 
-    public int getRating() {
+    public float getRating() {
         return rating;
     }
 

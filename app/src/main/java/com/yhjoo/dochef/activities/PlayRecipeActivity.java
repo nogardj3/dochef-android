@@ -8,15 +8,10 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.speech.RecognitionListener;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.util.Log;
 import android.view.View;
 
@@ -38,7 +33,6 @@ import com.yhjoo.dochef.utils.RxRetrofitBuilder;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -50,7 +44,6 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     SensorManager m_clsSensorManager;
     Sensor m_clsSensor;
     SpeechRecognizer mRecognizer;
-    int recipeID;
     RecipeViewPagerAdapter recipeViewPagerAdapter;
     RecipeDetail recipeDetailInfo;
 
@@ -76,7 +69,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
 
         recipeService = RxRetrofitBuilder.create(this, RxRetrofitServices.RecipeService.class);
 
-        recipeID = getIntent().getIntExtra("recipeID", 0);
+        recipeDetailInfo = (RecipeDetail) getIntent().getSerializableExtra("recipe");
+        recipePhases = recipeDetailInfo.getPhases();
 
         final String[] permissions = {
                 Manifest.permission.RECORD_AUDIO
@@ -117,7 +111,7 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
         recipeViewPagerAdapter.addFragment(new PlayRecipeStartFragment(), recipeDetailInfo);
         for (int i = 0; i < recipePhases.size(); i++) {
             if (i == recipePhases.size() - 1)
-                recipeViewPagerAdapter.addFragment(new PlayRecipeEndFragment(), recipePhases.get(i));
+                recipeViewPagerAdapter.addFragment(new PlayRecipeEndFragment(), recipePhases.get(i),recipeDetailInfo);
             else
                 recipeViewPagerAdapter.addFragment(new PlayRecipeItemFragment(), recipePhases.get(i));
         }
@@ -139,7 +133,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
                 if(mediaPlayer !=null && mediaPlayer.isPlaying())
                     mediaPlayer.stop();
 
-                setTimer(position);
+                if(position!=0)
+                    setTimer(position);
 
             }
 
@@ -157,7 +152,8 @@ public class PlayRecipeActivity extends BaseActivity implements SensorEventListe
     protected void onDestroy() {
         super.onDestroy();
         m_clsSensorManager.unregisterListener(this);
-        mediaPlayer.release();
+        if (mediaPlayer !=null)
+            mediaPlayer.release();
     }
 
     @Override

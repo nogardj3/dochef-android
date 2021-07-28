@@ -24,7 +24,7 @@ public class RecipeMyListAdapter extends BaseQuickAdapter<Recipe, BaseViewHolder
         helper.setText(R.id.recipemylist_nickname,
                 String.format(mContext.getResources().getString(R.string.format_usernickname), item.getNickname()));
         helper.setText(R.id.recipemylist_date, Utils.convertMillisToText(item.getDatetime()));
-        helper.setText(R.id.recipemylist_rating, Integer.toString(item.getRating()));
+        helper.setText(R.id.recipemylist_rating, String.format("%.1f",item.getRating()));
         helper.setText(R.id.recipemylist_view, Integer.toString(item.getView_count()));
 
         helper.setVisible(R.id.recipemylist_yours, !item.getUserID().equals(userID));

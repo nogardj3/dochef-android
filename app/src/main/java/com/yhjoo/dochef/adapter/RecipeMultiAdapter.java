@@ -48,7 +48,7 @@ public class RecipeMultiAdapter extends BaseMultiItemQuickAdapter<MultiItemRecip
                 helper.setText(R.id.recipemain_nickname,
                         String.format(mContext.getResources().getString(R.string.format_usernickname), item.getContent().getNickname()));
                 helper.setText(R.id.recipemain_date, Utils.convertMillisToText(item.getContent().getDatetime()));
-                helper.setText(R.id.recipemain_rating, Integer.toString(item.getContent().getRating()));
+                helper.setText(R.id.recipemain_rating, String.format("%.1f",item.getContent().getRating()));
                 helper.setText(R.id.recipemain_view, Integer.toString(item.getContent().getView_count()));
 
                 if (showNew)

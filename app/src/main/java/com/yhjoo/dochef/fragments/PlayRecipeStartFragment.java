@@ -11,18 +11,10 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.yhjoo.dochef.App;
 import com.yhjoo.dochef.R;
 import com.yhjoo.dochef.databinding.FPlayrecipeStartBinding;
 import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.RecipeDetail;
-import com.yhjoo.dochef.model.RecipePhase;
-import com.yhjoo.dochef.model.RecipePlay;
-import com.yhjoo.dochef.utils.GlideApp;
 import com.yhjoo.dochef.utils.ImageLoadUtil;
 
 public class PlayRecipeStartFragment extends Fragment {
