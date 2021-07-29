@@ -260,20 +260,17 @@ public class AccountActivity extends BaseActivity {
             progressON(this);
 
             compositeDisposable.add(
-                    accountService.createUser(idToken, mAuth.getUid(), nickname)
+                    accountService.createUser(idToken, fcmToken, mAuth.getUid(), nickname)
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(response -> {
-                                App.getAppInstance().showToast("회원 가입 되었습니다.");
-                                startMain(response.body());
+                                if (response.code() == 403)
+                                    App.getAppInstance().showToast("이미 존재하는 닉네임입니다.");
+                                else{
+                                    App.getAppInstance().showToast("회원 가입 되었습니다.");
+                                    startMain(response.body());
+                                }
                             }, throwable -> {
                                 throwable.printStackTrace();
-                                if (throwable instanceof HttpException) {
-                                    int code = ((HttpException) throwable).code();
-
-                                    if (code == 403)
-                                        App.getAppInstance().showToast("이미 존재하는 닉네임입니다.");
-                                }
-
                                 progressOFF();
                             })
             );
@@ -285,17 +282,16 @@ public class AccountActivity extends BaseActivity {
         compositeDisposable.add(
                 accountService.checkUser(idToken, mAuth.getUid(), fcmToken)
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(response -> startMain(response.body()), e -> {
-                            e.printStackTrace();
-                            if (e instanceof HttpException) {
-                                int code = ((HttpException) e).code();
-
-                                if (code == 404) {
-                                    App.getAppInstance().showToast("닉네임을 입력해주세요.");
-                                    startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
-                                }
+                        .subscribe(response -> {
+                            if(response.code() == 409){
+                                App.getAppInstance().showToast("닉네임을 입력해주세요.");
+                                startMode(AccountActivity.Mode.SIGNUPNICK, idToken);
+                                progressOFF();
                             }
-
+                            else
+                                startMain(response.body());
+                        }, e -> {
+                            e.printStackTrace();
                             progressOFF();
                         })
         );
@@ -327,6 +323,7 @@ public class AccountActivity extends BaseActivity {
     }
 
     void startMain(UserBrief userinfo) {
+        Utils.log("HELLO");
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();

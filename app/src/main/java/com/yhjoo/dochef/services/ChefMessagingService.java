@@ -17,6 +17,7 @@ import androidx.core.app.NotificationCompat;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.activities.NotificationActivity;
 import com.yhjoo.dochef.activities.SplashActivity;
 import com.yhjoo.dochef.utils.ChefSQLite;
 import com.yhjoo.dochef.utils.Utils;
@@ -62,8 +63,8 @@ public class ChefMessagingService extends FirebaseMessagingService {
     }
 
     private void sendNotification(String title, String messageBody) {
-        Intent intent = new Intent(this, SplashActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent intent = new Intent(this, NotificationActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

@@ -46,11 +46,13 @@ public class RxRetrofitServices {
         @FormUrlEncoded
         @POST("user/check/")
         Single<Response<UserBrief>> checkUser(@Field("user_token") String token,
-                                              @Field("user_id") String uid, @Field("user_fcm_token") String fcmtoken);
+                                              @Field("user_id") String uid,
+                                              @Field("user_fcm_token") String fcmtoken);
 
         @FormUrlEncoded
         @POST("user/signup")
         Single<Response<UserBrief>> createUser(@Field("user_token") String token,
+                                               @Field("user_fcm_token") String fcmtoken,
                                                @Field("user_id") String uid,
                                                @Field("nickname") String nickname);
 

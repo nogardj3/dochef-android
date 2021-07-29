@@ -133,6 +133,6 @@ public class FollowListActivity extends BaseActivity {
         followListAdapter.setActiveUserFollow(userDetailInfo.getFollow());
 
         followListAdapter.setNewData(userList);
-        followListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.followlistRecycler.getParent());
+        followListAdapter.setEmptyView(R.layout.rv_empty_follower, (ViewGroup) binding.followlistRecycler.getParent());
     }
 }

@@ -4,6 +4,12 @@
 
 ## About this Project
 
+1. ACCOUNT
+3. (local) recipe - main init -> main recipes -> main favorite -> detail 
+4. (server) recipe play - timer, proximity sensor -> review
+5. (local) Postlist -> postdetail -> post write
+6. (local) home
+
 ## How to use
 
 ### Prerequisites
@@ -39,7 +45,7 @@
     <string name="server_url">http://10.0.2.2:4000/chef/</string>
     ```
 
-## 활용기술
+## Tech stack & Open-source libraries
 
 -   [RxJava2 / RxAndriod](http://reactivex.io/)
 -   [Retrofit2](https://square.github.io/retrofit/)

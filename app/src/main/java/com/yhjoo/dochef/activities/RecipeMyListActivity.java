@@ -102,7 +102,7 @@ public class RecipeMyListActivity extends BaseActivity {
                         .subscribe(response -> {
                             recipeList = response.body();
                             recipeMyListAdapter.setNewData(recipeList);
-                            recipeMyListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipelistRecycler.getParent());
+                            recipeMyListAdapter.setEmptyView(R.layout.rv_empty_recipe, (ViewGroup) binding.recipelistRecycler.getParent());
                         }, RxRetrofitBuilder.defaultConsumer())
         );
     }

@@ -119,7 +119,7 @@ public class ResultFragment extends Fragment {
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(response -> {
                                     setUserItem(response.body());
-                                    searchListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.resultRecycler.getParent());
+                                    searchListAdapter.setEmptyView(R.layout.rv_empty_search, (ViewGroup) binding.resultRecycler.getParent());
 
                                 }, RxRetrofitBuilder.defaultConsumer())
                 );

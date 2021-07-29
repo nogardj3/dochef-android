@@ -394,8 +394,11 @@ public class HomeActivity extends BaseActivity {
             StorageReference ref = storageReference.child(getString(R.string.storage_path_profile) + image_url);
             ref.putFile(mImageUri)
                     .addOnSuccessListener(taskSnapshot -> updateToServer());
-        } else
+        } else{
+            image_url = userDetailInfo.getUserImg();
             updateToServer();
+        }
+
     }
 
     void updateToServer() {
@@ -408,8 +411,8 @@ public class HomeActivity extends BaseActivity {
                             App.getAppInstance().showToast("업데이트 되었습니다.");
 
                             currentOperation = OPERATION.VIEW;
-                            reviseMenu.setVisible(false);
-                            okMenu.setVisible(true);
+                            reviseMenu.setVisible(true);
+                            okMenu.setVisible(false);
                             binding.homeRevisegroup.setVisibility(View.VISIBLE);
 
                             mImageUri = null;

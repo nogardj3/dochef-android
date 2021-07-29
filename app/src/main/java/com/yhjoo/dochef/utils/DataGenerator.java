@@ -40,7 +40,7 @@ public class DataGenerator {
             ArrayList<FAQ> arrayList = new ArrayList<>();
 
             for (int i = 1; i < 10; i++) {
-                arrayList.add(new FAQ("FAQ Title " + i, "F\nA\nQ\n" + i));
+                arrayList.add(new FAQ("FAQ Title " + i, "FAQ" + i));
             }
 
             return (T) arrayList;
@@ -49,7 +49,7 @@ public class DataGenerator {
 
 
             for (int i = 1; i < 10; i++) {
-                arrayList.add(new Notice("Notice Title " + i, "No\nti\nce\n" + i, System.currentTimeMillis()));
+                arrayList.add(new Notice("Notice Title " + i, "Notice" + i, System.currentTimeMillis()));
             }
 
             return (T) arrayList;

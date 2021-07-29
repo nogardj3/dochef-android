@@ -126,7 +126,6 @@ public class MainRecipesFragment extends Fragment implements SwipeRefreshLayout.
                             }
 
                             recipeMultiAdapter.setNewData(recipeListItems);
-                            recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fRecipeRecycler.getParent());
                             binding.fRecipeRecycler.getLayoutManager().scrollToPosition(0);
                             binding.fRecipeSwipe.setRefreshing(false);
                         }, RxRetrofitBuilder.defaultConsumer())

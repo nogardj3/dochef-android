@@ -60,9 +60,10 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
 
         userID = Utils.getUserBrief(this.getContext()).getUserID();
 
+        Utils.log(userID);
         recipeMultiAdapter = new RecipeMultiAdapter(recipeListItems);
-        recipeMultiAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.fMyrecipeRecycler.getParent());
         recipeMultiAdapter.setUserid(userID);
+        recipeMultiAdapter.setEmptyView(R.layout.rv_loading, (ViewGroup) binding.fMyrecipeRecycler.getParent());
         recipeMultiAdapter.setShowYours(true);
         recipeMultiAdapter.setOnItemClickListener((adapter, view1, position) -> {
             if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
@@ -121,7 +122,7 @@ public class MainMyRecipeFragment extends Fragment implements SwipeRefreshLayout
                             }
 
                             recipeMultiAdapter.setNewData(recipeListItems);
-                            recipeMultiAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.fMyrecipeRecycler.getParent());
+                            recipeMultiAdapter.setEmptyView(R.layout.rv_empty_recipe, (ViewGroup) binding.fMyrecipeRecycler.getParent());
                             binding.fMyrecipeSwipe.setRefreshing(false);
                         }, RxRetrofitBuilder.defaultConsumer())
         );

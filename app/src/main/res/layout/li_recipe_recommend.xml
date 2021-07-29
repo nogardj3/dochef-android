@@ -26,7 +26,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:background="#77ffffff"
+            android:background="@drawable/bg_gradient"
             app:layout_constraintHeight_percent="0.35"
             app:layout_constraintBottom_toBottomOf="parent"/>
 
@@ -34,7 +34,7 @@
             android:id="@+id/reciperecommend_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintBottom_toTopOf="@+id/reciperecommend_rating_img"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -58,7 +58,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowRadius="1.5"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
+
             android:textSize="12sp"
             app:layout_constraintTop_toTopOf="@+id/reciperecommend_rating_img"
             app:layout_constraintBottom_toBottomOf="@+id/reciperecommend_rating_img"
@@ -75,6 +76,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/reciperecommend_rating_img"
             app:layout_constraintLeft_toRightOf="@+id/reciperecommend_rating"
             app:layout_constraintRight_toLeftOf="@+id/reciperecommend_view"
+            app:tint="@color/white"
             app:srcCompat="@drawable/ic_view_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -82,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:shadowRadius="1.5"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:layout_constraintTop_toTopOf="@+id/reciperecommend_rating_img"
             app:layout_constraintBottom_toBottomOf="@+id/reciperecommend_rating_img"

@@ -6,7 +6,7 @@
     <string name="SP_CHANNEL">NotificationChannelCreated</string>
 
     <!-- server -->
-    <string name="server_url">http://10.0.2.2:4000/chef/</string>
+    <string name="server_url">http://192.168.89.12:4000/chef/</string>
 
     <!-- admob test -->
     <string name="admob_banner_id_test">ca-app-pub-3940256099942544/6300978111</string>

@@ -138,19 +138,18 @@ public class PostWriteActivity extends BaseActivity {
     void doneClicked(View v) {
         ArrayList<String> tags = new ArrayList<>(binding.postwriteTags.getTags());
 
-        image_url = "";
         if (mImageUri != null) {
             image_url = String.format(getString(R.string.format_upload_file),
                     userID, Long.toString(System.currentTimeMillis()));
-        }
-
-        if (image_url != null && !image_url.equals("")) {
             progressON(this);
             StorageReference ref = storageReference.child(getString(R.string.storage_path_post) + image_url);
             ref.putFile(mImageUri)
                     .addOnSuccessListener(taskSnapshot -> createORupdatePost(tags));
-        } else
+        } else{
+            image_url = getIntent().getStringExtra("postImg") != null ?
+                    getIntent().getStringExtra("postImg"): "";
             createORupdatePost(tags);
+        }
     }
 
     void createORupdatePost(ArrayList<String> tags) {

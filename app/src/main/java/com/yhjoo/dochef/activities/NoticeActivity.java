@@ -70,6 +70,5 @@ public class NoticeActivity extends BaseActivity {
         }
 
         noticeListAdapter.setNewData(noticeList);
-        noticeListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.noticeRecycler.getParent());
     }
 }

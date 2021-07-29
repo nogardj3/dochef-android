@@ -33,6 +33,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="10dp"
+            android:scaleType="fitXY"
             android:background="@drawable/bg_round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/timeline_postimg"

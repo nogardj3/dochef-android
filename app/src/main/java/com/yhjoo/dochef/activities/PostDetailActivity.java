@@ -112,7 +112,7 @@ public class PostDetailActivity extends BaseActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if (postInfo.getUserID().equals(userID))
+        if (postInfo !=null && postInfo.getUserID().equals(userID))
             getMenuInflater().inflate(R.menu.menu_post_owner, menu);
 
         return super.onCreateOptionsMenu(menu);
@@ -161,6 +161,7 @@ public class PostDetailActivity extends BaseActivity {
                             commentListAdapter.setEmptyView(R.layout.rv_empty_comment,
                                     (ViewGroup) binding.postCommentRecycler.getParent());
 
+                            invalidateOptionsMenu();
                         }, RxRetrofitBuilder.defaultConsumer())
 
         );

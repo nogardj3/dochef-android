@@ -117,7 +117,6 @@ public class RecipeThemeActivity extends BaseActivity {
                             }
 
                             recipeMultiThemeAdapter.setNewData(recipeListItems);
-                            recipeMultiThemeAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.recipethemeRecycler.getParent());
                         }, RxRetrofitBuilder.defaultConsumer())
         );
     }

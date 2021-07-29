@@ -66,7 +66,7 @@ public class SettingActivity extends BaseActivity {
         ChefAuth.LogOut(this);
 
         Intent intent = new Intent(this, AccountActivity.class)
-                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
 
         finish();

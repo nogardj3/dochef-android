@@ -68,6 +68,5 @@ public class FAQActivity extends BaseActivity {
         }
 
         FAQListAdapter.setNewData(faqList);
-        FAQListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.faqRecycler.getParent());
     }
 }

@@ -23,6 +23,7 @@ import com.yhjoo.dochef.interfaces.RxRetrofitServices;
 import com.yhjoo.dochef.model.Post;
 import com.yhjoo.dochef.utils.DataGenerator;
 import com.yhjoo.dochef.utils.RxRetrofitBuilder;
+import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -91,8 +92,9 @@ public class MainTimelineFragment extends Fragment implements SwipeRefreshLayout
                         .subscribe(response -> {
                             postList = response.body();
                             postListAdapter.setNewData(response.body());
-                            postListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.timelineSwipe.getParent());
+                            postListAdapter.setEmptyView(R.layout.rv_empty_post, (ViewGroup) binding.timelineSwipe.getParent());
 
+                            Utils.log("Finish@@");
                             new Handler().postDelayed(() -> binding.timelineSwipe.setRefreshing(false), 1000);
                         }, RxRetrofitBuilder.defaultConsumer())
         );

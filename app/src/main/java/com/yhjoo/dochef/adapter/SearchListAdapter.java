@@ -1,14 +1,17 @@
 package com.yhjoo.dochef.adapter;
 
 import android.graphics.Typeface;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.google.android.flexbox.FlexboxLayout;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.yhjoo.dochef.R;
+import com.yhjoo.dochef.model.Ingredient;
 import com.yhjoo.dochef.model.Recipe;
 import com.yhjoo.dochef.model.SearchResult;
 import com.yhjoo.dochef.model.UserBrief;
@@ -50,7 +53,7 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
                         mContext, recipeItem.getRecipeImg(), helper.getView(R.id.reciperesult_recipeimg));
 
                 helper.setText(R.id.reciperesult_title, recipeItem.getRecipeName());
-                helper.setTextColor(R.id.reciperesult_title, mContext.getColor(R.color.colorPrimary));
+                helper.setTextColor(R.id.reciperesult_title, mContext.getColor(R.color.colorSecondary));
                 ((AppCompatTextView) helper.getView(R.id.reciperesult_title)).setTypeface(null, Typeface.BOLD);
                 helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem.getNickname()));
 
@@ -66,8 +69,14 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
                 helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem2.getNickname()));
                 helper.setVisible(R.id.reciperesult_ingredients, true);
 
-//                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
-//                    ((TagView) helper.getView(R.id.reciperesult_ingredients)).setTagList(((Recipe) item.getContent()).getIngredient());
+                ((FlexboxLayout) helper.getView(R.id.reciperesult_ingredients)).removeAllViews();
+                for (Ingredient ingredient : recipeItem2.getIngredient()) {
+                    LinearLayout tagcontainer = (LinearLayout) mLayoutInflater.inflate(R.layout.v_tag_post, null);
+                    AppCompatTextView tagview = tagcontainer.findViewById(R.id.vtag_post_text);
+                    tagview.setText("#" + ingredient.getName());
+                    ((FlexboxLayout) helper.getView(R.id.reciperesult_ingredients)).addView(tagcontainer);
+                }
+
                 break;
 
             case VIEWHOLDER_ITEM_TAG:
@@ -76,10 +85,18 @@ public class SearchListAdapter extends BaseMultiItemQuickAdapter<SearchResult, B
                 ImageLoadUtil.loadRecipeImage(
                         mContext, recipeItem3.getRecipeImg(), helper.getView(R.id.reciperesult_recipeimg));
 
-
                 helper.setText(R.id.reciperesult_title, recipeItem3.getRecipeName());
                 helper.setText(R.id.reciperesult_nickname, String.format(mContext.getResources().getString(R.string.format_usernickname), recipeItem3.getNickname()));
                 helper.setVisible(R.id.reciperesult_tags, true);
+
+
+                ((FlexboxLayout) helper.getView(R.id.reciperesult_tags)).removeAllViews();
+                for (String tag : recipeItem3.getTags()) {
+                    LinearLayout tagcontainer = (LinearLayout) mLayoutInflater.inflate(R.layout.v_tag_post, null);
+                    AppCompatTextView tagview = tagcontainer.findViewById(R.id.vtag_post_text);
+                    tagview.setText("#" + tag);
+                    ((FlexboxLayout) helper.getView(R.id.reciperesult_tags)).addView(tagcontainer);
+                }
 
 //                    ((TagView) helper.getView(R.id.timeline_tags)).removeAllViews();
 //                    ((TagView) helper.getView(R.id.reciperesult_tags)).setTagList(recipeItem3.getTags());

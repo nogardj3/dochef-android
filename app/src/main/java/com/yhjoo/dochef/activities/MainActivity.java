@@ -26,6 +26,7 @@ import com.yhjoo.dochef.fragments.MainMyRecipeFragment;
 import com.yhjoo.dochef.fragments.MainRecipesFragment;
 import com.yhjoo.dochef.fragments.MainTimelineFragment;
 import com.yhjoo.dochef.fragments.MainUserFragment;
+import com.yhjoo.dochef.utils.ChefAuth;
 import com.yhjoo.dochef.utils.Utils;
 
 import java.util.ArrayList;
@@ -61,6 +62,10 @@ public class MainActivity extends BaseActivity {
         MobileAds.initialize(this);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
+        if(Utils.getUserBrief(this) == null){
+            ChefAuth.LogOut(this);
+            finish();
+        }
         userID = Utils.getUserBrief(this).getUserID();
 
         ArrayList<Fragment> fragments = new ArrayList<>();

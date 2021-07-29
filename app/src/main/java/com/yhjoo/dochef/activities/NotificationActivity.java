@@ -94,7 +94,7 @@ public class NotificationActivity extends BaseActivity {
 
         }
         notificationListAdapter.setNewData(notifications);
-        notificationListAdapter.setEmptyView(R.layout.rv_empty, (ViewGroup) binding.notificationRecycler.getParent());
+        notificationListAdapter.setEmptyView(R.layout.rv_empty_notification, (ViewGroup) binding.notificationRecycler.getParent());
     }
 
     ArrayList<Notification> readDataFromDB() {
