@@ -1,42 +1,47 @@
 # Chef
 
-17.4 - 17.6 진행한 요리 앱 버전업
+17.4 - 17.6 진행한 요리 + SNS 어플리케이션 최신화
 
+## About this Project
 
 ## How to use
 
-1. 서버 구동 - https://github.com/nogardj3/server_nodejs 참조
+### Prerequisites
 
-2. Firebase Project 등록 및 API 연결
+1. requires Firebase project [Site](https://console.firebase.google.com/?hl=ko)
 
-3. local.properties
-   admob_app_id = ""
-   admob_banner_id = ""
+2. requires local server [Github](https://github.com/nogardj3/server_nodejs.git)
 
-4. app/google-services.json 파일 추가
+### Installation
 
-5. strings.yaml에 서버 urls 추가
+1.  Clone the repo
 
-## Libraries
+    ```sh
+    git clone https://github.com/nogardj3/server_nodejs
+    ```
 
-RxJava3 / RxAndriod
+2.  Copy google-services.json to ./app
 
-Retrofit2
+    ```sh
+    cp your_service_account_key.json ./app/google-services.json
+    ```
 
-Glide
+3.  add key to local.properties
 
-## API
+    ```
+    admob_app_id = ""
+    admob_banner_id = ""
+    ```
 
-Google Admonb
+4.  add server url to values/string.xml
 
-Firebase Auth
+    ```xml
+    <string name="server_url">http://10.0.2.2:4000/chef/</string>
+    ```
 
-Firebase Analytics
+## 활용기술
 
-Firebase Crashlytics
-
-Firebase Cloud Messaging
-
-Firebase Storage
-
-### TODO
+-   [RxJava2 / RxAndriod](http://reactivex.io/)
+-   [Retrofit2](https://square.github.io/retrofit/)
+-   [Glide](https://github.com/bumptech/glide)
+-   [Firebase(Auth, Admob, Analytics, Crashlytics, Cloud Messaging, Storage)](https://firebase.google.com/docs?hl=ko)
