@@ -3,21 +3,34 @@
 17.4 - 17.6 진행한 요리 + SNS 어플리케이션 최신화
 
 ## About this Project
+
 ### Introduction
 
+-   당시 유행했던 요리 앱, 인스타그램의 SNS를 하나로
+-   SNS 로그인 및 간편한 회원가입으로 유저 데이터 동기화
+-   레시피를 재생하면서 근접센서와 음성인식을 활용한 '스마트폰 손 안대고 요리하기' 구현
+
 ### Function
-1. ACCOUNT
-   1. Firebase Auth - Google / Email 로그인 
-   2. 서버연동 - 유저 정보 자동 동기화
-2. HOME
-   1. 사용자의 Recipe와 Post, Follow 정보를 한 눈에 볼 수 있는 기능
-3. RECIPE
-   1. 레시피 및 리뷰를 생성, 관리, 재생하는 기능
-   2. 근접센서 감지 -> 음성인식 기능
-4. POST
-   1. Post 및 댓글을 생성, 관리하는 기능
-5. NOTIFICATION
-   1. FCM 및 서버 연동, SQLite를 활용한 알림 기능
+
+1. ACCOUNT  
+   ![account.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/account.gif?raw=true)
+    1. Firebase Auth - Google / Email 로그인
+    2. 서버연동 - 유저 정보 자동 동기화
+2. HOME  
+   ![home.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/home.gif?raw=true)
+    1. 사용자의 Recipe와 Post, Follow 정보를 한 눈에 볼 수 있는 기능
+3. RECIPE  
+   ![recipe1.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/recipe1.gif?raw=true)
+   ![recipe2.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/recipe2.gif?raw=true)
+    1. 레시피 및 리뷰를 생성, 관리, 재생하는 기능
+    2. 근접센서 감지 -> 음성인식 기능
+4. POST  
+   ![post1.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/post1.gif?raw=true)
+   ![post2.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/post2.gif?raw=true)
+    1. Post 및 댓글을 생성, 관리하는 기능
+5. NOTIFICATION  
+   ![notification.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/notification.gif?raw=true)
+    1. FCM 및 서버 연동, SQLite를 활용한 알림 기능
 
 ## How to use
 
