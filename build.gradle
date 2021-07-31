@@ -19,7 +19,6 @@ allprojects {
         maven {
             url "https://www.jitpack.io"
         }
-//      depreceated Soon
         jcenter()
     }
 }
