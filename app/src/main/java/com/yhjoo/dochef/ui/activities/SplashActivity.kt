@@ -5,10 +5,12 @@ import android.app.NotificationManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.github.florent37.viewanimator.ViewAnimator
 import com.google.android.gms.tasks.Task
 import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.App.Companion.appInstance
@@ -29,6 +31,7 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ASplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
         checkServerAlive()
         checkIsAutoLogin()
@@ -37,17 +40,12 @@ class SplashActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        val bundle = Bundle()
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_start))
-        bundle.putString(
-            FirebaseAnalytics.Param.ITEM_NAME,
-            getString(R.string.analytics_name_start)
-        )
-        bundle.putString(
-            FirebaseAnalytics.Param.CONTENT_TYPE,
-            getString(R.string.analytics_type_text)
-        )
-        mFirebaseAnalytics!!.logEvent(FirebaseAnalytics.Event.APP_OPEN, bundle)
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN){
+            param(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_start))
+            param(FirebaseAnalytics.Param.ITEM_NAME,getString(R.string.analytics_name_start))
+            param(FirebaseAnalytics.Param.CONTENT_TYPE,getString(R.string.analytics_type_text))
+        }
+
         ViewAnimator.animate(binding!!.splashLogo)
             .alpha(0.0f, 1.0f)
             .accelerate()
@@ -59,20 +57,20 @@ class SplashActivity : BaseActivity() {
             .start()
     }
 
-    fun goWhere() {
+    private fun goWhere() {
         Utils.log(serverAlive.toString() + "", isLogin.toString() + "")
         // 정상상태
         if (serverAlive && isLogin) startMain() else if (!isLogin) startAccount() else {
-            appInstance!!.showToast("서버가 동작하지 않습니다. 체험모드로 실행합니다.")
+            appInstance.showToast("서버가 동작하지 않습니다. 체험모드로 실행합니다.")
             startMain()
         }
         finish()
     }
 
-    fun checkServerAlive() {
+    private fun checkServerAlive() {
         val basicService = RxRetrofitBuilder.create(this, BasicService::class.java)
         compositeDisposable!!.add(
-            basicService!!.checkAlive()
+            basicService.checkAlive()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response: Response<JsonObject?>? ->
                     appInstance.isServerAlive = true
@@ -117,9 +115,11 @@ class SplashActivity : BaseActivity() {
                     }
                     Utils.log(task.isSuccessful)
                 }
-            val editor = mSharedPreferences.edit()
-            editor.putBoolean("channel_created", true)
-            editor.apply()
+
+            mSharedPreferences.edit {
+                putBoolean("channel_created", true)
+                apply()
+            }
         }
     }
 }
