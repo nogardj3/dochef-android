@@ -15,6 +15,7 @@ import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.MultiItemTheme
 import com.yhjoo.dochef.data.model.Recipe
+import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utils.RxRetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single

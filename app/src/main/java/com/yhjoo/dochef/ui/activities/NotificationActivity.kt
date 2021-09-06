@@ -14,6 +14,8 @@ import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Notification
 import com.yhjoo.dochef.databinding.ANotificationBinding
 import com.yhjoo.dochef.model.*
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.ChefSQLite.NotificationEntry
 import java.util.*
@@ -57,15 +59,15 @@ class NotificationActivity : BaseActivity() {
                     || noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_2)
                 ) {
                     val intent = Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", notifications[position].intent_data.toInt())
+                        .putExtra("recipeID", notifications[position].intentData.toInt())
                     startActivity(intent)
                 } else if (noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_3)) {
                     val intent = Intent(this@NotificationActivity, PostDetailActivity::class.java)
-                        .putExtra("postID", notifications[position].intent_data.toInt())
+                        .putExtra("postID", notifications[position].intentData.toInt())
                     startActivity(intent)
                 } else if (noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_4)) {
                     val intent = Intent(this@NotificationActivity, HomeActivity::class.java)
-                        .putExtra("postID", notifications[position].intent_data)
+                        .putExtra("postID", notifications[position].intentData)
                     startActivity(intent)
                 }
             }

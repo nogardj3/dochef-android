@@ -16,6 +16,9 @@ import com.google.gson.JsonObject
 import com.yhjoo.dochef.App.Companion.appInstance
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.ASplashBinding
+import com.yhjoo.dochef.ui.activities.AccountActivity
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.MainActivity
 import com.yhjoo.dochef.utils.RxRetrofitServices.BasicService
 import com.yhjoo.dochef.utils.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.BaseActivity
-import com.yhjoo.dochef.activities.HomeActivity
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.activities.RecipeDetailActivity
 import com.yhjoo.dochef.activities.SearchActivity
 import com.yhjoo.dochef.adapter.SearchListAdapter

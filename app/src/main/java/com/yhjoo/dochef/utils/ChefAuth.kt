@@ -1,6 +1,9 @@
 package com.yhjoo.dochef.utils
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatEditText
+import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.yhjoo.dochef.R
@@ -9,13 +12,11 @@ object ChefAuth {
     private lateinit var mAuth: FirebaseAuth
 
     fun logOut(context: Context) {
-        val sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-        val editor = sharedPreferences.edit()
-
-        editor.putBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false)
-        editor.remove(context.getString(R.string.SP_USERINFO))
-        editor.apply()
+        Utils.getSharedPreferences(context).edit {
+            putBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false)
+            remove(context.getString(R.string.SP_USERINFO))
+            apply()
+        }
 
         mAuth = FirebaseAuth.getInstance()
         mAuth.signOut()
@@ -23,8 +24,8 @@ object ChefAuth {
 
     fun isLogIn(context: Context): Boolean {
         mAuth = FirebaseAuth.getInstance()
-        val sharedPreferences =
-            PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+        val sharedPreferences = Utils.getSharedPreferences(context)
+
         return if (sharedPreferences.getBoolean(
                 context.getString(R.string.SP_ACTIVATEDDEVICE),
                 false
@@ -38,9 +39,10 @@ object ChefAuth {
                     false
                 )
             ) {
-                val editor = sharedPreferences.edit()
-                editor.putBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false)
-                editor.apply()
+                sharedPreferences.edit {
+                    putBoolean(context.getString(R.string.SP_ACTIVATEDDEVICE), false)
+                    apply()
+                }
             } else if (mAuth.currentUser != null) {
                 mAuth.signOut()
             }

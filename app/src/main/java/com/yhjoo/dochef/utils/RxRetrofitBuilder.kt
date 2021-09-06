@@ -13,17 +13,18 @@ object RxRetrofitBuilder {
     // TODO
     // 1. Coroutine용으로 변경
     // 2. create 옵션 살피기
+    // 3. header, response 전역 메소드 정하기
 
-    fun <T> create(context: Context?, service: Class<T>, loginNeeds: Boolean, token: String?): T {
+    fun <T> create(context: Context, service: Class<T>, loginNeeds: Boolean, token: String?): T {
         val retrofit = Retrofit.Builder()
-            .baseUrl(context!!.getString(R.string.server_url))
+            .baseUrl(context.getString(R.string.server_url))
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.createWithScheduler(Schedulers.io()))
             .build()
         return retrofit.create(service)
     }
 
-    fun <T> create(context: Context?, service: Class<T>): T {
+    fun <T> create(context: Context, service: Class<T>): T {
         return create(context, service, false, "")
     }
 

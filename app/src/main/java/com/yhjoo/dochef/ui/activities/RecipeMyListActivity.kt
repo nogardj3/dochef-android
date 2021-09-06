@@ -4,9 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
@@ -17,6 +15,7 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipelistBinding
 import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
 import com.yhjoo.dochef.model.*
+import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utils.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import retrofit2.Response
@@ -49,14 +48,16 @@ class RecipeMyListActivity : BaseActivity() {
         }
         recipeMyListAdapter!!.setOnItemChildClickListener { adapter: BaseQuickAdapter<*, *>, view: View, position: Int ->
             if (view.id == R.id.recipemylist_yours) {
-                BaseActivity.Companion.createConfirmDialog(this,
-                    null, "레시피를 삭제하시겠습니까?",
-                    SingleButtonCallback { dialog1: MaterialDialog?, which: DialogAction? ->
+
+                MaterialDialog(this).show{
+                    message(text="레시피를 삭제 하시겠습니까?")
+                    positiveButton(text="확인"){
                         cancelLikeRecipe(
                             (adapter.data[position] as Recipe).recipeID
                         )
-                    })
-                    .show()
+                    }
+                    negativeButton(text="취소")
+                }
             }
         }
         binding!!.recipelistRecycler.layoutManager = LinearLayoutManager(this)

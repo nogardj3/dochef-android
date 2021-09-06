@@ -22,25 +22,25 @@
             android:theme="@style/Base.Theme.AppCompat"/>
 
         <activity
-            android:name="com.yhjoo.dochef.activities.FollowListActivity"
+            android:name="com.yhjoo.dochef.ui.activities.FollowListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.FAQActivity"
+            android:name="com.yhjoo.dochef.ui.activities.FAQActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.AccountActivity"
+            android:name="com.yhjoo.dochef.ui.activities.AccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.MainActivity"
+            android:name="com.yhjoo.dochef.ui.activities.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
@@ -52,7 +52,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.HomeActivity"
+            android:name="com.yhjoo.dochef.ui.activities.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />

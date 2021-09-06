@@ -5,6 +5,7 @@ import android.text.Html
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.databinding.ATosBinding
+import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utils.RxRetrofitBuilder
 import com.yhjoo.dochef.utils.RxRetrofitServices.BasicService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -26,7 +27,7 @@ class TOSActivity : BaseActivity() {
         if (App.appInstance.isServerAlive) {
             val basicService = RxRetrofitBuilder.create(this, BasicService::class.java)
             compositeDisposable!!.add(
-                basicService.tOS
+                basicService.tos
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ response: Response<JsonObject> ->
                         val tos_text = response.body()!!["message"].asString

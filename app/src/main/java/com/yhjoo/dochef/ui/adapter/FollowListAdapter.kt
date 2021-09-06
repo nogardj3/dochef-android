@@ -10,7 +10,7 @@ import java.util.*
 class FollowListAdapter(var userID: String?) :
     BaseQuickAdapter<UserBrief, BaseViewHolder>(R.layout.li_follow) {
     var activeUserFollow: ArrayList<String?>? = null
-    fun setActiveUserFollow(activeUserFollow: ArrayList<String?>?) {
+    fun setActiveUserFollow(activeUserFollow: ArrayList<String>) {
         this.activeUserFollow = activeUserFollow
     }
 

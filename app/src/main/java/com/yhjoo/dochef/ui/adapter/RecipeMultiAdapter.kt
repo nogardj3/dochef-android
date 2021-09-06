@@ -45,7 +45,7 @@ class RecipeMultiAdapter(data: List<MultiItemRecipe>?) :
                     Utils.convertMillisToText(item.content.datetime)
                 )
                 helper.setText(R.id.recipemain_rating, String.format("%.1f", item.content.rating))
-                helper.setText(R.id.recipemain_view, Integer.toString(item.content.view_count))
+                helper.setText(R.id.recipemain_view, Integer.toString(item.content.viewCount))
                 if (showNew) helper.setVisible(
                     R.id.recipemain_new,
                     Utils.checkNew(item.content.datetime)

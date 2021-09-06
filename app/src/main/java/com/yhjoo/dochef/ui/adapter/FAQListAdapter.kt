@@ -12,8 +12,9 @@ class FAQListAdapter(data: List<MultiItemEntity>?) :
     BaseMultiItemQuickAdapter<MultiItemEntity?, BaseViewHolder?>(data) {
     private val EXPAND_DEPTH_0 = 0
     private val EXPAND_CONTENTS = 1
-    protected override fun convert(helper: BaseViewHolder, item: MultiItemEntity) {
-        when (helper.itemViewType) {
+
+    override fun convert(helper: BaseViewHolder?, item: MultiItemEntity?) {
+        when (helper!!.itemViewType) {
             EXPAND_DEPTH_0 -> {
                 val lv0 = item as ExpandTitle
                 helper.setText(R.id.exp_title_title, lv0.title)

@@ -18,6 +18,8 @@ import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
 import com.yhjoo.dochef.utils.RxRetrofitServices.ReviewService
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.utils.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single

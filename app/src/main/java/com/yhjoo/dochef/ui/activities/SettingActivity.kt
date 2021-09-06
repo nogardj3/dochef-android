@@ -11,6 +11,9 @@ import com.yhjoo.dochef.App.Companion.appInstance
 import com.yhjoo.dochef.BuildConfig
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.ASettingBinding
+import com.yhjoo.dochef.ui.activities.AccountActivity
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.FAQActivity
 import com.yhjoo.dochef.utils.*
 
 class SettingActivity : BaseActivity() {

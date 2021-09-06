@@ -9,9 +9,7 @@ import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.DialogAction
 import com.afollestad.materialdialogs.MaterialDialog
-import com.afollestad.materialdialogs.MaterialDialog.SingleButtonCallback
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.gson.JsonObject
 import com.skydoves.powermenu.MenuAnimation
@@ -29,6 +27,8 @@ import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.utils.RxRetrofitServices.CommentService
 import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
 import com.yhjoo.dochef.model.*
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.utils.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Single
@@ -71,13 +71,13 @@ class PostDetailActivity : BaseActivity() {
             powerMenu.onMenuItemClickListener =
                 OnMenuItemClickListener { pos: Int, item: PowerMenuItem? ->
                     if (pos == 0) {
-                        BaseActivity.Companion.createConfirmDialog(this,
-                            null,
-                            "삭제 하시겠습니까?",
-                            SingleButtonCallback { dialog1: MaterialDialog?, which: DialogAction? ->
+                        MaterialDialog(this).show{
+                            message(text="삭제 하시겠습니까?")
+                            positiveButton(text="확인"){
                                 removeComment((baseQuickAdapter.getItem(position) as Comment?).getCommentID())
-                            })
-                            .show()
+                            }
+                            negativeButton(text="취소")
+                        }
                         powerMenu.dismiss()
                     }
                 }
@@ -121,9 +121,10 @@ class PostDetailActivity : BaseActivity() {
             startActivity(intent)
         } else if (item.itemId == R.id.menu_post_owner_delete) {
             appInstance!!.showToast("삭제")
-            BaseActivity.Companion.createConfirmDialog(this,
-                null, "삭제하시겠습니까?",
-                SingleButtonCallback { dialog1: MaterialDialog?, which: DialogAction? ->
+
+            MaterialDialog(this).show{
+                message(text="삭제하시겠습니까?")
+                positiveButton(text="확인"){
                     compositeDisposable!!.add(
                         postService!!.deletePost(postID)
                             .observeOn(AndroidSchedulers.mainThread())
@@ -131,7 +132,9 @@ class PostDetailActivity : BaseActivity() {
                                 { response: Response<JsonObject?>? -> finish() },
                                 RxRetrofitBuilder.defaultConsumer())
                     )
-                }).show()
+                }
+                negativeButton(text="취소")
+            }
         }
         return super.onOptionsItemSelected(item)
     }

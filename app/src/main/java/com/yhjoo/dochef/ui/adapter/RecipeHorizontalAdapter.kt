@@ -14,6 +14,6 @@ class RecipeHorizontalAdapter :
         )
         helper.setText(R.id.reciperecommend_title, item.recipeName)
         helper.setText(R.id.reciperecommend_rating, String.format("%.1f", item.rating))
-        helper.setText(R.id.reciperecommend_view, Integer.toString(item.view_count))
+        helper.setText(R.id.reciperecommend_view, Integer.toString(item.viewCount))
     }
 }

@@ -41,7 +41,7 @@ class App : Application() {
 //                // that's likely a bug in the application Thread.currentThread().getUncaughtExceptionHandler() .uncaughtException(Thread.currentThread(), e);
 //                return@setErrorHandler
 //            }
-//            if (e is IllegalStateException) { // that's a bug in RxJava or in a custom operator
+//            if (e is IllegalStateException) { q// that's a bug in RxJava or in a custom operator
 //                Thread.currentThread().uncaughtExceptionHandler.uncaughtException(
 //                    Thread.currentThread(),
 //                    e
@@ -69,7 +69,7 @@ class App : Application() {
 //        )
     }
 
-    fun showToast(text: String?) {
+    fun showToast(text: String) {
         toast.setText(text)
         toast.show()
     }

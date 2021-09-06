@@ -7,7 +7,11 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 
 object ImageLoadUtil {
-    fun loadUserImage(context: Context, filename: String, appCompatImageView: AppCompatImageView) {
+    fun loadUserImage(
+        context: Context,
+        filename: String,
+        appCompatImageView: AppCompatImageView
+    ) {
         if (App.appInstance.isServerAlive) {
             if (filename != "default") {
                 val profileSrc = FirebaseStorage.getInstance().reference
@@ -43,7 +47,11 @@ object ImageLoadUtil {
                 .into(appCompatImageView)
     }
 
-    fun loadPostImage(context: Context, filename: String, appCompatImageView: AppCompatImageView) {
+    fun loadPostImage(
+        context: Context,
+        filename: String,
+        appCompatImageView: AppCompatImageView
+    ) {
         if (App.appInstance.isServerAlive) {
             if (filename != "") {
                 val postSrc = FirebaseStorage.getInstance().reference

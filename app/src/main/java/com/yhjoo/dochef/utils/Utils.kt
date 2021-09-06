@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.utils
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.util.Patterns
 import androidx.core.content.ContextCompat
@@ -26,35 +27,33 @@ object Utils {
     object PWValidate {
         const val VALID = 0
         const val NODATA = 1
-        const val SHORT = 2
-        const val LONG = 3
-        const val INVALID = 4
+        const val LENGTH = 2
+        const val INVALID = 3
     }
 
     object NicknameValidate {
         const val VALID = 0
         const val NODATA = 1
-        const val SHORT = 2
-        const val LONG = 3
-        const val INVALID = 4
+        const val LENGTH = 2
+        const val INVALID = 3
     }
 
-    fun checkPermission(context: Context, RequirePermissions: Array<String?>): Boolean {
+    fun checkPermission(context: Context, RequirePermissions: Array<String>): Boolean {
         for (a in RequirePermissions)
             if (ContextCompat.checkSelfPermission(
                     context,
-                    a!!
+                    a
                 ) != PackageManager.PERMISSION_GRANTED
             )
                 return false
         return true
     }
 
-    fun log(vararg msgs: Any?) {
+    fun log(vararg msgs: String) {
         Logger.d("YHJOO %s", msgs)
     }
 
-    fun getUserBrief(context: Context): UserBrief? {
+    fun getUserBrief(context: Context): UserBrief {
         val mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(
             context.applicationContext
         )
@@ -79,8 +78,7 @@ object Utils {
 
         return when {
             pw.isEmpty() -> PWValidate.NODATA
-            pw.length < 8 -> PWValidate.SHORT
-            pw.length > 16 -> PWValidate.LONG
+            pw.length < 8 || pw.length > 16 -> PWValidate.LENGTH
             Pattern.compile(regex).matcher(pw).matches() -> PWValidate.VALID
             else -> PWValidate.INVALID
         }
@@ -91,8 +89,7 @@ object Utils {
 
         return when {
             nickname.isEmpty() -> NicknameValidate.NODATA
-            nickname.length < 6 -> NicknameValidate.SHORT
-            nickname.length > 10 -> NicknameValidate.LONG
+            nickname.length < 6 || nickname.length > 10 -> NicknameValidate.LENGTH
             Pattern.compile(regex).matcher(nickname).matches() -> NicknameValidate.VALID
             else -> NicknameValidate.INVALID
         }
@@ -102,10 +99,10 @@ object Utils {
         val currentMillis = Date().time
         val secDiff = (currentMillis - millis) / 1000
 
-        return when{
+        return when {
             secDiff < 60 -> "방금 전"
             secDiff / 60 < 60 -> (secDiff / 60).toString() + "분 전"
-            secDiff / 60 / 60 / 24 < 7  -> (secDiff / 60 / 60 / 24).toString() + "일 전"
+            secDiff / 60 / 60 / 24 < 7 -> (secDiff / 60 / 60 / 24).toString() + "일 전"
             else -> {
                 val formatter = SimpleDateFormat("yyyy-MM-dd")
                 formatter.format(Date(millis))
@@ -116,6 +113,11 @@ object Utils {
     fun checkNew(millis: Long): Boolean {
         val currentMillis = Date().time
         val secDiff = (currentMillis - millis) / 1000
+
         return secDiff / 60 / 60 / 24 < 3
+    }
+
+    fun getSharedPreferences(context: Context): SharedPreferences{
+        return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     }
 }

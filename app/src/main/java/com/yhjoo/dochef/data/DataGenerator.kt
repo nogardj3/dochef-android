@@ -387,8 +387,8 @@ object DataGenerator {
                 바로 해서 먹으면 일품요리로도 손색없어요
                 """.trimIndent(),
                 System.currentTimeMillis() - 1000 * 1000,
-                "30분", 1, likes, 5.0f,
-                ingredients, tags, phases
+                "30분", 1, 5.0F, ingredients,
+                likes, tags, phases
             )
             recipeDetail as T
         } else if (type == resources.getInteger(R.integer.DATA_TYPE_REVIEW)) {

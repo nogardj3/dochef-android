@@ -12,7 +12,7 @@ import com.yhjoo.dochef.adapter.SearchViewPagerAdapter
 import com.yhjoo.dochef.databinding.ASearchBinding
 import com.yhjoo.dochef.ui.fragments.ResultFragment
 import com.yhjoo.dochef.data.model.SearchType
-import java.util.*
+import com.yhjoo.dochef.ui.activities.BaseActivity
 
 class SearchActivity : BaseActivity() {
     // TODO

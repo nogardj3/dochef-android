@@ -12,6 +12,7 @@ import com.yhjoo.dochef.data.model.ExpandContents
 import com.yhjoo.dochef.data.model.ExpandTitle
 import com.yhjoo.dochef.data.model.Notice
 import com.yhjoo.dochef.data.DataGenerator
+import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utils.RxRetrofitBuilder
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import retrofit2.Response

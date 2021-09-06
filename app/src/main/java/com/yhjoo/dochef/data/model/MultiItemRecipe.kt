@@ -5,7 +5,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity
 class MultiItemRecipe : MultiItemEntity {
     var multiType: Int
     var content: Recipe? = null
-    var pager_title: String? = null
+    var pagerTitle: String? = null
 
     constructor(itemType: Int, content: Recipe?) {
         this.multiType = itemType
@@ -14,7 +14,7 @@ class MultiItemRecipe : MultiItemEntity {
 
     constructor(itemType: Int, title: String?) {
         this.multiType = itemType
-        pager_title = title
+        pagerTitle = title
     }
 
     constructor(itemType: Int) {

@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.App.Companion.appInstance
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
 import com.yhjoo.dochef.utils.RxRetrofitServices.ReviewService

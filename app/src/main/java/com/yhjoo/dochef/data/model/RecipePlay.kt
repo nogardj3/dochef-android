@@ -2,7 +2,7 @@ package com.yhjoo.dochef.data.model
 
 import java.io.Serializable
 
-class RecipePlay(
+data class RecipePlay(
     val recipeImg: Int,
     val title: String,
     val ingredients: Array<String>,

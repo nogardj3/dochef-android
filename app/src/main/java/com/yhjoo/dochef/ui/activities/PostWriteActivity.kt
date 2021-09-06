@@ -17,6 +17,7 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import com.yhjoo.dochef.App.Companion.appInstance
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.APostwriteBinding
+import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
 import com.yhjoo.dochef.utils.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

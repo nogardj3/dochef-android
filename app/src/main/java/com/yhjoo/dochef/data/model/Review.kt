@@ -2,7 +2,7 @@ package com.yhjoo.dochef.data.model
 
 import com.google.gson.annotations.SerializedName
 
-class Review(
+data class Review(
     @SerializedName("review_id") val reviewID: Int,
     @SerializedName("recipe_id") val postID: Int,
     @SerializedName("user_id") val userID: String,
@@ -11,17 +11,4 @@ class Review(
     @SerializedName("contents") val contents: String,
     @SerializedName("rating") val rating: Long,
     @SerializedName("datetime") val dateTime: Long
-) {
-    override fun toString(): String {
-        return "Review{" +
-                "reviewID=" + reviewID +
-                ", postID=" + postID +
-                ", userID='" + userID + '\'' +
-                ", nickname='" + nickname + '\'' +
-                ", userImg='" + userImg + '\'' +
-                ", contents='" + contents + '\'' +
-                ", rating=" + rating +
-                ", dateTime=" + dateTime +
-                '}'
-    }
-}
+)

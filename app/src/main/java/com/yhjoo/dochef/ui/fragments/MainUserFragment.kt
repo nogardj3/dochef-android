@@ -8,8 +8,8 @@ import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.App.Companion.appInstance
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.BaseActivity
-import com.yhjoo.dochef.activities.HomeActivity
+import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.activities.RecipeMyListActivity
 import com.yhjoo.dochef.activities.SettingActivity
 import com.yhjoo.dochef.data.DataGenerator
@@ -73,7 +73,7 @@ class MainUserFragment : Fragment() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.setData(
             Uri.parse(
-                "https://play.google.com/store/apps/details?id=quvesoft.sprout"
+                "https://play.google.com/store/apps/details?id=com.yhjoo.dochef"
             )
         )
             .setPackage("com.android.vending")
