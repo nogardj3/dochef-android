@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.activities
+package com.yhjoo.dochef.ui.activities
 
 import android.Manifest
 import android.content.Intent
@@ -10,74 +10,79 @@ import androidx.core.app.ActivityCompat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.UploadTask
-import com.google.gson.JsonObject
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import com.yhjoo.dochef.App.Companion.appInstance
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.APostwriteBinding
-import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
 import com.yhjoo.dochef.utils.*
+import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Response
 import java.util.*
 
 class PostWriteActivity : BaseActivity() {
-    private val CODE_PERMISSION = 22
-    private val IMG_WIDTH = 1080
-    private val IMG_HEIGHT = 1080
+    companion object VALUES {
+        const val CODE_PERMISSION = 22
+        const val IMG_WIDTH = 1080
+        const val IMG_HEIGHT = 1080
 
-    enum class MODE {
-        WRITE, REVISE
+        object UIMODE {
+            const val WRITE = 0
+            const val REVISE = 1
+        }
     }
 
-    var binding: APostwriteBinding? = null
-    var storageReference: StorageReference? = null
-    var postService: PostService? = null
-    var mImageUri: Uri? = null
-    var current_mode: MODE? = MODE.WRITE
-    var userID: String? = null
-    var image_url: String? = null
-    var postID = 0
+    private val binding: APostwriteBinding by lazy { APostwriteBinding.inflate(layoutInflater) }
+    private lateinit var storageReference: StorageReference
+    private lateinit var postService: PostService
+    private lateinit var userID: String
+    private var postID = 0
+
+    private var imageUri: Uri? = null
+    private var imageString: String? = null
+    private var currentMode = UIMODE.WRITE
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = APostwriteBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
+        setContentView(binding.root)
+
         storageReference = FirebaseStorage.getInstance().reference
         postService = RxRetrofitBuilder.create(this, PostService::class.java)
         userID = Utils.getUserBrief(this).userID
-        current_mode = intent.getSerializableExtra("MODE") as MODE?
-        if (current_mode == MODE.REVISE) {
+        currentMode = intent.getIntExtra("MODE", UIMODE.WRITE)
+
+        if (currentMode == UIMODE.REVISE) {
             postID = intent.getIntExtra("postID", -1)
-            binding!!.postwriteToolbar.title = "수정"
-            binding!!.postwriteContents.setText(intent.getStringExtra("contents"))
-            if (intent.getStringExtra("postImg") != null) {
-                Utils.log(intent.getStringExtra("postImg"))
-                ImageLoadUtil.loadPostImage(
-                    this, intent.getStringExtra("postImg"), binding!!.postwritePostimg
-                )
+            binding.apply {
+                postwriteToolbar.title = "수정"
+                postwriteContents.setText(intent.getStringExtra("contents"))
+                if (intent.getStringExtra("postImg") != null) {
+                    ImageLoadUtil.loadPostImage(
+                        this@PostWriteActivity, intent.getStringExtra("postImg")!!, postwritePostimg
+                    )
+                }
+                postwriteTags.setTags(intent.getStringArrayExtra("tags"))
             }
-            binding!!.postwriteTags.setTags(intent.getStringArrayExtra("tags"))
         }
-        setSupportActionBar(binding!!.postwriteToolbar)
+        setSupportActionBar(binding.postwriteToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        binding!!.postwritePostimgAdd.setOnClickListener { v: View? -> addImage(v) }
-        binding!!.postwriteOk.setOnClickListener { v: View? -> doneClicked(v) }
+
+        binding.postwritePostimgAdd.setOnClickListener { addImage() }
+        binding.postwriteOk.setOnClickListener { doneClicked() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                mImageUri = result.uri
+                imageUri = result.uri
                 GlideApp.with(this)
-                    .load(mImageUri)
+                    .load(imageUri)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
-                    .into(binding!!.postwritePostimg)
+                    .into(binding.postwritePostimg)
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
                 error.printStackTrace()
@@ -93,76 +98,74 @@ class PostWriteActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CODE_PERMISSION) {
             for (result in grantResults) if (result == PackageManager.PERMISSION_DENIED) {
-                appInstance!!.showToast("권한 거부")
+                App.showToast("권한 거부")
                 return
             }
-            CropImage.activity(mImageUri)
+            CropImage.activity(imageUri)
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAspectRatio(1, 1)
                 .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
-                .setOutputUri(mImageUri)
+                .setOutputUri(imageUri)
                 .start(this)
         }
     }
 
-    fun addImage(v: View?) {
-        val permissions = arrayOf<String?>(
-            Manifest.permission.READ_EXTERNAL_STORAGE
-        )
+    private fun addImage() {
+        val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         if (Utils.checkPermission(this, permissions)) {
             CropImage.activity()
                 .setGuidelines(CropImageView.Guidelines.ON)
                 .setAspectRatio(1, 1)
                 .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
-                .setOutputUri(mImageUri)
+                .setOutputUri(imageUri)
                 .start(this)
-        } else ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION)
+        } else
+            ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION)
     }
 
-    fun doneClicked(v: View?) {
-        val tags = ArrayList(binding!!.postwriteTags.tags)
-        if (mImageUri != null) {
-            image_url = String.format(
+    private fun doneClicked() {
+        val tags = ArrayList(binding.postwriteTags.tags)
+        if (imageUri != null) {
+            imageString = String.format(
                 getString(R.string.format_upload_file),
-                userID, java.lang.Long.toString(System.currentTimeMillis())
+                userID, System.currentTimeMillis().toString()
             )
             progressON(this)
-            val ref = storageReference!!.child(getString(R.string.storage_path_post) + image_url)
-            ref.putFile(mImageUri!!)
-                .addOnSuccessListener { taskSnapshot: UploadTask.TaskSnapshot? ->
-                    createORupdatePost(
-                        tags
-                    )
+            val ref = storageReference.child(getString(R.string.storage_path_post) + imageString)
+            ref.putFile(imageUri!!)
+                .addOnSuccessListener {
+                    createORupdatePost(tags)
                 }
         } else {
-            image_url =
-                if (intent.getStringExtra("postImg") != null) intent.getStringExtra("postImg") else ""
+            imageString =
+                if (intent.getStringExtra("postImg") != null) intent.getStringExtra("postImg")
+                else ""
             createORupdatePost(tags)
         }
     }
 
-    fun createORupdatePost(tags: ArrayList<String>?) {
-        if (current_mode == MODE.WRITE) compositeDisposable!!.add(
-            postService!!.createPost(
-                userID, image_url,
-                binding!!.postwriteContents.text.toString(),
+    private fun createORupdatePost(tags: ArrayList<String>) {
+        if (currentMode == UIMODE.WRITE) compositeDisposable.add(
+            postService.createPost(
+                userID, imageString!!,
+                binding.postwriteContents.text.toString(),
                 System.currentTimeMillis(), tags
             )
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response<JsonObject?>? ->
-                    appInstance!!.showToast("글이 등록되었습니다.")
+                .subscribe({
+                    App.showToast("글이 등록되었습니다.")
                     progressOFF()
                     finish()
                 }, RxRetrofitBuilder.defaultConsumer())
-        ) else compositeDisposable!!.add(
-            postService!!.updatePost(
-                postID, image_url,
-                binding!!.postwriteContents.text.toString(),
+        ) else compositeDisposable.add(
+            postService.updatePost(
+                postID, imageString!!,
+                binding.postwriteContents.text.toString(),
                 System.currentTimeMillis(), tags
             )
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response<JsonObject?>? ->
-                    appInstance!!.showToast("업데이트 되었습니다.")
+                .subscribe({
+                    App.showToast("업데이트 되었습니다.")
                     progressOFF()
                     finish()
                 }, RxRetrofitBuilder.defaultConsumer())

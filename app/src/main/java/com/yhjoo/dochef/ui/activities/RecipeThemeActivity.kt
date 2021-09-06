@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.activities
+package com.yhjoo.dochef.ui.activities
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,105 +8,111 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.gms.ads.MobileAds
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.RecipeMultiThemeAdapter
-import com.yhjoo.dochef.databinding.ARecipethemeBinding
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
-import com.yhjoo.dochef.model.*
+import com.yhjoo.dochef.ui.adapter.RecipeMultiThemeAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.MultiItemTheme
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.ui.activities.BaseActivity
+import com.yhjoo.dochef.databinding.ARecipethemeBinding
 import com.yhjoo.dochef.utils.RxRetrofitBuilder
+import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Single
-import retrofit2.Response
 import java.util.*
 
 class RecipeThemeActivity : BaseActivity() {
-    val VIEWHOLDER_AD = 1
-    val VIEWHOLDER_ITEM = 2
+    /*
+        TODO
+        Recommend multi adapter 변경
+    */
+
+    object VIEWHOLDER {
+        const val AD = 1
+        const val ITEM = 2
+    }
 
     object MODE {
         const val POPULAR = 0
         const val TAG = 1
     }
 
-    var binding: ARecipethemeBinding? = null
-    var recipeService: RecipeService? = null
-    var recipeMultiThemeAdapter: RecipeMultiThemeAdapter? = null
-    var recipeListItems = ArrayList<MultiItemTheme>()
-    var tagName: String? = null
-    var currentMode: Int? = null
+    private val binding: ARecipethemeBinding by lazy { ARecipethemeBinding.inflate(layoutInflater) }
+    private lateinit var recipeService: RecipeService
+    private lateinit var recipeMultiThemeAdapter: RecipeMultiThemeAdapter
+    private lateinit var recipeListItems: ArrayList<MultiItemTheme>
 
-    /*
-        TODO
-        Recommend multi adapter 변경
-    */
+    private lateinit var tagName: String
+    private var currentMode: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ARecipethemeBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
-        setSupportActionBar(binding!!.recipethemeToolbar)
+        setContentView(binding.root)
+        setSupportActionBar(binding.recipethemeToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         MobileAds.initialize(this)
+        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
         if (intent.getStringExtra("tag") == null) currentMode = MODE.POPULAR else {
             currentMode = MODE.TAG
-            tagName = intent.getStringExtra("tag")
+            tagName = intent.getStringExtra("tag")!!
         }
-        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
-        recipeMultiThemeAdapter = RecipeMultiThemeAdapter(recipeListItems)
-        recipeMultiThemeAdapter!!.setSpanSizeLookup { gridLayoutManager: GridLayoutManager?, position: Int -> recipeListItems[position].spanSize }
-        recipeMultiThemeAdapter!!.onItemClickListener =
-            BaseQuickAdapter.OnItemClickListener { adapter: BaseQuickAdapter<*, *>, view: View?, position: Int ->
-                if (adapter.getItemViewType(position) == VIEWHOLDER_ITEM) {
-                    val intent = Intent(this@RecipeThemeActivity, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", recipeListItems[position].content.recipeID)
-                    startActivity(intent)
-                }
+
+        binding.apply {
+            recipeMultiThemeAdapter = RecipeMultiThemeAdapter(recipeListItems).apply {
+                setSpanSizeLookup { _: GridLayoutManager?, position: Int -> recipeListItems[position].spanSize }
+                onItemClickListener =
+                    BaseQuickAdapter.OnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
+                        if (adapter.getItemViewType(position) == VIEWHOLDER.ITEM) {
+                            val intent =
+                                Intent(this@RecipeThemeActivity, RecipeDetailActivity::class.java)
+                                    .putExtra(
+                                        "recipeID",
+                                        recipeListItems[position].content!!.recipeID
+                                    )
+                            startActivity(intent)
+                        }
+                    }
             }
-        binding!!.recipethemeRecycler.layoutManager = GridLayoutManager(this, 2)
-        binding!!.recipethemeRecycler.adapter = recipeMultiThemeAdapter
+            recipethemeRecycler.layoutManager = GridLayoutManager(this@RecipeThemeActivity, 2)
+            recipethemeRecycler.adapter = recipeMultiThemeAdapter
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        if (App.appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             loadData()
         } else {
             val arrayList = DataGenerator.make<ArrayList<Recipe>>(
                 resources, resources.getInteger(R.integer.DATE_TYPE_RECIPE)
             )
             for (i in arrayList.indices) {
-                if (i != 0 && i % 4 == 0) recipeListItems.add(MultiItemTheme(VIEWHOLDER_AD, 2))
-                recipeListItems.add(MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList[i]))
+                if (i != 0 && i % 4 == 0)
+                    recipeListItems.add(MultiItemTheme(VIEWHOLDER.AD, 2))
+                recipeListItems.add(MultiItemTheme(VIEWHOLDER.ITEM, 1, arrayList[i]))
             }
-            recipeMultiThemeAdapter!!.setNewData(recipeListItems)
+            recipeMultiThemeAdapter.setNewData(recipeListItems as List<MultiItemTheme?>?)
         }
     }
 
-    fun loadData() {
-        val recipeSingle: Single<Response<ArrayList<Recipe?>?>?>
-        recipeSingle = if (currentMode == MODE.POPULAR) recipeService!!.getRecipes("popular")
-            .observeOn(AndroidSchedulers.mainThread()) else recipeService!!.getRecipeByTag(
-            tagName,
-            "popular"
-        )
-            .observeOn(AndroidSchedulers.mainThread())
-        compositeDisposable!!.add(
+    private fun loadData() {
+        val recipeSingle =
+            if (currentMode == MODE.POPULAR)
+                recipeService.getRecipes("popular")
+                    .observeOn(AndroidSchedulers.mainThread())
+            else
+                recipeService.getRecipeByTag(tagName, "popular")
+                    .observeOn(AndroidSchedulers.mainThread())
+
+        compositeDisposable.add(
             recipeSingle
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response<ArrayList<Recipe?>?>? ->
-                    val arrayList = response!!.body()
-                    for (i in arrayList!!.indices) {
-                        if (i != 0 && i % 4 == 0) recipeListItems.add(
-                            MultiItemTheme(
-                                VIEWHOLDER_AD,
-                                2
-                            )
-                        )
-                        recipeListItems.add(MultiItemTheme(VIEWHOLDER_ITEM, 1, arrayList[i]))
+                .subscribe({
+                    val arrayList = it.body()!!
+                    for (i in arrayList.indices) {
+                        if (i != 0 && i % 4 == 0)
+                            recipeListItems.add(MultiItemTheme(VIEWHOLDER.AD, 2))
+                        recipeListItems.add(MultiItemTheme(VIEWHOLDER.ITEM, 1, arrayList[i]))
                     }
-                    recipeMultiThemeAdapter!!.setNewData(recipeListItems)
+                    recipeMultiThemeAdapter.setNewData(recipeListItems as List<MultiItemTheme?>?)
                 }, RxRetrofitBuilder.defaultConsumer())
         )
     }

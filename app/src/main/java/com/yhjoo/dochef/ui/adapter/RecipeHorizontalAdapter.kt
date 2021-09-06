@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.adapter
+package com.yhjoo.dochef.ui.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -14,6 +14,6 @@ class RecipeHorizontalAdapter :
         )
         helper.setText(R.id.reciperecommend_title, item.recipeName)
         helper.setText(R.id.reciperecommend_rating, String.format("%.1f", item.rating))
-        helper.setText(R.id.reciperecommend_view, Integer.toString(item.viewCount))
+        helper.setText(R.id.reciperecommend_view, item.viewCount.toString())
     }
 }

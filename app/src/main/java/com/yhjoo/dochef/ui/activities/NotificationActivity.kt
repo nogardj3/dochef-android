@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.activities
+package com.yhjoo.dochef.ui.activities
 
 import android.content.ContentValues
 import android.content.Intent
@@ -9,77 +9,83 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.NotificationListAdapter
+import com.yhjoo.dochef.ui.adapter.NotificationListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Notification
 import com.yhjoo.dochef.databinding.ANotificationBinding
-import com.yhjoo.dochef.model.*
-import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.ChefSQLite.NotificationEntry
 import java.util.*
 
 class NotificationActivity : BaseActivity() {
-    var binding: ANotificationBinding? = null
-    var chefSQLite: ChefSQLite? = null
-    var notificationListAdapter: NotificationListAdapter? = null
-    var notifications = ArrayList<Notification>()
+    private val binding: ANotificationBinding by lazy { ANotificationBinding.inflate(layoutInflater) }
+
+    private lateinit var chefSQLite: ChefSQLite
+    private lateinit var notificationListAdapter: NotificationListAdapter
+    private lateinit var notifications: ArrayList<Notification>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ANotificationBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
-        setSupportActionBar(binding!!.notificationToolbar)
+        setContentView(binding.root)
+        setSupportActionBar(binding.notificationToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         chefSQLite = ChefSQLite(
-            this, ChefSQLite.Companion.DATABASE_NAME,
-            null, ChefSQLite.Companion.DATABASE_VERSION
+            this, ChefSQLite.DATABASE_NAME,
+            null, ChefSQLite.DATABASE_VERSION
         )
-        notificationListAdapter = NotificationListAdapter()
-        notificationListAdapter!!.setEmptyView(
-            R.layout.rv_loading,
-            binding!!.notificationRecycler.parent as ViewGroup
-        )
-        notificationListAdapter!!.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>?, view: View?, position: Int ->
-            if (App.isServerAlive()) {
-                val db2 = chefSQLite!!.writableDatabase
-                val values = ContentValues()
-                values.put(NotificationEntry.COLUMN_NAME_READ, 1)
-                val selection = BaseColumns._ID + " LIKE ?"
-                val selectionArgs = arrayOf(Integer.toString(notifications[position]._id))
-                val count = db2.update(
-                    NotificationEntry.TABLE_NAME,
-                    values,
-                    selection,
-                    selectionArgs
-                )
-                val noti_type = notifications[position].type
-                Utils.log(notifications[position].type)
-                if (noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_1)
-                    || noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_2)
-                ) {
-                    val intent = Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", notifications[position].intentData.toInt())
-                    startActivity(intent)
-                } else if (noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_3)) {
-                    val intent = Intent(this@NotificationActivity, PostDetailActivity::class.java)
-                        .putExtra("postID", notifications[position].intentData.toInt())
-                    startActivity(intent)
-                } else if (noti_type == resources.getInteger(R.integer.NOTIFICATION_TYPE_4)) {
-                    val intent = Intent(this@NotificationActivity, HomeActivity::class.java)
-                        .putExtra("postID", notifications[position].intentData)
-                    startActivity(intent)
+
+        notificationListAdapter = NotificationListAdapter().apply {
+            setEmptyView(
+                R.layout.rv_loading,
+                binding.notificationRecycler.parent as ViewGroup
+            )
+            setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
+                if (App.isServerAlive) {
+                    val db2 = chefSQLite.writableDatabase
+                    val values = ContentValues().apply {
+                        put(NotificationEntry.COLUMN_NAME_READ, 1)
+                    }
+
+                    val selection = BaseColumns._ID + " LIKE ?"
+                    val selectionArgs = arrayOf(notifications[position].type.toString())
+                    db2.update(
+                        NotificationEntry.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs
+                    )
+
+                    val notiType = notifications[position].type
+                    if (notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_1)
+                        || notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_2)
+                    ) {
+                        val intent =
+                            Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
+                                .putExtra("recipeID", notifications[position].intentData.toInt())
+                        startActivity(intent)
+                    } else if (notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_3)) {
+                        val intent =
+                            Intent(this@NotificationActivity, PostDetailActivity::class.java)
+                                .putExtra("postID", notifications[position].intentData.toInt())
+                        startActivity(intent)
+                    } else if (notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_4)) {
+                        val intent = Intent(this@NotificationActivity, HomeActivity::class.java)
+                            .putExtra("postID", notifications[position].intentData)
+                        startActivity(intent)
+                    }
                 }
             }
         }
-        binding!!.notificationRecycler.layoutManager = LinearLayoutManager(this)
-        binding!!.notificationRecycler.adapter = notificationListAdapter
-        notificationListAdapter!!.setNewData(notifications)
+
+        binding.notificationRecycler.layoutManager = LinearLayoutManager(this)
+        binding.notificationRecycler.adapter = notificationListAdapter
+        notificationListAdapter.setNewData(notifications)
     }
 
     override fun onResume() {
         super.onResume()
-        notifications = if (App.isServerAlive()) {
+        notifications = if (App.isServerAlive) {
             readDataFromDB()
         } else {
             DataGenerator.make(
@@ -87,28 +93,28 @@ class NotificationActivity : BaseActivity() {
                 resources.getInteger(R.integer.DATA_TYPE_NOTIFICATION)
             )
         }
-        notificationListAdapter!!.setNewData(notifications)
-        notificationListAdapter!!.setEmptyView(
+        notificationListAdapter.setNewData(notifications)
+        notificationListAdapter.setEmptyView(
             R.layout.rv_empty_notification,
-            binding!!.notificationRecycler.parent as ViewGroup
+            binding.notificationRecycler.parent as ViewGroup
         )
     }
 
-    fun readDataFromDB(): ArrayList<Notification> {
+    private fun readDataFromDB(): ArrayList<Notification> {
         val res = ArrayList<Notification>()
-        val db = chefSQLite!!.readableDatabase
+        val db = chefSQLite.readableDatabase
         val selection = NotificationEntry.COLUMN_NAME_DATETIME + " > ?"
         val selectionArgs =
-            arrayOf(java.lang.Long.toString(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 3))
+            arrayOf((System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 3).toString())
         val sortOrder = NotificationEntry.COLUMN_NAME_DATETIME + " DESC"
         val cursor = db.query(
-            NotificationEntry.TABLE_NAME,  // The table to query
-            null,  // The array of columns to return (pass null to get all)
-            selection,  // The columns for the WHERE clause
-            selectionArgs,  // The values for the WHERE clause
-            null,  // don't group the rows
-            null,  // don't filter by row groups
-            sortOrder // The sort order
+            NotificationEntry.TABLE_NAME,
+            null,
+            selection,
+            selectionArgs,
+            null,
+            null,
+            sortOrder
         )
         while (cursor.moveToNext()) {
             res.add(

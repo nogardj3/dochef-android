@@ -14,7 +14,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
-import com.yhjoo.dochef.App.Companion.appInstance
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.AAccountBinding
@@ -118,7 +118,7 @@ class AccountActivity : BaseActivity() {
                 signInWithGoogle(account.idToken!!)
             } catch (e: ApiException) {
                 Utils.log("Google sign in failed", e.toString())
-                appInstance.showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.")
+                App.showToast("구글 인증 오류. 잠시 후 다시 시도해주세요.")
                 progressOFF()
             }
         }
@@ -132,13 +132,13 @@ class AccountActivity : BaseActivity() {
             Utils.emailValidation(signinEmail) == EmailValidate.NODATA || Utils.pwValidation(
                 signinPw
             ) == PWValidate.NODATA ->
-                appInstance.showToast("이메일과 비밀번호를 모두 입력해주세요.")
+                App.showToast("이메일과 비밀번호를 모두 입력해주세요.")
             Utils.emailValidation(signinEmail) == EmailValidate.INVALID ->
-                appInstance.showToast("이메일 형식이 올바르지 않습니다.")
+                App.showToast("이메일 형식이 올바르지 않습니다.")
             Utils.pwValidation(signinPw) == PWValidate.LENGTH ->
-                appInstance.showToast("비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요.")
+                App.showToast("비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요.")
             Utils.pwValidation(signinPw) == PWValidate.INVALID ->
-                appInstance.showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.")
+                App.showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.")
             else -> {
                 firebaseAuth.signInWithEmailAndPassword(signinEmail, signinPw)
                     .addOnCompleteListener { authTask: Task<AuthResult> ->
@@ -147,24 +147,24 @@ class AccountActivity : BaseActivity() {
                             if (e is FirebaseAuthException) {
                                 when (e.errorCode) {
                                     "ERROR_USER_NOT_FOUND" ->
-                                        appInstance.showToast("존재하지 않는 이메일입니다. 가입 후 사용해 주세요.")
+                                        App.showToast("존재하지 않는 이메일입니다. 가입 후 사용해 주세요.")
                                     "ERROR_WRONG_PASSWORD" ->
-                                        appInstance.showToast("비밀번호가 올바르지 않습니다.")
+                                        App.showToast("비밀번호가 올바르지 않습니다.")
                                     "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" ->
-                                        appInstance.showToast(
+                                        App.showToast(
                                             "해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오."
                                         )
                                     else ->
-                                        appInstance.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
+                                        App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
                                 }
-                            } else appInstance.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
+                            } else App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
                             progressOFF()
                         } else {
                             authTask.result!!.user!!.getIdToken(true)
                                 .addOnCompleteListener { task: Task<GetTokenResult> ->
                                     if (!task.isSuccessful) {
                                         progressOFF()
-                                        appInstance.showToast("알 수 없는 오류 발생. 다시 시도해 주세요")
+                                        App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요")
                                     } else {
                                         idToken = task.result!!.token!!
                                         checkUserInfo(idToken)
@@ -191,7 +191,7 @@ class AccountActivity : BaseActivity() {
                         .addOnCompleteListener { tokenTask: Task<GetTokenResult> ->
                             if (!tokenTask.isSuccessful) {
                                 progressOFF()
-                                appInstance.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
+                                App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
                             } else {
                                 idToken = tokenTask.result!!.token!!
                                 checkUserInfo(idToken)
@@ -199,7 +199,7 @@ class AccountActivity : BaseActivity() {
                         }
                 } else {
                     task.exception?.printStackTrace()
-                    appInstance.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
+                    App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
                 }
             }
     }
@@ -210,13 +210,13 @@ class AccountActivity : BaseActivity() {
 
         when {
             Utils.emailValidation(email) == EmailValidate.NODATA || Utils.pwValidation(email) == PWValidate.NODATA ->
-                appInstance.showToast("이메일과 비밀번호를 모두 입력해주세요.")
+                App.showToast("이메일과 비밀번호를 모두 입력해주세요.")
             Utils.emailValidation(email) == EmailValidate.INVALID ->
-                appInstance.showToast("이메일 형식이 올바르지 않습니다.")
+                App.showToast("이메일 형식이 올바르지 않습니다.")
             Utils.pwValidation(pw) == PWValidate.LENGTH ->
-                appInstance.showToast("비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요.")
+                App.showToast("비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요.")
             Utils.pwValidation(pw) == PWValidate.INVALID ->
-                appInstance.showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.")
+                App.showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.")
             else -> {
                 progressON(this)
                 firebaseAuth.createUserWithEmailAndPassword(email, pw)
@@ -229,21 +229,21 @@ class AccountActivity : BaseActivity() {
                                     val fbae =
                                         (authTask.exception as FirebaseAuthException).errorCode
                                     if ("ERROR_EMAIL_ALREADY_IN_USE" == fbae)
-                                        appInstance.showToast("이미 가입되있는 이메일입니다.")
+                                        App.showToast("이미 가입되있는 이메일입니다.")
                                     else
-                                        appInstance.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
+                                        App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
                                 }
                                 is FirebaseNetworkException ->
-                                    appInstance.showToast("네트워크 상태를 확인해주세요.")
+                                    App.showToast("네트워크 상태를 확인해주세요.")
                                 else ->
-                                    appInstance.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
+                                    App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
                             }
                         } else {
                             authTask.result!!.user!!.getIdToken(true)
                                 .addOnCompleteListener { task: Task<GetTokenResult> ->
                                     if (!task.isSuccessful) {
                                         progressOFF()
-                                        appInstance.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
+                                        App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
                                     } else {
                                         idToken = task.result!!.token!!
                                         checkUserInfo(idToken)
@@ -260,11 +260,11 @@ class AccountActivity : BaseActivity() {
 
         when {
             Utils.nicknameValidate(nickname) == NicknameValidate.NODATA ->
-                appInstance.showToast("닉네임을 입력 해 주세요.")
+                App.showToast("닉네임을 입력 해 주세요.")
             Utils.nicknameValidate(nickname) == NicknameValidate.LENGTH ->
-                appInstance.showToast("닉네임의 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요")
+                App.showToast("닉네임의 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요")
             Utils.nicknameValidate(nickname) == NicknameValidate.INVALID ->
-                appInstance.showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.")
+                App.showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.")
             else -> {
                 progressON(this)
                 compositeDisposable.add(
@@ -272,9 +272,9 @@ class AccountActivity : BaseActivity() {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe({ response: Response<UserBrief> ->
                             if (response.code() == 403)
-                                appInstance.showToast("이미 존재하는 닉네임입니다.")
+                                App.showToast("이미 존재하는 닉네임입니다.")
                             else {
-                                appInstance.showToast("회원 가입 되었습니다.")
+                                App.showToast("회원 가입 되었습니다.")
                                 startMain(response.body()!!)
                             }
                         }) { throwable: Throwable ->
@@ -293,7 +293,7 @@ class AccountActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({ response: Response<UserBrief> ->
                     if (response.code() == 409) {
-                        appInstance.showToast("닉네임을 입력해주세요.")
+                        App.showToast("닉네임을 입력해주세요.")
                         startMode(MODE.SIGNUPNICK)
                         progressOFF()
                     } else startMain(response.body()!!)

@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.FAQListAdapter
+import com.yhjoo.dochef.ui.adapter.FAQListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.ExpandContents
 import com.yhjoo.dochef.data.model.ExpandTitle
@@ -40,7 +40,7 @@ class FAQActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (App.appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             compositeDisposable.add(
                 basicService.faq
                     .observeOn(AndroidSchedulers.mainThread())
@@ -51,10 +51,12 @@ class FAQActivity : BaseActivity() {
                     }, RxRetrofitBuilder.defaultConsumer())
             )
         } else {
-            loadList(DataGenerator.make(
-                resources,
-                resources.getInteger(R.integer.DATA_TYPE_FAQ)
-            ))
+            loadList(
+                DataGenerator.make(
+                    resources,
+                    resources.getInteger(R.integer.DATA_TYPE_FAQ)
+                )
+            )
         }
     }
 

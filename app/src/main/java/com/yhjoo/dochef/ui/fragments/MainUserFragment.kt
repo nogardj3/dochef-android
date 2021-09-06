@@ -6,70 +6,76 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
-import com.yhjoo.dochef.App.Companion.appInstance
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.DataGenerator
+import com.yhjoo.dochef.data.model.UserDetail
+import com.yhjoo.dochef.databinding.FMainUserBinding
 import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.HomeActivity
-import com.yhjoo.dochef.activities.RecipeMyListActivity
-import com.yhjoo.dochef.activities.SettingActivity
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.databinding.FMainUserBinding
-import com.yhjoo.dochef.utils.RxRetrofitServices.UserService
-import com.yhjoo.dochef.data.model.UserDetail
+import com.yhjoo.dochef.ui.activities.RecipeMyListActivity
+import com.yhjoo.dochef.ui.activities.SettingActivity
 import com.yhjoo.dochef.utils.*
+import com.yhjoo.dochef.utils.RxRetrofitServices.UserService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Response
 
 class MainUserFragment : Fragment() {
-    var binding: FMainUserBinding? = null
-    var userService: UserService? = null
-    var userDetailInfo: UserDetail? = null
-    var userID: String? = null
+    private lateinit var binding: FMainUserBinding
+    private lateinit var userService: UserService
+    private lateinit var userDetailInfo: UserDetail
+    private lateinit var userID: String
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FMainUserBinding.inflate(inflater, container, false)
-        val view: View = binding!!.root
-        userService = RxRetrofitBuilder.create(context, UserService::class.java)
-        userID = Utils.getUserBrief(context).userID
-        binding!!.fmainUserHome.setOnClickListener { view: View? -> goHome(view) }
-        binding!!.fmainUserRecipe.setOnClickListener { view: View? -> goMyRecipe(view) }
-        binding!!.fmainUserSetting.setOnClickListener { view: View? -> goSetting(view) }
-        binding!!.fmainUserReview.setOnClickListener { view: View? -> goReview(view) }
+        val view: View = binding.root
+
+        userService = RxRetrofitBuilder.create(requireContext(), UserService::class.java)
+
+        userID = Utils.getUserBrief(requireContext()).userID
+
+        binding.apply {
+            fmainUserHome.setOnClickListener { goHome() }
+            fmainUserRecipe.setOnClickListener { goMyRecipe() }
+            fmainUserSetting.setOnClickListener { goSetting() }
+            fmainUserReview.setOnClickListener { goReview() }
+        }
         return view
     }
 
     override fun onResume() {
         super.onResume()
-        if (App.isServerAlive()) userDetail else {
+        if (App.isServerAlive)
+            settingUserDetail()
+        else {
             userDetailInfo =
                 DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
             ImageLoadUtil.loadUserImage(
-                context,
-                userDetailInfo.getUserImg(),
-                binding!!.fmainUserImg
+                requireContext(),
+                userDetailInfo.userImg,
+                binding.fmainUserImg
             )
-            binding!!.fmainUserNickname.text = userDetailInfo.getNickname()
+            binding.fmainUserNickname.text = userDetailInfo.nickname
         }
     }
 
-    fun goHome(view: View?) {
+    private fun goHome() {
         startActivity(Intent(context, HomeActivity::class.java))
     }
 
-    fun goMyRecipe(view: View?) {
+    private fun goMyRecipe() {
         val intent = Intent(context, RecipeMyListActivity::class.java)
-            .putExtra("userID", userDetailInfo.getUserID())
+            .putExtra("userID", userDetailInfo.userID)
         startActivity(intent)
     }
 
-    fun goSetting(view: View?) {
+    private fun goSetting() {
         startActivity(Intent(context, SettingActivity::class.java))
     }
 
-    fun goReview(view: View?) {
+    private fun goReview() {
         val intent = Intent(Intent.ACTION_VIEW)
         intent.setData(
             Uri.parse(
@@ -81,24 +87,23 @@ class MainUserFragment : Fragment() {
             startActivity(intent)
         } catch (e: Exception) {
             Utils.log(e.toString())
-            appInstance!!.showToast("스토어 열기 실패")
+            App.showToast("스토어 열기 실패")
         }
     }
 
-    val userDetail: Unit
-        get() {
-            (activity as BaseActivity?).getCompositeDisposable().add(
-                userService!!.getUserDetail(userID)
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response: Response<UserDetail?>? ->
-                        userDetailInfo = response!!.body()
-                        ImageLoadUtil.loadUserImage(
-                            this@MainUserFragment.context,
-                            userDetailInfo.getUserImg(),
-                            binding!!.fmainUserImg
-                        )
-                        binding!!.fmainUserNickname.text = userDetailInfo.getNickname()
-                    }, RxRetrofitBuilder.defaultConsumer())
-            )
-        }
+    private fun settingUserDetail() {
+        (activity as BaseActivity).compositeDisposable.add(
+            userService.getUserDetail(userID)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({
+                    userDetailInfo = it.body()!!
+                    ImageLoadUtil.loadUserImage(
+                        this@MainUserFragment.requireContext(),
+                        userDetailInfo.userImg,
+                        binding!!.fmainUserImg
+                    )
+                    binding!!.fmainUserNickname.text = userDetailInfo.nickname
+                }, RxRetrofitBuilder.defaultConsumer())
+        )
+    }
 }

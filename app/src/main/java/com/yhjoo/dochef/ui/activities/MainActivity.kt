@@ -19,10 +19,9 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.activities.*
-import com.yhjoo.dochef.adapter.MainFragmentAdapter
+import com.yhjoo.dochef.ui.adapter.MainFragmentAdapter
 import com.yhjoo.dochef.databinding.AMainBinding
 import com.yhjoo.dochef.ui.fragments.*
-import com.yhjoo.dochef.ui.fragments.MainRecipesFragment.SORT
 import com.yhjoo.dochef.utils.Utils
 import java.util.*
 
@@ -132,9 +131,9 @@ class MainActivity : BaseActivity() {
         powerMenu.onMenuItemClickListener =
             OnMenuItemClickListener { position: Int, _: PowerMenuItem? ->
                 when (position) {
-                    0 -> sortMenu(SORT.LATEST)
-                    1 -> sortMenu(SORT.POPULAR)
-                    2 -> sortMenu(SORT.RATING)
+                    0 -> sortMenu(MainRecipesFragment.VALUES.SORT.LATEST)
+                    1 -> sortMenu(MainRecipesFragment.VALUES.SORT.POPULAR)
+                    2 -> sortMenu(MainRecipesFragment.VALUES.SORT.RATING)
                 }
                 powerMenu.selectedPosition = position
                 powerMenu.dismiss()
@@ -207,7 +206,7 @@ class MainActivity : BaseActivity() {
             )
             R.id.main_menu_write_post -> {
                 val intent = Intent(this, PostWriteActivity::class.java)
-                    .putExtra("MODE", PostWriteActivity.MODE.WRITE)
+                    .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.WRITE)
                 startActivity(intent)
             }
             R.id.main_menu_search -> startActivity(Intent(this, SearchActivity::class.java))
@@ -216,7 +215,7 @@ class MainActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun sortMenu(sort: SORT) {
+    private fun sortMenu(sort: Int) {
         (mainFragmentAdapter.getItem(1) as MainRecipesFragment).changeSortMode(sort)
     }
 }

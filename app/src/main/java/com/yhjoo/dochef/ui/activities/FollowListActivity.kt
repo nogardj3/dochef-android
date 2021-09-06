@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.FollowListAdapter
+import com.yhjoo.dochef.ui.adapter.FollowListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
@@ -24,10 +24,10 @@ class FollowListActivity : BaseActivity() {
         const val FOLLOWING = 1
     }
 
-    val binding: AFollowlistBinding by lazy { AFollowlistBinding.inflate(layoutInflater) }
+    private val binding: AFollowlistBinding by lazy { AFollowlistBinding.inflate(layoutInflater) }
 
-    lateinit var rxUserService: UserService
-    lateinit var followListAdapter: FollowListAdapter
+    private lateinit var rxUserService: UserService
+    private lateinit var followListAdapter: FollowListAdapter
     private lateinit var userDetailInfo: UserDetail
     private lateinit var userList: ArrayList<UserBrief>
     private lateinit var activeUserid: String
@@ -43,7 +43,7 @@ class FollowListActivity : BaseActivity() {
 
         rxUserService = RxRetrofitBuilder.create(this, UserService::class.java)
 
-        currentMode = intent.getSerializableExtra("MODE") as Int
+        currentMode = intent.getIntExtra("MODE", UIMODE.FOLLOWER)
         activeUserid = Utils.getUserBrief(this).userID
         targetId = intent.getStringExtra("userID").toString()
 
@@ -73,7 +73,7 @@ class FollowListActivity : BaseActivity() {
             }
         }
 
-        if (App.appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             val modeSingle =
                 if (currentMode == UIMODE.FOLLOWER) {
                     rxUserService.getFollowers(targetId)
@@ -140,7 +140,7 @@ class FollowListActivity : BaseActivity() {
 
     private fun setListData() {
         followListAdapter.apply {
-            setActiveUserFollow(userDetailInfo.follow)
+            settingUserFollow(userDetailInfo.follow)
             setNewData(userList)
             setEmptyView(
                 R.layout.rv_empty_follower,

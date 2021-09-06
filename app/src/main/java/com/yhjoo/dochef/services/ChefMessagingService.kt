@@ -10,7 +10,7 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.NotificationActivity
+import com.yhjoo.dochef.ui.activities.NotificationActivity
 import com.yhjoo.dochef.utils.ChefSQLite
 import com.yhjoo.dochef.utils.ChefSQLite.NotificationEntry
 import com.yhjoo.dochef.utils.Utils
@@ -31,9 +31,7 @@ class ChefMessagingService : FirebaseMessagingService() {
             val type = remoteMessage.data["type"]
             if (type != "0") addDB(remoteMessage.data)
 
-            val mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(
-                applicationContext
-            )
+            val mSharedPreferences = Utils.getSharedPreferences(this)
             val settingEnable = mSharedPreferences.getBoolean(
                 resources.getStringArray(R.array.sp_noti)[type!!.toInt()], true
             )

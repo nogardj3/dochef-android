@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.adapter
+package com.yhjoo.dochef.ui.adapter
 
 import android.content.Context
 import android.view.View

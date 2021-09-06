@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.activities
+package com.yhjoo.dochef.ui.activities
 
 import android.content.Intent
 import android.content.SharedPreferences
@@ -6,54 +6,51 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
-import com.yhjoo.dochef.App.Companion.appInstance
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.BuildConfig
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.ASettingBinding
-import com.yhjoo.dochef.ui.activities.AccountActivity
-import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.ui.activities.FAQActivity
 import com.yhjoo.dochef.utils.*
 
 class SettingActivity : BaseActivity() {
-    lateinit var binding: ASettingBinding
-    lateinit var mSharedPreferences: SharedPreferences
-    lateinit var notiSettingArray: Array<String>
+    private val binding: ASettingBinding by lazy { ASettingBinding.inflate(layoutInflater) }
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var notiSettingArray: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ASettingBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        sharedPreferences = Utils.getSharedPreferences(this)
         notiSettingArray = resources.getStringArray(R.array.sp_noti)
 
-        binding.settingNotice.setOnClickListener { startNotice() }
-        binding.settingVersion.text = BuildConfig.VERSION_NAME
-        binding.settingFaq.setOnClickListener { startFAQ() }
-        binding.settingTos.setOnClickListener { startTOS() }
-        binding.settingLogout.setOnClickListener { signOut() }
-        binding.settingNotificationAllCheck.setOnClickListener {
-            toggleAllnotification()
+        binding.apply {
+            settingNotice.setOnClickListener { startNotice() }
+            settingVersion.text = BuildConfig.VERSION_NAME
+            settingFaq.setOnClickListener { startFAQ() }
+            settingTos.setOnClickListener { startTOS() }
+            settingLogout.setOnClickListener { signOut() }
+
+            settingNotificationAllCheck.setOnClickListener { toggleAllnotification() }
+            settingNotification0Check.setOnClickListener {
+                toggleNotification(0, null)
+            }
+            settingNotification1Check.setOnClickListener {
+                toggleNotification(1, null)
+            }
+            settingNotification2Check.setOnClickListener {
+                toggleNotification(2, null)
+            }
+            settingNotification3Check.setOnClickListener {
+                toggleNotification(3, null)
+            }
+            settingNotification4Check.setOnClickListener {
+                toggleNotification(4, null)
+            }
         }
-        binding.settingNotification0Check.setOnClickListener {
-            toggleNotification(0,null)
-        }
-        binding.settingNotification1Check.setOnClickListener {
-            toggleNotification(1,null)
-        }
-        binding.settingNotification2Check.setOnClickListener {
-            toggleNotification(2,null)
-        }
-        binding.settingNotification3Check.setOnClickListener {
-            toggleNotification(3,null)
-        }
-        binding.settingNotification4Check.setOnClickListener {
-            toggleNotification(4,null)
-        }
-        notiSettings
+
+        setNotificiationSettings()
     }
 
     private fun startNotice() {
@@ -69,28 +66,32 @@ class SettingActivity : BaseActivity() {
     }
 
     private fun signOut() {
-        appInstance.showToast("로그아웃")
+        App.showToast("로그아웃")
         ChefAuth.logOut(this)
-        val intent = Intent(this, AccountActivity::class.java)
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        startActivity(intent)
+
+        startActivity(
+            Intent(this, AccountActivity::class.java)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        )
         finish()
     }
 
-    private val notiSettings: Unit
-        get() {
-            binding.settingNotificationAllCheck.isChecked = false
-            binding.settingNotification0Check.isChecked =
-                mSharedPreferences.getBoolean(notiSettingArray[0], true)
-            binding.settingNotification1Check.isChecked =
-                mSharedPreferences.getBoolean(notiSettingArray[1], true)
-            binding.settingNotification2Check.isChecked =
-                mSharedPreferences.getBoolean(notiSettingArray[2], true)
-            binding.settingNotification3Check.isChecked =
-                mSharedPreferences.getBoolean(notiSettingArray[3], true)
-            binding.settingNotification4Check.isChecked =
-                mSharedPreferences.getBoolean(notiSettingArray[4], true)
+    private fun setNotificiationSettings() {
+        binding.apply {
+            settingNotificationAllCheck.isChecked = false
+            settingNotification0Check.isChecked =
+                sharedPreferences.getBoolean(notiSettingArray[0], true)
+            settingNotification1Check.isChecked =
+                sharedPreferences.getBoolean(notiSettingArray[1], true)
+            settingNotification2Check.isChecked =
+                sharedPreferences.getBoolean(notiSettingArray[2], true)
+            settingNotification3Check.isChecked =
+                sharedPreferences.getBoolean(notiSettingArray[3], true)
+            settingNotification4Check.isChecked =
+                sharedPreferences.getBoolean(notiSettingArray[4], true)
         }
+    }
+
 
     private fun toggleAllnotification() {
         toggleNotification(0, binding.settingNotificationAllCheck.isChecked)
@@ -112,9 +113,8 @@ class SettingActivity : BaseActivity() {
         if (check != null) {
             target.isChecked = check
         }
-        Utils.log(target.isChecked)
 
-        mSharedPreferences.edit {
+        sharedPreferences.edit {
             putBoolean(notiSettingArray[position], target.isChecked)
             apply()
         }

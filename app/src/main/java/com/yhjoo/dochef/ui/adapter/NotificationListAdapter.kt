@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.adapter
+package com.yhjoo.dochef.ui.adapter
 
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView

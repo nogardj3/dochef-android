@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.adapter
+package com.yhjoo.dochef.ui.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -20,7 +20,7 @@ class RecipeMyListAdapter(var userID: String?) :
         )
         helper.setText(R.id.recipemylist_date, Utils.convertMillisToText(item.datetime))
         helper.setText(R.id.recipemylist_rating, String.format("%.1f", item.rating))
-        helper.setText(R.id.recipemylist_view, Integer.toString(item.viewCount))
+        helper.setText(R.id.recipemylist_view, item.viewCount.toString())
         helper.setVisible(R.id.recipemylist_yours, item.userID != userID)
         helper.addOnClickListener(R.id.recipemylist_yours)
     }

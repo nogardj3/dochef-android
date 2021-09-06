@@ -12,35 +12,37 @@ import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.utils.ImageLoadUtil
 
 class PlayRecipeStartFragment : Fragment() {
-    var binding: FPlayrecipeStartBinding? = null
+    private lateinit var binding: FPlayrecipeStartBinding
 
-    /*
-        TODO
-    */
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FPlayrecipeStartBinding.inflate(inflater, container, false)
-        val view: View = binding!!.root
-        val recipeDetail = requireArguments().getSerializable("item") as RecipeDetail?
+        val view: View = binding.root
+
+        val recipeDetail = requireArguments().getSerializable("item") as RecipeDetail
+
         ImageLoadUtil.loadRecipeImage(
-            context,
-            recipeDetail!!.recipeImg,
-            binding!!.playrecipeStartImg
+            requireContext(),
+            recipeDetail.recipeImg,
+            binding.playrecipeStartImg
         )
-        binding!!.playrecipeStartTitle.text = recipeDetail.getRecipeName()
-        binding!!.playrecipeStartContents.text = recipeDetail.getContents()
-        binding!!.playrecipeStartTags.removeAllViews()
-        for (tag in recipeDetail.getTags()) {
+
+        binding.playrecipeStartTitle.text = recipeDetail.recipeName
+        binding.playrecipeStartContents.text = recipeDetail.contents
+
+        binding.playrecipeStartTags.removeAllViews()
+        for (tag in recipeDetail.tags) {
             val tagcontainer = layoutInflater.inflate(R.layout.v_tag_recipe, null) as LinearLayout
             val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_recipe_text)
             tagview.text = "#$tag"
-            binding!!.playrecipeStartTags.addView(tagcontainer)
+            binding.playrecipeStartTags.addView(tagcontainer)
         }
-        binding!!.playrecipeStartIngredients.removeAllViews()
-        for (ingredient in recipeDetail.getIngredients()) {
+
+        binding.playrecipeStartIngredients.removeAllViews()
+        for (ingredient in recipeDetail.ingredients) {
             val ingredientContainer =
                 layoutInflater.inflate(R.layout.v_ingredient_play, null) as ConstraintLayout
             val ingredientName: AppCompatTextView =
@@ -49,8 +51,9 @@ class PlayRecipeStartFragment : Fragment() {
             val ingredientAmount: AppCompatTextView =
                 ingredientContainer.findViewById(R.id.v_ingredientplay_amount)
             ingredientAmount.text = ingredient.amount
-            binding!!.playrecipeStartIngredients.addView(ingredientContainer)
+            binding.playrecipeStartIngredients.addView(ingredientContainer)
         }
+
         return view
     }
 }

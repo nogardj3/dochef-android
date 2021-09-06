@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.adapter
+package com.yhjoo.dochef.ui.adapter
 
 import android.view.View
 import android.widget.LinearLayout
@@ -20,8 +20,8 @@ class PostListAdapter : BaseQuickAdapter<Post, BaseViewHolder>(R.layout.li_timel
             mContext, item.userImg, helper.getView(R.id.timeline_userimg)
         )
         helper.setText(R.id.timeline_nickname, item.nickname)
-        helper.setText(R.id.timeline_likecount, Integer.toString(item.likes.size))
-        helper.setText(R.id.timeline_commentcount, Integer.toString(item.comments.size))
+        helper.setText(R.id.timeline_likecount, item.likes.size.toString())
+        helper.setText(R.id.timeline_commentcount, item.comments.size.toString())
         helper.setText(R.id.timeline_contents, " " + item.contents)
         helper.setText(R.id.timeline_time, Utils.convertMillisToText(item.dateTime))
         helper.addOnClickListener(R.id.timeline_userimg)
@@ -35,14 +35,14 @@ class PostListAdapter : BaseQuickAdapter<Post, BaseViewHolder>(R.layout.li_timel
         }
         if (item.comments.size != 0) {
             ImageLoadUtil.loadUserImage(
-                mContext, item.comments[0].userImg, helper.getView(R.id.timeline_comment_img)
+                mContext, item.comments[0]!!.userImg, helper.getView(R.id.timeline_comment_img)
             )
             helper.setVisible(R.id.timeline_comment_group, true)
-            helper.setText(R.id.timeline_comment_nickname, item.comments[0].nickName)
-            helper.setText(R.id.timeline_comment_contents, item.comments[0].contents)
+            helper.setText(R.id.timeline_comment_nickname, item.comments[0]!!.nickName)
+            helper.setText(R.id.timeline_comment_contents, item.comments[0]!!.contents)
             helper.setText(
                 R.id.timeline_comment_date, Utils.convertMillisToText(
-                    item.comments[0].dateTime
+                    item.comments[0]!!.dateTime
                 )
             )
         } else helper.setVisible(R.id.timeline_comment_group, false)

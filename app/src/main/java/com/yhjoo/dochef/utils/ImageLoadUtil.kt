@@ -12,7 +12,7 @@ object ImageLoadUtil {
         filename: String,
         appCompatImageView: AppCompatImageView
     ) {
-        if (App.appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             if (filename != "default") {
                 val profileSrc = FirebaseStorage.getInstance().reference
                     .child(context.getString(R.string.storage_path_profile) + filename)
@@ -34,7 +34,7 @@ object ImageLoadUtil {
         filename: String,
         appCompatImageView: AppCompatImageView
     ) {
-        if (App.appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             val recipeSrc = FirebaseStorage.getInstance().reference
                 .child(context.getString(R.string.storage_path_recipe) + filename)
 
@@ -52,7 +52,7 @@ object ImageLoadUtil {
         filename: String,
         appCompatImageView: AppCompatImageView
     ) {
-        if (App.appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             if (filename != "") {
                 val postSrc = FirebaseStorage.getInstance().reference
                     .child(context.getString(R.string.storage_path_post) + filename)

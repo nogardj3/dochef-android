@@ -10,18 +10,19 @@ class App : Application() {
     // 1. RX error Handler
     // 2. 세로 막기
 
-    private lateinit var toast: Toast
-    var isServerAlive = false
-
     companion object {
-        lateinit var appInstance: App
+        var isServerAlive = false
+        lateinit var toast: Toast
+        fun showToast(text: String) {
+            toast.setText(text)
+            toast.show()
+        }
     }
 
     override fun onCreate() {
         super.onCreate()
 
         Logger.addLogAdapter(AndroidLogAdapter())
-        appInstance = this
         toast = Toast.makeText(this, "Default", Toast.LENGTH_SHORT)
 
 //-------- Rxjava 에러
@@ -69,8 +70,4 @@ class App : Application() {
 //        )
     }
 
-    fun showToast(text: String) {
-        toast.setText(text)
-        toast.show()
-    }
 }

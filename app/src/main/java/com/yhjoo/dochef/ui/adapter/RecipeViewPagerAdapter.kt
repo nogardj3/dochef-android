@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.adapter
+package com.yhjoo.dochef.ui.adapter
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

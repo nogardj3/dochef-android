@@ -19,13 +19,10 @@ import com.google.firebase.storage.StorageReference
 import com.google.gson.JsonObject
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import com.yhjoo.dochef.App.Companion.appInstance
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.PostDetailActivity
-import com.yhjoo.dochef.activities.RecipeDetailActivity
-import com.yhjoo.dochef.activities.RecipeMyListActivity
-import com.yhjoo.dochef.adapter.PostListAdapter
-import com.yhjoo.dochef.adapter.RecipeHorizontalHomeAdapter
+import com.yhjoo.dochef.ui.adapter.PostListAdapter
+import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
@@ -38,23 +35,23 @@ import retrofit2.Response
 import java.util.*
 
 class HomeActivity : BaseActivity() {
-    companion object{
+    companion object {
         const val CODE_PERMISSION = 22
         const val IMG_WIDTH = 360
         const val IMG_HEIGHT = 360
     }
 
-    object UIMODE{
+    object UIMODE {
         const val OWNER = 0
         const val OTHERS = 1
     }
 
-    object OPERATION{
+    object OPERATION {
         const val VIEW = 0
         const val REVISE = 1
     }
 
-    val binding: AHomeBinding by lazy {AHomeBinding.inflate(layoutInflater)}
+    val binding: AHomeBinding by lazy { AHomeBinding.inflate(layoutInflater) }
 
     private lateinit var storageReference: StorageReference
     private lateinit var accountService: AccountService
@@ -93,7 +90,7 @@ class HomeActivity : BaseActivity() {
         postService = RxRetrofitBuilder.create(this, PostService::class.java)
 
         val userID = Utils.getUserBrief(this).userID
-        if (intent.getStringExtra("userID") == null|| intent.getStringExtra("userID") == userID) {
+        if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == userID) {
             currentMode = UIMODE.OWNER
             currentUserID = userID
         } else {
@@ -120,23 +117,26 @@ class HomeActivity : BaseActivity() {
                 startActivity(intent)
             }
 
-            binding.homePostRecycler.layoutManager = object : LinearLayoutManager(this@HomeActivity) {
-                override fun canScrollHorizontally(): Boolean {
-                    return false
-                }
+            binding.homePostRecycler.layoutManager =
+                object : LinearLayoutManager(this@HomeActivity) {
+                    override fun canScrollHorizontally(): Boolean {
+                        return false
+                    }
 
-                override fun canScrollVertically(): Boolean {
-                    return false
+                    override fun canScrollVertically(): Boolean {
+                        return false
+                    }
                 }
-            }
             binding.homePostRecycler.adapter = postListAdapter
         }
 
-        if (appInstance.isServerAlive) {
+        if (App.isServerAlive) {
             loadList()
         } else {
-            userDetailInfo = DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
-            recipeList = DataGenerator.make(resources, resources.getInteger(R.integer.DATE_TYPE_RECIPE))
+            userDetailInfo =
+                DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
+            recipeList =
+                DataGenerator.make(resources, resources.getInteger(R.integer.DATE_TYPE_RECIPE))
             postList = DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_POST))
 
             setUserInfo()
@@ -158,8 +158,8 @@ class HomeActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (currentOperation == OPERATION.REVISE) {
-            MaterialDialog(this).show{
-                positiveButton(text="확인"){
+            MaterialDialog(this).show {
+                positiveButton(text = "확인") {
                     currentOperation = OPERATION.VIEW
                     reviseMenu.isVisible = true
                     okMenu.isVisible = false
@@ -174,7 +174,7 @@ class HomeActivity : BaseActivity() {
                         homeProfiletext.text = userDetailInfo.profileText
                     }
                 }
-                negativeButton(text="취소")
+                negativeButton(text = "취소")
             }
         } else super.onBackPressed()
     }
@@ -221,7 +221,7 @@ class HomeActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == CODE_PERMISSION) {
             for (result in grantResults) if (result == PackageManager.PERMISSION_DENIED) {
-                appInstance.showToast("권한 거부")
+                App.showToast("권한 거부")
                 return
             }
             CropImage.activity(imageUri)
@@ -238,11 +238,11 @@ class HomeActivity : BaseActivity() {
     private fun loadList() {
         compositeDisposable.add(
             userService.getUserDetail(currentUserID!!)
-                .flatMap {response: Response<UserDetail> ->
+                .flatMap { response: Response<UserDetail> ->
                     userDetailInfo = response.body()!!
                     recipeService.getRecipeByUserID(currentUserID!!, "latest")
                 }
-                .flatMap{response: Response<ArrayList<Recipe>> ->
+                .flatMap { response: Response<ArrayList<Recipe>> ->
                     val res: List<Recipe?> = response.body()!!
                         .subList(0, response.body()!!.size.coerceAtMost(10))
                     recipeList = ArrayList(res)
@@ -318,15 +318,15 @@ class HomeActivity : BaseActivity() {
     private fun clickReviseNickname() {
         MaterialDialog(this).show {
             noAutoDismiss()
-            title(text="닉네임 변경")
-            input(hint="닉네임",prefill = binding!!.homeNickname.text.toString())
-            positiveButton(text="확인",click = {
+            title(text = "닉네임 변경")
+            input(hint = "닉네임", prefill = binding!!.homeNickname.text.toString())
+            positiveButton(text = "확인", click = {
                 when {
                     it.getInputField().text == null ->
-                        appInstance.showToast("닉네임을 입력 해 주세요.")
+                        App.showToast("닉네임을 입력 해 주세요.")
                     it.getInputField().text.length > 12 ->
-                        appInstance.showToast("12자 이하 입력 해 주세요.")
-                    else ->{
+                        App.showToast("12자 이하 입력 해 주세요.")
+                    else -> {
                         compositeDisposable.add(
                             accountService.checkNickname(it.getInputField().text.toString())
                                 .observeOn(AndroidSchedulers.mainThread())
@@ -336,37 +336,40 @@ class HomeActivity : BaseActivity() {
                                     if (msg == "ok") {
                                         binding.homeNickname.text = it.getInputField().text
                                         it.dismiss()
-                                    } else appInstance.showToast("이미 존재합니다.")
+                                    } else App.showToast("이미 존재합니다.")
                                 }, RxRetrofitBuilder.defaultConsumer())
                         )
                     }
                 }
             })
-            negativeButton(text="취소")
+            negativeButton(text = "취소")
         }
     }
 
     private fun clickReviseContents() {
         MaterialDialog(this).show {
             noAutoDismiss()
-            title(text="프로필 변경")
-            input(hint="닉네임",inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
-                prefill = binding!!.homeProfiletext.text.toString())
-            positiveButton(text="확인",click = {
+            title(text = "프로필 변경")
+            input(
+                hint = "닉네임",
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
+                prefill = binding!!.homeProfiletext.text.toString()
+            )
+            positiveButton(text = "확인", click = {
                 when {
                     it.getInputField().text == null ->
-                        appInstance.showToast("프로필을 입력 해 주세요.")
+                        App.showToast("프로필을 입력 해 주세요.")
                     it.getInputField().text.length > 60 ->
-                        appInstance.showToast("60자 이하 입력 해 주세요.")
+                        App.showToast("60자 이하 입력 해 주세요.")
                     it.getInputField().lineCount > 4 ->
-                        appInstance.showToast("4줄 이하 입력 해 주세요.")
-                    else ->{
+                        App.showToast("4줄 이하 입력 해 주세요.")
+                    else -> {
                         binding.homeProfiletext.text = it.getInputField().text
                         it.dismiss()
                     }
                 }
             })
-            negativeButton(text="취소")
+            negativeButton(text = "취소")
         }
     }
 
@@ -395,7 +398,7 @@ class HomeActivity : BaseActivity() {
             )
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe({
-                    appInstance.showToast("업데이트 되었습니다.")
+                    App.showToast("업데이트 되었습니다.")
                     currentOperation = OPERATION.VIEW
                     reviseMenu.isVisible = true
                     okMenu.isVisible = false

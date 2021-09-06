@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.activities
+package com.yhjoo.dochef.ui.activities
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -6,36 +6,31 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.github.florent37.viewanimator.ViewAnimator
 import com.google.android.gms.tasks.Task
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.JsonObject
-import com.yhjoo.dochef.App.Companion.appInstance
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.ASplashBinding
-import com.yhjoo.dochef.ui.activities.AccountActivity
-import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.ui.activities.MainActivity
+import com.yhjoo.dochef.utils.ChefAuth
+import com.yhjoo.dochef.utils.RxRetrofitBuilder
 import com.yhjoo.dochef.utils.RxRetrofitServices.BasicService
-import com.yhjoo.dochef.utils.*
+import com.yhjoo.dochef.utils.Utils
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Response
 
 class SplashActivity : BaseActivity() {
-    lateinit var binding: ASplashBinding
-    lateinit var mFirebaseAnalytics: FirebaseAnalytics
-    var serverAlive = false
-    var isLogin = false
+    private val binding: ASplashBinding by lazy { ASplashBinding.inflate(layoutInflater) }
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+    private var serverAlive = false
+    private var isLogin = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ASplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
         checkServerAlive()
         checkIsAutoLogin()
         createChannel()
@@ -43,17 +38,17 @@ class SplashActivity : BaseActivity() {
 
     override fun onStart() {
         super.onStart()
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN){
+        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.APP_OPEN) {
             param(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_start))
-            param(FirebaseAnalytics.Param.ITEM_NAME,getString(R.string.analytics_name_start))
-            param(FirebaseAnalytics.Param.CONTENT_TYPE,getString(R.string.analytics_type_text))
+            param(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_start))
+            param(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text))
         }
 
-        ViewAnimator.animate(binding!!.splashLogo)
+        ViewAnimator.animate(binding.splashLogo)
             .alpha(0.0f, 1.0f)
             .accelerate()
             .duration(500)
-            .thenAnimate(binding!!.splashLogo)
+            .thenAnimate(binding.splashLogo)
             .alpha(1.0f, 1.0f)
             .duration(300)
             .onStop { goWhere() }
@@ -62,9 +57,8 @@ class SplashActivity : BaseActivity() {
 
     private fun goWhere() {
         Utils.log(serverAlive.toString() + "", isLogin.toString() + "")
-        // 정상상태
         if (serverAlive && isLogin) startMain() else if (!isLogin) startAccount() else {
-            appInstance.showToast("서버가 동작하지 않습니다. 체험모드로 실행합니다.")
+            App.showToast("서버가 동작하지 않습니다. 체험모드로 실행합니다.")
             startMain()
         }
         finish()
@@ -72,15 +66,15 @@ class SplashActivity : BaseActivity() {
 
     private fun checkServerAlive() {
         val basicService = RxRetrofitBuilder.create(this, BasicService::class.java)
-        compositeDisposable!!.add(
+        compositeDisposable.add(
             basicService.checkAlive()
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response<JsonObject?>? ->
-                    appInstance.isServerAlive = true
+                .subscribe({
+                    App.isServerAlive = true
                     serverAlive = true
                 }) { throwable: Throwable ->
                     throwable.printStackTrace()
-                    appInstance.isServerAlive = false
+                    App.isServerAlive = false
                     serverAlive = false
                 }
         )
@@ -99,9 +93,8 @@ class SplashActivity : BaseActivity() {
     }
 
     private fun createChannel() {
-        val mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(applicationContext)
+        val mSharedPreferences = Utils.getSharedPreferences(this)
         val channelCreated = mSharedPreferences.getBoolean("channel_created", false)
-        Utils.log(channelCreated)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
             val channelID = getString(R.string.notification_channel_id)
@@ -110,13 +103,13 @@ class SplashActivity : BaseActivity() {
             val mChannel = NotificationChannel(channelID, name, importance)
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(mChannel)
+
             FirebaseMessaging.getInstance().subscribeToTopic("admin")
                 .addOnCompleteListener { task: Task<Void?> ->
                     if (!task.isSuccessful) {
                         task.exception!!.printStackTrace()
                         Utils.log(task.exception.toString())
                     }
-                    Utils.log(task.isSuccessful)
                 }
 
             mSharedPreferences.edit {

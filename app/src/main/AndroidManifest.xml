@@ -58,54 +58,54 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.RecipeMyListActivity"
+            android:name="com.yhjoo.dochef.ui.activities.RecipeMyListActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.NoticeActivity"
+            android:name="com.yhjoo.dochef.ui.activities.NoticeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.NotificationActivity"
+            android:name="com.yhjoo.dochef.ui.activities.NotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.PlayRecipeActivity"
+            android:name="com.yhjoo.dochef.ui.activities.PlayRecipeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.PostDetailActivity"
+            android:name="com.yhjoo.dochef.ui.activities.PostDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.RecipeDetailActivity"
+            android:name="com.yhjoo.dochef.ui.activities.RecipeDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.SearchActivity"
+            android:name="com.yhjoo.dochef.ui.activities.SearchActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.SettingActivity"
+            android:name="com.yhjoo.dochef.ui.activities.SettingActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity android:name="com.yhjoo.dochef.activities.SplashActivity"
+        <activity android:name="com.yhjoo.dochef.ui.activities.SplashActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -115,19 +115,19 @@
         </activity>
 
         <activity
-            android:name="com.yhjoo.dochef.activities.RecipeThemeActivity"
+            android:name="com.yhjoo.dochef.ui.activities.RecipeThemeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.TOSActivity"
+            android:name="com.yhjoo.dochef.ui.activities.TOSActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.PostWriteActivity"
+            android:name="com.yhjoo.dochef.ui.activities.PostWriteActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />

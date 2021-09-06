@@ -5,22 +5,22 @@ import com.yhjoo.dochef.databinding.ARecipemakeBinding
 import com.yhjoo.dochef.ui.activities.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
-    object MODE{
-        const val WRITE = 0
-        const val REVISE = 1
-    }
-
-    var binding: ARecipemakeBinding? = null
-
     /*
         TODO
         모든 기능
     */
+
+    object MODE {
+        const val WRITE = 0
+        const val REVISE = 1
+    }
+
+    private val binding: ARecipemakeBinding by lazy { ARecipemakeBinding.inflate(layoutInflater) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ARecipemakeBinding.inflate(layoutInflater)
-        setContentView(binding!!.root)
-        setSupportActionBar(binding!!.recipemakeToolbar)
+        setContentView(binding.root)
+        setSupportActionBar(binding.recipemakeToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
     }
 }
