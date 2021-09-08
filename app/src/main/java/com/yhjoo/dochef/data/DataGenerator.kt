@@ -49,12 +49,12 @@ object DataGenerator {
             }
             arrayList as T
         } else if (type == resources.getInteger(R.integer.DATA_TYPE_NOTIFICATION)) {
-            val arrayList = ArrayList<Notification>()
+            val arrayList = ArrayList<NotificationItem>()
             for (i in 1..9) {
                 val r = Random()
                 arrayList.add(
-                    Notification(
-                        i, resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
+                    NotificationItem(
+                        i.toLong(), resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
                         "recipe_detail",
                         "1",
                         "팔로워 XXX이 새 레시피가 등록되었습니다.",
@@ -64,8 +64,8 @@ object DataGenerator {
                     )
                 )
                 arrayList.add(
-                    Notification(
-                        i, resources.getInteger(R.integer.NOTIFICATION_TYPE_2),
+                    NotificationItem(
+                        i.toLong(), resources.getInteger(R.integer.NOTIFICATION_TYPE_2),
                         "recipe_detail",
                         "1",
                         "XXX에 새 리뷰가 등록되었습니다.",
@@ -75,8 +75,8 @@ object DataGenerator {
                     )
                 )
                 arrayList.add(
-                    Notification(
-                        i, resources.getInteger(R.integer.NOTIFICATION_TYPE_3),
+                    NotificationItem(
+                        i.toLong(), resources.getInteger(R.integer.NOTIFICATION_TYPE_3),
                         "post",
                         "1",
                         "XXX에 댓글이 등록되었습니다.",
@@ -86,8 +86,8 @@ object DataGenerator {
                     )
                 )
                 arrayList.add(
-                    Notification(
-                        i, resources.getInteger(R.integer.NOTIFICATION_TYPE_4),
+                    NotificationItem(
+                        i.toLong(), resources.getInteger(R.integer.NOTIFICATION_TYPE_4),
                         "home",
                         "1",
                         "XXX가 당신을 팔로우합니다.",

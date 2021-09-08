@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteDatabase.CursorFactory
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
 class ChefSQLite(context: Context?, name: String?, factory: CursorFactory?, version: Int) :
     SQLiteOpenHelper(context, name, factory, version) {

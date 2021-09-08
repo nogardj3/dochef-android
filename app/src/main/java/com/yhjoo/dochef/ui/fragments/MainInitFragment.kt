@@ -19,8 +19,8 @@ import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.activities.RecipeThemeActivity
 import com.yhjoo.dochef.ui.adapter.MainAdPagerAdapter
 import com.yhjoo.dochef.ui.adapter.RecipeHorizontalAdapter
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.*
@@ -45,7 +45,7 @@ class MainInitFragment : Fragment() {
         binding = FMainInitBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-        recipeService = RxRetrofitBuilder.create(requireContext(), RecipeService::class.java)
+        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
 
         val imgs = arrayListOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
@@ -107,7 +107,7 @@ class MainInitFragment : Fragment() {
                     // Html.fromHtml(
                     // String.format(getString(R.string.format_recommend_title),recipeList.get(0).getNickname()),Html.FROM_HTML_MODE_LEGACY);
                     recipeHorizontalAdapter.setNewData(recipeList)
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

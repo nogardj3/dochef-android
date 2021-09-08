@@ -29,7 +29,7 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.databinding.AHomeBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.*
+import com.yhjoo.dochef.utils.RetrofitServices.*
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import retrofit2.Response
 import java.util.*
@@ -84,10 +84,10 @@ class HomeActivity : BaseActivity() {
 
         storageReference = FirebaseStorage.getInstance().reference
 
-        accountService = RxRetrofitBuilder.create(this, AccountService::class.java)
-        userService = RxRetrofitBuilder.create(this, UserService::class.java)
-        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
-        postService = RxRetrofitBuilder.create(this, PostService::class.java)
+        accountService = RetrofitBuilder.create(this, AccountService::class.java)
+        userService = RetrofitBuilder.create(this, UserService::class.java)
+        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
+        postService = RetrofitBuilder.create(this, PostService::class.java)
 
         val userID = Utils.getUserBrief(this).userID
         if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == userID) {
@@ -261,7 +261,7 @@ class HomeActivity : BaseActivity() {
                     postListAdapter.setEmptyView(
                         R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
                     )
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 
@@ -337,7 +337,7 @@ class HomeActivity : BaseActivity() {
                                         binding.homeNickname.text = it.getInputField().text
                                         it.dismiss()
                                     } else App.showToast("이미 존재합니다.")
-                                }, RxRetrofitBuilder.defaultConsumer())
+                                }, RetrofitBuilder.defaultConsumer())
                         )
                     }
                 }
@@ -405,7 +405,7 @@ class HomeActivity : BaseActivity() {
                     binding.homeRevisegroup.visibility = View.VISIBLE
                     imageUri = null
                     progressOFF()
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

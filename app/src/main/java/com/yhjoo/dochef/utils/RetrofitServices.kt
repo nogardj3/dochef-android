@@ -7,128 +7,128 @@ import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
 
-class RxRetrofitServices {
+class RetrofitServices {
     // TODO
     // 1. Coroutine용으로 변경
 
     interface BasicService {
-        @get:GET("notice")
-        val notice: Single<Response<ArrayList<Notice>>>
+        @GET("notice")
+        suspend fun getNotice(): Response<ArrayList<Notice>>
 
-        @get:GET("faq")
-        val faq: Single<Response<ArrayList<FAQ>>>
+        @GET("faq")
+        suspend fun getFAQ(): Response<ArrayList<FAQ>>
 
-        @get:GET("tos")
-        val tos: Single<Response<JsonObject>>
+        @GET("tos")
+        suspend fun getTOS(): Response<JsonObject>
 
         @GET("alive")
-        fun checkAlive(): Single<Response<JsonObject>>
+        suspend fun checkAlive(): Response<JsonObject>
     }
 
     interface AccountService {
         @POST("user/check/nickname")
-        fun checkNickname(@Query("nickname") nickname: String): Single<Response<JsonObject>>
+        suspend fun checkNickname(@Query("nickname") nickname: String): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("user/check/")
-        fun checkUser(
+        suspend fun checkUser(
             @Field("user_token") token: String,
             @Field("user_id") uid: String,
             @Field("user_fcm_token") fcmtoken: String
-        ): Single<Response<UserBrief>>
+        ): Response<UserBrief>
 
         @FormUrlEncoded
         @POST("user/signup")
-        fun createUser(
+        suspend fun createUser(
             @Field("user_token") token: String,
             @Field("user_fcm_token") fcmtoken: String,
             @Field("user_id") uid: String,
             @Field("nickname") nickname: String
-        ): Single<Response<UserBrief>>
+        ): Response<UserBrief>
 
         @FormUrlEncoded
         @POST("user/update")
-        fun updateUser(
+        suspend fun updateUser(
             @Field("user_id") userID: String,
             @Field("user_img") userImg: String,
             @Field("nickname") nickname: String,
             @Field("bio") bio: String
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
     }
 
     interface UserService {
         @GET("user/")
-        fun getUserByNickname(@Query("nickname") nickname: String): Single<Response<ArrayList<UserBrief>>>
+        suspend fun getUserByNickname(@Query("nickname") nickname: String): Response<ArrayList<UserBrief>>
 
         @GET("user/follower")
-        fun getFollowers(@Query("target_id") target_id: String): Single<Response<ArrayList<UserBrief>>>
+        suspend fun getFollowers(@Query("target_id") target_id: String): Response<ArrayList<UserBrief>>
 
         @GET("user/detail")
-        fun getUserDetail(@Query("user_id") user_id: String): Single<Response<UserDetail>>
+        suspend fun getUserDetail(@Query("user_id") user_id: String): Response<UserDetail>
 
         @GET("user/following")
-        fun getFollowings(@Query("target_id") target_id: String): Single<Response<ArrayList<UserBrief>>>
+        suspend fun getFollowings(@Query("target_id") target_id: String): Response<ArrayList<UserBrief>>
 
         @FormUrlEncoded
         @POST("user/subscribe")
-        fun subscribeUser(
+        suspend fun subscribeUser(
             @Field("user_id") user_id: String,
             @Field("target_id") target_id: String
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("user/unsubscribe")
-        fun unsubscribeUser(
+        suspend fun unsubscribeUser(
             @Field("user_id") user_id: String,
             @Field("target_id") target_id: String
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
     }
 
     interface RecipeService {
         @GET("recipe/detail")
-        fun getRecipeDetail(@Query("recipe_id") recipeId: Int): Single<Response<RecipeDetail>>
+        suspend fun getRecipeDetail(@Query("recipe_id") recipeId: Int): Response<RecipeDetail>
 
         @GET("recipe/")
-        fun getRecipes(@Query("sort") sort: String): Single<Response<ArrayList<Recipe>>>
+        suspend fun getRecipes(@Query("sort") sort: String): Response<ArrayList<Recipe>>
 
         @GET("recipe/")
-        fun getRecipeByUserID(
+        suspend fun getRecipeByUserID(
             @Query("user_id") userId: String,
             @Query("sort") sort: String
-        ): Single<Response<ArrayList<Recipe>>>
+        ): Response<ArrayList<Recipe>>
 
         @GET("recipe/")
-        fun getRecipeByName(
+        suspend fun getRecipeByName(
             @Query("recipe_name") recipeName: String,
             @Query("sort") sort: String
-        ): Single<Response<ArrayList<Recipe>>>
+        ): Response<ArrayList<Recipe>>
 
         @GET("recipe/")
-        fun getRecipeByTag(
+        suspend fun getRecipeByTag(
             @Query("tag") tag: String,
             @Query("sort") sort: String
-        ): Single<Response<ArrayList<Recipe>>>
+        ): Response<ArrayList<Recipe>>
 
         @GET("recipe/")
-        fun getRecipeByIngredient(
+        suspend fun getRecipeByIngredient(
             @Query("ingredient") ingredient: String,
             @Query("sort") sort: String
-        ): Single<Response<ArrayList<Recipe>>>
+        ): Response<ArrayList<Recipe>>
 
         @FormUrlEncoded
         @POST("recipe/count")
-        fun addCount(@Field("recipe_id") recipeId: Int): Single<Response<JsonObject>>
+        suspend fun addCount(@Field("recipe_id") recipeId: Int): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("recipe/like")
-        fun setLikeRecipe(
+        suspend fun setLikeRecipe(
             @Field("recipe_id") recipeId: Int,
             @Field("user_id") userId: String,
             @Field("like") like: Int
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @POST("recipe/create")
-        fun createRecipe(
+        suspend fun createRecipe(
             @Body recipeDetail: RecipeDetail //                @Field("user_id") String userID,
             //                                                  @Field("recipe_name") String recipeName,
             //                                                  @Field("recipe_img") String recipeImg,
@@ -138,89 +138,89 @@ class RxRetrofitServices {
             //                                                  @Field("ingredients") ArrayList<Ingredient> ingredients,
             //                                                  @Field("tags") ArrayList<String> tags,
             //                                                  @Field("phase") ArrayList<RecipePhase> phases
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
     }
 
     interface ReviewService {
         @GET("review/")
-        fun getReview(@Query("recipe_id") recipeId: Int): Single<Response<ArrayList<Review>>>
+        suspend fun getReview(@Query("recipe_id") recipeId: Int): Response<ArrayList<Review>>
 
         @FormUrlEncoded
         @POST("review/create")
-        fun createReview(
+        suspend fun createReview(
             @Field("recipe_id") recipeID: Int,
             @Field("user_id") userID: String,
             @Field("contents") contents: String,
             @Field("rating") rating: Long,
             @Field("datetime") dateTime: Long
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("review/delete")
-        fun deleteReview(@Query("recipe_id") recipeId: Int): Single<Response<JsonObject>>
+        suspend fun deleteReview(@Query("recipe_id") recipeId: Int): Response<JsonObject>
     }
 
     interface PostService {
-        @get:GET("post/")
-        val postList: Single<Response<ArrayList<Post>>>
+        @GET("post/")
+        suspend fun getPostList(): Response<ArrayList<Post>>
 
         @GET("post/")
-        fun getPostListByUserID(@Query("user_id") userID: String): Single<Response<ArrayList<Post>>>
+        suspend fun getPostListByUserID(@Query("user_id") userID: String): Response<ArrayList<Post>>
 
         @GET("post/")
-        fun getPostListByNickname(@Query("nickname") nickname: String): Single<Response<ArrayList<Post>>>
+        suspend fun getPostListByNickname(@Query("nickname") nickname: String): Response<ArrayList<Post>>
 
         @GET("post/detail")
-        fun getPost(@Query("post_id") postID: Int): Single<Response<Post>>
+        suspend fun getPost(@Query("post_id") postID: Int): Response<Post>
 
         @FormUrlEncoded
         @POST("post/like")
-        fun setLikePost(
+        suspend fun setLikePost(
             @Field("user_id") userID: String,
             @Field("post_id") postID: Int,
             @Field("like") like: Int
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("post/create")
-        fun createPost(
+        suspend fun createPost(
             @Field("user_id") userID: String,
             @Field("post_img") postImgs: String,
             @Field("contents") contents: String,
             @Field("datetime") datetime: Long,
             @Field("tags") tags: ArrayList<String>
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("post/update")
-        fun updatePost(
+        suspend fun updatePost(
             @Field("post_id") postID: Int,
             @Field("post_img") postImgs: String,
             @Field("contents") contents: String,
             @Field("datetime") datetime: Long,
             @Field("tags") tags: ArrayList<String>
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("post/delete")
-        fun deletePost(@Field("post_id") postID: Int): Single<Response<JsonObject>>
+        suspend fun deletePost(@Field("post_id") postID: Int): Response<JsonObject>
     }
 
     interface CommentService {
         @GET("comment/")
-        fun getComment(@Query("post_id") postID: Int): Single<Response<ArrayList<Comment>>>
+        suspend fun getComment(@Query("post_id") postID: Int): Response<ArrayList<Comment>>
 
         @FormUrlEncoded
         @POST("comment/create")
-        fun createComment(
+        suspend fun createComment(
             @Field("post_id") postID: Int,
             @Field("user_id") userID: String,
             @Field("contents") contents: String,
             @Field("datetime") dateTime: Long
-        ): Single<Response<JsonObject>>
+        ): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("comment/delete")
-        fun deleteComment(@Field("comment_id") commentID: Int): Single<Response<JsonObject>>
+        suspend fun deleteComment(@Field("comment_id") commentID: Int): Response<JsonObject>
     }
 }

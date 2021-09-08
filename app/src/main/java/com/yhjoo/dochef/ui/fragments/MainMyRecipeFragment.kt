@@ -18,7 +18,7 @@ import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -43,7 +43,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         binding = FMainMyrecipeBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-        recipeService = RxRetrofitBuilder.create(requireContext(), RecipeService::class.java)
+        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
         userID = Utils.getUserBrief(requireContext()).userID
 
         binding.apply {
@@ -134,7 +134,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
                         binding.fMyrecipeRecycler.parent as ViewGroup
                     )
                     binding.fMyrecipeSwipe.isRefreshing = false
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

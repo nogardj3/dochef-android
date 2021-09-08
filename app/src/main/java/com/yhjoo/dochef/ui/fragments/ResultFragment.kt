@@ -16,9 +16,9 @@ import com.yhjoo.dochef.databinding.FResultBinding
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.SearchListAdapter
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
-import com.yhjoo.dochef.utils.RxRetrofitServices.UserService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitServices.UserService
 import com.yhjoo.dochef.utils.Utils
 import java.util.*
 
@@ -46,8 +46,8 @@ class ResultFragment : Fragment() {
         binding = FResultBinding.inflate(layoutInflater)
         val view: View = binding.root
 
-        userService = RxRetrofitBuilder.create(requireContext(), UserService::class.java)
-        recipeService = RxRetrofitBuilder.create(requireContext(), RecipeService::class.java)
+        userService = RetrofitBuilder.create(requireContext(), UserService::class.java)
+        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
 
         type = requireArguments().getInt("type")
 

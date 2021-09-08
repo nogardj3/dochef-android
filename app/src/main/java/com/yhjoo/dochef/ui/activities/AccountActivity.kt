@@ -19,7 +19,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.AAccountBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.AccountService
+import com.yhjoo.dochef.utils.RetrofitServices.AccountService
 import com.yhjoo.dochef.utils.Utils.EmailValidate
 import com.yhjoo.dochef.utils.Utils.NicknameValidate
 import com.yhjoo.dochef.utils.Utils.PWValidate
@@ -76,7 +76,7 @@ class AccountActivity : BaseActivity() {
                 fcmToken = token!!
             }
 
-        accountService = RxRetrofitBuilder.create(this, AccountService::class.java)
+        accountService = RetrofitBuilder.create(this, AccountService::class.java)
 
         binding.apply {
             accountSigninOk.setOnClickListener { signInWithEmailPW() }
@@ -267,6 +267,7 @@ class AccountActivity : BaseActivity() {
                 App.showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.")
             else -> {
                 progressON(this)
+
                 compositeDisposable.add(
                     accountService.createUser(idToken, fcmToken, firebaseAuth.uid!!, nickname)
                         .observeOn(AndroidSchedulers.mainThread())

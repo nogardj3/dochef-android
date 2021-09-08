@@ -15,10 +15,13 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.ASplashBinding
 import com.yhjoo.dochef.utils.ChefAuth
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.BasicService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.BasicService
 import com.yhjoo.dochef.utils.Utils
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 
 class SplashActivity : BaseActivity() {
     private val binding: ASplashBinding by lazy { ASplashBinding.inflate(layoutInflater) }
@@ -64,7 +67,23 @@ class SplashActivity : BaseActivity() {
         finish()
     }
 
-    private fun checkServerAlive() {
+    private fun checkServerAlive() = CoroutineScope(Dispatchers.IO).launch {
+        val basicService = RetrofitBuilder.create(this@SplashActivity, BasicService::class.java)
+
+        basicService.checkAlive().runCatching {
+            basicService.checkAlive()
+        }.onSuccess {
+            App.isServerAlive = true
+            serverAlive = true
+        }.onFailure {
+            App.isServerAlive = false
+            serverAlive = false
+
+            RetrofitBuilder.defaultErrorHandler(it)
+        }
+
+        /*
+        * RXJAVA
         val basicService = RxRetrofitBuilder.create(this, BasicService::class.java)
         compositeDisposable.add(
             basicService.checkAlive()
@@ -78,6 +97,7 @@ class SplashActivity : BaseActivity() {
                     serverAlive = false
                 }
         )
+         */
     }
 
     private fun checkIsAutoLogin() {

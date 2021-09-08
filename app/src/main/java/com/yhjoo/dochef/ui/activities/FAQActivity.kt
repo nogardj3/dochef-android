@@ -11,8 +11,8 @@ import com.yhjoo.dochef.data.model.ExpandContents
 import com.yhjoo.dochef.data.model.ExpandTitle
 import com.yhjoo.dochef.data.model.FAQ
 import com.yhjoo.dochef.databinding.AFaqBinding
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.BasicService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.BasicService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import retrofit2.Response
 import java.util.*
@@ -30,7 +30,7 @@ class FAQActivity : BaseActivity() {
         setSupportActionBar(binding.faqToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        basicService = RxRetrofitBuilder.create(this, BasicService::class.java)
+        basicService = RetrofitBuilder.create(this, BasicService::class.java)
         faqListAdapter = FAQListAdapter(faqList)
         binding.apply {
             faqRecycler.adapter = faqListAdapter
@@ -48,7 +48,7 @@ class FAQActivity : BaseActivity() {
                         loadList(
                             response.body()!!
                         )
-                    }, RxRetrofitBuilder.defaultConsumer())
+                    }, RetrofitBuilder.defaultConsumer())
             )
         } else {
             loadList(

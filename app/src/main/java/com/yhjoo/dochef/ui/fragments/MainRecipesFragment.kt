@@ -17,8 +17,8 @@ import com.yhjoo.dochef.databinding.FMainRecipesBinding
 import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -51,7 +51,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         binding = FMainRecipesBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-        recipeService = RxRetrofitBuilder.create(requireContext(), RecipeService::class.java)
+        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
 
         binding.apply {
             fRecipeSwipe.setOnRefreshListener(this@MainRecipesFragment)
@@ -139,7 +139,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
                     recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
                     binding.fRecipeRecycler.layoutManager!!.scrollToPosition(0)
                     binding.fRecipeSwipe.isRefreshing = false
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 

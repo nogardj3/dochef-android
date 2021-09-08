@@ -2,18 +2,19 @@ package com.yhjoo.dochef.services
 
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.ContentValues
 import android.content.Intent
 import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.NotificationItem
 import com.yhjoo.dochef.ui.activities.NotificationActivity
-import com.yhjoo.dochef.utils.ChefSQLite
-import com.yhjoo.dochef.utils.ChefSQLite.NotificationEntry
+import com.yhjoo.dochef.utils.NotificationDatabase
 import com.yhjoo.dochef.utils.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ChefMessagingService : FirebaseMessagingService() {
     // TODO
@@ -43,25 +44,44 @@ class ChefMessagingService : FirebaseMessagingService() {
     }
 
     private fun addDB(data: Map<String, String>) {
-        val chefSQLite = ChefSQLite(
-            this, ChefSQLite.DATABASE_NAME,
-            null, ChefSQLite.DATABASE_VERSION
+        val notiData = NotificationItem(
+            null,
+            data["type"]!!.toInt(),
+            data["target_intent"]!!,
+            data["target_intent_data"]!!,
+            data["notification_contents"]!!,
+            data["notification_img"]!!,
+            data["notification_datetime"]!!.toLong(),
+            0
         )
-        val db = chefSQLite.writableDatabase
-        val values = ContentValues().apply {
-            put(NotificationEntry.COLUMN_NAME_TYPE, Integer.valueOf(data["type"]))
-            put(NotificationEntry.COLUMN_NAME_INTENT, data["target_intent"])
-            put(NotificationEntry.COLUMN_NAME_INTENT_DATA, data["target_intent_data"])
-            put(NotificationEntry.COLUMN_NAME_CONTENTS, data["notification_contents"])
-            put(NotificationEntry.COLUMN_NAME_IMG, data["notification_img"])
-            put(
-                NotificationEntry.COLUMN_NAME_DATETIME,
-                java.lang.Long.valueOf(data["notification_datetime"])
-            )
-            put(NotificationEntry.COLUMN_NAME_READ, 0)
+
+        val db = NotificationDatabase.getInstance(applicationContext)
+        CoroutineScope(Dispatchers.IO).launch {
+            db!!.notificationDao().insert(notiData)
+            Utils.log("message received",data.toString())
         }
 
-        db.insert(NotificationEntry.TABLE_NAME, null, values)
+/* SQLITE
+//        val chefSQLite = ChefSQLite(
+//            this, ChefSQLite.DATABASE_NAME,
+//            null, ChefSQLite.DATABASE_VERSION
+//        )
+//        val db = chefSQLite.writableDatabase
+//        val values = ContentValues().apply {
+//            put(NotificationEntry.COLUMN_NAME_TYPE, Integer.valueOf(data["type"]))
+//            put(NotificationEntry.COLUMN_NAME_INTENT, data["target_intent"])
+//            put(NotificationEntry.COLUMN_NAME_INTENT_DATA, data["target_intent_data"])
+//            put(NotificationEntry.COLUMN_NAME_CONTENTS, data["notification_contents"])
+//            put(NotificationEntry.COLUMN_NAME_IMG, data["notification_img"])
+//            put(
+//                NotificationEntry.COLUMN_NAME_DATETIME,
+//                java.lang.Long.valueOf(data["notification_datetime"])
+//            )
+//            put(NotificationEntry.COLUMN_NAME_READ, 0)
+//        }
+//
+//        db.insert(NotificationEntry.TABLE_NAME, null, values)
+*/
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {

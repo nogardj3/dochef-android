@@ -14,7 +14,7 @@ import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipelistBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -33,7 +33,7 @@ class RecipeMyListActivity : BaseActivity() {
         setSupportActionBar(binding.recipelistToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
+        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
         userID = Utils.getUserBrief(this).userID
 
         binding.apply {
@@ -108,7 +108,7 @@ class RecipeMyListActivity : BaseActivity() {
                         R.layout.rv_empty_recipe,
                         binding.recipelistRecycler.parent as ViewGroup
                     )
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 
@@ -118,7 +118,7 @@ class RecipeMyListActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { loadData() },
-                    RxRetrofitBuilder.defaultConsumer()
+                    RetrofitBuilder.defaultConsumer()
                 )
         )
     }

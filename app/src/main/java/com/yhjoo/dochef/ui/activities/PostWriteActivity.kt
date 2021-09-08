@@ -16,7 +16,7 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.APostwriteBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
+import com.yhjoo.dochef.utils.RetrofitServices.PostService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -47,7 +47,7 @@ class PostWriteActivity : BaseActivity() {
         setContentView(binding.root)
 
         storageReference = FirebaseStorage.getInstance().reference
-        postService = RxRetrofitBuilder.create(this, PostService::class.java)
+        postService = RetrofitBuilder.create(this, PostService::class.java)
         userID = Utils.getUserBrief(this).userID
         currentMode = intent.getIntExtra("MODE", UIMODE.WRITE)
 
@@ -156,7 +156,7 @@ class PostWriteActivity : BaseActivity() {
                     App.showToast("글이 등록되었습니다.")
                     progressOFF()
                     finish()
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         ) else compositeDisposable.add(
             postService.updatePost(
                 postID, imageString!!,
@@ -168,7 +168,7 @@ class PostWriteActivity : BaseActivity() {
                     App.showToast("업데이트 되었습니다.")
                     progressOFF()
                     finish()
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

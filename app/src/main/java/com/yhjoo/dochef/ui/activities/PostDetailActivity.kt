@@ -23,8 +23,8 @@ import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.CommentService
-import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
+import com.yhjoo.dochef.utils.RetrofitServices.CommentService
+import com.yhjoo.dochef.utils.RetrofitServices.PostService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -45,8 +45,8 @@ class PostDetailActivity : BaseActivity() {
         setSupportActionBar(binding.postToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        postService = RxRetrofitBuilder.create(this, PostService::class.java)
-        commentService = RxRetrofitBuilder.create(this, CommentService::class.java)
+        postService = RetrofitBuilder.create(this, PostService::class.java)
+        commentService = RetrofitBuilder.create(this, CommentService::class.java)
 
         userID = Utils.getUserBrief(this).userID
         postID = intent.getIntExtra("postID", -1)
@@ -132,7 +132,7 @@ class PostDetailActivity : BaseActivity() {
                                 {
                                     finish()
                                 },
-                                RxRetrofitBuilder.defaultConsumer()
+                                RetrofitBuilder.defaultConsumer()
                             )
                     )
                 }
@@ -159,7 +159,7 @@ class PostDetailActivity : BaseActivity() {
                         binding.postCommentRecycler.parent as ViewGroup
                     )
                     invalidateOptionsMenu()
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 
@@ -221,7 +221,7 @@ class PostDetailActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { loadData() },
-                    RxRetrofitBuilder.defaultConsumer()
+                    RetrofitBuilder.defaultConsumer()
                 )
         )
     }
@@ -239,7 +239,7 @@ class PostDetailActivity : BaseActivity() {
                         imm.hideSoftInputFromWindow(binding.postCommentEdittext.windowToken, 0)
                         binding.postCommentEdittext.setText("")
                         loadData()
-                    }, RxRetrofitBuilder.defaultConsumer())
+                    }, RetrofitBuilder.defaultConsumer())
             )
         } else App.showToast("댓글을 입력 해 주세요")
     }
@@ -250,7 +250,7 @@ class PostDetailActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { loadData() },
-                    RxRetrofitBuilder.defaultConsumer()
+                    RetrofitBuilder.defaultConsumer()
                 )
         )
     }

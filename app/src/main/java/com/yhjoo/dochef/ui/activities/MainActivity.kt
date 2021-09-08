@@ -57,6 +57,8 @@ class MainActivity : BaseActivity() {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         userID = Utils.getUserBrief(this).userID
+
+        invalidateOptionsMenu()
         val fragments = ArrayList<Fragment>().apply {
             add(MainInitFragment())
             add(MainRecipesFragment())
@@ -84,28 +86,30 @@ class MainActivity : BaseActivity() {
             }
             mainTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    mainViewpager.currentItem = tab.position
-                    menuNotification.isVisible = false
-                    menuSort.isVisible = false
-                    menuWriteRecipe.isVisible = false
-                    menuWritePost.isVisible = false
-                    menuSearch.isVisible = false
-                    menuSetting.isVisible = false
-                    when (tab.position) {
-                        0 -> menuNotification.isVisible = true
-                        1 -> {
-                            menuSort.isVisible = true
-                            menuSearch.isVisible = true
+                    if(menuNotification!=null){
+                        mainViewpager.currentItem = tab.position
+                        menuNotification.isVisible = false
+                        menuSort.isVisible = false
+                        menuWriteRecipe.isVisible = false
+                        menuWritePost.isVisible = false
+                        menuSearch.isVisible = false
+                        menuSetting.isVisible = false
+                        when (tab.position) {
+                            0 -> menuNotification.isVisible = true
+                            1 -> {
+                                menuSort.isVisible = true
+                                menuSearch.isVisible = true
+                            }
+                            2 -> {
+                                menuWriteRecipe.isVisible = true
+                                menuSearch.isVisible = true
+                            }
+                            3 -> {
+                                menuWritePost.isVisible = true
+                                menuSearch.isVisible = true
+                            }
+                            4 -> menuSetting.isVisible = true
                         }
-                        2 -> {
-                            menuWriteRecipe.isVisible = true
-                            menuSearch.isVisible = true
-                        }
-                        3 -> {
-                            menuWritePost.isVisible = true
-                            menuSearch.isVisible = true
-                        }
-                        4 -> menuSetting.isVisible = true
                     }
                 }
 

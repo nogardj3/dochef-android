@@ -13,8 +13,8 @@ import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.MultiItemTheme
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipethemeBinding
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -49,7 +49,7 @@ class RecipeThemeActivity : BaseActivity() {
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
         MobileAds.initialize(this)
-        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
+        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
         if (intent.getStringExtra("tag") == null) currentMode = MODE.POPULAR else {
             currentMode = MODE.TAG
             tagName = intent.getStringExtra("tag")!!
@@ -113,7 +113,7 @@ class RecipeThemeActivity : BaseActivity() {
                         recipeListItems.add(MultiItemTheme(VIEWHOLDER.ITEM, 1, arrayList[i]))
                     }
                     recipeMultiThemeAdapter.setNewData(recipeListItems as List<MultiItemTheme?>?)
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

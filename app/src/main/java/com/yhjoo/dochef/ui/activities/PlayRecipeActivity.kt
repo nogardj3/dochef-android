@@ -26,7 +26,7 @@ import com.yhjoo.dochef.ui.fragments.PlayRecipeEndFragment
 import com.yhjoo.dochef.ui.fragments.PlayRecipeItemFragment
 import com.yhjoo.dochef.ui.fragments.PlayRecipeStartFragment
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.*
@@ -58,7 +58,7 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
+        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
         recipeDetailInfo = intent.getSerializableExtra("recipe") as RecipeDetail
         recipePhases = recipeDetailInfo.phases
 

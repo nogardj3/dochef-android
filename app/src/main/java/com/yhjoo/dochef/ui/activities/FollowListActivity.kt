@@ -13,7 +13,7 @@ import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.databinding.AFollowlistBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.UserService
+import com.yhjoo.dochef.utils.RetrofitServices.UserService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import retrofit2.Response
 import java.util.*
@@ -41,7 +41,7 @@ class FollowListActivity : BaseActivity() {
         setSupportActionBar(binding.followlistToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
-        rxUserService = RxRetrofitBuilder.create(this, UserService::class.java)
+        rxUserService = RetrofitBuilder.create(this, UserService::class.java)
 
         currentMode = intent.getIntExtra("MODE", UIMODE.FOLLOWER)
         activeUserid = Utils.getUserBrief(this).userID
@@ -92,7 +92,7 @@ class FollowListActivity : BaseActivity() {
                     .subscribe({ response: Response<ArrayList<UserBrief>> ->
                         userList = response.body()!!
                         setListData()
-                    }, RxRetrofitBuilder.defaultConsumer())
+                    }, RetrofitBuilder.defaultConsumer())
             )
         } else {
             userDetailInfo =
@@ -134,7 +134,7 @@ class FollowListActivity : BaseActivity() {
                 .subscribe({ response: Response<ArrayList<UserBrief>> ->
                     userList = response.body()!!
                     setListData()
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 

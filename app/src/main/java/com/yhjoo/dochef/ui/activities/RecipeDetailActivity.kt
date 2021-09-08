@@ -16,8 +16,8 @@ import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.databinding.ARecipedetailBinding
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
-import com.yhjoo.dochef.utils.RxRetrofitServices.ReviewService
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitServices.ReviewService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -43,8 +43,8 @@ class RecipeDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        recipeService = RxRetrofitBuilder.create(this, RecipeService::class.java)
-        reviewService = RxRetrofitBuilder.create(this, ReviewService::class.java)
+        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
+        reviewService = RetrofitBuilder.create(this, ReviewService::class.java)
 
         userID = Utils.getUserBrief(this).userID
         recipeID = intent.getIntExtra("recipeID", 0)
@@ -103,7 +103,7 @@ class RecipeDetailActivity : BaseActivity() {
                     R.layout.rv_empty_review,
                     binding.recipedetailReviewRecycler.parent as ViewGroup
                 )
-            }, RxRetrofitBuilder.defaultConsumer())
+            }, RetrofitBuilder.defaultConsumer())
     }
 
     private fun setTopView() {
@@ -178,7 +178,7 @@ class RecipeDetailActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { Utils.log("count ok") },
-                    RxRetrofitBuilder.defaultConsumer()
+                    RetrofitBuilder.defaultConsumer()
                 )
         )
     }
@@ -190,7 +190,7 @@ class RecipeDetailActivity : BaseActivity() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { loadData() },
-                    RxRetrofitBuilder.defaultConsumer()
+                    RetrofitBuilder.defaultConsumer()
                 )
         )
     }

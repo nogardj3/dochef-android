@@ -14,9 +14,9 @@ import com.yhjoo.dochef.data.model.RecipePhase
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utils.ImageLoadUtil
-import com.yhjoo.dochef.utils.RxRetrofitBuilder
-import com.yhjoo.dochef.utils.RxRetrofitServices.RecipeService
-import com.yhjoo.dochef.utils.RxRetrofitServices.ReviewService
+import com.yhjoo.dochef.utils.RetrofitBuilder
+import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utils.RetrofitServices.ReviewService
 import com.yhjoo.dochef.utils.Utils
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
@@ -43,8 +43,8 @@ class PlayRecipeEndFragment : Fragment() {
         binding = FPlayrecipeItemBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-        recipeService = RxRetrofitBuilder.create(requireContext(), RecipeService::class.java)
-        reviewService = RxRetrofitBuilder.create(requireContext(), ReviewService::class.java)
+        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
+        reviewService = RetrofitBuilder.create(requireContext(), ReviewService::class.java)
 
         userID = Utils.getUserBrief(requireContext()).userID
         recipePhase = requireArguments().getSerializable("item") as RecipePhase
@@ -105,7 +105,7 @@ class PlayRecipeEndFragment : Fragment() {
                     .subscribe({
                         App.showToast("리뷰가 등록되었습니다.")
                         (activity as BaseActivity?)!!.finish()
-                    }, RxRetrofitBuilder.defaultConsumer())
+                    }, RetrofitBuilder.defaultConsumer())
             )
         } else App.showToast("댓글을 입력 해 주세요")
     }
@@ -118,7 +118,7 @@ class PlayRecipeEndFragment : Fragment() {
                 .subscribe({
                     isLikeThis = !isLikeThis
                     loadData()
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

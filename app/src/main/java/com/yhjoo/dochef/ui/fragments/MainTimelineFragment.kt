@@ -18,7 +18,7 @@ import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.PostDetailActivity
 import com.yhjoo.dochef.ui.adapter.PostListAdapter
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.PostService
+import com.yhjoo.dochef.utils.RetrofitServices.PostService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import java.util.*
 
@@ -36,7 +36,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         binding = FMainTimelineBinding.inflate(layoutInflater)
         val view: View = binding.root
 
-        postService = RxRetrofitBuilder.create(
+        postService = RetrofitBuilder.create(
             requireContext(),
             PostService::class.java
         )
@@ -101,7 +101,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
                     )
                     Utils.log("Finish@@")
                     Handler().postDelayed({ binding.timelineSwipe.isRefreshing = false }, 1000)
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }

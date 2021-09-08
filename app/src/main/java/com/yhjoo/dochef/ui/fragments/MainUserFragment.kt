@@ -15,7 +15,7 @@ import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeMyListActivity
 import com.yhjoo.dochef.ui.activities.SettingActivity
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RxRetrofitServices.UserService
+import com.yhjoo.dochef.utils.RetrofitServices.UserService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 
 class MainUserFragment : Fragment() {
@@ -32,7 +32,7 @@ class MainUserFragment : Fragment() {
         binding = FMainUserBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-        userService = RxRetrofitBuilder.create(requireContext(), UserService::class.java)
+        userService = RetrofitBuilder.create(requireContext(), UserService::class.java)
 
         userID = Utils.getUserBrief(requireContext()).userID
 
@@ -103,7 +103,7 @@ class MainUserFragment : Fragment() {
                         binding!!.fmainUserImg
                     )
                     binding!!.fmainUserNickname.text = userDetailInfo.nickname
-                }, RxRetrofitBuilder.defaultConsumer())
+                }, RetrofitBuilder.defaultConsumer())
         )
     }
 }
