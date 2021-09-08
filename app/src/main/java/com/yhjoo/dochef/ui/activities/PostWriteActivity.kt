@@ -8,10 +8,10 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageView
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.APostwriteBinding
@@ -77,15 +77,15 @@ class PostWriteActivity : BaseActivity() {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                imageUri = result.uri
+                imageUri = result!!.originalUri
                 GlideApp.with(this)
                     .load(imageUri)
                     .diskCacheStrategy(DiskCacheStrategy.NONE)
                     .skipMemoryCache(true)
                     .into(binding.postwritePostimg)
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
-                error.printStackTrace()
+                val error = result!!.error
+                error!!.printStackTrace()
             }
         }
     }

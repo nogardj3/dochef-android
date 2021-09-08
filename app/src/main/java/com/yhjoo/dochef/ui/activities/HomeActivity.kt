@@ -13,12 +13,12 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.gson.JsonObject
-import com.theartofdev.edmodo.cropper.CropImage
-import com.theartofdev.edmodo.cropper.CropImageView
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.ui.adapter.PostListAdapter
@@ -198,7 +198,7 @@ class HomeActivity : BaseActivity() {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                imageUri = result.uri
+                imageUri = result!!.originalUri
                 Utils.log(imageUri.toString())
                 GlideApp.with(this)
                     .load(imageUri)
@@ -207,8 +207,8 @@ class HomeActivity : BaseActivity() {
                     .skipMemoryCache(true)
                     .into(binding.homeUserimg)
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result.error
-                error.printStackTrace()
+                val error = result!!.error
+                error!!.printStackTrace()
             }
         }
     }
