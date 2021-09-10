@@ -20,6 +20,9 @@ import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
 import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainRecipesFragment : Fragment(), OnRefreshListener {
@@ -111,36 +114,37 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         }
     }
 
-    private fun getRecipeList(sort: Int) {
-        var sortmode = ""
-        when (sort) {
-            SORT.LATEST -> sortmode = "latest"
-            SORT.POPULAR -> sortmode = "popular"
-            SORT.RATING -> sortmode = "rating"
-        }
+    private fun getRecipeList(sort: Int) =         CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            var sortmode = ""
+            when (sort) {
+                SORT.LATEST -> sortmode = "latest"
+                SORT.POPULAR -> sortmode = "popular"
+                SORT.RATING -> sortmode = "rating"
+            }
 
-        (activity as BaseActivity).compositeDisposable.add(
-            recipeService.getRecipes(sortmode)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val arrayList = it.body()!!
-                    recipeListItems.clear()
-                    for (i in arrayList.indices) {
-                        if (i != 0 && i % 4 == 0) {
-                            recipeListItems.add(MultiItemRecipe(RecipeMultiAdapter.VIEWHOLDER_AD))
-                        }
-                        recipeListItems.add(
-                            MultiItemRecipe(
-                                RecipeMultiAdapter.VIEWHOLDER_ITEM,
-                                arrayList[i]
-                            )
-                        )
-                    }
-                    recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
-                    binding.fRecipeRecycler.layoutManager!!.scrollToPosition(0)
-                    binding.fRecipeSwipe.isRefreshing = false
-                }, RetrofitBuilder.defaultConsumer())
-        )
+            val res1 = recipeService.getRecipes(sortmode)
+            val arrayList = res1.body()!!
+            recipeListItems.clear()
+            for (i in arrayList.indices) {
+                if (i != 0 && i % 4 == 0) {
+                    recipeListItems.add(MultiItemRecipe(RecipeMultiAdapter.VIEWHOLDER_AD))
+                }
+                recipeListItems.add(
+                    MultiItemRecipe(
+                        RecipeMultiAdapter.VIEWHOLDER_ITEM,
+                        arrayList[i]
+                    )
+                )
+            }
+            recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
+            binding.fRecipeRecycler.layoutManager!!.scrollToPosition(0)
+            binding.fRecipeSwipe.isRefreshing = false
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 
     fun changeSortMode(sort: Int) {

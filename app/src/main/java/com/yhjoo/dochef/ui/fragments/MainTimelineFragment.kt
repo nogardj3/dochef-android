@@ -13,13 +13,14 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.FMainTimelineBinding
-import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.PostDetailActivity
 import com.yhjoo.dochef.ui.adapter.PostListAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.PostService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainTimelineFragment : Fragment(), OnRefreshListener {
@@ -88,20 +89,20 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         }
     }
 
-    private fun getPostList() {
-        (activity as BaseActivity).compositeDisposable.add(
-            postService.postList
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    postList = it.body()!!
-                    postListAdapter.setNewData(it.body())
-                    postListAdapter.setEmptyView(
-                        R.layout.rv_empty_post,
-                        binding.timelineSwipe.parent as ViewGroup
-                    )
-                    Utils.log("Finish@@")
-                    Handler().postDelayed({ binding.timelineSwipe.isRefreshing = false }, 1000)
-                }, RetrofitBuilder.defaultConsumer())
-        )
+    private fun getPostList() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = postService.getPostList()
+            postList = res1.body()!!
+            postListAdapter.setNewData(postList)
+            postListAdapter.setEmptyView(
+                R.layout.rv_empty_post,
+                binding.timelineSwipe.parent as ViewGroup
+            )
+            Handler().postDelayed({ binding.timelineSwipe.isRefreshing = false }, 1000)
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

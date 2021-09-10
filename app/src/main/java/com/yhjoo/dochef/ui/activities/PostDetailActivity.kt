@@ -17,15 +17,17 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.CommentListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.APostdetailBinding
+import com.yhjoo.dochef.ui.adapter.CommentListAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.CommentService
 import com.yhjoo.dochef.utils.RetrofitServices.PostService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class PostDetailActivity : BaseActivity() {
@@ -36,12 +38,16 @@ class PostDetailActivity : BaseActivity() {
     private lateinit var commentListAdapter: CommentListAdapter
     private lateinit var commentList: ArrayList<Comment>
 
-    private lateinit var postInfo: Post
+    private lateinit var reviseMenu: MenuItem
+    private lateinit var deleteMenu: MenuItem
+
     private lateinit var userID: String
+    private lateinit var postInfo:Post
     private var postID = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(binding.root)
         setSupportActionBar(binding.postToolbar)
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
 
@@ -82,10 +88,6 @@ class PostDetailActivity : BaseActivity() {
 
         binding.postCommentRecycler.layoutManager = LinearLayoutManager(this)
         binding.postCommentRecycler.adapter = commentListAdapter
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         if (App.isServerAlive)
             loadData()
@@ -103,10 +105,14 @@ class PostDetailActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (postInfo.userID == userID) menuInflater.inflate(
+        menuInflater.inflate(
             R.menu.menu_post_owner,
             menu
         )
+
+        reviseMenu = menu.findItem(R.id.menu_post_owner_revise)
+        deleteMenu = menu.findItem(R.id.menu_post_owner_delete)
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -125,16 +131,17 @@ class PostDetailActivity : BaseActivity() {
             MaterialDialog(this).show {
                 message(text = "삭제하시겠습니까?")
                 positiveButton(text = "확인") {
-                    compositeDisposable.add(
-                        postService.deletePost(postID)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(
-                                {
-                                    finish()
-                                },
-                                RetrofitBuilder.defaultConsumer()
-                            )
-                    )
+                    CoroutineScope(Dispatchers.Main).launch {
+                        runCatching {
+                            postService.deletePost(postID)
+                            finish()
+                        }
+                            .onSuccess {
+                            }
+                            .onFailure {
+                                RetrofitBuilder.defaultErrorHandler(it)
+                            }
+                    }
                 }
                 negativeButton(text = "취소")
             }
@@ -142,25 +149,29 @@ class PostDetailActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadData() {
-        compositeDisposable.add(
-            postService.getPost(postID)
-                .flatMap {
-                    postInfo = it.body()!!
-                    commentService.getComment(postID)
-                        .observeOn(AndroidSchedulers.mainThread())
-                }
-                .subscribe({
-                    commentList = it.body()!!
-                    setTopView()
-                    commentListAdapter.setNewData(commentList)
-                    commentListAdapter.setEmptyView(
-                        R.layout.rv_empty_comment,
-                        binding.postCommentRecycler.parent as ViewGroup
-                    )
-                    invalidateOptionsMenu()
-                }, RetrofitBuilder.defaultConsumer())
-        )
+    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = postService.getPost(postID)
+            postInfo = res1.body()!!
+
+            val res2 = commentService.getComment(postID)
+            commentList = res2.body()!!
+
+            setTopView()
+            commentListAdapter.setNewData(commentList)
+            commentListAdapter.setEmptyView(
+                R.layout.rv_empty_comment,
+                binding.postCommentRecycler.parent as ViewGroup
+            )
+            if(postInfo.postID == postID){
+                reviseMenu.isVisible = true
+                deleteMenu.isVisible = true
+            }
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 
     private fun setTopView() {
@@ -216,42 +227,46 @@ class PostDetailActivity : BaseActivity() {
             binding.postLike.setImageResource(R.drawable.ic_favorite_red)
         }
 
-        compositeDisposable.add(
-            postService.setLikePost(userID, postID, newLike)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { loadData() },
-                    RetrofitBuilder.defaultConsumer()
-                )
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                postService.setLikePost(userID, postID, newLike)
+                loadData()
+            }
+                .onSuccess { }
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
+                }
+        }
     }
 
-    private fun writeComment() {
-        if (binding.postCommentEdittext.text.toString() != "") {
-            compositeDisposable.add(
+    private fun writeComment() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            if (binding.postCommentEdittext.text.toString() != "") {
                 commentService.createComment(
                     postID, userID,
                     binding.postCommentEdittext.text.toString(), System.currentTimeMillis()
                 )
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                        imm.hideSoftInputFromWindow(binding.postCommentEdittext.windowToken, 0)
-                        binding.postCommentEdittext.setText("")
-                        loadData()
-                    }, RetrofitBuilder.defaultConsumer())
-            )
-        } else App.showToast("댓글을 입력 해 주세요")
+
+                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(binding.postCommentEdittext.windowToken, 0)
+                binding.postCommentEdittext.setText("")
+                loadData()
+            } else App.showToast("댓글을 입력 해 주세요")
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 
-    private fun removeComment(commentID: Int) {
-        compositeDisposable.add(
+    private fun removeComment(commentID: Int) = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
             commentService.deleteComment(commentID)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { loadData() },
-                    RetrofitBuilder.defaultConsumer()
-                )
-        )
+            loadData()
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

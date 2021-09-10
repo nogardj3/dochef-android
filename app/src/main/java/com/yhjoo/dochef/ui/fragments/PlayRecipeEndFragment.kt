@@ -18,7 +18,9 @@ import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import com.yhjoo.dochef.utils.RetrofitServices.ReviewService
 import com.yhjoo.dochef.utils.Utils
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class PlayRecipeEndFragment : Fragment() {
     /*
@@ -93,32 +95,36 @@ class PlayRecipeEndFragment : Fragment() {
         binding.playrecipeEndReviewOk.setOnClickListener { addReview() }
     }
 
-    private fun addReview() {
-        if (binding.playrecipeEndReviewEdittext.text.toString() != "") {
-            (activity as BaseActivity).compositeDisposable.add(
+    private fun addReview() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+
+            if (binding.playrecipeEndReviewEdittext.text.toString() != "") {
                 reviewService.createReview(
                     recipeDetail.recipeID, userID!!,
                     binding.playrecipeEndReviewEdittext.text.toString(),
                     binding.playrecipeEndRating.rating.toLong(), System.currentTimeMillis()
                 )
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({
-                        App.showToast("리뷰가 등록되었습니다.")
-                        (activity as BaseActivity?)!!.finish()
-                    }, RetrofitBuilder.defaultConsumer())
-            )
-        } else App.showToast("댓글을 입력 해 주세요")
+                App.showToast("리뷰가 등록되었습니다.")
+                (activity as BaseActivity?)!!.finish()
+
+            } else App.showToast("댓글을 입력 해 주세요")
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 
-    private fun setLike() {
-        val like = if (isLikeThis) -1 else 1
-        (activity as BaseActivity).compositeDisposable.add(
+    private fun setLike() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val like = if (isLikeThis) -1 else 1
             recipeService.setLikeRecipe(recipeDetail.recipeID, userID!!, like)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    isLikeThis = !isLikeThis
-                    loadData()
-                }, RetrofitBuilder.defaultConsumer())
-        )
+            isLikeThis = !isLikeThis
+            loadData()
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

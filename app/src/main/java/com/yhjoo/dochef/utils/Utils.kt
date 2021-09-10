@@ -50,7 +50,7 @@ object Utils {
     }
 
     fun log(vararg msgs: String) {
-        Logger.d("YHJOO %s", msgs)
+        Logger.d("YHJOO %s", msgs.joinToString())
     }
 
     fun getUserBrief(context: Context): UserBrief {

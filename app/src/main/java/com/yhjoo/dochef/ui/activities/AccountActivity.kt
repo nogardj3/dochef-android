@@ -25,6 +25,9 @@ import com.yhjoo.dochef.utils.Utils.NicknameValidate
 import com.yhjoo.dochef.utils.Utils.PWValidate
 import com.yhjoo.dochef.utils.Utils.getSharedPreferences
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Response
 
 class AccountActivity : BaseActivity() {
@@ -267,42 +270,40 @@ class AccountActivity : BaseActivity() {
                 App.showToast("사용할 수 없는 닉네임입니다. 숫자, 알파벳 대소문자, 한글만 사용가능합니다.")
             else -> {
                 progressON(this)
-
-                compositeDisposable.add(
-                    accountService.createUser(idToken, fcmToken, firebaseAuth.uid!!, nickname)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe({ response: Response<UserBrief> ->
-                            if (response.code() == 403)
-                                App.showToast("이미 존재하는 닉네임입니다.")
-                            else {
-                                App.showToast("회원 가입 되었습니다.")
-                                startMain(response.body()!!)
-                            }
-                        }) { throwable: Throwable ->
-                            throwable.printStackTrace()
-                            progressOFF()
+                CoroutineScope(Dispatchers.Main).launch {
+                    runCatching {
+                        accountService.createUser(idToken, fcmToken, firebaseAuth.uid!!, nickname)
+                    }.onSuccess {
+                        if (it.code() == 403)
+                            App.showToast("이미 존재하는 닉네임입니다.")
+                        else {
+                            App.showToast("회원 가입 되었습니다.")
+                            startMain(it.body()!!)
                         }
-                )
+                    }.onFailure {
+                        progressOFF()
+                        RetrofitBuilder.defaultErrorHandler(it)
+                    }
+                }
             }
         }
     }
 
     private fun checkUserInfo(idToken: String) {
-        compositeDisposable.add(
-            accountService
-                .checkUser(idToken, firebaseAuth.uid!!, fcmToken)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ response: Response<UserBrief> ->
-                    if (response.code() == 409) {
-                        App.showToast("닉네임을 입력해주세요.")
-                        startMode(MODE.SIGNUPNICK)
-                        progressOFF()
-                    } else startMain(response.body()!!)
-                }) { e: Throwable ->
-                    e.printStackTrace()
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                accountService.checkUser(idToken, firebaseAuth.uid!!, fcmToken)
+            }.onSuccess {
+                if (it.code() == 409) {
+                    App.showToast("닉네임을 입력해주세요.")
+                    startMode(MODE.SIGNUPNICK)
                     progressOFF()
-                }
-        )
+                } else startMain(it.body()!!)
+            }.onFailure {
+                progressOFF()
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
+        }
     }
 
     private fun startMode(mode: Int) {

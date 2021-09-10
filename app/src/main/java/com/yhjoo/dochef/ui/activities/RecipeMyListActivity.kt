@@ -9,13 +9,15 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.activities.RecipeMakeActivity
-import com.yhjoo.dochef.ui.adapter.RecipeMyListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipelistBinding
+import com.yhjoo.dochef.ui.adapter.RecipeMyListAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeMyListActivity : BaseActivity() {
@@ -97,29 +99,30 @@ class RecipeMyListActivity : BaseActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun loadData() {
-        compositeDisposable.add(
-            recipeService.getRecipeByUserID(userID, "latest")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    recipeList = it.body()!!
-                    recipeMyListAdapter.setNewData(recipeList)
-                    recipeMyListAdapter.setEmptyView(
-                        R.layout.rv_empty_recipe,
-                        binding.recipelistRecycler.parent as ViewGroup
-                    )
-                }, RetrofitBuilder.defaultConsumer())
-        )
+    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = recipeService.getRecipeByUserID(userID, "latest")
+            recipeList = res1.body()!!
+            recipeMyListAdapter.setNewData(recipeList)
+            recipeMyListAdapter.setEmptyView(
+                R.layout.rv_empty_recipe,
+                binding.recipelistRecycler.parent as ViewGroup
+            )
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 
-    private fun cancelLikeRecipe(recipeid: Int) {
-        compositeDisposable.add(
+    private fun cancelLikeRecipe(recipeid: Int) = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
             recipeService.setLikeRecipe(recipeid, userID, -1)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { loadData() },
-                    RetrofitBuilder.defaultConsumer()
-                )
-        )
+            loadData()
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

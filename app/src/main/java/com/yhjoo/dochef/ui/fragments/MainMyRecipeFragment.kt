@@ -14,12 +14,13 @@ import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.MultiItemRecipe
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.FMainMyrecipeBinding
-import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class MainMyRecipeFragment : Fragment(), OnRefreshListener {
@@ -108,33 +109,35 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         }
     }
 
-    private fun settingList() {
-        (activity as BaseActivity).compositeDisposable.add(
-            recipeService.getRecipeByUserID(userID!!, "latest")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val temp = it.body()!!
-                    recipeListItems.clear()
-                    for (i in temp.indices) {
-                        if (i != 0 && i % 4 == 0) recipeListItems.add(
-                            MultiItemRecipe(
-                                RecipeMultiAdapter.VIEWHOLDER_AD
-                            )
-                        )
-                        recipeListItems.add(
-                            MultiItemRecipe(
-                                RecipeMultiAdapter.VIEWHOLDER_ITEM,
-                                temp[i]
-                            )
-                        )
-                    }
-                    recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
-                    recipeMultiAdapter.setEmptyView(
-                        R.layout.rv_empty_recipe,
-                        binding.fMyrecipeRecycler.parent as ViewGroup
+    private fun settingList() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = recipeService.getRecipeByUserID(userID!!, "latest")
+
+            val temp = res1.body()!!
+            recipeListItems.clear()
+            for (i in temp.indices) {
+                if (i != 0 && i % 4 == 0) recipeListItems.add(
+                    MultiItemRecipe(
+                        RecipeMultiAdapter.VIEWHOLDER_AD
                     )
-                    binding.fMyrecipeSwipe.isRefreshing = false
-                }, RetrofitBuilder.defaultConsumer())
-        )
+                )
+                recipeListItems.add(
+                    MultiItemRecipe(
+                        RecipeMultiAdapter.VIEWHOLDER_ITEM,
+                        temp[i]
+                    )
+                )
+            }
+            recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
+            recipeMultiAdapter.setEmptyView(
+                R.layout.rv_empty_recipe,
+                binding.fMyrecipeRecycler.parent as ViewGroup
+            )
+            binding.fMyrecipeSwipe.isRefreshing = false
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

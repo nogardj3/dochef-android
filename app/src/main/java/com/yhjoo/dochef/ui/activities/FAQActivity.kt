@@ -5,16 +5,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.FAQListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.ExpandContents
 import com.yhjoo.dochef.data.model.ExpandTitle
 import com.yhjoo.dochef.data.model.FAQ
 import com.yhjoo.dochef.databinding.AFaqBinding
+import com.yhjoo.dochef.ui.adapter.FAQListAdapter
 import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices.BasicService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class FAQActivity : BaseActivity() {
@@ -22,7 +24,7 @@ class FAQActivity : BaseActivity() {
 
     private lateinit var basicService: BasicService
     private lateinit var faqListAdapter: FAQListAdapter
-    private lateinit var faqList: ArrayList<MultiItemEntity>
+    private var faqList = ArrayList<MultiItemEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,23 +42,26 @@ class FAQActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
-        if (App.isServerAlive) {
-            compositeDisposable.add(
-                basicService.faq
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ response: Response<ArrayList<FAQ>> ->
-                        loadList(
-                            response.body()!!
+
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                if (App.isServerAlive) {
+                    val faqResponse = basicService.getFAQ()
+                    loadList(faqResponse.body()!!)
+                } else {
+                    val faqResponse = withContext(Dispatchers.IO) {
+                        DataGenerator.make<ArrayList<FAQ>>(
+                            resources,
+                            resources.getInteger(R.integer.DATA_TYPE_FAQ)
                         )
-                    }, RetrofitBuilder.defaultConsumer())
-            )
-        } else {
-            loadList(
-                DataGenerator.make(
-                    resources,
-                    resources.getInteger(R.integer.DATA_TYPE_FAQ)
-                )
-            )
+                    }
+                    loadList(faqResponse)
+                }
+            }
+                .onSuccess {}
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
+                }
         }
     }
 

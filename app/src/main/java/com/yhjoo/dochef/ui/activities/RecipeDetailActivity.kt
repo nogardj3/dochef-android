@@ -10,15 +10,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.ReviewListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.databinding.ARecipedetailBinding
+import com.yhjoo.dochef.ui.adapter.ReviewListAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import com.yhjoo.dochef.utils.RetrofitServices.ReviewService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeDetailActivity : BaseActivity() {
@@ -87,23 +89,24 @@ class RecipeDetailActivity : BaseActivity() {
         }
     }
 
-    private fun loadData() {
-        recipeService.getRecipeDetail(recipeID)
-            .flatMap {
-                recipeDetailInfo = it.body()!!
-                reviewService.getReview(recipeID)
-                    .subscribeOn(AndroidSchedulers.mainThread())
-                    .observeOn(AndroidSchedulers.mainThread())
+    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = recipeService.getRecipeDetail(recipeID)
+            recipeDetailInfo = res1.body()!!
+
+            val res2 = reviewService.getReview(recipeID)
+            reviewList = res2.body()!!
+            setTopView()
+            reviewListAdapter.setNewData(reviewList)
+            reviewListAdapter.setEmptyView(
+                R.layout.rv_empty_review,
+                binding.recipedetailReviewRecycler.parent as ViewGroup
+            )
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
             }
-            .subscribe({
-                reviewList = it.body()!!
-                setTopView()
-                reviewListAdapter.setNewData(reviewList)
-                reviewListAdapter.setEmptyView(
-                    R.layout.rv_empty_review,
-                    binding.recipedetailReviewRecycler.parent as ViewGroup
-                )
-            }, RetrofitBuilder.defaultConsumer())
     }
 
     private fun setTopView() {
@@ -172,26 +175,25 @@ class RecipeDetailActivity : BaseActivity() {
         }
     }
 
-    private fun addCount() {
-        compositeDisposable.add(
+    private fun addCount() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
             recipeService.addCount(recipeID)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { Utils.log("count ok") },
-                    RetrofitBuilder.defaultConsumer()
-                )
-        )
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 
-    private fun setLike() {
-        val like = if (recipeDetailInfo.likes.contains(userID)) -1 else 1
-        compositeDisposable!!.add(
-            recipeService!!.setLikeRecipe(recipeID, userID!!, like)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { loadData() },
-                    RetrofitBuilder.defaultConsumer()
-                )
-        )
+    private fun setLike() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val like = if (recipeDetailInfo.likes.contains(userID)) -1 else 1
+            recipeService.setLikeRecipe(recipeID, userID!!, like)
+            loadData()
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

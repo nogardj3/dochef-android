@@ -17,6 +17,9 @@ import com.yhjoo.dochef.ui.activities.SettingActivity
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.UserService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class MainUserFragment : Fragment() {
     private lateinit var binding: FMainUserBinding
@@ -91,19 +94,20 @@ class MainUserFragment : Fragment() {
         }
     }
 
-    private fun settingUserDetail() {
-        (activity as BaseActivity).compositeDisposable.add(
-            userService.getUserDetail(userID)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    userDetailInfo = it.body()!!
-                    ImageLoadUtil.loadUserImage(
-                        this@MainUserFragment.requireContext(),
-                        userDetailInfo.userImg,
-                        binding!!.fmainUserImg
-                    )
-                    binding!!.fmainUserNickname.text = userDetailInfo.nickname
-                }, RetrofitBuilder.defaultConsumer())
-        )
+    private fun settingUserDetail()  =         CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = userService.getUserDetail(userID)
+            userDetailInfo = res1.body()!!
+            ImageLoadUtil.loadUserImage(
+                this@MainUserFragment.requireContext(),
+                userDetailInfo.userImg,
+                binding.fmainUserImg
+            )
+            binding.fmainUserNickname.text = userDetailInfo.nickname
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

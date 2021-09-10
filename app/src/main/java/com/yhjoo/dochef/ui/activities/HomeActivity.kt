@@ -18,20 +18,20 @@ import com.canhub.cropper.CropImageView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.PostListAdapter
-import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.databinding.AHomeBinding
+import com.yhjoo.dochef.ui.adapter.PostListAdapter
+import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.*
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class HomeActivity : BaseActivity() {
@@ -236,33 +236,34 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun loadList() {
-        compositeDisposable.add(
-            userService.getUserDetail(currentUserID!!)
-                .flatMap { response: Response<UserDetail> ->
-                    userDetailInfo = response.body()!!
-                    recipeService.getRecipeByUserID(currentUserID!!, "latest")
-                }
-                .flatMap { response: Response<ArrayList<Recipe>> ->
-                    val res: List<Recipe?> = response.body()!!
-                        .subList(0, response.body()!!.size.coerceAtMost(10))
-                    recipeList = ArrayList(res)
-                    postService.getPostListByUserID(currentUserID!!)
-                        .observeOn(AndroidSchedulers.mainThread())
-                }
-                .subscribe({ response: Response<ArrayList<Post>> ->
-                    postList = response.body()!!
-                    setUserInfo()
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                val res1 = userService.getUserDetail(currentUserID!!)
+                userDetailInfo = res1.body()!!
 
-                    recipeHorizontalHomeAdapter.setNewData(recipeList)
-                    recipeHorizontalHomeAdapter.setEmptyView(
-                        R.layout.rv_empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
-                    )
-                    postListAdapter.setNewData(postList)
-                    postListAdapter.setEmptyView(
-                        R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
-                    )
-                }, RetrofitBuilder.defaultConsumer())
-        )
+                val res2 = recipeService.getRecipeByUserID(currentUserID!!, "latest")
+                val res2_data: List<Recipe?> = res2.body()!!
+                    .subList(0, res2.body()!!.size.coerceAtMost(10))
+                recipeList = ArrayList(res2_data)
+
+                val res3 = postService.getPostListByUserID(currentUserID!!)
+                postList = res3.body()!!
+                setUserInfo()
+
+                recipeHorizontalHomeAdapter.setNewData(recipeList)
+                recipeHorizontalHomeAdapter.setEmptyView(
+                    R.layout.rv_empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
+                )
+                postListAdapter.setNewData(postList)
+                postListAdapter.setEmptyView(
+                    R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
+                )
+            }
+                .onSuccess { }
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
+                }
+        }
     }
 
     private fun setUserInfo() {
@@ -327,18 +328,23 @@ class HomeActivity : BaseActivity() {
                     it.getInputField().text.length > 12 ->
                         App.showToast("12자 이하 입력 해 주세요.")
                     else -> {
-                        compositeDisposable.add(
-                            accountService.checkNickname(it.getInputField().text.toString())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe({ response: Response<JsonObject> ->
-                                    val msg = response.body()!!["msg"].asString
-                                    Utils.log(msg)
-                                    if (msg == "ok") {
-                                        binding.homeNickname.text = it.getInputField().text
-                                        it.dismiss()
-                                    } else App.showToast("이미 존재합니다.")
-                                }, RetrofitBuilder.defaultConsumer())
-                        )
+                        CoroutineScope(Dispatchers.Main).launch {
+                            runCatching {
+                                val res1 =
+                                    accountService.checkNickname(it.getInputField().text.toString())
+
+                                val msg = res1.body()!!["msg"].asString
+                                Utils.log(msg)
+                                if (msg == "ok") {
+                                    binding.homeNickname.text = it.getInputField().text
+                                    it.dismiss()
+                                } else App.showToast("이미 존재합니다.")
+                            }
+                                .onSuccess { }
+                                .onFailure {
+                                    RetrofitBuilder.defaultErrorHandler(it)
+                                }
+                        }
                     }
                 }
             })
@@ -390,22 +396,26 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun updateToServer() {
-        compositeDisposable.add(
-            accountService.updateUser(
-                userDetailInfo.userID, imageUrl!!,
-                binding.homeNickname.text.toString(),
-                binding.homeProfiletext.text.toString()
-            )
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    App.showToast("업데이트 되었습니다.")
-                    currentOperation = OPERATION.VIEW
-                    reviseMenu.isVisible = true
-                    okMenu.isVisible = false
-                    binding.homeRevisegroup.visibility = View.VISIBLE
-                    imageUri = null
-                    progressOFF()
-                }, RetrofitBuilder.defaultConsumer())
-        )
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                accountService.updateUser(
+                    userDetailInfo.userID, imageUrl!!,
+                    binding.homeNickname.text.toString(),
+                    binding.homeProfiletext.text.toString()
+                )
+
+                App.showToast("업데이트 되었습니다.")
+                currentOperation = OPERATION.VIEW
+                reviseMenu.isVisible = true
+                okMenu.isVisible = false
+                binding.homeRevisegroup.visibility = View.VISIBLE
+                imageUri = null
+                progressOFF()
+            }
+                .onSuccess { }
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
+                }
+        }
     }
 }

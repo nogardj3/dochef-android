@@ -8,14 +8,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.gms.ads.MobileAds
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.RecipeMultiThemeAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.MultiItemTheme
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipethemeBinding
+import com.yhjoo.dochef.ui.adapter.RecipeMultiThemeAdapter
 import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeThemeActivity : BaseActivity() {
@@ -93,27 +95,24 @@ class RecipeThemeActivity : BaseActivity() {
         }
     }
 
-    private fun loadData() {
-        val recipeSingle =
-            if (currentMode == MODE.POPULAR)
+    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            val res1 = if (currentMode == MODE.POPULAR)
                 recipeService.getRecipes("popular")
-                    .observeOn(AndroidSchedulers.mainThread())
             else
                 recipeService.getRecipeByTag(tagName, "popular")
-                    .observeOn(AndroidSchedulers.mainThread())
 
-        compositeDisposable.add(
-            recipeSingle
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    val arrayList = it.body()!!
-                    for (i in arrayList.indices) {
-                        if (i != 0 && i % 4 == 0)
-                            recipeListItems.add(MultiItemTheme(VIEWHOLDER.AD, 2))
-                        recipeListItems.add(MultiItemTheme(VIEWHOLDER.ITEM, 1, arrayList[i]))
-                    }
-                    recipeMultiThemeAdapter.setNewData(recipeListItems as List<MultiItemTheme?>?)
-                }, RetrofitBuilder.defaultConsumer())
-        )
+            val arrayList = res1.body()!!
+            for (i in arrayList.indices) {
+                if (i != 0 && i % 4 == 0)
+                    recipeListItems.add(MultiItemTheme(VIEWHOLDER.AD, 2))
+                recipeListItems.add(MultiItemTheme(VIEWHOLDER.ITEM, 1, arrayList[i]))
+            }
+            recipeMultiThemeAdapter.setNewData(recipeListItems as List<MultiItemTheme?>?)
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

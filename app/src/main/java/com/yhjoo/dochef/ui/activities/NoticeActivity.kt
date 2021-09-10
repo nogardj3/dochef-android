@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.ui.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
@@ -13,6 +14,7 @@ import com.yhjoo.dochef.databinding.ANoticeBinding
 import com.yhjoo.dochef.ui.adapter.NoticeListAdapter
 import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices.BasicService
+import com.yhjoo.dochef.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,7 +26,7 @@ class NoticeActivity : BaseActivity() {
 
     private lateinit var basicService: BasicService
     private lateinit var noticeListAdapter: NoticeListAdapter
-    private lateinit var noticeList: ArrayList<MultiItemEntity>
+    private var noticeList =  ArrayList<MultiItemEntity>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,29 +44,24 @@ class NoticeActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
         CoroutineScope(Dispatchers.Main).launch {
-            if (App.isServerAlive) {
-                val noticeResponse = withContext(Dispatchers.IO) {
-                    basicService.getNotice()
+            runCatching {
+                if (App.isServerAlive) {
+                    val noticeResponse = basicService.getNotice()
+                    loadList(noticeResponse.body()!!)
+                } else {
+                    val noticeResponse = withContext(Dispatchers.IO) {
+                        DataGenerator.make<ArrayList<Notice>>(
+                            resources,
+                            resources.getInteger(R.integer.DATA_TYPE_NOTICE)
+                        )
+                    }
+                    loadList(noticeResponse)
                 }
-                loadList(noticeResponse.body()!!)
-
-                // RXJAVA
-//                compositeDisposable.add(
-//                    basicService.getNotice()
-//                        .observeOn(AndroidSchedulers.mainThread())
-//                        .subscribe({ response: Response<ArrayList<Notice>> ->
-//                            loadList(response.body()!!)
-//                        }, RetrofitBuilder.defaultConsumer())
-//                )
-            } else {
-                val noticeResponse = withContext(Dispatchers.IO) {
-                    DataGenerator.make<ArrayList<Notice>>(
-                        resources,
-                        resources.getInteger(R.integer.DATA_TYPE_NOTICE)
-                    )
-                }
-                loadList(noticeResponse)
             }
+                .onSuccess { }
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
+                }
         }
     }
 

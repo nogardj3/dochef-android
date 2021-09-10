@@ -23,6 +23,9 @@ import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -96,18 +99,20 @@ class MainInitFragment : Fragment() {
         return view
     }
 
-    private fun settingList() {
-        (activity as BaseActivity?)!!.compositeDisposable.add(
-            // Todo
-            // recipeService.getRecipeByName( "CHEF","popular")
-            recipeService.getRecipes("popular")
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    recipeList = it.body()!!
-                    // Html.fromHtml(
-                    // String.format(getString(R.string.format_recommend_title),recipeList.get(0).getNickname()),Html.FROM_HTML_MODE_LEGACY);
-                    recipeHorizontalAdapter.setNewData(recipeList)
-                }, RetrofitBuilder.defaultConsumer())
-        )
+    private fun settingList() =         CoroutineScope(Dispatchers.Main).launch {
+        runCatching {
+            // Todo 유명인 레시피 검색
+            // val res1 = recipeService.getRecipeByName( "CHEF","popular")
+            val res1 = recipeService.getRecipes("popular")
+
+            recipeList = res1.body()!!
+            // Html.fromHtml(
+            // String.format(getString(R.string.format_recommend_title),recipeList.get(0).getNickname()),Html.FROM_HTML_MODE_LEGACY);
+            recipeHorizontalAdapter.setNewData(recipeList)
+        }
+            .onSuccess { }
+            .onFailure {
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
     }
 }

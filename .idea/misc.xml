@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/a_postdetail.xml" value="0.2" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_main_init.xml" value="0.3558974358974359" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/menu/menu_post_owner.xml" value="0.2" />
       </map>
     </option>
   </component>

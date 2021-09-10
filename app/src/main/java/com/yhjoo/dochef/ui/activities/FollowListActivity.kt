@@ -7,15 +7,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.FollowListAdapter
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.databinding.AFollowlistBinding
+import com.yhjoo.dochef.ui.adapter.FollowListAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.UserService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import retrofit2.Response
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.util.*
 
 class FollowListActivity : BaseActivity() {
@@ -73,28 +75,26 @@ class FollowListActivity : BaseActivity() {
             }
         }
 
-        if (App.isServerAlive) {
-            val modeSingle =
-                if (currentMode == UIMODE.FOLLOWER) {
-                    rxUserService.getFollowers(targetId)
-                        .observeOn(AndroidSchedulers.mainThread())
-                } else {
-                    rxUserService.getFollowings(targetId)
-                        .observeOn(AndroidSchedulers.mainThread())
-                }
+        if (App.isServerAlive)
+            CoroutineScope(Dispatchers.Main).launch {
+                runCatching {
+                    val res1 = rxUserService.getUserDetail(activeUserid)
+                    userDetailInfo = res1.body()!!
 
-            compositeDisposable.add(
-                rxUserService.getUserDetail(activeUserid)
-                    .flatMap { response: Response<UserDetail> ->
-                        userDetailInfo = response.body()!!
-                        modeSingle
+                    val res2 = if (currentMode == UIMODE.FOLLOWER)
+                        rxUserService.getFollowers(targetId)
+                    else
+                        rxUserService.getFollowings(targetId)
+
+                    userList = res2.body()!!
+                    setListData()
+                }
+                    .onSuccess {}
+                    .onFailure {
+                        RetrofitBuilder.defaultErrorHandler(it)
                     }
-                    .subscribe({ response: Response<ArrayList<UserBrief>> ->
-                        userList = response.body()!!
-                        setListData()
-                    }, RetrofitBuilder.defaultConsumer())
-            )
-        } else {
+            }
+        else {
             userDetailInfo =
                 DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
             userList =
@@ -106,36 +106,30 @@ class FollowListActivity : BaseActivity() {
     private fun onListItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
         val target = (adapter.data[position] as UserBrief).userID
 
-        val subORunsub = if (view.id == R.id.user_followcancel_btn)
-            rxUserService.subscribeUser(activeUserid, target)
-        else
-            rxUserService.unsubscribeUser(activeUserid, target)
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                if (view.id == R.id.user_followcancel_btn)
+                    rxUserService.subscribeUser(activeUserid, target)
+                else
+                    rxUserService.unsubscribeUser(activeUserid, target)
 
-        val modeSingle =
-            if (currentMode == UIMODE.FOLLOWER) {
-                rxUserService.getFollowers(targetId)
-                    .observeOn(AndroidSchedulers.mainThread())
-            } else {
-                rxUserService.getFollowings(targetId)
-                    .observeOn(AndroidSchedulers.mainThread())
+                val res1 = rxUserService.getUserDetail(activeUserid)
+                userDetailInfo = res1.body()!!
+
+                val res2 =
+                    if (currentMode == UIMODE.FOLLOWER)
+                        rxUserService.getFollowers(targetId)
+                    else
+                        rxUserService.getFollowings(targetId)
+
+                userList = res2.body()!!
+                setListData()
             }
-
-        compositeDisposable.add(
-            subORunsub
-                .flatMap {
-                    rxUserService.getUserDetail(
-                        activeUserid
-                    )
+                .onSuccess { }
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
                 }
-                .flatMap {
-                    userDetailInfo = it.body()!!
-                    modeSingle
-                }
-                .subscribe({ response: Response<ArrayList<UserBrief>> ->
-                    userList = response.body()!!
-                    setListData()
-                }, RetrofitBuilder.defaultConsumer())
-        )
+        }
     }
 
     private fun setListData() {

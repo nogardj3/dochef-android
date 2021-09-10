@@ -76,7 +76,7 @@ class NotificationActivity : BaseActivity() {
     override fun onResume() {
         super.onResume()
 
-        runBlocking {
+        CoroutineScope(Dispatchers.Main).launch {
             notifications =
                 if (App.isServerAlive) {
                     readDataFromDB()

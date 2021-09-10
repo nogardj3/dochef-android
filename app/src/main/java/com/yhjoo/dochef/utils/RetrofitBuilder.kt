@@ -17,15 +17,15 @@ object RetrofitBuilder {
     // 타임아웃, 헤더 등 설정
     private val retrofitClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .connectTimeout(20, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
+            .connectTimeout(10, TimeUnit.SECONDS)
+            .writeTimeout(10, TimeUnit.SECONDS)
+            .readTimeout(10, TimeUnit.SECONDS)
             .build();
     }
 
     fun <T> create(context: Context, service: Class<T>): T {
         return Retrofit.Builder()
-            .client(retrofitClient)
+//            .client(retrofitClient)
             .baseUrl(context.getString(R.string.server_url))
             .addConverterFactory(GsonConverterFactory.create())
             // use RxJava, return Call -> Observable, Single
@@ -49,6 +49,7 @@ object RetrofitBuilder {
 
         } else {
             Utils.log("알 수 없는 에러")
+            Utils.log(throwable.message!!,throwable.toString(), throwable.localizedMessage!!)
         }
     }
 }

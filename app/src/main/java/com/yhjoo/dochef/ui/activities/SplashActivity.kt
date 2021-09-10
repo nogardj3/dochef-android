@@ -21,7 +21,6 @@ import com.yhjoo.dochef.utils.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 
 class SplashActivity : BaseActivity() {
     private val binding: ASplashBinding by lazy { ASplashBinding.inflate(layoutInflater) }
@@ -67,38 +66,21 @@ class SplashActivity : BaseActivity() {
         finish()
     }
 
-    private fun checkServerAlive() = CoroutineScope(Dispatchers.IO).launch {
-        val basicService = RetrofitBuilder.create(this@SplashActivity, BasicService::class.java)
+    private fun checkServerAlive() =
+        CoroutineScope(Dispatchers.Main).launch {
+            val basicService = RetrofitBuilder.create(this@SplashActivity, BasicService::class.java)
 
-        basicService.checkAlive().runCatching {
-            basicService.checkAlive()
-        }.onSuccess {
-            App.isServerAlive = true
-            serverAlive = true
-        }.onFailure {
-            App.isServerAlive = false
-            serverAlive = false
-
-            RetrofitBuilder.defaultErrorHandler(it)
+            runCatching {
+                basicService.checkAlive()
+            }.onSuccess {
+                App.isServerAlive = true
+                serverAlive = true
+            }.onFailure {
+                App.isServerAlive = false
+                serverAlive = false
+                RetrofitBuilder.defaultErrorHandler(it)
+            }
         }
-
-        /*
-        * RXJAVA
-        val basicService = RxRetrofitBuilder.create(this, BasicService::class.java)
-        compositeDisposable.add(
-            basicService.checkAlive()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    App.isServerAlive = true
-                    serverAlive = true
-                }) { throwable: Throwable ->
-                    throwable.printStackTrace()
-                    App.isServerAlive = false
-                    serverAlive = false
-                }
-        )
-         */
-    }
 
     private fun checkIsAutoLogin() {
         isLogin = ChefAuth.isLogIn(this)

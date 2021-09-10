@@ -12,7 +12,12 @@ class NoticeListAdapter(data: List<MultiItemEntity>?) :
     BaseMultiItemQuickAdapter<MultiItemEntity?, BaseViewHolder?>(data) {
     object EXPAND {
         const val DEPTH_0 = 0
-        const val CONTENTS = 0
+        const val CONTENTS = 1
+    }
+
+    init {
+        addItemType(EXPAND.DEPTH_0, R.layout.li_expand_title)
+        addItemType(EXPAND.CONTENTS, R.layout.li_expand_contents)
     }
 
     override fun convert(helper: BaseViewHolder?, item: MultiItemEntity?) {
@@ -44,10 +49,5 @@ class NoticeListAdapter(data: List<MultiItemEntity>?) :
                 }
             }
         }
-    }
-
-    init {
-        addItemType(EXPAND.DEPTH_0, R.layout.li_expand_title)
-        addItemType(EXPAND.CONTENTS, R.layout.li_expand_contents)
     }
 }

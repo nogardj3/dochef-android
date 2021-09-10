@@ -17,7 +17,9 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.APostwriteBinding
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.PostService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
 class PostWriteActivity : BaseActivity() {
@@ -144,31 +146,30 @@ class PostWriteActivity : BaseActivity() {
         }
     }
 
-    private fun createORupdatePost(tags: ArrayList<String>) {
-        if (currentMode == UIMODE.WRITE) compositeDisposable.add(
-            postService.createPost(
-                userID, imageString!!,
-                binding.postwriteContents.text.toString(),
-                System.currentTimeMillis(), tags
-            )
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
+    private fun createORupdatePost(tags: ArrayList<String>) =
+        CoroutineScope(Dispatchers.Main).launch {
+            runCatching {
+                if (currentMode == UIMODE.WRITE) {
+                    postService.createPost(
+                        userID, imageString!!,
+                        binding.postwriteContents.text.toString(),
+                        System.currentTimeMillis(), tags
+                    )
                     App.showToast("글이 등록되었습니다.")
-                    progressOFF()
-                    finish()
-                }, RetrofitBuilder.defaultConsumer())
-        ) else compositeDisposable.add(
-            postService.updatePost(
-                postID, imageString!!,
-                binding.postwriteContents.text.toString(),
-                System.currentTimeMillis(), tags
-            )
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({
-                    App.showToast("업데이트 되었습니다.")
-                    progressOFF()
-                    finish()
-                }, RetrofitBuilder.defaultConsumer())
-        )
-    }
+                } else
+                    postService.updatePost(
+                        postID, imageString!!,
+                        binding.postwriteContents.text.toString(),
+                        System.currentTimeMillis(), tags
+                    )
+                App.showToast("업데이트 되었습니다.")
+
+                progressOFF()
+                finish()
+            }
+                .onSuccess { }
+                .onFailure {
+                    RetrofitBuilder.defaultErrorHandler(it)
+                }
+        }
 }
