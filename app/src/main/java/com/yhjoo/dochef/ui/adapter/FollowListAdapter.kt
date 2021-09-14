@@ -5,6 +5,7 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.Utils
 import java.util.*
 
 class FollowListAdapter(var userID: String) :
@@ -17,6 +18,8 @@ class FollowListAdapter(var userID: String) :
 
     override fun convert(helper: BaseViewHolder, item: UserBrief) {
         GlideImageLoadDelegator.loadUserImage(mContext, item.userImg, helper.getView(R.id.user_img))
+        Utils.log(item.userID, userID)
+
         if (item.userID != userID) {
             if (userFollow.contains(item.userID)) {
                 helper.setVisible(R.id.user_follow_btn, true)
@@ -28,6 +31,7 @@ class FollowListAdapter(var userID: String) :
             helper.addOnClickListener(R.id.user_followcancel_btn)
             helper.addOnClickListener(R.id.user_follow_btn)
         }
+
         helper.setText(
             R.id.user_follower_count, String.format(
                 mContext.getString(R.string.format_follower), item.follower_count.toString()

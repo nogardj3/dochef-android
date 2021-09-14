@@ -24,11 +24,6 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class MainMyRecipeFragment : Fragment(), OnRefreshListener {
-    /*
-        TODO
-        Recommend multi adapter 변경
-    */
-
     private lateinit var binding: MainMyrecipeFragmentBinding
     private lateinit var recipeService: RecipeService
     private lateinit var recipeMultiAdapter: RecipeMultiAdapter

@@ -34,7 +34,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainTimelineFragmentBinding.inflate(layoutInflater)
+        binding = MainTimelineFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         postService = RetrofitBuilder.create(
@@ -43,6 +43,14 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         )
 
         binding.apply {
+            timelineSwipe.setOnRefreshListener(this@MainTimelineFragment)
+            timelineSwipe.setColorSchemeColors(
+                resources.getColor(
+                    R.color.colorPrimary,
+                    null
+                )
+            )
+
             postListAdapter = PostListAdapter().apply {
                 setEmptyView(
                     R.layout.rv_loading,

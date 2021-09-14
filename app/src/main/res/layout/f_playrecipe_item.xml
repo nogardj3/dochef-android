@@ -170,7 +170,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/bg_stroke_2dp"
-                android:inputType="textMultiLine"
+                android:inputType="textMultiLine|textNoSuggestions"
                 android:lines="3"
                 android:maxLines="4"
                 android:theme="@style/BaseTheme.EditTextStyle"

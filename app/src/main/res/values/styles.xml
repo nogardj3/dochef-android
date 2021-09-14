@@ -14,19 +14,10 @@
 
 <!-- TODO -->
 <!-- edittext color settings-->
-    <style name="BaseTheme.EditTextStyle" parent="BaseTheme">
+    <style name="BaseTheme.EditTextStyle">
         <item name="colorControlActivated">@color/colorPrimary</item>
         <item name="android:textColorHint">@color/grey_text</item>
         <item name="android:textColorHighlight">@color/grey</item>
-
-        <item name="background">@null</item>
-        <item name="android:background">@null</item>
-        <item name="backgroundColor">@null</item>
-        <item name="android:colorBackground">@null</item>
-        <item name="backgroundTint">@null</item>
-        <item name="android:backgroundTint">@null</item>
-        <item name="editTextBackground">@null</item>
-        <item name="android:editTextBackground">@null</item>
     </style>
 
     <style name="BaseTheme.EditTextStyle_post">
@@ -44,10 +35,16 @@
         <item name="colorControlActivated">@color/colorPrimary</item>
     </style>
 
-    <style name="BaseTheme.Toolbar" parent="BaseTheme">
+    <style name="BaseTheme.Toolbar">
         <item name="android:background">@color/colorPrimary</item>
-        <item name="android:colorControlNormal">@android:color/white</item>
         <item name="titleTextColor">@color/white</item>
+    </style>
+
+    <style name="BaseTheme.SearchView">
+        <!--bubble 색상-->
+        <item name="colorAccent">@color/colorPrimary</item>
+        <!--버튼 색상-->
+        <item name="colorControlNormal">#aaaaaa</item>
     </style>
 
     <style name="BaseTheme.AlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
