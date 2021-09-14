@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/accountSignInFragment">
+    <fragment
+        android:id="@+id/accountSignUpNickFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.AccountSignUpNickFragment"
+        android:label="AccountSignUpNickFragment"
+        tools:layout="@layout/f_account_signupnick"/>
+    <fragment
+        android:id="@+id/accountFindPWFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.AccountFindPWFragment"
+        android:label="AccountFindPWFragment"
+        tools:layout="@layout/f_account_findpw"/>
+    <fragment
+        android:id="@+id/accountSignInFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.AccountSignInFragment"
+        android:label="AccountSignInFragment"
+        tools:layout="@layout/f_account_signin">
+        <action
+            android:id="@+id/action_accountSignInFragment_to_accountSignUpFragment"
+            app:destination="@id/accountSignUpFragment" />
+        <action
+            android:id="@+id/action_accountSignInFragment_to_accountFindPWFragment"
+            app:destination="@id/accountFindPWFragment" />
+        <action
+            android:id="@+id/action_accountSignInFragment_to_accountSignUpNickFragment"
+            app:destination="@id/accountSignUpNickFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/accountSignUpFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.AccountSignUpFragment"
+        android:label="AccountSignUpFragment"
+        tools:layout="@layout/f_account_signup">
+        <action
+            android:id="@+id/action_accountSignUpFragment_to_accountSignUpNickFragment"
+            app:destination="@id/accountSignUpNickFragment" />
+    </fragment>
+</navigation>

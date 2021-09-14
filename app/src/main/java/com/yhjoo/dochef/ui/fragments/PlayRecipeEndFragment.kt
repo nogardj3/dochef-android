@@ -105,7 +105,7 @@ class PlayRecipeEndFragment : Fragment() {
                     binding.playrecipeEndRating.rating.toLong(), System.currentTimeMillis()
                 )
                 App.showToast("리뷰가 등록되었습니다.")
-                (activity as BaseActivity?)!!.finish()
+                (requireActivity() as BaseActivity?)!!.finish()
 
             } else App.showToast("댓글을 입력 해 주세요")
         }

@@ -42,13 +42,14 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
     private val binding: APlayrecipeBinding by lazy { APlayrecipeBinding.inflate(layoutInflater) }
 
     private lateinit var recipeService: RecipeService
-    private lateinit var sensorManager: SensorManager
-    private lateinit var mClssensor: Sensor
     private lateinit var speechRecognizer: SpeechRecognizer
     private lateinit var recipeViewPagerAdapter: RecipeViewPagerAdapter
     private lateinit var recipeDetailInfo: RecipeDetail
     private lateinit var recipePhases: ArrayList<RecipePhase>
-    private lateinit var mediaPlayer: MediaPlayer
+
+    private lateinit var sensorManager: SensorManager
+    private var mClssensor: Sensor? = null
+    private var mediaPlayer: MediaPlayer? = null
 
     private var timerValue = 0
     private var timerSet = false
@@ -115,7 +116,7 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
                 binding.playrecipeCircularToolsGroup.visibility =
                     if (position == 0 || position == recipePhases.size) View.GONE else View.VISIBLE
                 if (timerSet) stopTimer()
-                if (mediaPlayer.isPlaying) mediaPlayer.stop()
+                if (mediaPlayer!=null && mediaPlayer!!.isPlaying) mediaPlayer!!.stop()
                 if (position != 0) setTimer(position)
             }
 
@@ -128,7 +129,8 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
     override fun onDestroy() {
         super.onDestroy()
         sensorManager.unregisterListener(this)
-        mediaPlayer.release()
+        if(mediaPlayer!=null)
+            mediaPlayer!!.release()
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -167,17 +169,17 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
                         String.format("%02d:%02d", t / 60, t % 60)
                 }, { throwable: Throwable -> throwable.printStackTrace() }) {
                     mediaPlayer = MediaPlayer.create(this@PlayRecipeActivity, R.raw.ring_complete)
-                    mediaPlayer.setOnCompletionListener {
+                    mediaPlayer!!.setOnCompletionListener {
                         if (soundCount < 2) {
                             soundCount++
-                            mediaPlayer.seekTo(0)
-                            mediaPlayer.start()
+                            it.seekTo(0)
+                            it.start()
                         } else {
-                            mediaPlayer.stop()
+                            mediaPlayer!!.stop()
                             stopTimer()
                         }
                     }
-                    mediaPlayer.start()
+                    mediaPlayer!!.start()
                 }
         )
     }

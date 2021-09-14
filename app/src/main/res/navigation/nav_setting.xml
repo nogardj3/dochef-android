@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/settingMainFragment">
+    <fragment
+        android:id="@+id/settingTosFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.SettingTosFragment"
+        android:label="SettingTosFragment"
+        tools:layout="@layout/f_setting_tos"/>
+    <fragment
+        android:id="@+id/settingMainFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.SettingMainFragment"
+        android:label="SettingMainFragment"
+        tools:layout="@layout/f_setting">
+        <action
+            android:id="@+id/action_settingMainFragment_to_settingFAQFragment"
+            app:destination="@id/settingFAQFragment" />
+        <action
+            android:id="@+id/action_settingMainFragment_to_settingNoticeFragment"
+            app:destination="@id/settingNoticeFragment" />
+        <action
+            android:id="@+id/action_settingMainFragment_to_settingTosFragment"
+            app:destination="@id/settingTosFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingNoticeFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.SettingNoticeFragment"
+        android:label="SettingNoticeFragment"
+        tools:layout="@layout/f_setting_notice"/>
+    <fragment
+        android:id="@+id/settingFAQFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.SettingFAQFragment"
+        android:label="SettingFAQFragment"
+        tools:layout="@layout/f_setting_faq"/>
+</navigation>

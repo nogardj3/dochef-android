@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/mainInitFragment">
+    <fragment
+        android:id="@+id/mainInitFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.MainInitFragment"
+        android:label="MainInitFragment"
+        tools:layout="@layout/f_main_init">
+        <action
+            android:id="@+id/action_mainInitFragment_to_recipeThemeActivity"
+            app:destination="@id/recipeThemeActivity" />
+        <action
+            android:id="@+id/action_mainInitFragment_to_recipeDetailActivity"
+            app:destination="@id/recipeDetailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainMyRecipeFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.MainMyRecipeFragment"
+        android:label="MainMyRecipeFragment"
+        tools:layout="@layout/f_main_myrecipe" >
+        <action
+            android:id="@+id/action_mainMyRecipeFragment_to_recipeDetailActivity"
+            app:destination="@id/recipeDetailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainRecipesFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.MainRecipesFragment"
+        android:label="MainRecipesFragment"
+        tools:layout="@layout/f_main_recipes">
+        <action
+            android:id="@+id/action_mainRecipesFragment_to_recipeDetailActivity"
+            app:destination="@id/recipeDetailActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainTimelineFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.MainTimelineFragment"
+        android:label="MainTimelineFragment"
+        tools:layout="@layout/f_main_timeline" >
+        <action
+            android:id="@+id/action_mainTimelineFragment_to_postDetailActivity"
+            app:destination="@id/postDetailActivity" />
+        <action
+            android:id="@+id/action_mainTimelineFragment_to_homeActivity"
+            app:destination="@id/homeActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainUserFragment"
+        android:name="com.yhjoo.dochef.ui.fragments.MainUserFragment"
+        android:label="MainUserFragment"
+        tools:layout="@layout/f_main_user">
+        <action
+            android:id="@+id/action_mainUserFragment_to_recipeMyListActivity"
+            app:destination="@id/recipeMyListActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/recipeThemeActivity"
+        android:name="com.yhjoo.dochef.ui.activities.RecipeThemeActivity"
+        android:label="RecipeThemeActivity" />
+    <activity
+        android:id="@+id/recipeDetailActivity"
+        android:name="com.yhjoo.dochef.ui.activities.RecipeDetailActivity"
+        android:label="RecipeDetailActivity" />
+    <activity
+        android:id="@+id/postDetailActivity"
+        android:name="com.yhjoo.dochef.ui.activities.PostDetailActivity"
+        android:label="PostDetailActivity" />
+    <activity
+        android:id="@+id/homeActivity"
+        android:name="com.yhjoo.dochef.ui.activities.HomeActivity"
+        android:label="HomeActivity" />
+    <activity
+        android:id="@+id/recipeMyListActivity"
+        android:name="com.yhjoo.dochef.ui.activities.RecipeMyListActivity"
+        android:label="RecipeMyListActivity" />
+</navigation>

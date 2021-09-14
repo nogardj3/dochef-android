@@ -22,7 +22,7 @@ import com.yhjoo.dochef.utils.RetrofitServices.UserService
 import com.yhjoo.dochef.utils.Utils
 import java.util.*
 
-class ResultFragment : Fragment() {
+class SearchResultFragment : Fragment() {
     object VIEWHOLDER {
         const val AD = 0
         const val ITEM_USER = 1

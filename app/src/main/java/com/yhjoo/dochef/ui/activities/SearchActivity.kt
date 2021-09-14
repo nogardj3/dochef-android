@@ -10,7 +10,7 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.ui.adapter.SearchViewPagerAdapter
 import com.yhjoo.dochef.data.model.SearchType
 import com.yhjoo.dochef.databinding.ASearchBinding
-import com.yhjoo.dochef.ui.fragments.ResultFragment
+import com.yhjoo.dochef.ui.fragments.SearchResultFragment
 
 class SearchActivity : BaseActivity() {
     private val binding: ASearchBinding by lazy { ASearchBinding.inflate(layoutInflater) }
@@ -38,7 +38,7 @@ class SearchActivity : BaseActivity() {
                 searchTypes.add(SearchType(3, "재료"))
                 searchTypes.add(SearchType(4, "태그"))
                 for (i in searchTypes.indices) {
-                    viewPagerAdapter.addFragment(searchTypes[i].fragment, searchTypes[i].title)
+                    viewPagerAdapter.addFragment(searchTypes[i].fragmentSearch, searchTypes[i].title)
                 }
             }
             searchViewpager.adapter = viewPagerAdapter
@@ -46,7 +46,7 @@ class SearchActivity : BaseActivity() {
             searchEdittext.setOnEditorActionListener { _: TextView?, actionId: Int, _: KeyEvent? ->
                 if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     keyword = searchEdittext.text.toString()
-                    (viewPagerAdapter.getItem(searchViewpager.currentItem) as ResultFragment).search()
+                    (viewPagerAdapter.getItem(searchViewpager.currentItem) as SearchResultFragment).search()
                     val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(searchEdittext.windowToken, 0)
                 }
@@ -65,10 +65,10 @@ class SearchActivity : BaseActivity() {
             keyword = binding.searchEdittext.text.toString().trim { it <= ' ' }
             binding.searchEdittext.setText(keyword)
             when (binding.searchViewpager.currentItem) {
-                0 -> (viewPagerAdapter.getItem(0) as ResultFragment).search()
-                1 -> (viewPagerAdapter.getItem(1) as ResultFragment).search()
-                2 -> (viewPagerAdapter.getItem(2) as ResultFragment).search()
-                3 -> (viewPagerAdapter.getItem(3) as ResultFragment).search()
+                0 -> (viewPagerAdapter.getItem(0) as SearchResultFragment).search()
+                1 -> (viewPagerAdapter.getItem(1) as SearchResultFragment).search()
+                2 -> (viewPagerAdapter.getItem(2) as SearchResultFragment).search()
+                3 -> (viewPagerAdapter.getItem(3) as SearchResultFragment).search()
             }
             val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(binding.searchEdittext.windowToken, 0)

@@ -28,12 +28,6 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.ui.activities.FAQActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
-
-        <activity
             android:name="com.yhjoo.dochef.ui.activities.AccountActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
@@ -63,11 +57,6 @@
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity
-            android:name="com.yhjoo.dochef.ui.activities.NoticeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name="com.yhjoo.dochef.ui.activities.NotificationActivity"
@@ -120,11 +109,6 @@
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
-        <activity
-            android:name="com.yhjoo.dochef.ui.activities.TOSActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/BaseTheme"
-            android:windowSoftInputMode="adjustNothing" />
 
         <activity
             android:name="com.yhjoo.dochef.ui.activities.PostWriteActivity"

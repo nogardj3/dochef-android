@@ -1,15 +1,15 @@
 package com.yhjoo.dochef.data.model
 
 import android.os.Bundle
-import com.yhjoo.dochef.ui.fragments.ResultFragment
+import com.yhjoo.dochef.ui.fragments.SearchResultFragment
 
 class SearchType(type: Int, var title: String) {
-    var fragment: ResultFragment
+    var fragmentSearch: SearchResultFragment
 
     init {
-        fragment = ResultFragment()
+        fragmentSearch = SearchResultFragment()
         val b = Bundle()
         b.putInt("type", type)
-        fragment.arguments = b
+        fragmentSearch.arguments = b
     }
 }
