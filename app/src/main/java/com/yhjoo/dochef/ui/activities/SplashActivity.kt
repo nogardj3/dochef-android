@@ -98,6 +98,7 @@ class SplashActivity : BaseActivity() {
         val mSharedPreferences = Utils.getSharedPreferences(this)
         val channelCreated = mSharedPreferences.getBoolean("channel_created", false)
 
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
             val channelID = getString(R.string.notification_channel_id)
             val name = "기본채널"

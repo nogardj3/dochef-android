@@ -9,7 +9,7 @@ class SearchViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
     Fm!!
 ) {
     var fragments: MutableList<Fragment> = ArrayList()
-    var fragmentTitles: MutableList<String?> = ArrayList()
+    private var fragmentTitles: MutableList<String?> = ArrayList()
     fun addFragment(fragment: Fragment?, title: String?) {
         fragments.add(fragment!!)
         fragmentTitles.add(title)

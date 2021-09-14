@@ -5,8 +5,8 @@ import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.MultiItemTheme
-import com.yhjoo.dochef.utils.ImageLoadUtil
+import com.yhjoo.dochef.model.MultiItemTheme
+import com.yhjoo.dochef.utils.GlideImageLoadDelegator
 
 class RecipeMultiThemeAdapter(data: List<MultiItemTheme>?) :
     BaseMultiItemQuickAdapter<MultiItemTheme?, BaseViewHolder?>(data) {
@@ -24,7 +24,7 @@ class RecipeMultiThemeAdapter(data: List<MultiItemTheme>?) :
         if (helper != null && item != null) {
             when (helper.itemViewType) {
                 VIEWHOLDER.ITEM -> {
-                    ImageLoadUtil.loadRecipeImage(
+                    GlideImageLoadDelegator.loadRecipeImage(
                         mContext, item.content!!.recipeImg, helper.getView(R.id.recipetheme_img)
                     )
                     helper.setText(R.id.recipetheme_title, item.content!!.recipeName)

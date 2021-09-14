@@ -6,42 +6,33 @@ import android.view.*
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.databinding.AAccountBinding
+import com.yhjoo.dochef.model.UserBrief
+import com.yhjoo.dochef.databinding.AccountActivityBinding
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.AccountService
-import com.yhjoo.dochef.utils.Utils.EmailValidate
-import com.yhjoo.dochef.utils.Utils.NicknameValidate
-import com.yhjoo.dochef.utils.Utils.PWValidate
 import com.yhjoo.dochef.utils.Utils.getSharedPreferences
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 
 class AccountActivity : BaseActivity() {
-    val binding: AAccountBinding by lazy { AAccountBinding.inflate(layoutInflater) }
+    val binding: AccountActivityBinding by lazy { AccountActivityBinding.inflate(layoutInflater) }
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var accountService: AccountService
-    private lateinit var idToken: String
     private lateinit var fcmToken: String
     private lateinit var navController:NavController
 

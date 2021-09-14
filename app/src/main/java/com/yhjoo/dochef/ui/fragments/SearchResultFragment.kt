@@ -9,9 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.model.SearchResult
-import com.yhjoo.dochef.data.model.UserBrief
+import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.model.SearchResult
+import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.databinding.FResultBinding
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
@@ -42,7 +42,7 @@ class SearchResultFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FResultBinding.inflate(layoutInflater)
         val view: View = binding.root
 

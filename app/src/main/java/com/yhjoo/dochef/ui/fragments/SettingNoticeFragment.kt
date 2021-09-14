@@ -4,44 +4,41 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.*
-import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
-import com.yhjoo.dochef.databinding.FSettingFaqBinding
-import com.yhjoo.dochef.databinding.FSettingNoticeBinding
-import com.yhjoo.dochef.ui.adapter.FAQListAdapter
+import com.yhjoo.dochef.databinding.SettingNoticeFragmentBinding
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.ExpandContents
+import com.yhjoo.dochef.model.ExpandTitle
+import com.yhjoo.dochef.model.Notice
 import com.yhjoo.dochef.ui.adapter.NoticeListAdapter
-import com.yhjoo.dochef.utils.ImageLoadUtil
 import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.ArrayList
+import java.util.*
 
 class SettingNoticeFragment : Fragment() {
-    private lateinit var binding: FSettingNoticeBinding
+    private lateinit var binding: SettingNoticeFragmentBinding
     private lateinit var basicService: RetrofitServices.BasicService
     private lateinit var noticeListAdapter: NoticeListAdapter
-    private var noticeList =  ArrayList<MultiItemEntity>()
+    private var noticeList = ArrayList<MultiItemEntity>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FSettingNoticeBinding.inflate(inflater, container, false)
+        binding = SettingNoticeFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
-        basicService = RetrofitBuilder.create(requireContext(), RetrofitServices.BasicService::class.java)
+        basicService =
+            RetrofitBuilder.create(requireContext(), RetrofitServices.BasicService::class.java)
         noticeListAdapter = NoticeListAdapter(noticeList)
         binding.apply {
             noticeRecycler.adapter = noticeListAdapter

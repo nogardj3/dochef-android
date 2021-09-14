@@ -70,6 +70,11 @@ dependencies {
     implementation("com.google.android.flexbox:flexbox:3.0.0")
     implementation("androidx.preference:preference-ktx:1.1.1")
 
+    /* Later
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+     */
+
     // API
     implementation(platform("com.google.firebase:firebase-bom:28.1.0"))
     implementation ("com.google.firebase:firebase-auth-ktx")

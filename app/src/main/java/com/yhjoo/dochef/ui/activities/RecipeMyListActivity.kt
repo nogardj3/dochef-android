@@ -8,9 +8,8 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.RecipeMakeActivity
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.Recipe
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipelistBinding
 import com.yhjoo.dochef.ui.adapter.RecipeMyListAdapter
 import com.yhjoo.dochef.utils.*
@@ -33,7 +32,7 @@ class RecipeMyListActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.recipelistToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
         userID = Utils.getUserBrief(this).userID
@@ -90,13 +89,11 @@ class RecipeMyListActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_recipe_add) startActivity(
-            Intent(
-                this,
-                RecipeMakeActivity::class.java
-            )
-        )
-        return super.onOptionsItemSelected(item)
+        return if (item.itemId == R.id.menu_recipe_add) {
+            startActivity(Intent(this, RecipeMakeActivity::class.java))
+            true
+        } else
+            super.onOptionsItemSelected(item)
     }
 
     private fun loadData() = CoroutineScope(Dispatchers.Main).launch {

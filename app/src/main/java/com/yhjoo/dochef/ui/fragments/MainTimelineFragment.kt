@@ -10,9 +10,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.FMainTimelineBinding
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.PostDetailActivity
 import com.yhjoo.dochef.ui.adapter.PostListAdapter

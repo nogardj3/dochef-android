@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -13,30 +12,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.*
+import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.databinding.*
 import com.yhjoo.dochef.ui.activities.AccountActivity
 import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.ui.activities.MainActivity
 import com.yhjoo.dochef.utils.RetrofitBuilder
 import com.yhjoo.dochef.utils.RetrofitServices
 import com.yhjoo.dochef.utils.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class AccountSignInFragment : Fragment() {
     object CODE {
         const val RC_SIGN_IN = 9001
     }
 
-    private lateinit var binding: FAccountSigninBinding
+    private lateinit var binding: AccountSigninFragmentBinding
     private lateinit var accountService: RetrofitServices.AccountService
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var firebaseAuth: FirebaseAuth
@@ -48,7 +41,7 @@ class AccountSignInFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FAccountSigninBinding.inflate(inflater, container, false)
+        binding = AccountSigninFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         firebaseAuth = FirebaseAuth.getInstance()

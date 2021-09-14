@@ -8,9 +8,9 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.RecipePhase
+import com.yhjoo.dochef.model.RecipePhase
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
-import com.yhjoo.dochef.utils.ImageLoadUtil
+import com.yhjoo.dochef.utils.GlideImageLoadDelegator
 
 class PlayRecipeItemFragment : Fragment() {
     private lateinit var binding: FPlayrecipeItemBinding
@@ -25,7 +25,7 @@ class PlayRecipeItemFragment : Fragment() {
 
         val recipePhase = requireArguments().getSerializable("item") as RecipePhase
 
-        ImageLoadUtil.loadRecipeImage(
+        GlideImageLoadDelegator.loadRecipeImage(
             requireContext(),
             recipePhase.recipe_img,
             binding.playrecipeItemImg
@@ -41,7 +41,7 @@ class PlayRecipeItemFragment : Fragment() {
         binding.playrecipeItemIngredients.removeAllViews()
         for (ingredient in recipePhase.ingredients) {
             val ingredientContainer =
-                layoutInflater.inflate(R.layout.v_ingredient, null) as ConstraintLayout
+                layoutInflater.inflate(R.layout.v_ingredient, binding.playrecipeItemIngredients,false) as ConstraintLayout
             val ingredientName: AppCompatTextView =
                 ingredientContainer.findViewById(R.id.v_ingredient_name)
             ingredientName.text = ingredient.name

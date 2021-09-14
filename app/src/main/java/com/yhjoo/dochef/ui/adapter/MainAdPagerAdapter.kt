@@ -8,7 +8,7 @@ import androidx.viewpager.widget.PagerAdapter
 import com.bumptech.glide.Glide
 import java.util.*
 
-class MainAdPagerAdapter(var mContext: Context?, var imgids: ArrayList<Int>) : PagerAdapter() {
+class MainAdPagerAdapter(var mContext: Context?, private var imgids: ArrayList<Int>) : PagerAdapter() {
     override fun instantiateItem(collection: ViewGroup, position: Int): Any {
         val aa = AppCompatImageView(mContext!!)
         val lp = ViewGroup.LayoutParams(

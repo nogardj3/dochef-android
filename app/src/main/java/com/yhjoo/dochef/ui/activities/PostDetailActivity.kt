@@ -17,9 +17,9 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.Comment
-import com.yhjoo.dochef.data.model.Post
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.Comment
+import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.ui.adapter.CommentListAdapter
 import com.yhjoo.dochef.utils.*
@@ -42,14 +42,14 @@ class PostDetailActivity : BaseActivity() {
     private lateinit var deleteMenu: MenuItem
 
     private lateinit var userID: String
-    private lateinit var postInfo:Post
+    private lateinit var postInfo: Post
     private var postID = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.postToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         postService = RetrofitBuilder.create(this, PostService::class.java)
         commentService = RetrofitBuilder.create(this, CommentService::class.java)
@@ -117,36 +117,41 @@ class PostDetailActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_post_owner_revise) {
-            val intent = Intent(this@PostDetailActivity, PostWriteActivity::class.java)
-                .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.REVISE)
-                .putExtra("postID", postInfo.postID)
-                .putExtra("postImg", postInfo.postImg)
-                .putExtra("contents", postInfo.contents)
-                .putExtra("tags", postInfo.tags.toTypedArray())
-            startActivity(intent)
-        } else if (item.itemId == R.id.menu_post_owner_delete) {
-            App.showToast("삭제")
-
-            MaterialDialog(this).show {
-                message(text = "삭제하시겠습니까?")
-                positiveButton(text = "확인") {
-                    CoroutineScope(Dispatchers.Main).launch {
-                        runCatching {
-                            postService.deletePost(postID)
-                            finish()
-                        }
-                            .onSuccess {
-                            }
-                            .onFailure {
-                                RetrofitBuilder.defaultErrorHandler(it)
-                            }
-                    }
-                }
-                negativeButton(text = "취소")
+        return when (item.itemId) {
+            R.id.menu_post_owner_revise -> {
+                val intent = Intent(this@PostDetailActivity, PostWriteActivity::class.java)
+                    .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.REVISE)
+                    .putExtra("postID", postInfo.postID)
+                    .putExtra("postImg", postInfo.postImg)
+                    .putExtra("contents", postInfo.contents)
+                    .putExtra("tags", postInfo.tags.toTypedArray())
+                startActivity(intent)
+                true
             }
+            R.id.menu_post_owner_delete -> {
+                App.showToast("삭제")
+
+                MaterialDialog(this).show {
+                    message(text = "삭제하시겠습니까?")
+                    positiveButton(text = "확인") {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            runCatching {
+                                postService.deletePost(postID)
+                                finish()
+                            }
+                                .onSuccess {
+                                }
+                                .onFailure {
+                                    RetrofitBuilder.defaultErrorHandler(it)
+                                }
+                        }
+                    }
+                    negativeButton(text = "취소")
+                }
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
@@ -163,7 +168,7 @@ class PostDetailActivity : BaseActivity() {
                 R.layout.rv_empty_comment,
                 binding.postCommentRecycler.parent as ViewGroup
             )
-            if(postInfo.postID == postID){
+            if (postInfo.postID == postID) {
                 reviseMenu.isVisible = true
                 deleteMenu.isVisible = true
             }
@@ -176,12 +181,12 @@ class PostDetailActivity : BaseActivity() {
 
     private fun setTopView() {
         binding.apply {
-            ImageLoadUtil.loadPostImage(
+            GlideImageLoadDelegator.loadPostImage(
                 this@PostDetailActivity,
                 postInfo.postImg,
                 binding.postPostimg
             )
-            ImageLoadUtil.loadUserImage(
+            GlideImageLoadDelegator.loadUserImage(
                 this@PostDetailActivity,
                 postInfo.userImg,
                 binding.postUserimg

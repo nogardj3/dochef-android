@@ -59,7 +59,7 @@ class PostWriteActivity : BaseActivity() {
                 postwriteToolbar.title = "수정"
                 postwriteContents.setText(intent.getStringExtra("contents"))
                 if (intent.getStringExtra("postImg") != null) {
-                    ImageLoadUtil.loadPostImage(
+                    GlideImageLoadDelegator.loadPostImage(
                         this@PostWriteActivity, intent.getStringExtra("postImg")!!, postwritePostimg
                     )
                 }
@@ -67,7 +67,7 @@ class PostWriteActivity : BaseActivity() {
             }
         }
         setSupportActionBar(binding.postwriteToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.postwritePostimgAdd.setOnClickListener { addImage() }
         binding.postwriteOk.setOnClickListener { doneClicked() }

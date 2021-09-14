@@ -20,10 +20,10 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.model.UserDetail
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.Post
+import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.model.UserDetail
 import com.yhjoo.dochef.databinding.AHomeBinding
 import com.yhjoo.dochef.ui.adapter.PostListAdapter
 import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
@@ -80,7 +80,7 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.homeToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         storageReference = FirebaseStorage.getInstance().reference
 
@@ -165,7 +165,7 @@ class HomeActivity : BaseActivity() {
                     okMenu.isVisible = false
                     binding.apply {
                         homeRevisegroup.visibility = View.GONE
-                        ImageLoadUtil.loadUserImage(
+                        GlideImageLoadDelegator.loadUserImage(
                             this@HomeActivity,
                             userDetailInfo.userImg,
                             homeUserimg
@@ -180,16 +180,20 @@ class HomeActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_home_owner_revise) {
-            currentOperation = OPERATION.REVISE
-            reviseMenu.isVisible = false
-            okMenu.isVisible = true
-            binding.homeRevisegroup.visibility = View.VISIBLE
-        } else if (item.itemId == R.id.menu_home_owner_revise_ok) {
-            updateProfile()
+        return when (item.itemId) {
+            R.id.menu_home_owner_revise -> {
+                currentOperation = OPERATION.REVISE
+                reviseMenu.isVisible = false
+                okMenu.isVisible = true
+                binding.homeRevisegroup.visibility = View.VISIBLE
+                true
+            }
+            R.id.menu_home_owner_revise_ok -> {
+                updateProfile()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -242,9 +246,9 @@ class HomeActivity : BaseActivity() {
                 userDetailInfo = res1.body()!!
 
                 val res2 = recipeService.getRecipeByUserID(currentUserID!!, "latest")
-                val res2_data: List<Recipe?> = res2.body()!!
+                val res2Data: List<Recipe?> = res2.body()!!
                     .subList(0, res2.body()!!.size.coerceAtMost(10))
-                recipeList = ArrayList(res2_data)
+                recipeList = ArrayList(res2Data)
 
                 val res3 = postService.getPostListByUserID(currentUserID!!)
                 postList = res3.body()!!
@@ -267,7 +271,7 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun setUserInfo() {
-        ImageLoadUtil.loadUserImage(this, userDetailInfo.userImg, binding.homeUserimg)
+        GlideImageLoadDelegator.loadUserImage(this, userDetailInfo.userImg, binding.homeUserimg)
 
         binding.homeToolbar.title = userDetailInfo.nickname
         binding.homeNickname.text = userDetailInfo.nickname
@@ -320,8 +324,8 @@ class HomeActivity : BaseActivity() {
         MaterialDialog(this).show {
             noAutoDismiss()
             title(text = "닉네임 변경")
-            input(hint = "닉네임", prefill = binding!!.homeNickname.text.toString())
-            positiveButton(text = "확인", click = {
+            input(hint = "닉네임", prefill = binding.homeNickname.text.toString())
+            positiveButton(text = "확인", click = { it ->
                 when {
                     it.getInputField().text == null ->
                         App.showToast("닉네임을 입력 해 주세요.")
@@ -359,7 +363,7 @@ class HomeActivity : BaseActivity() {
             input(
                 hint = "닉네임",
                 inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
-                prefill = binding!!.homeProfiletext.text.toString()
+                prefill = binding.homeProfiletext.text.toString()
             )
             positiveButton(text = "확인", click = {
                 when {

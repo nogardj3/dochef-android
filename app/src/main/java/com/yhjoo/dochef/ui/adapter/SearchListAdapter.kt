@@ -10,15 +10,15 @@ import com.google.android.flexbox.FlexboxLayout
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.model.SearchResult
-import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.utils.ImageLoadUtil
+import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.model.SearchResult
+import com.yhjoo.dochef.model.UserBrief
+import com.yhjoo.dochef.utils.GlideImageLoadDelegator
 
 class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: Int) :
     BaseMultiItemQuickAdapter<SearchResult<*>?, BaseViewHolder?>(data) {
 
-    companion object VIEWHOLDER {
+    object VIEWHOLDER {
         const val AD = 0
         const val ITEM_USER = 1
         const val ITEM_RECIPE_NAME = 2
@@ -31,7 +31,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
             when (helper.itemViewType) {
                 VIEWHOLDER.ITEM_USER -> {
                     val ele = item.content as UserBrief
-                    ImageLoadUtil.loadUserImage(
+                    GlideImageLoadDelegator.loadUserImage(
                         mContext,
                         ele.userImg,
                         helper.getView(R.id.user_img)
@@ -40,13 +40,13 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                     helper.setText(
                         R.id.user_follower_count, String.format(
                             mContext.getString(R.string.format_follower),
-                            Integer.toString(ele.follower_count)
+                            ele.follower_count.toString()
                         )
                     )
                 }
                 VIEWHOLDER.ITEM_RECIPE_NAME -> {
                     val recipeItem = item.content as Recipe
-                    ImageLoadUtil.loadRecipeImage(
+                    GlideImageLoadDelegator.loadRecipeImage(
                         mContext, recipeItem.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
                     )
                     helper.setText(R.id.reciperesult_title, recipeItem.recipeName)
@@ -68,7 +68,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                 }
                 VIEWHOLDER.ITEM_INGREDIENT -> {
                     val recipeItem2 = item.content as Recipe
-                    ImageLoadUtil.loadRecipeImage(
+                    GlideImageLoadDelegator.loadRecipeImage(
                         mContext, recipeItem2.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
                     )
                     helper.setText(R.id.reciperesult_title, recipeItem2.recipeName)
@@ -86,7 +86,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                             mLayoutInflater.inflate(R.layout.v_tag_post, null) as LinearLayout
                         val tagview: AppCompatTextView =
                             tagcontainer.findViewById(R.id.vtag_post_text)
-                        tagview.text = "#" + ingredient.name
+                        tagview.text = "#$ingredient.name"
                         (helper.getView<View>(R.id.reciperesult_ingredients) as FlexboxLayout).addView(
                             tagcontainer
                         )
@@ -94,7 +94,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                 }
                 VIEWHOLDER.ITEM_TAG -> {
                     val recipeItem3 = item.content as Recipe
-                    ImageLoadUtil.loadRecipeImage(
+                    GlideImageLoadDelegator.loadRecipeImage(
                         mContext, recipeItem3.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
                     )
                     helper.setText(R.id.reciperesult_title, recipeItem3.recipeName)

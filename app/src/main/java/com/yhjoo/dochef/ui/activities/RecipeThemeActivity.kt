@@ -8,9 +8,9 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.gms.ads.MobileAds
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.MultiItemTheme
-import com.yhjoo.dochef.data.model.Recipe
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.MultiItemTheme
+import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipethemeBinding
 import com.yhjoo.dochef.ui.adapter.RecipeMultiThemeAdapter
 import com.yhjoo.dochef.utils.RetrofitBuilder
@@ -48,7 +48,7 @@ class RecipeThemeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.recipethemeToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         MobileAds.initialize(this)
         recipeService = RetrofitBuilder.create(this, RecipeService::class.java)

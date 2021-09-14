@@ -10,6 +10,7 @@ class App : Application() {
     // 1. RX error Handler
     // 2. 세로 막기
 
+
     companion object {
         var isServerAlive = false
         lateinit var toast: Toast
@@ -21,6 +22,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+
 
         Logger.addLogAdapter(AndroidLogAdapter())
         toast = Toast.makeText(this, "Default", Toast.LENGTH_SHORT)

@@ -10,9 +10,9 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.MultiItemRecipe
-import com.yhjoo.dochef.data.model.Recipe
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.MultiItemRecipe
+import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.databinding.FMainMyrecipeBinding
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter

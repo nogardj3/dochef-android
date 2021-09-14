@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.RecipePhase
+import com.yhjoo.dochef.model.RecipeDetail
+import com.yhjoo.dochef.model.RecipePhase
 import java.util.*
 
 class RecipeViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
@@ -41,4 +41,5 @@ class RecipeViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
     override fun getCount(): Int {
         return fragments.size
     }
+
 }

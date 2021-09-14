@@ -56,7 +56,7 @@
         android:layout_marginTop="8dp"
         app:flexWrap="wrap"
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
-        app:layout_constraintRight_toLeftOf="@+id/playrecipe_start_contents"
+        app:layout_constraintRight_toRightOf="@+id/playrecipe_start_contents"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_contents"/>
 
 
@@ -81,13 +81,13 @@
         app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_tags" />
 
-    <ListView
+    <com.google.android.flexbox.FlexboxLayout
         android:id="@+id/playrecipe_start_ingredients"
-        android:layout_width="200dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:flexDirection="column"
         app:flexWrap="wrap"
-        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_title"
+        app:layout_constraintLeft_toLeftOf="@+id/playrecipe_start_contents"
         app:layout_constraintRight_toRightOf="@+id/playrecipe_start_contents"
         app:layout_constraintTop_toBottomOf="@+id/playrecipe_start_ingredienttext" />
 

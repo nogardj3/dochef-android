@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         tools:visibility="visible"
-        app:constraint_referenced_ids="playrecipe_podslider, playrecipe_circular_timer, playrecipe_circular_timer_text"/>
+        app:constraint_referenced_ids="playrecipe_stepindicator, playrecipe_circular_timer, playrecipe_circular_timer_text"/>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/playrecipe_circular_timer_text"
@@ -49,7 +49,7 @@
         app:trackThickness="8dp"/>
 
     <com.layer_net.stepindicator.StepIndicator
-        android:id="@+id/playrecipe_podslider"
+        android:id="@+id/playrecipe_stepindicator"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"

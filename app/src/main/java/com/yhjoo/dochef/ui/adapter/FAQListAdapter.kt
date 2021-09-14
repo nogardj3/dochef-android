@@ -1,12 +1,11 @@
 package com.yhjoo.dochef.ui.adapter
 
-import android.view.View
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.ExpandContents
-import com.yhjoo.dochef.data.model.ExpandTitle
+import com.yhjoo.dochef.model.ExpandContents
+import com.yhjoo.dochef.model.ExpandTitle
 
 class FAQListAdapter(data: List<MultiItemEntity>) :
     BaseMultiItemQuickAdapter<MultiItemEntity?, BaseViewHolder?>(data) {

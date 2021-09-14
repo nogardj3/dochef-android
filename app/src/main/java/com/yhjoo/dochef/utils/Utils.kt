@@ -9,14 +9,14 @@ import androidx.preference.PreferenceManager
 import com.google.gson.Gson
 import com.orhanobut.logger.Logger
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.UserBrief
+import com.yhjoo.dochef.model.UserBrief
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
 
 object Utils {
     // TODO
-    // 1. TimeDiff 라이브러리
+    // 1. TimeDiff 만들기
 
     object EmailValidate {
         const val VALID = 0
@@ -117,7 +117,10 @@ object Utils {
         return secDiff / 60 / 60 / 24 < 3
     }
 
-    fun getSharedPreferences(context: Context): SharedPreferences{
+    fun getSharedPreferences(context: Context): SharedPreferences {
+
+//        val dataStore = context. createDataStore(name = "settings_pref")
+
         return PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     }
 }

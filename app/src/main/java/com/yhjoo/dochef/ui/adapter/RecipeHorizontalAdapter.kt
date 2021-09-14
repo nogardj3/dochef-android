@@ -3,13 +3,13 @@ package com.yhjoo.dochef.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.utils.ImageLoadUtil
+import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.utils.GlideImageLoadDelegator
 
 class RecipeHorizontalAdapter :
     BaseQuickAdapter<Recipe, BaseViewHolder>(R.layout.li_recipe_recommend) {
     override fun convert(helper: BaseViewHolder, item: Recipe) {
-        ImageLoadUtil.loadRecipeImage(
+        GlideImageLoadDelegator.loadRecipeImage(
             mContext, item.recipeImg, helper.getView(R.id.reciperecommend_recipeimg)
         )
         helper.setText(R.id.reciperecommend_title, item.recipeName)

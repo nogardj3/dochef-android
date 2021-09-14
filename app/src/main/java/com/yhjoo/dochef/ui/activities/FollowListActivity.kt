@@ -7,16 +7,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.data.model.UserDetail
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.UserBrief
+import com.yhjoo.dochef.model.UserDetail
 import com.yhjoo.dochef.databinding.AFollowlistBinding
 import com.yhjoo.dochef.ui.adapter.FollowListAdapter
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.UserService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -41,7 +40,7 @@ class FollowListActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.followlistToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         rxUserService = RetrofitBuilder.create(this, UserService::class.java)
 

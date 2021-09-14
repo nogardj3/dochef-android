@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.NotificationItem
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.databinding.ANotificationBinding
+import com.yhjoo.dochef.db.NotificationDatabase
 import com.yhjoo.dochef.ui.adapter.NotificationListAdapter
 import com.yhjoo.dochef.utils.*
 import kotlinx.coroutines.*
@@ -19,20 +20,14 @@ import kotlin.collections.ArrayList
 class NotificationActivity : BaseActivity() {
     private val binding: ANotificationBinding by lazy { ANotificationBinding.inflate(layoutInflater) }
 
-    private lateinit var chefSQLite: ChefSQLite
     private lateinit var notificationListAdapter: NotificationListAdapter
-    private var notifications: ArrayList<NotificationItem> = ArrayList()
+    private var notifications: ArrayList<NotificationEntity> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.notificationToolbar)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-
-        chefSQLite = ChefSQLite(
-            this, ChefSQLite.DATABASE_NAME,
-            null, ChefSQLite.DATABASE_VERSION
-        )
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         notificationListAdapter = NotificationListAdapter().apply {
             setEmptyView(
@@ -95,7 +90,7 @@ class NotificationActivity : BaseActivity() {
         )
     }
 
-    private suspend fun readDataFromDB(): ArrayList<NotificationItem> =
+    private suspend fun readDataFromDB(): ArrayList<NotificationEntity> =
         withContext(Dispatchers.IO) {
             val db = NotificationDatabase.getInstance(applicationContext)
             val resList = ArrayList(

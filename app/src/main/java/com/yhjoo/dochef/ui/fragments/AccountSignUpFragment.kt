@@ -1,50 +1,25 @@
 package com.yhjoo.dochef.ui.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.AppCompatTextView
-import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.entity.MultiItemEntity
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseNetworkException
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthException
 import com.google.firebase.auth.GetTokenResult
-import com.google.firebase.messaging.FirebaseMessaging
-import com.google.gson.Gson
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.*
 import com.yhjoo.dochef.databinding.*
 import com.yhjoo.dochef.ui.activities.AccountActivity
 import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.ui.activities.MainActivity
-import com.yhjoo.dochef.ui.adapter.FAQListAdapter
-import com.yhjoo.dochef.utils.ImageLoadUtil
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices
 import com.yhjoo.dochef.utils.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.ArrayList
 
 class AccountSignUpFragment : Fragment() {
-    private lateinit var binding: FAccountSignupBinding
+    private lateinit var binding: AccountSignupFragmentBinding
     private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
@@ -52,7 +27,7 @@ class AccountSignUpFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FAccountSignupBinding.inflate(inflater, container, false)
+        binding = AccountSignupFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         firebaseAuth = FirebaseAuth.getInstance()

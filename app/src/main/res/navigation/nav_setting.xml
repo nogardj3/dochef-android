@@ -8,12 +8,12 @@
         android:id="@+id/settingTosFragment"
         android:name="com.yhjoo.dochef.ui.fragments.SettingTosFragment"
         android:label="SettingTosFragment"
-        tools:layout="@layout/f_setting_tos"/>
+        tools:layout="@layout/setting_tos_fragment"/>
     <fragment
         android:id="@+id/settingMainFragment"
         android:name="com.yhjoo.dochef.ui.fragments.SettingMainFragment"
         android:label="SettingMainFragment"
-        tools:layout="@layout/f_setting">
+        tools:layout="@layout/setting_fragment">
         <action
             android:id="@+id/action_settingMainFragment_to_settingFAQFragment"
             app:destination="@id/settingFAQFragment" />
@@ -28,10 +28,10 @@
         android:id="@+id/settingNoticeFragment"
         android:name="com.yhjoo.dochef.ui.fragments.SettingNoticeFragment"
         android:label="SettingNoticeFragment"
-        tools:layout="@layout/f_setting_notice"/>
+        tools:layout="@layout/setting_notice_fragment"/>
     <fragment
         android:id="@+id/settingFAQFragment"
         android:name="com.yhjoo.dochef.ui.fragments.SettingFAQFragment"
         android:label="SettingFAQFragment"
-        tools:layout="@layout/f_setting_faq"/>
+        tools:layout="@layout/setting_faq_fragment"/>
 </navigation>

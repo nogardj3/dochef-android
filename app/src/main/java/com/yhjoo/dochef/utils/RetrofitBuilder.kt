@@ -2,25 +2,20 @@ package com.yhjoo.dochef.utils
 
 import android.content.Context
 import com.yhjoo.dochef.R
-import io.reactivex.rxjava3.functions.Consumer
 import okhttp3.OkHttpClient
 import retrofit2.HttpException
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitBuilder {
-    // TODO
-    // 1. Coroutine용으로 변경
-
     // 타임아웃, 헤더 등 설정
     private val retrofitClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS)
             .writeTimeout(10, TimeUnit.SECONDS)
             .readTimeout(10, TimeUnit.SECONDS)
-            .build();
+            .build()
     }
 
     fun <T> create(context: Context, service: Class<T>): T {
@@ -34,7 +29,7 @@ object RetrofitBuilder {
             .create(service)
     }
 
-    fun defaultErrorHandler (throwable: Throwable) {
+    fun defaultErrorHandler(throwable: Throwable) {
         throwable.printStackTrace()
         if (throwable is HttpException) {
             val code = throwable.code()
@@ -49,7 +44,7 @@ object RetrofitBuilder {
 
         } else {
             Utils.log("알 수 없는 에러")
-            Utils.log(throwable.message!!,throwable.toString(), throwable.localizedMessage!!)
+            Utils.log(throwable.message!!, throwable.toString(), throwable.localizedMessage!!)
         }
     }
 }

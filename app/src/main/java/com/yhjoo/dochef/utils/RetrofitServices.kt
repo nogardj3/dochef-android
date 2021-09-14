@@ -1,16 +1,12 @@
 package com.yhjoo.dochef.utils
 
 import com.google.gson.JsonObject
-import com.yhjoo.dochef.data.model.*
-import io.reactivex.rxjava3.core.Single
+import com.yhjoo.dochef.model.*
 import retrofit2.Response
 import retrofit2.http.*
 import java.util.*
 
 class RetrofitServices {
-    // TODO
-    // 1. Coroutine용으로 변경
-
     interface BasicService {
         @GET("notice")
         suspend fun getNotice(): Response<ArrayList<Notice>>

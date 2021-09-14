@@ -7,16 +7,14 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.UserDetail
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.UserDetail
 import com.yhjoo.dochef.databinding.FMainUserBinding
-import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeMyListActivity
 import com.yhjoo.dochef.ui.activities.SettingActivity
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.utils.RetrofitServices.UserService
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,7 +53,7 @@ class MainUserFragment : Fragment() {
         else {
             userDetailInfo =
                 DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
-            ImageLoadUtil.loadUserImage(
+            GlideImageLoadDelegator.loadUserImage(
                 requireContext(),
                 userDetailInfo.userImg,
                 binding.fmainUserImg
@@ -98,7 +96,7 @@ class MainUserFragment : Fragment() {
         runCatching {
             val res1 = userService.getUserDetail(userID)
             userDetailInfo = res1.body()!!
-            ImageLoadUtil.loadUserImage(
+            GlideImageLoadDelegator.loadUserImage(
                 this@MainUserFragment.requireContext(),
                 userDetailInfo.userImg,
                 binding.fmainUserImg

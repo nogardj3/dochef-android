@@ -11,10 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.Recipe
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.databinding.FMainInitBinding
-import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.activities.RecipeThemeActivity
 import com.yhjoo.dochef.ui.adapter.MainAdPagerAdapter

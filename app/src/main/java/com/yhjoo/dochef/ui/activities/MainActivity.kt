@@ -8,18 +8,20 @@ import android.view.Menu
 import android.view.MenuItem
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentPagerAdapter
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.activities.*
-import com.yhjoo.dochef.ui.adapter.MainFragmentAdapter
 import com.yhjoo.dochef.databinding.AMainBinding
 import com.yhjoo.dochef.ui.fragments.*
 import com.yhjoo.dochef.utils.Utils
@@ -33,7 +35,7 @@ class MainActivity : BaseActivity() {
 
     val binding: AMainBinding by lazy { AMainBinding.inflate(layoutInflater) }
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
-    private lateinit var mainFragmentAdapter: MainFragmentAdapter
+    private lateinit var mainFragmentAdapter: FragmentStateAdapter
 
     private lateinit var powerMenu: PowerMenu
     lateinit var menuNotification: MenuItem
@@ -58,35 +60,19 @@ class MainActivity : BaseActivity() {
 
         userID = Utils.getUserBrief(this).userID
 
-        invalidateOptionsMenu()
-        val fragments = ArrayList<Fragment>().apply {
-            add(MainInitFragment())
-            add(MainRecipesFragment())
-            add(MainMyRecipeFragment())
-            add(MainTimelineFragment())
-            add(MainUserFragment())
-        }
-        mainFragmentAdapter = MainFragmentAdapter(
-            supportFragmentManager,
-            FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT,
-            fragments
-        )
+        mainFragmentAdapter = MainFragmentAdapter(this)
 
         binding.apply {
-            mainViewpager.offscreenPageLimit = 3
-            mainViewpager.pageMargin = 15
-            mainViewpager.addOnPageChangeListener(
-                TabLayout.TabLayoutOnPageChangeListener(
-                    mainTablayout
-                )
-            )
+            mainViewpager.offscreenPageLimit = 5
             mainViewpager.adapter = mainFragmentAdapter
-            for (drawable in tabIcons) {
-                mainTablayout.addTab(mainTablayout.newTab().setIcon(drawable))
-            }
+            mainViewpager.setPageTransformer(MarginPageTransformer(15))
+
+            TabLayoutMediator(mainTablayout, mainViewpager) { tab, position ->
+                tab.setIcon(tabIcons[position])
+            }.attach()
             mainTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    if(menuNotification!=null){
+                    if (menuNotification != null) {
                         mainViewpager.currentItem = tab.position
                         menuNotification.isVisible = false
                         menuSort.isVisible = false
@@ -194,32 +180,65 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.main_menu_notification -> startActivity(
-                Intent(
-                    this,
-                    NotificationActivity::class.java
+        return when (item.itemId) {
+            R.id.main_menu_notification -> {
+                startActivity(
+                    Intent(
+                        this,
+                        NotificationActivity::class.java
+                    )
                 )
-            )
-            R.id.main_menu_sort -> powerMenu.showAsAnchorRightBottom(binding.mainToolbar)
-            R.id.main_menu_write_recipe -> startActivity(
-                Intent(
-                    this,
-                    RecipeMakeActivity::class.java
+                true
+            }
+            R.id.main_menu_sort -> {
+                powerMenu.showAsAnchorRightBottom(binding.mainToolbar)
+                true
+            }
+            R.id.main_menu_write_recipe -> {
+                startActivity(
+                    Intent(
+                        this,
+                        RecipeMakeActivity::class.java
+                    )
                 )
-            )
+                true
+            }
             R.id.main_menu_write_post -> {
                 val intent = Intent(this, PostWriteActivity::class.java)
                     .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.WRITE)
                 startActivity(intent)
+                true
             }
-            R.id.main_menu_search -> startActivity(Intent(this, SearchActivity::class.java))
-            R.id.main_menu_setting -> startActivity(Intent(this, SettingActivity::class.java))
+            R.id.main_menu_search -> {
+                startActivity(Intent(this, SearchActivity::class.java))
+                true
+            }
+            R.id.main_menu_setting -> {
+                startActivity(Intent(this, SettingActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun sortMenu(sort: Int) {
-        (mainFragmentAdapter.getItem(1) as MainRecipesFragment).changeSortMode(sort)
+//        (mainFragmentAdapter.getItem(1) as MainRecipesFragment).changeSortMode(sort)
+    }
+
+    class MainFragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+        override fun getItemCount(): Int {
+            return 5
+        }
+
+        override fun createFragment(position: Int): Fragment {
+            return when (position){
+                0-> MainInitFragment()
+                1-> MainRecipesFragment()
+                2-> MainMyRecipeFragment()
+                3-> MainTimelineFragment()
+                4-> MainUserFragment()
+                else -> throw Throwable("limit ")
+            }
+        }
     }
 }

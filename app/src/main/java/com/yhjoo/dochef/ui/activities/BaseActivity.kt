@@ -12,7 +12,7 @@ import com.yhjoo.dochef.R
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 open class BaseActivity : AppCompatActivity() {
-    var progressDialog: AppCompatDialog? = null
+    private var progressDialog: AppCompatDialog? = null
     val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
     // TODO

@@ -13,13 +13,13 @@ import androidx.navigation.fragment.findNavController
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.BuildConfig
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.FSettingBinding
+import com.yhjoo.dochef.databinding.SettingFragmentBinding
 import com.yhjoo.dochef.ui.activities.AccountActivity
 import com.yhjoo.dochef.utils.ChefAuth
 import com.yhjoo.dochef.utils.Utils
 
 class SettingMainFragment : Fragment() {
-    private lateinit var binding: FSettingBinding
+    private lateinit var binding: SettingFragmentBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var notiSettingArray: Array<String>
 
@@ -28,7 +28,7 @@ class SettingMainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FSettingBinding.inflate(inflater, container, false)
+        binding = SettingFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         sharedPreferences = Utils.getSharedPreferences(requireContext())

@@ -3,7 +3,7 @@ package com.yhjoo.dochef.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.Review
+import com.yhjoo.dochef.model.Review
 import com.yhjoo.dochef.utils.Utils
 
 class ReviewListAdapter : BaseQuickAdapter<Review, BaseViewHolder>(R.layout.li_review) {

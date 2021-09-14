@@ -7,16 +7,16 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.google.android.flexbox.FlexboxLayout
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.utils.ImageLoadUtil
+import com.yhjoo.dochef.model.Post
+import com.yhjoo.dochef.utils.GlideImageLoadDelegator
 import com.yhjoo.dochef.utils.Utils
 
 class PostListAdapter : BaseQuickAdapter<Post, BaseViewHolder>(R.layout.li_timeline) {
     override fun convert(helper: BaseViewHolder, item: Post) {
-        ImageLoadUtil.loadPostImage(
+        GlideImageLoadDelegator.loadPostImage(
             mContext, item.postImg, helper.getView(R.id.timeline_postimg)
         )
-        ImageLoadUtil.loadUserImage(
+        GlideImageLoadDelegator.loadUserImage(
             mContext, item.userImg, helper.getView(R.id.timeline_userimg)
         )
         helper.setText(R.id.timeline_nickname, item.nickname)
@@ -34,7 +34,7 @@ class PostListAdapter : BaseQuickAdapter<Post, BaseViewHolder>(R.layout.li_timel
             (helper.getView<View>(R.id.timeline_tags) as FlexboxLayout).addView(tagcontainer)
         }
         if (item.comments.size != 0) {
-            ImageLoadUtil.loadUserImage(
+            GlideImageLoadDelegator.loadUserImage(
                 mContext, item.comments[0]!!.userImg, helper.getView(R.id.timeline_comment_img)
             )
             helper.setVisible(R.id.timeline_comment_group, true)

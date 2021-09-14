@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.Review
+import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.model.RecipeDetail
+import com.yhjoo.dochef.model.Review
 import com.yhjoo.dochef.databinding.ARecipedetailBinding
 import com.yhjoo.dochef.ui.adapter.ReviewListAdapter
 import com.yhjoo.dochef.utils.*
@@ -111,12 +111,12 @@ class RecipeDetailActivity : BaseActivity() {
 
     private fun setTopView() {
         binding.apply {
-            ImageLoadUtil.loadRecipeImage(
+            GlideImageLoadDelegator.loadRecipeImage(
                 this@RecipeDetailActivity,
                 recipeDetailInfo.recipeImg,
                 recipedetailMainImg
             )
-            ImageLoadUtil.loadUserImage(
+            GlideImageLoadDelegator.loadUserImage(
                 this@RecipeDetailActivity,
                 recipeDetailInfo.userImg,
                 recipedetailUserimg

@@ -3,8 +3,8 @@ package com.yhjoo.dochef.ui.adapter
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.utils.ImageLoadUtil
+import com.yhjoo.dochef.model.UserBrief
+import com.yhjoo.dochef.utils.GlideImageLoadDelegator
 import java.util.*
 
 class FollowListAdapter(var userID: String) :
@@ -16,7 +16,7 @@ class FollowListAdapter(var userID: String) :
     }
 
     override fun convert(helper: BaseViewHolder, item: UserBrief) {
-        ImageLoadUtil.loadUserImage(mContext, item.userImg, helper.getView(R.id.user_img))
+        GlideImageLoadDelegator.loadUserImage(mContext, item.userImg, helper.getView(R.id.user_img))
         if (item.userID != userID) {
             if (userFollow.contains(item.userID)) {
                 helper.setVisible(R.id.user_follow_btn, true)
