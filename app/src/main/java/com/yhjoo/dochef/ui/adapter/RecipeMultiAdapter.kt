@@ -6,8 +6,8 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.MultiItemRecipe
-import com.yhjoo.dochef.utils.GlideImageLoadDelegator
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.Utils
 
 class RecipeMultiAdapter(data: List<MultiItemRecipe>?) :
     BaseMultiItemQuickAdapter<MultiItemRecipe?, BaseViewHolder?>(data) {

@@ -15,8 +15,8 @@ import com.yhjoo.dochef.BuildConfig
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.SettingFragmentBinding
 import com.yhjoo.dochef.ui.activities.AccountActivity
-import com.yhjoo.dochef.utils.ChefAuth
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.ChefAuth
+import com.yhjoo.dochef.utilities.Utils
 
 class SettingMainFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding

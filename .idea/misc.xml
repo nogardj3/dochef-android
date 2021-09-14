@@ -20,6 +20,7 @@
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/a_tos.xml" value="0.21481481481481482" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/account_activity.xml" value="0.2989583333333333" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/account_findpw_fragment.xml" value="0.2989583333333333" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/adview.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_account_findpw.xml" value="0.49128205128205127" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_account_main.xml" value="0.49895833333333334" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_account_signin.xml" value="0.49128205128205127" />
@@ -36,7 +37,9 @@
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_setting_tos.xml" value="0.1" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/setting_activity.xml" value="0.27291666666666664" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/setting_fragment.xml" value="0.27291666666666664" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/v_ingredient.xml" value="0.21296296296296297" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/v_ingredient_play.xml" value="0.2" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/v_progress.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/v_recommend.xml" value="0.16296296296296298" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/menu/main.xml" value="0.16296296296296298" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/menu/menu_comment_owner.xml" value="0.16296296296296298" />

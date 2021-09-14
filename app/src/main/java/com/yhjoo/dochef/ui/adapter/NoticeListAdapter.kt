@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.ExpandContents
 import com.yhjoo.dochef.model.ExpandTitle
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.Utils
 
 class NoticeListAdapter(data: List<MultiItemEntity>?) :
     BaseMultiItemQuickAdapter<MultiItemEntity?, BaseViewHolder?>(data) {

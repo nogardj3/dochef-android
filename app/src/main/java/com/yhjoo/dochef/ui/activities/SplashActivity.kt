@@ -14,10 +14,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.ASplashBinding
-import com.yhjoo.dochef.utils.ChefAuth
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices.BasicService
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.ChefAuth
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices.BasicService
+import com.yhjoo.dochef.utilities.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

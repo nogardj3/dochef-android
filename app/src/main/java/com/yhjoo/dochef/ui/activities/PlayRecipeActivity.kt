@@ -23,8 +23,8 @@ import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
 import com.yhjoo.dochef.ui.adapter.RecipeViewPagerAdapter
 import com.yhjoo.dochef.ui.fragments.*
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.*

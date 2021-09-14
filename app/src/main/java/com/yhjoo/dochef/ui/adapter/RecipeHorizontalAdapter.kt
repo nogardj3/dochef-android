@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.utils.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 
 class RecipeHorizontalAdapter :
     BaseQuickAdapter<Recipe, BaseViewHolder>(R.layout.li_recipe_recommend) {

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.FPlayrecipeStartBinding
 import com.yhjoo.dochef.model.RecipeDetail
-import com.yhjoo.dochef.utils.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 
 class PlayRecipeStartFragment : Fragment() {
     private lateinit var binding: FPlayrecipeStartBinding

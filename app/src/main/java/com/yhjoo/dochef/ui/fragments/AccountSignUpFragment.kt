@@ -16,7 +16,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.*
 import com.yhjoo.dochef.ui.activities.AccountActivity
 import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.Utils
 
 class AccountSignUpFragment : Fragment() {
     private lateinit var binding: AccountSignupFragmentBinding

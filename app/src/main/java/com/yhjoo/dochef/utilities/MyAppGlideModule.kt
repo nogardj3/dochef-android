@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.utils
+package com.yhjoo.dochef.utilities
 
 import android.content.Context
 import com.bumptech.glide.Glide

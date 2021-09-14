@@ -13,11 +13,11 @@ import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.utils.GlideImageLoadDelegator
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
-import com.yhjoo.dochef.utils.RetrofitServices.ReviewService
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.RetrofitServices.ReviewService
+import com.yhjoo.dochef.utilities.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

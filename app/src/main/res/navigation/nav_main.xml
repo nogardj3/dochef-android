@@ -8,7 +8,7 @@
         android:id="@+id/mainInitFragment"
         android:name="com.yhjoo.dochef.ui.fragments.MainInitFragment"
         android:label="MainInitFragment"
-        tools:layout="@layout/f_main_init">
+        tools:layout="@layout/main_init_fragment">
         <action
             android:id="@+id/action_mainInitFragment_to_recipeThemeActivity"
             app:destination="@id/recipeThemeActivity" />
@@ -20,7 +20,7 @@
         android:id="@+id/mainMyRecipeFragment"
         android:name="com.yhjoo.dochef.ui.fragments.MainMyRecipeFragment"
         android:label="MainMyRecipeFragment"
-        tools:layout="@layout/f_main_myrecipe" >
+        tools:layout="@layout/main_myrecipe_fragment" >
         <action
             android:id="@+id/action_mainMyRecipeFragment_to_recipeDetailActivity"
             app:destination="@id/recipeDetailActivity" />
@@ -29,7 +29,7 @@
         android:id="@+id/mainRecipesFragment"
         android:name="com.yhjoo.dochef.ui.fragments.MainRecipesFragment"
         android:label="MainRecipesFragment"
-        tools:layout="@layout/f_main_recipes">
+        tools:layout="@layout/main_recipes_fragment">
         <action
             android:id="@+id/action_mainRecipesFragment_to_recipeDetailActivity"
             app:destination="@id/recipeDetailActivity" />
@@ -38,7 +38,7 @@
         android:id="@+id/mainTimelineFragment"
         android:name="com.yhjoo.dochef.ui.fragments.MainTimelineFragment"
         android:label="MainTimelineFragment"
-        tools:layout="@layout/f_main_timeline" >
+        tools:layout="@layout/main_timeline_fragment" >
         <action
             android:id="@+id/action_mainTimelineFragment_to_postDetailActivity"
             app:destination="@id/postDetailActivity" />
@@ -50,7 +50,7 @@
         android:id="@+id/mainUserFragment"
         android:name="com.yhjoo.dochef.ui.fragments.MainUserFragment"
         android:label="MainUserFragment"
-        tools:layout="@layout/f_main_user">
+        tools:layout="@layout/main_user_fragment">
         <action
             android:id="@+id/action_mainUserFragment_to_recipeMyListActivity"
             app:destination="@id/recipeMyListActivity" />

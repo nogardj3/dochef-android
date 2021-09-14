@@ -27,8 +27,8 @@ import com.yhjoo.dochef.model.UserDetail
 import com.yhjoo.dochef.databinding.AHomeBinding
 import com.yhjoo.dochef.ui.adapter.PostListAdapter
 import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.*
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

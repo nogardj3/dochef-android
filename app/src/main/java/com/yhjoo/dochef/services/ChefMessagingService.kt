@@ -11,7 +11,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.db.NotificationDatabase
 import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.ui.activities.NotificationActivity
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

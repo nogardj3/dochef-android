@@ -4,7 +4,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.Comment
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.Utils
 
 class CommentListAdapter(private var mUserID: String) :
     BaseQuickAdapter<Comment, BaseViewHolder>(R.layout.li_comment) {

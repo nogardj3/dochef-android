@@ -7,20 +7,20 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.MainUserFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.databinding.FMainUserBinding
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeMyListActivity
 import com.yhjoo.dochef.ui.activities.SettingActivity
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.UserService
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.UserService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainUserFragment : Fragment() {
-    private lateinit var binding: FMainUserBinding
+    private lateinit var binding: MainUserFragmentBinding
     private lateinit var userService: UserService
     private lateinit var userDetailInfo: UserDetail
     private lateinit var userID: String
@@ -30,7 +30,7 @@ class MainUserFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FMainUserBinding.inflate(inflater, container, false)
+        binding = MainUserFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         userService = RetrofitBuilder.create(requireContext(), UserService::class.java)
@@ -92,7 +92,7 @@ class MainUserFragment : Fragment() {
         }
     }
 
-    private fun settingUserDetail()  =         CoroutineScope(Dispatchers.Main).launch {
+    private fun settingUserDetail() = CoroutineScope(Dispatchers.Main).launch {
         runCatching {
             val res1 = userService.getUserDetail(userID)
             userDetailInfo = res1.body()!!

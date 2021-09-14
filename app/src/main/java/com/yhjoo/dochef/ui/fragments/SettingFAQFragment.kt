@@ -15,8 +15,8 @@ import com.yhjoo.dochef.model.ExpandContents
 import com.yhjoo.dochef.model.ExpandTitle
 import com.yhjoo.dochef.model.FAQ
 import com.yhjoo.dochef.ui.adapter.FAQListAdapter
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

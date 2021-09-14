@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.utils
+package com.yhjoo.dochef.utilities
 
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.model.*

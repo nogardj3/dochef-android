@@ -1,10 +1,7 @@
-package com.yhjoo.dochef.utils
+package com.yhjoo.dochef.utilities
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
-import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.yhjoo.dochef.R
 

@@ -10,14 +10,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.MultiItemRecipe
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.databinding.FMainMyrecipeBinding
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         Recommend multi adapter 변경
     */
 
-    private lateinit var binding: FMainMyrecipeBinding
+    private lateinit var binding: MainMyrecipeFragmentBinding
     private lateinit var recipeService: RecipeService
     private lateinit var recipeMultiAdapter: RecipeMultiAdapter
     private lateinit var recommendTags: Array<String>
@@ -41,7 +41,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FMainMyrecipeBinding.inflate(inflater, container, false)
+        binding = MainMyrecipeFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)

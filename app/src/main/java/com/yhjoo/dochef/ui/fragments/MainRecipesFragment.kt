@@ -10,14 +10,14 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.MultiItemRecipe
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.databinding.FMainRecipesBinding
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,7 +37,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         }
     }
 
-    private lateinit var binding: FMainRecipesBinding
+    private lateinit var binding: MainRecipesFragmentBinding
     private lateinit var recipeService: RecipeService
     private lateinit var recipeMultiAdapter: RecipeMultiAdapter
     private lateinit var recommendTags: Array<String>
@@ -49,7 +49,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FMainRecipesBinding.inflate(inflater, container, false)
+        binding = MainRecipesFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
@@ -112,7 +112,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         }
     }
 
-    private fun getRecipeList(sort: Int) =         CoroutineScope(Dispatchers.Main).launch {
+    private fun getRecipeList(sort: Int) = CoroutineScope(Dispatchers.Main).launch {
         runCatching {
             var sortmode = ""
             when (sort) {

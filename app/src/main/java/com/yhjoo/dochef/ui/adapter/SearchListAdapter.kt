@@ -13,7 +13,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.SearchResult
 import com.yhjoo.dochef.model.UserBrief
-import com.yhjoo.dochef.utils.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 
 class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: Int) :
     BaseMultiItemQuickAdapter<SearchResult<*>?, BaseViewHolder?>(data) {

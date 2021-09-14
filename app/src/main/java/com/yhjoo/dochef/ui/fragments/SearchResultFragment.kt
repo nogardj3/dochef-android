@@ -16,10 +16,10 @@ import com.yhjoo.dochef.databinding.FResultBinding
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.SearchListAdapter
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
-import com.yhjoo.dochef.utils.RetrofitServices.UserService
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.RetrofitServices.UserService
+import com.yhjoo.dochef.utilities.Utils
 import java.util.*
 
 class SearchResultFragment : Fragment() {

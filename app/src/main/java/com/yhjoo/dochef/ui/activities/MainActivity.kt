@@ -11,7 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.MarginPageTransformer
-import androidx.viewpager2.widget.ViewPager2
 import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayout
@@ -22,10 +21,9 @@ import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.AMainBinding
+import com.yhjoo.dochef.databinding.MainActivityBinding
 import com.yhjoo.dochef.ui.fragments.*
-import com.yhjoo.dochef.utils.Utils
-import java.util.*
+import com.yhjoo.dochef.utilities.Utils
 
 class MainActivity : BaseActivity() {
     private val tabIcons = intArrayOf(
@@ -33,7 +31,7 @@ class MainActivity : BaseActivity() {
         R.drawable.ic_favorite_white, R.drawable.ic_article_white, R.drawable.ic_person_white
     )
 
-    val binding: AMainBinding by lazy { AMainBinding.inflate(layoutInflater) }
+    val binding: MainActivityBinding by lazy { MainActivityBinding.inflate(layoutInflater) }
     private lateinit var mFirebaseAnalytics: FirebaseAnalytics
     private lateinit var mainFragmentAdapter: FragmentStateAdapter
 
@@ -225,18 +223,19 @@ class MainActivity : BaseActivity() {
 //        (mainFragmentAdapter.getItem(1) as MainRecipesFragment).changeSortMode(sort)
     }
 
-    class MainFragmentAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+    class MainFragmentAdapter(fragmentActivity: FragmentActivity) :
+        FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int {
             return 5
         }
 
         override fun createFragment(position: Int): Fragment {
-            return when (position){
-                0-> MainInitFragment()
-                1-> MainRecipesFragment()
-                2-> MainMyRecipeFragment()
-                3-> MainTimelineFragment()
-                4-> MainUserFragment()
+            return when (position) {
+                0 -> MainInitFragment()
+                1 -> MainRecipesFragment()
+                2 -> MainMyRecipeFragment()
+                3 -> MainTimelineFragment()
+                4 -> MainUserFragment()
                 else -> throw Throwable("limit ")
             }
         }

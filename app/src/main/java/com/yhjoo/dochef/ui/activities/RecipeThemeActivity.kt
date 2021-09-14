@@ -13,8 +13,8 @@ import com.yhjoo.dochef.model.MultiItemTheme
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipethemeBinding
 import com.yhjoo.dochef.ui.adapter.RecipeMultiThemeAdapter
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

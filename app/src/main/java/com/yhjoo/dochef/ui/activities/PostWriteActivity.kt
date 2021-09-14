@@ -15,8 +15,8 @@ import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.APostwriteBinding
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.PostService
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.PostService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

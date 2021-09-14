@@ -6,8 +6,8 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.db.entity.NotificationEntity
-import com.yhjoo.dochef.utils.GlideImageLoadDelegator
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.Utils
 
 class NotificationListAdapter :
     BaseQuickAdapter<NotificationEntity, BaseViewHolder>(R.layout.li_notification) {

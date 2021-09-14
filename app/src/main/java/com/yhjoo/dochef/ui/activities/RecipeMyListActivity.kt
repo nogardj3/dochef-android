@@ -12,8 +12,8 @@ import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.databinding.ARecipelistBinding
 import com.yhjoo.dochef.ui.adapter.RecipeMyListAdapter
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

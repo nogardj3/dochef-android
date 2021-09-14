@@ -15,9 +15,9 @@ import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.databinding.*
 import com.yhjoo.dochef.ui.activities.AccountActivity
 import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.utils.RetrofitBuilder
-import com.yhjoo.dochef.utils.RetrofitServices
-import com.yhjoo.dochef.utils.Utils
+import com.yhjoo.dochef.utilities.RetrofitBuilder
+import com.yhjoo.dochef.utilities.RetrofitServices
+import com.yhjoo.dochef.utilities.Utils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

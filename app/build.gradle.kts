@@ -6,6 +6,7 @@ plugins {
     id ("com.google.firebase.crashlytics")
     id ("kotlin-android")
     id ("org.jetbrains.kotlin.kapt")
+//    id("androidx.navigation.safeargs.kotlin")
 }
 
 val admobAppId: String = gradleLocalProperties(rootDir).getProperty("admobAppId")
@@ -64,11 +65,11 @@ dependencies {
     kapt("androidx.room:room-compiler:2.3.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-    implementation("androidx.preference:preference-ktx:1.1.1")
 
     /* Later
     implementation("androidx.datastore:datastore:1.0.0")

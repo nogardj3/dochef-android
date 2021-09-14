@@ -15,9 +15,9 @@ import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.Review
 import com.yhjoo.dochef.databinding.ARecipedetailBinding
 import com.yhjoo.dochef.ui.adapter.ReviewListAdapter
-import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.utils.RetrofitServices.RecipeService
-import com.yhjoo.dochef.utils.RetrofitServices.ReviewService
+import com.yhjoo.dochef.utilities.*
+import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
+import com.yhjoo.dochef.utilities.RetrofitServices.ReviewService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
