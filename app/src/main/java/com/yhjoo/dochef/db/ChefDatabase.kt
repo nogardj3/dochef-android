@@ -1,9 +1,11 @@
 package com.yhjoo.dochef.db
 
 import android.content.Context
-import androidx.room.*
-import com.yhjoo.dochef.db.entity.NotificationEntity
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.yhjoo.dochef.db.dao.NotificationDao
+import com.yhjoo.dochef.db.entity.NotificationEntity
 
 
 @Database(entities = [NotificationEntity::class],version = 1)

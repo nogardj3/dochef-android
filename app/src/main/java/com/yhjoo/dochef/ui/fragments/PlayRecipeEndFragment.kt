@@ -9,9 +9,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
-import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 import com.yhjoo.dochef.utilities.RetrofitBuilder

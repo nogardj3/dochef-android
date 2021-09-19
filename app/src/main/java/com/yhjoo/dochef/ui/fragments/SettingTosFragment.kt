@@ -33,8 +33,6 @@ class SettingTosFragment : Fragment() {
     }
 
     override fun onResume() {
-        super.onResume()
-
         CoroutineScope(Dispatchers.Main).launch {
             runCatching {
                 if (App.isServerAlive) {
@@ -49,5 +47,7 @@ class SettingTosFragment : Fragment() {
                     RetrofitBuilder.defaultErrorHandler(it)
                 }
         }
+
+        super.onResume()
     }
 }

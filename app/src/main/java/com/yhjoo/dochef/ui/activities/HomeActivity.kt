@@ -20,11 +20,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.AHomeBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.databinding.AHomeBinding
 import com.yhjoo.dochef.ui.adapter.PostListAdapter
 import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.utilities.*

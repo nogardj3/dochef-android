@@ -9,10 +9,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.FResultBinding
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.SearchResult
 import com.yhjoo.dochef.model.UserBrief
-import com.yhjoo.dochef.databinding.FResultBinding
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.adapter.SearchListAdapter

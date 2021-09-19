@@ -2,8 +2,8 @@ package com.yhjoo.dochef.db
 
 import android.content.res.Resources
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.db.entity.NotificationEntity
+import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.utilities.Utils
 import java.util.*
 

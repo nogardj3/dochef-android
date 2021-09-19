@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.ui.activities
 
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment

@@ -8,9 +8,9 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.ARecipelistBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.databinding.ARecipelistBinding
 import com.yhjoo.dochef.ui.adapter.RecipeMyListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService

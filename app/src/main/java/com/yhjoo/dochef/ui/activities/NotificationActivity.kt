@@ -4,13 +4,12 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.db.DataGenerator
-import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.databinding.ANotificationBinding
+import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.db.NotificationDatabase
+import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.ui.adapter.NotificationListAdapter2
 import kotlinx.coroutines.*
-import kotlin.collections.ArrayList
 
 class NotificationActivity : BaseActivity() {
     private val binding: ANotificationBinding by lazy { ANotificationBinding.inflate(layoutInflater) }

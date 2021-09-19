@@ -8,10 +8,10 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.google.android.gms.ads.MobileAds
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.ARecipethemeBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.MultiItemTheme
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.databinding.ARecipethemeBinding
 import com.yhjoo.dochef.ui.adapter.RecipeMultiThemeAdapter
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
