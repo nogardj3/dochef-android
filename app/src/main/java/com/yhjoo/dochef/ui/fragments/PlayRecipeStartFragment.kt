@@ -24,34 +24,36 @@ class PlayRecipeStartFragment : Fragment() {
 
         val recipeDetail = requireArguments().getSerializable("item") as RecipeDetail
 
-        GlideImageLoadDelegator.loadRecipeImage(
-            requireContext(),
-            recipeDetail.recipeImg,
-            binding.playrecipeStartImg
-        )
+        binding.apply {
+            GlideImageLoadDelegator.loadRecipeImage(
+                requireContext(),
+                recipeDetail.recipeImg,
+                playrecipeStartImg
+            )
 
-        binding.playrecipeStartTitle.text = recipeDetail.recipeName
-        binding.playrecipeStartContents.text = recipeDetail.contents
+            playrecipeStartTitle.text = recipeDetail.recipeName
+            playrecipeStartContents.text = recipeDetail.contents
 
-        binding.playrecipeStartTags.removeAllViews()
-        for (tag in recipeDetail.tags) {
-            val tagcontainer = layoutInflater.inflate(R.layout.v_tag_recipe, null) as LinearLayout
-            val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_recipe_text)
-            tagview.text = "#$tag"
-            binding.playrecipeStartTags.addView(tagcontainer)
-        }
+            playrecipeStartTags.removeAllViews()
+            for (tag in recipeDetail.tags) {
+                val tagcontainer = layoutInflater.inflate(R.layout.v_tag_recipe, null) as LinearLayout
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_recipe_text)
+                tagview.text = "#$tag"
+                playrecipeStartTags.addView(tagcontainer)
+            }
 
-        binding.playrecipeStartIngredients.removeAllViews()
-        for (ingredient in recipeDetail.ingredients) {
-            val ingredientContainer =
-                layoutInflater.inflate(R.layout.v_ingredient_play,binding.playrecipeStartIngredients, false) as ConstraintLayout
-            val ingredientName: AppCompatTextView =
-                ingredientContainer.findViewById(R.id.v_ingredientplay_name)
-            ingredientName.text = ingredient.name
-            val ingredientAmount: AppCompatTextView =
-                ingredientContainer.findViewById(R.id.v_ingredientplay_amount)
-            ingredientAmount.text = ingredient.amount
-            binding.playrecipeStartIngredients.addView(ingredientContainer)
+            playrecipeStartIngredients.removeAllViews()
+            for (ingredient in recipeDetail.ingredients) {
+                val ingredientContainer =
+                    layoutInflater.inflate(R.layout.v_ingredient_play,playrecipeStartIngredients, false) as ConstraintLayout
+                val ingredientName: AppCompatTextView =
+                    ingredientContainer.findViewById(R.id.v_ingredientplay_name)
+                ingredientName.text = ingredient.name
+                val ingredientAmount: AppCompatTextView =
+                    ingredientContainer.findViewById(R.id.v_ingredientplay_amount)
+                ingredientAmount.text = ingredient.amount
+                playrecipeStartIngredients.addView(ingredientContainer)
+            }
         }
 
         return view

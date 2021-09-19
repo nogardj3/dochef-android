@@ -84,9 +84,11 @@ class MainInitFragment : Fragment() {
                 }
                 setNewData(recipeList)
             }
-            mainRecommendRecyclerview.layoutManager =
-                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            mainRecommendRecyclerview.adapter = recipeHorizontalAdapter
+            mainRecommendRecyclerview.apply{
+                layoutManager =
+                    LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                adapter = recipeHorizontalAdapter
+            }
         }
 
         if (App.isServerAlive)

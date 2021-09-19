@@ -73,8 +73,10 @@ class RecipeThemeActivity : BaseActivity() {
                         }
                     }
             }
-            recipethemeRecycler.layoutManager = GridLayoutManager(this@RecipeThemeActivity, 2)
-            recipethemeRecycler.adapter = recipeMultiThemeAdapter
+            recipethemeRecycler.apply{
+                layoutManager = GridLayoutManager(this@RecipeThemeActivity, 2)
+                adapter = recipeMultiThemeAdapter
+            }
         }
     }
 

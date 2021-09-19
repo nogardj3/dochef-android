@@ -98,36 +98,42 @@ class HomeActivity : BaseActivity() {
             currentUserID = intent.getStringExtra("userID")
         }
 
-        recipeHorizontalHomeAdapter = RecipeHorizontalHomeAdapter(currentUserID)
-        recipeHorizontalHomeAdapter.setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
-            val intent = Intent(this@HomeActivity, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", recipeList[position].recipeID)
-            startActivity(intent)
-        }
-
         binding.apply {
-            homeRecipeRecycler.layoutManager =
-                LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
-            homeRecipeRecycler.adapter = recipeHorizontalHomeAdapter
-
-            postListAdapter = PostListAdapter()
-            postListAdapter.setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
-                val intent = Intent(this@HomeActivity, PostDetailActivity::class.java)
-                    .putExtra("postID", postList[position].postID)
-                startActivity(intent)
+            recipeHorizontalHomeAdapter = RecipeHorizontalHomeAdapter(currentUserID).apply {
+                setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
+                    val intent = Intent(this@HomeActivity, RecipeDetailActivity::class.java)
+                        .putExtra("recipeID", recipeList[position].recipeID)
+                    startActivity(intent)
+                }
             }
 
-            binding.homePostRecycler.layoutManager =
-                object : LinearLayoutManager(this@HomeActivity) {
-                    override fun canScrollHorizontally(): Boolean {
-                        return false
-                    }
+            homeRecipeRecycler.apply{
+                layoutManager =
+                    LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
+                adapter = recipeHorizontalHomeAdapter
+            }
 
-                    override fun canScrollVertically(): Boolean {
-                        return false
-                    }
+            postListAdapter = PostListAdapter().apply{
+                setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
+                    val intent = Intent(this@HomeActivity, PostDetailActivity::class.java)
+                        .putExtra("postID", postList[position].postID)
+                    startActivity(intent)
                 }
-            binding.homePostRecycler.adapter = postListAdapter
+            }
+
+            homePostRecycler.apply{
+                layoutManager =
+                    object : LinearLayoutManager(this@HomeActivity) {
+                        override fun canScrollHorizontally(): Boolean {
+                            return false
+                        }
+
+                        override fun canScrollVertically(): Boolean {
+                            return false
+                        }
+                    }
+                adapter = postListAdapter
+            }
         }
 
         if (App.isServerAlive) {
@@ -254,14 +260,18 @@ class HomeActivity : BaseActivity() {
                 postList = res3.body()!!
                 setUserInfo()
 
-                recipeHorizontalHomeAdapter.setNewData(recipeList)
-                recipeHorizontalHomeAdapter.setEmptyView(
-                    R.layout.rv_empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
-                )
-                postListAdapter.setNewData(postList)
-                postListAdapter.setEmptyView(
-                    R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
-                )
+                recipeHorizontalHomeAdapter.apply{
+                    setNewData(recipeList)
+                    setEmptyView(
+                        R.layout.rv_empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
+                    )
+                }
+                postListAdapter.apply{
+                    setNewData(postList)
+                    setEmptyView(
+                        R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
+                    )
+                }
             }
                 .onSuccess { }
                 .onFailure {
@@ -271,37 +281,38 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun setUserInfo() {
-        GlideImageLoadDelegator.loadUserImage(this, userDetailInfo.userImg, binding.homeUserimg)
+        binding.apply{
+            GlideImageLoadDelegator.loadUserImage(this@HomeActivity, userDetailInfo.userImg, homeUserimg)
+            homeToolbar.title = userDetailInfo.nickname
+            homeNickname.text = userDetailInfo.nickname
+            homeProfiletext.text = userDetailInfo.profileText
+            homeRecipecount.text = userDetailInfo.recipeCount.toString()
+            homeFollowercount.text = userDetailInfo.followerCount.toString()
+            homeFollowingcount.text = userDetailInfo.followingCount.toString()
+            homeFollowBtn.visibility =
+                if (currentMode == UIMODE.OTHERS) View.VISIBLE else View.GONE
 
-        binding.homeToolbar.title = userDetailInfo.nickname
-        binding.homeNickname.text = userDetailInfo.nickname
-        binding.homeProfiletext.text = userDetailInfo.profileText
-        binding.homeRecipecount.text = userDetailInfo.recipeCount.toString()
-        binding.homeFollowercount.text = userDetailInfo.followerCount.toString()
-        binding.homeFollowingcount.text = userDetailInfo.followingCount.toString()
-        binding.homeFollowBtn.visibility =
-            if (currentMode == UIMODE.OTHERS) View.VISIBLE else View.GONE
+            homeUserimgRevise.setOnClickListener { reviseProfileImage() }
+            homeNicknameRevise.setOnClickListener { clickReviseNickname() }
+            homeProfiletextRevise.setOnClickListener { clickReviseContents() }
 
-        binding.homeUserimgRevise.setOnClickListener { reviseProfileImage() }
-        binding.homeNicknameRevise.setOnClickListener { clickReviseNickname() }
-        binding.homeProfiletextRevise.setOnClickListener { clickReviseContents() }
-
-        binding.homeRecipewrapper.setOnClickListener {
-            val intent = Intent(this@HomeActivity, RecipeMyListActivity::class.java)
-                .putExtra("userID", userDetailInfo.userID)
-            startActivity(intent)
-        }
-        binding.homeFollowerwrapper.setOnClickListener {
-            val intent = Intent(this@HomeActivity, FollowListActivity::class.java)
-                .putExtra("MODE", FollowListActivity.UIMODE.FOLLOWER)
-                .putExtra("userID", userDetailInfo.userID)
-            startActivity(intent)
-        }
-        binding.homeFollowingwrapper.setOnClickListener {
-            val intent = Intent(this@HomeActivity, FollowListActivity::class.java)
-                .putExtra("MODE", FollowListActivity.UIMODE.FOLLOWING)
-                .putExtra("userID", userDetailInfo.userID)
-            startActivity(intent)
+            homeRecipewrapper.setOnClickListener {
+                val intent = Intent(this@HomeActivity, RecipeMyListActivity::class.java)
+                    .putExtra("userID", userDetailInfo.userID)
+                startActivity(intent)
+            }
+            homeFollowerwrapper.setOnClickListener {
+                val intent = Intent(this@HomeActivity, FollowListActivity::class.java)
+                    .putExtra("MODE", FollowListActivity.UIMODE.FOLLOWER)
+                    .putExtra("userID", userDetailInfo.userID)
+                startActivity(intent)
+            }
+            homeFollowingwrapper.setOnClickListener {
+                val intent = Intent(this@HomeActivity, FollowListActivity::class.java)
+                    .putExtra("MODE", FollowListActivity.UIMODE.FOLLOWING)
+                    .putExtra("userID", userDetailInfo.userID)
+                startActivity(intent)
+            }
         }
     }
 

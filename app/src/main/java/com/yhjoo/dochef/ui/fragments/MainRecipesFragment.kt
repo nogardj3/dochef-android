@@ -55,8 +55,10 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
 
         binding.apply {
-            fRecipeSwipe.setOnRefreshListener(this@MainRecipesFragment)
-            fRecipeSwipe.setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
+            fRecipeSwipe.apply{
+                setOnRefreshListener(this@MainRecipesFragment)
+                setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
+            }
             recipeMultiAdapter = RecipeMultiAdapter(recipeListItems).apply {
                 setEmptyView(
                     R.layout.rv_loading,
@@ -78,8 +80,10 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
                     }
                 }
             }
-            fRecipeRecycler.layoutManager = LinearLayoutManager(requireContext())
-            fRecipeRecycler.adapter = recipeMultiAdapter
+            fRecipeRecycler.apply{
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = recipeMultiAdapter
+            }
 
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
@@ -147,11 +151,13 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
 
     fun changeSortMode(sort: Int) {
         if (currentMode != sort) {
-            recipeMultiAdapter.setNewData(ArrayList())
-            recipeMultiAdapter.setEmptyView(
-                R.layout.rv_loading,
-                binding.fRecipeRecycler.parent as ViewGroup
-            )
+            recipeMultiAdapter.apply{
+                setNewData(ArrayList())
+                setEmptyView(
+                    R.layout.rv_loading,
+                    binding.fRecipeRecycler.parent as ViewGroup
+                )
+            }
             currentMode = sort
             getRecipeList(currentMode)
         }

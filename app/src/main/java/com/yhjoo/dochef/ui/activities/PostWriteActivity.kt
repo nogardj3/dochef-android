@@ -9,7 +9,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import androidx.core.app.ActivityCompat
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView

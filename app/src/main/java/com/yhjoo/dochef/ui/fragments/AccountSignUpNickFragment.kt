@@ -57,27 +57,33 @@ class AccountSignUpNickFragment : Fragment() {
             RetrofitBuilder.create(requireContext(), RetrofitServices.AccountService::class.java)
 
         binding.apply {
-            accountSignupnickNicknameEdittext.textChanged {
-                binding.accountSignupnickNicknameLayout.error = null
-            }
-            accountSignupnickNicknameEdittext.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (Utils.pwValidation(binding.accountSignupnickNicknameEdittext.text.toString()) == Utils.PWValidate.LENGTH) {
-                        binding.accountSignupnickNicknameLayout.error =
-                            "닉네임 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요."
-                    } else if (Utils.pwValidation(binding.accountSignupnickNicknameEdittext.text.toString()) == Utils.PWValidate.INVALID) {
-                        binding.accountSignupnickNicknameLayout.error =
-                            "닉네임 형식을 확인 해 주세요. 숫자, 알파벳 대소문자, 한글만 사용가능합니다."
-                    } else {
-                        binding.accountSignupnickNicknameLayout.error = null
-                        (requireActivity() as BaseActivity).hideKeyboard(binding.accountSignupnickNicknameLayout)
-                    }
-                    true
-                } else
-                    false
+            signupnickNicknameEdittext.apply {
+                textChanged {
+                    signupnickNicknameLayout.error = null
+                }
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        when {
+                            Utils.pwValidation(signupnickNicknameEdittext.text.toString()) == Utils.PWValidate.LENGTH ->
+                                signupnickNicknameLayout.error =
+                                    "닉네임 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요."
+                            Utils.pwValidation(signupnickNicknameEdittext.text.toString()) == Utils.PWValidate.INVALID ->
+                                signupnickNicknameLayout.error =
+                                    "닉네임 형식을 확인 해 주세요. 숫자, 알파벳 대소문자, 한글만 사용가능합니다."
+                            else -> {
+                                signupnickNicknameLayout.error = null
+                                (requireActivity() as BaseActivity).hideKeyboard(
+                                    signupnickNicknameLayout
+                                )
+                            }
+                        }
+                        true
+                    } else
+                        false
+                }
             }
 
-            accountSignupnickOk.setOnClickListener { signUpWithEmailPW() }
+            signupnickOk.setOnClickListener { signUpWithEmailPW() }
         }
 
         idToken = arguments?.get("token") as String
@@ -87,10 +93,10 @@ class AccountSignUpNickFragment : Fragment() {
 
 
     private fun signUpWithEmailPW() {
-        val nickname = binding.accountSignupnickNicknameEdittext.text.toString()
+        val nickname = binding.signupnickNicknameEdittext.text.toString()
 
         if (Utils.nicknameValidate(nickname) != Utils.EmailValidate.VALID)
-            binding.accountSignupnickNicknameLayout.requestFocus()
+            binding.signupnickNicknameLayout.requestFocus()
         else {
             (requireActivity() as BaseActivity).progressON(requireActivity())
             CoroutineScope(Dispatchers.Main).launch {

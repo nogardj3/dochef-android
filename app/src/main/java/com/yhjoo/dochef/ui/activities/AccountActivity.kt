@@ -17,11 +17,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.databinding.AccountActivityBinding
+import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.AccountService
-import com.yhjoo.dochef.utilities.Utils.getSharedPreferences
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,7 +33,7 @@ class AccountActivity : BaseActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var accountService: AccountService
     private lateinit var fcmToken: String
-    private lateinit var navController:NavController
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,24 +68,7 @@ class AccountActivity : BaseActivity() {
         navController = navHostFragment.navController
     }
 
-    override fun onStart() {
-        super.onStart()
-        val bundle = Bundle().apply {
-            putString(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_signin))
-            putString(
-                FirebaseAnalytics.Param.ITEM_NAME,
-                getString(R.string.analytics_name_signin)
-            )
-            putString(
-                FirebaseAnalytics.Param.CONTENT_TYPE,
-                getString(R.string.analytics_type_text)
-            )
-        }
-
-        firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
-    }
-
-    fun checkUserInfo(idToken: String, action:Int) {
+    fun checkUserInfo(idToken: String, action: Int) {
         CoroutineScope(Dispatchers.Main).launch {
             runCatching {
                 accountService.checkUser(idToken, firebaseAuth.uid!!, fcmToken)
@@ -94,7 +76,7 @@ class AccountActivity : BaseActivity() {
                 if (it.code() == 409) {
                     App.showToast("닉네임을 입력해주세요.")
                     val bundle = bundleOf("token" to idToken)
-                    navController.navigate(action,bundle)
+                    navController.navigate(action, bundle)
                     progressOFF()
                 } else startMain(it.body()!!)
             }.onFailure {
@@ -105,7 +87,8 @@ class AccountActivity : BaseActivity() {
     }
 
     fun startMain(userinfo: UserBrief) {
-        getSharedPreferences(this).edit {
+        Utils.log(userinfo.toString())
+        Utils.getSharedPreferences(this).edit {
             putBoolean(getString(R.string.SP_ACTIVATEDDEVICE), true)
             putString(getString(R.string.SP_USERINFO), Gson().toJson(userinfo))
             apply()
@@ -124,8 +107,6 @@ class AccountActivity : BaseActivity() {
         }
 
         firebaseAnalytics.logEvent(FirebaseAnalytics.Event.LOGIN, bundle)
-
-        Utils.log(userinfo.toString())
 
         startActivity(Intent(this, MainActivity::class.java))
         finish()

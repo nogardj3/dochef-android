@@ -18,8 +18,8 @@ import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.databinding.*
+import com.yhjoo.dochef.model.*
 import com.yhjoo.dochef.ui.activities.AccountActivity
 import com.yhjoo.dochef.ui.activities.BaseActivity
 import com.yhjoo.dochef.utilities.RetrofitBuilder
@@ -50,8 +50,11 @@ class AccountSignInFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(
             requireActivity(),
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id
-                ))
+                .requestIdToken(
+                    getString(
+                        R.string.default_web_client_id
+                    )
+                )
                 .requestEmail()
                 .build()
         )
@@ -66,55 +69,64 @@ class AccountSignInFragment : Fragment() {
                 Utils.log(token.toString())
                 fcmToken = token!!
             }
-        accountService =
-            RetrofitBuilder.create(requireContext(), RetrofitServices.AccountService::class.java)
+        accountService = RetrofitBuilder.create(
+            requireContext(),
+            RetrofitServices.AccountService::class.java
+        )
 
         binding.apply {
-            accountSigninEmailEdittext.textChanged {
-                binding.accountSigninEmailLayout.error = null
+            signinEmailEdittext.apply{
+                textChanged {
+                    signinEmailLayout.error = null
+                }
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        if (Utils.emailValidation(text.toString()) == Utils.EmailValidate.INVALID) {
+                            signinEmailLayout.error = "이메일 형식이 올바르지 않습니다."
+                        } else {
+                            signinEmailLayout.error = null
+                            (requireActivity() as BaseActivity).hideKeyboard(signinEmailLayout)
+                        }
+                        true
+                    } else
+                        false
+                }
             }
-            binding.accountSigninEmailEdittext.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (Utils.emailValidation(binding.accountSigninEmailEdittext.text.toString()) == Utils.EmailValidate.INVALID) {
-                        binding.accountSigninEmailLayout.error = "이메일 형식이 올바르지 않습니다."
-                    } else {
-                        binding.accountSigninEmailLayout.error = null
-                        (requireActivity() as BaseActivity).hideKeyboard(binding.accountSigninEmailLayout)
-                    }
-                    true
-                } else
-                    false
+            signinPasswordEdittext.apply{
+                textChanged {
+                    error = null
+                }
+                setOnEditorActionListener { _, actionId, _ ->
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        when {
+                            Utils.pwValidation(signinPasswordEdittext.text.toString()) == Utils.PWValidate.LENGTH ->
+                                signinPasswordLayout.error =
+                                    "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
+                            Utils.pwValidation(signinPasswordEdittext.text.toString()) == Utils.PWValidate.INVALID ->
+                                signinPasswordLayout.error =
+                                    "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
+                            else -> {
+                                signinPasswordLayout.error = null
+                                (requireActivity() as BaseActivity).hideKeyboard(signinPasswordLayout)
+                            }
+                        }
+                        true
+                    } else
+                        false
+                }
             }
 
-            accountSigninPasswordEdittext.textChanged {
-                binding.accountSigninPasswordLayout.error = null
-            }
-            accountSigninPasswordEdittext.setOnEditorActionListener { v, actionId, event ->
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    if (Utils.pwValidation(binding.accountSigninPasswordEdittext.text.toString()) == Utils.PWValidate.LENGTH) {
-                        binding.accountSigninPasswordLayout.error =
-                            "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
-                    } else if (Utils.pwValidation(binding.accountSigninPasswordEdittext.text.toString()) == Utils.PWValidate.INVALID) {
-                        binding.accountSigninPasswordLayout.error =
-                            "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
-                    } else {
-                        binding.accountSigninPasswordLayout.error = null
-                        (requireActivity() as BaseActivity).hideKeyboard(binding.accountSigninPasswordLayout)
-                    }
-                    true
-                } else
-                    false
-            }
-
-            accountSigninOk.setOnClickListener { signInWithEmailPW() }
-            accountSigninGoogle.setOnClickListener {
+            signinOk.setOnClickListener { signInWithEmailPW() }
+            signinGoogle.setOnClickListener {
                 startActivityForResult(
                     googleSignInClient.signInIntent,
                     CODE.RC_SIGN_IN
                 )
             }
-            accountSigninSignup.setOnClickListener { findNavController().navigate(R.id.action_accountSignInFragment_to_accountSignUpFragment) }
-            accountSigninFindpw.setOnClickListener { findNavController().navigate(R.id.action_accountSignInFragment_to_accountFindPWFragment) }
+            signinSignupBtn.setOnClickListener {
+                findNavController().navigate(R.id.action_accountSignInFragment_to_accountSignUpFragment) }
+            signinFindpwBtn.setOnClickListener {
+                findNavController().navigate(R.id.action_accountSignInFragment_to_accountFindPWFragment) }
         }
 
         return view
@@ -140,55 +152,60 @@ class AccountSignInFragment : Fragment() {
     }
 
     private fun signInWithEmailPW() {
-        val signinEmail = binding.accountSigninEmailEdittext.text.toString()
-        val signinPw = binding.accountSigninPasswordEdittext.text.toString()
+        val signinEmail = binding.signinEmailEdittext.text.toString()
+        val signinPw = binding.signinPasswordEdittext.text.toString()
 
-        if (Utils.emailValidation(signinEmail) != Utils.EmailValidate.VALID)
-            binding.accountSigninEmailLayout.requestFocus()
-        else if (Utils.pwValidation(signinPw) != Utils.PWValidate.VALID)
-            binding.accountSigninPasswordEdittext.requestFocus()
-        else
-            firebaseAuth.signInWithEmailAndPassword(signinEmail, signinPw)
-                .addOnCompleteListener { authTask: Task<AuthResult> ->
-                    if (!authTask.isSuccessful) {
-                        val e = authTask.exception
-                        if (e is FirebaseAuthException) {
-                            when (e.errorCode) {
-                                "ERROR_USER_NOT_FOUND" ->
-                                    App.showToast("존재하지 않는 이메일입니다. 가입 후 사용해 주세요.")
-                                "ERROR_WRONG_PASSWORD" ->
-                                    App.showToast("비밀번호가 올바르지 않습니다.")
-                                "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" ->
-                                    App.showToast(
-                                        "해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오."
-                                    )
-                                else ->
-                                    App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
-                            }
-                        } else App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
-                        (requireActivity() as BaseActivity).progressOFF()
-                    } else {
-                        authTask.result!!.user!!.getIdToken(true)
-                            .addOnCompleteListener { task: Task<GetTokenResult> ->
-                                if (!task.isSuccessful) {
-                                    (requireActivity() as BaseActivity).progressOFF()
-                                    App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요")
-                                } else {
-                                    idToken = task.result!!.token!!
-                                    (requireActivity() as AccountActivity).checkUserInfo(
-                                        idToken,
-                                        R.id.action_accountSignInFragment_to_accountSignUpNickFragment
-                                    )
+        when {
+            Utils.emailValidation(signinEmail) != Utils.EmailValidate.VALID ->
+                binding.signinEmailLayout.requestFocus()
+            Utils.pwValidation(signinPw) != Utils.PWValidate.VALID ->
+                binding.signinPasswordEdittext.requestFocus()
+            else -> {
+                firebaseAuth
+                    .signInWithEmailAndPassword(signinEmail, signinPw)
+                    .addOnCompleteListener { authTask: Task<AuthResult> ->
+                        if (!authTask.isSuccessful) {
+                            val e = authTask.exception
+                            if (e is FirebaseAuthException) {
+                                when (e.errorCode) {
+                                    "ERROR_USER_NOT_FOUND" ->
+                                        App.showToast("존재하지 않는 이메일입니다. 가입 후 사용해 주세요.")
+                                    "ERROR_WRONG_PASSWORD" ->
+                                        App.showToast("비밀번호가 올바르지 않습니다.")
+                                    "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" ->
+                                        App.showToast(
+                                            "해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오."
+                                        )
+                                    else ->
+                                        App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
                                 }
-                            }
+                            } else App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
+                            (requireActivity() as BaseActivity).progressOFF()
+                        } else {
+                            authTask.result!!.user!!.getIdToken(true)
+                                .addOnCompleteListener { task: Task<GetTokenResult> ->
+                                    if (!task.isSuccessful) {
+                                        (requireActivity() as BaseActivity).progressOFF()
+                                        App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요")
+                                    } else {
+                                        idToken = task.result!!.token!!
+                                        (requireActivity() as AccountActivity).checkUserInfo(
+                                            idToken,
+                                            R.id.action_accountSignInFragment_to_accountSignUpNickFragment
+                                        )
+                                    }
+                                }
+                        }
                     }
-                }
+            }
+        }
     }
 
     private fun signInWithGoogle(googleToken: String) {
         val credential = GoogleAuthProvider.getCredential(googleToken, null)
 
-        firebaseAuth.signInWithCredential(credential)
+        firebaseAuth
+            .signInWithCredential(credential)
             .addOnCompleteListener(requireActivity()) { task: Task<AuthResult?> ->
                 if (task.isSuccessful) {
                     val user = firebaseAuth.currentUser

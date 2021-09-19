@@ -63,9 +63,10 @@ class RecipeMyListActivity : BaseActivity() {
                     }
                 }
             }
-
-            recipelistRecycler.layoutManager = LinearLayoutManager(this@RecipeMyListActivity)
-            recipelistRecycler.adapter = recipeMyListAdapter
+            recipelistRecycler.apply {
+                layoutManager = LinearLayoutManager(this@RecipeMyListActivity)
+                adapter = recipeMyListAdapter
+            }
         }
     }
 
@@ -100,11 +101,13 @@ class RecipeMyListActivity : BaseActivity() {
         runCatching {
             val res1 = recipeService.getRecipeByUserID(userID, "latest")
             recipeList = res1.body()!!
-            recipeMyListAdapter.setNewData(recipeList)
-            recipeMyListAdapter.setEmptyView(
-                R.layout.rv_empty_recipe,
-                binding.recipelistRecycler.parent as ViewGroup
-            )
+            recipeMyListAdapter.apply {
+                setNewData(recipeList)
+                setEmptyView(
+                    R.layout.rv_empty_recipe,
+                    binding.recipelistRecycler.parent as ViewGroup
+                )
+            }
         }
             .onSuccess { }
             .onFailure {

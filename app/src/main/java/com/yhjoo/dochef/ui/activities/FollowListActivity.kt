@@ -7,10 +7,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.AFollowlistBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.databinding.AFollowlistBinding
 import com.yhjoo.dochef.ui.adapter.FollowListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.UserService
@@ -52,7 +52,7 @@ class FollowListActivity : BaseActivity() {
             followlistToolbar.title = if (currentMode == UIMODE.FOLLOWER) "팔로워" else "팔로잉"
 
             followListAdapter = FollowListAdapter(activeUserid).apply {
-                setEmptyView(R.layout.rv_loading, binding.followlistRecycler.parent as ViewGroup)
+                setEmptyView(R.layout.rv_loading, followlistRecycler.parent as ViewGroup)
                 setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
                     Utils.log((adapter.data[position] as UserBrief).userID)
                     val intent = Intent(this@FollowListActivity, HomeActivity::class.java)

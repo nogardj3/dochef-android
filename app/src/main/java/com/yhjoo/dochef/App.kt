@@ -1,15 +1,21 @@
 package com.yhjoo.dochef
 
 import android.app.Application
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.os.Build
 import android.widget.Toast
+import androidx.core.content.edit
+import com.google.android.gms.tasks.Task
+import com.google.firebase.messaging.FirebaseMessaging
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.yhjoo.dochef.utilities.Utils
 
 class App : Application() {
     // TODO
     // 1. RX error Handler
     // 2. 세로 막기
-
 
     companion object {
         var isServerAlive = false
@@ -23,9 +29,10 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
 
-
         Logger.addLogAdapter(AndroidLogAdapter())
         toast = Toast.makeText(this, "Default", Toast.LENGTH_SHORT)
+
+        createNotificationChannel()
 
 //-------- Rxjava 에러
 //        RxJavaPlugins.setErrorHandler { e: Throwable ->
@@ -72,4 +79,31 @@ class App : Application() {
 //        )
     }
 
+
+    private fun createNotificationChannel() {
+        val mSharedPreferences = Utils.getSharedPreferences(this)
+        val channelCreated = mSharedPreferences.getBoolean("channel_created", false)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
+            val channelID = getString(R.string.notification_channel_id)
+            val name = "기본채널"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val mChannel = NotificationChannel(channelID, name, importance)
+            val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(mChannel)
+
+            FirebaseMessaging.getInstance().subscribeToTopic("admin")
+                .addOnCompleteListener { task: Task<Void?> ->
+                    if (!task.isSuccessful) {
+                        task.exception!!.printStackTrace()
+                        Utils.log(task.exception.toString())
+                    }
+                }
+
+            mSharedPreferences.edit {
+                putBoolean("channel_created", true)
+                apply()
+            }
+        }
+    }
 }

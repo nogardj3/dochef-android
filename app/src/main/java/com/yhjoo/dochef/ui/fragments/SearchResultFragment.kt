@@ -51,39 +51,45 @@ class SearchResultFragment : Fragment() {
 
         type = requireArguments().getInt("type")
 
-        searchListAdapter =
-            if (type == VIEWHOLDER.ITEM_USER)
-                SearchListAdapter(
-                    type,
-                    ArrayList(),
-                    R.layout.li_follow
+        binding.apply{
+            searchListAdapter =
+                if (type == VIEWHOLDER.ITEM_USER)
+                    SearchListAdapter(
+                        type,
+                        ArrayList(),
+                        R.layout.li_follow
+                    )
+                else
+                    SearchListAdapter(type, ArrayList(), R.layout.li_recipe_result)
+            searchListAdapter.apply{
+                setEmptyView(
+                    R.layout.rv_search,
+                    binding.resultRecycler.parent as ViewGroup
                 )
-            else
-                SearchListAdapter(type, ArrayList(), R.layout.li_recipe_result)
-        searchListAdapter.setEmptyView(
-            R.layout.rv_search,
-            binding.resultRecycler.parent as ViewGroup
-        )
-        searchListAdapter.setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
-            when (adapter.getItemViewType(position)) {
-                VIEWHOLDER.ITEM_RECIPE_NAME, VIEWHOLDER.ITEM_INGREDIENT, VIEWHOLDER.ITEM_TAG -> {
-                    val intent = Intent(context, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", (adapter.data[position] as Recipe).recipeID)
-                    startActivity(intent)
-                }
-                VIEWHOLDER.ITEM_USER -> {
-                    val intent2 = Intent(context, HomeActivity::class.java)
-                        .putExtra(
-                            "userID",
-                            ((adapter.data[position] as SearchResult<*>).content as UserBrief).userID
-                        )
-                    Utils.log(((adapter.data[position] as SearchResult<*>).content as UserBrief).userID)
-                    startActivity(intent2)
+                setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
+                    when (adapter.getItemViewType(position)) {
+                        VIEWHOLDER.ITEM_RECIPE_NAME, VIEWHOLDER.ITEM_INGREDIENT, VIEWHOLDER.ITEM_TAG -> {
+                            val intent = Intent(context, RecipeDetailActivity::class.java)
+                                .putExtra("recipeID", (adapter.data[position] as Recipe).recipeID)
+                            startActivity(intent)
+                        }
+                        VIEWHOLDER.ITEM_USER -> {
+                            val intent2 = Intent(context, HomeActivity::class.java)
+                                .putExtra(
+                                    "userID",
+                                    ((adapter.data[position] as SearchResult<*>).content as UserBrief).userID
+                                )
+                            Utils.log(((adapter.data[position] as SearchResult<*>).content as UserBrief).userID)
+                            startActivity(intent2)
+                        }
+                    }
                 }
             }
+            resultRecycler.apply{
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = searchListAdapter
+            }
         }
-        binding.resultRecycler.layoutManager = LinearLayoutManager(this.context)
-        binding.resultRecycler.adapter = searchListAdapter
 
         return view
     }

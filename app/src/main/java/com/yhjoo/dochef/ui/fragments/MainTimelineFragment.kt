@@ -43,13 +43,15 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         )
 
         binding.apply {
-            timelineSwipe.setOnRefreshListener(this@MainTimelineFragment)
-            timelineSwipe.setColorSchemeColors(
-                resources.getColor(
-                    R.color.colorPrimary,
-                    null
+            timelineSwipe.apply{
+                setOnRefreshListener(this@MainTimelineFragment)
+                setColorSchemeColors(
+                    resources.getColor(
+                        R.color.colorPrimary,
+                        null
+                    )
                 )
-            )
+            }
 
             postListAdapter = PostListAdapter().apply {
                 setEmptyView(
@@ -78,8 +80,10 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
                     }
             }
 
-            timelineRecycler.layoutManager = LinearLayoutManager(requireContext())
-            timelineRecycler.adapter = postListAdapter
+            timelineRecycler.apply{
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = postListAdapter
+            }
         }
 
         return view
@@ -101,11 +105,13 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         runCatching {
             val res1 = postService.getPostList()
             postList = res1.body()!!
-            postListAdapter.setNewData(postList)
-            postListAdapter.setEmptyView(
-                R.layout.rv_empty_post,
-                binding.timelineSwipe.parent as ViewGroup
-            )
+            postListAdapter.apply{
+                setNewData(postList)
+                setEmptyView(
+                    R.layout.rv_empty_post,
+                    binding.timelineSwipe.parent as ViewGroup
+                )
+            }
             Handler().postDelayed({ binding.timelineSwipe.isRefreshing = false }, 1000)
         }
             .onSuccess { }

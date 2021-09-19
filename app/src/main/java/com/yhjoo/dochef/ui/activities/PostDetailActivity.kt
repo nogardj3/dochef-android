@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
@@ -19,10 +18,10 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Comment
 import com.yhjoo.dochef.model.Post
-import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.ui.adapter.CommentListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.CommentService
@@ -88,7 +87,7 @@ class PostDetailActivity : BaseActivity() {
             powerMenu.showAsAnchorCenter(view)
         }
 
-        binding.apply{
+        binding.apply {
             postCommentRecycler.layoutManager = LinearLayoutManager(this@PostDetailActivity)
             postCommentRecycler.adapter = commentListAdapter
             postCommentEdittext.addTextChangedListener(object : TextWatcher {
@@ -106,9 +105,9 @@ class PostDetailActivity : BaseActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable?) {
-                    if(binding.postCommentEdittext.lineCount > 3 || s.toString().length >= 120){
+                    if (binding.postCommentEdittext.lineCount > 3 || s.toString().length >= 120) {
                         binding.postCommentEdittext.setText(prevText)
-                        binding.postCommentEdittext.setSelection(prevText.length -1)
+                        binding.postCommentEdittext.setSelection(prevText.length - 1)
                     }
                 }
             })
@@ -277,8 +276,7 @@ class PostDetailActivity : BaseActivity() {
                     binding.postCommentEdittext.text.toString(), System.currentTimeMillis()
                 )
 
-                val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(binding.postCommentEdittext.windowToken, 0)
+                hideKeyboard(binding.postCommentEdittext)
                 binding.postCommentEdittext.setText("")
                 loadData()
             } else App.showToast("댓글을 입력 해 주세요")

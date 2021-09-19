@@ -24,7 +24,8 @@ class NotificationActivity : BaseActivity() {
         setSupportActionBar(binding.notificationToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        notificationListAdapter = NotificationListAdapter2(notifications).apply {
+        binding.apply {
+            notificationListAdapter = NotificationListAdapter2(notifications).apply {
 //            setEmptyView(
 //                R.layout.rv_loading,
 //                binding.notificationRecycler.parent as ViewGroup
@@ -56,11 +57,11 @@ class NotificationActivity : BaseActivity() {
 //                    }
 //                }
 //            }
-        }
+            }
 
-        binding.notificationRecycler.layoutManager = LinearLayoutManager(this)
-        binding.notificationRecycler.adapter = notificationListAdapter
-//        notificationListAdapter.setNewData(notifications)
+            notificationRecycler.layoutManager = LinearLayoutManager(this@NotificationActivity)
+            notificationRecycler.adapter = notificationListAdapter
+        }
     }
 
     override fun onResume() {

@@ -51,25 +51,27 @@ class RecipeDetailActivity : BaseActivity() {
         userID = Utils.getUserBrief(this).userID
         recipeID = intent.getIntExtra("recipeID", 0)
 
-        reviewListAdapter = ReviewListAdapter().apply {
-            onItemChildClickListener =
-                BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
-                    val intent = Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                        .putExtra("userID", (adapter.data[position] as Review).userID)
-                    startActivity(intent)
-                }
-        }
-        binding.recipedetailReviewRecycler.layoutManager =
-            object : LinearLayoutManager(this) {
-                override fun canScrollHorizontally(): Boolean {
-                    return false
-                }
-
-                override fun canScrollVertically(): Boolean {
-                    return false
-                }
+        binding.apply {
+            reviewListAdapter = ReviewListAdapter().apply {
+                onItemChildClickListener =
+                    BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
+                        val intent = Intent(this@RecipeDetailActivity, HomeActivity::class.java)
+                            .putExtra("userID", (adapter.data[position] as Review).userID)
+                        startActivity(intent)
+                    }
             }
-        binding.recipedetailReviewRecycler.adapter = reviewListAdapter
+            recipedetailReviewRecycler.layoutManager =
+                object : LinearLayoutManager(this@RecipeDetailActivity) {
+                    override fun canScrollHorizontally(): Boolean {
+                        return false
+                    }
+
+                    override fun canScrollVertically(): Boolean {
+                        return false
+                    }
+                }
+            recipedetailReviewRecycler.adapter = reviewListAdapter
+        }
     }
 
     override fun onResume() {
@@ -96,12 +98,15 @@ class RecipeDetailActivity : BaseActivity() {
 
             val res2 = reviewService.getReview(recipeID)
             reviewList = res2.body()!!
+            
             setTopView()
-            reviewListAdapter.setNewData(reviewList)
-            reviewListAdapter.setEmptyView(
-                R.layout.rv_empty_review,
-                binding.recipedetailReviewRecycler.parent as ViewGroup
-            )
+            reviewListAdapter.apply {
+                setNewData(reviewList)
+                setEmptyView(
+                    R.layout.rv_empty_review,
+                    binding.recipedetailReviewRecycler.parent as ViewGroup
+                )
+            }
         }
             .onSuccess { }
             .onFailure {

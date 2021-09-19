@@ -43,13 +43,15 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         userID = Utils.getUserBrief(requireContext()).userID
 
         binding.apply {
-            fMyrecipeSwipe.setOnRefreshListener(this@MainMyRecipeFragment)
-            fMyrecipeSwipe.setColorSchemeColors(
-                resources.getColor(
-                    R.color.colorPrimary,
-                    null
+            fMyrecipeSwipe.apply{
+                setOnRefreshListener(this@MainMyRecipeFragment)
+                setColorSchemeColors(
+                    resources.getColor(
+                        R.color.colorPrimary,
+                        null
+                    )
                 )
-            )
+            }
 
             recipeMultiAdapter = RecipeMultiAdapter(recipeListItems).apply {
                 userid = userID
@@ -67,8 +69,11 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
                     }
                 }
             }
-            fMyrecipeRecycler.layoutManager = LinearLayoutManager(requireContext())
-            fMyrecipeRecycler.adapter = recipeMultiAdapter
+
+            fMyrecipeRecycler.apply{
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = recipeMultiAdapter
+            }
 
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
@@ -123,11 +128,14 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
                     )
                 )
             }
-            recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
-            recipeMultiAdapter.setEmptyView(
-                R.layout.rv_empty_recipe,
-                binding.fMyrecipeRecycler.parent as ViewGroup
-            )
+
+            recipeMultiAdapter.apply{
+                setNewData(recipeListItems as List<MultiItemRecipe?>?)
+                setEmptyView(
+                    R.layout.rv_empty_recipe,
+                    binding.fMyrecipeRecycler.parent as ViewGroup
+                )
+            }
             binding.fMyrecipeSwipe.isRefreshing = false
         }
             .onSuccess { }

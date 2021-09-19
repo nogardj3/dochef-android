@@ -73,9 +73,9 @@ class PlayRecipeItemFragment : Fragment() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable?) {
-                    if (binding.playrecipeEndReviewEdittext.lineCount > 3 || s.toString().length >= 120) {
-                        binding.playrecipeEndReviewEdittext.setText(prevText)
-                        binding.playrecipeEndReviewEdittext.setSelection(prevText.length - 1)
+                    if (playrecipeEndReviewEdittext.lineCount > 3 || s.toString().length >= 120) {
+                        playrecipeEndReviewEdittext.setText(prevText)
+                        playrecipeEndReviewEdittext.setSelection(prevText.length - 1)
                     }
                 }
             })

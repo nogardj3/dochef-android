@@ -41,32 +41,35 @@ class SearchActivity : BaseActivity() {
 //                    addFragment(searchTypes[i].fragmentSearch, searchTypes[i].title)
 //                }
 //            }
-            searchViewpager.offscreenPageLimit = 4
-            searchViewpager.adapter = viewPagerAdapter
+            searchViewpager.apply{
+                offscreenPageLimit = 4
+                adapter = viewPagerAdapter
+            }
             TabLayoutMediator(searchTablayout, searchViewpager) { tab, position ->
                 tab.text = tabStrings[position]
             }.attach()
 
-            searchSearchview.isSubmitButtonEnabled = true
-            searchSearchview.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String?): Boolean {
-                    return false
-                }
+            searchSearchview.apply{
+                isSubmitButtonEnabled = true
+                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                    override fun onQueryTextChange(newText: String?): Boolean {
+                        return false
+                    }
 
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    Utils.log("submitsubmit", query!!)
-                    keyword = query
+                    override fun onQueryTextSubmit(query: String?): Boolean {
+                        Utils.log("submitsubmit", query!!)
+                        keyword = query
 //                        when (binding.searchViewpager.currentItem) {
 //                            0 -> (viewPagerAdapter.getItem(0) as SearchResultFragment).search()
 //                            1 -> (viewPagerAdapter.getItem(1) as SearchResultFragment).search()
 //                            2 -> (viewPagerAdapter.getItem(2) as SearchResultFragment).search()
 //                            3 -> (viewPagerAdapter.getItem(3) as SearchResultFragment).search()
 //                        }
-                    val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                    imm.hideSoftInputFromWindow(searchSearchview.windowToken, 0)
-                    return true
-                }
-            })
+                        hideKeyboard(searchSearchview)
+                        return true
+                    }
+                })
+            }
         }
     }
 

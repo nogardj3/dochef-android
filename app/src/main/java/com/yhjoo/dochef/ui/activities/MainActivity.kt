@@ -17,7 +17,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.skydoves.powermenu.MenuAnimation
-import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
@@ -28,11 +27,12 @@ import com.yhjoo.dochef.utilities.Utils
 class MainActivity : BaseActivity() {
     private val tabIcons = intArrayOf(
         R.drawable.ic_home_white, R.drawable.ic_hot_white,
-        R.drawable.ic_favorite_white, R.drawable.ic_article_white, R.drawable.ic_person_white
+        R.drawable.ic_favorite_white, R.drawable.ic_article_white,
+        R.drawable.ic_person_white
     )
 
     val binding: MainActivityBinding by lazy { MainActivityBinding.inflate(layoutInflater) }
-    private lateinit var mFirebaseAnalytics: FirebaseAnalytics
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var mainFragmentAdapter: FragmentStateAdapter
 
     private lateinit var powerMenu: PowerMenu
@@ -49,51 +49,52 @@ class MainActivity : BaseActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.mainToolbar)
 
-        val actionBar = supportActionBar!!
-        actionBar.setDisplayHomeAsUpEnabled(false)
-        actionBar.setDisplayShowTitleEnabled(false)
+        val actionBar = supportActionBar!!.apply {
+            setDisplayHomeAsUpEnabled(false)
+            setDisplayShowTitleEnabled(false)
+        }
 
         MobileAds.initialize(this)
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
 
         userID = Utils.getUserBrief(this).userID
 
         mainFragmentAdapter = MainFragmentAdapter(this)
 
         binding.apply {
-            mainViewpager.offscreenPageLimit = 5
-            mainViewpager.adapter = mainFragmentAdapter
-            mainViewpager.setPageTransformer(MarginPageTransformer(15))
+            mainViewpager.apply {
+                offscreenPageLimit = 5
+                adapter = mainFragmentAdapter
+                setPageTransformer(MarginPageTransformer(15))
+            }
 
             TabLayoutMediator(mainTablayout, mainViewpager) { tab, position ->
                 tab.setIcon(tabIcons[position])
             }.attach()
             mainTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
-                    if (menuNotification != null) {
-                        mainViewpager.currentItem = tab.position
-                        menuNotification.isVisible = false
-                        menuSort.isVisible = false
-                        menuWriteRecipe.isVisible = false
-                        menuWritePost.isVisible = false
-                        menuSearch.isVisible = false
-                        menuSetting.isVisible = false
-                        when (tab.position) {
-                            0 -> menuNotification.isVisible = true
-                            1 -> {
-                                menuSort.isVisible = true
-                                menuSearch.isVisible = true
-                            }
-                            2 -> {
-                                menuWriteRecipe.isVisible = true
-                                menuSearch.isVisible = true
-                            }
-                            3 -> {
-                                menuWritePost.isVisible = true
-                                menuSearch.isVisible = true
-                            }
-                            4 -> menuSetting.isVisible = true
+                    mainViewpager.currentItem = tab.position
+                    menuNotification.isVisible = false
+                    menuSort.isVisible = false
+                    menuWriteRecipe.isVisible = false
+                    menuWritePost.isVisible = false
+                    menuSearch.isVisible = false
+                    menuSetting.isVisible = false
+                    when (tab.position) {
+                        0 -> menuNotification.isVisible = true
+                        1 -> {
+                            menuSort.isVisible = true
+                            menuSearch.isVisible = true
                         }
+                        2 -> {
+                            menuWriteRecipe.isVisible = true
+                            menuSearch.isVisible = true
+                        }
+                        3 -> {
+                            menuWritePost.isVisible = true
+                            menuSearch.isVisible = true
+                        }
+                        4 -> menuSetting.isVisible = true
                     }
                 }
 
@@ -115,9 +116,7 @@ class MainActivity : BaseActivity() {
             .setMenuColor(Color.WHITE)
             .setSelectedMenuColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .setBackgroundAlpha(0f)
-            .build()
-        powerMenu.onMenuItemClickListener =
-            OnMenuItemClickListener { position: Int, _: PowerMenuItem? ->
+            .setOnMenuItemClickListener { position, _ ->
                 when (position) {
                     0 -> sortMenu(MainRecipesFragment.VALUES.SORT.LATEST)
                     1 -> sortMenu(MainRecipesFragment.VALUES.SORT.POPULAR)
@@ -126,6 +125,7 @@ class MainActivity : BaseActivity() {
                 powerMenu.selectedPosition = position
                 powerMenu.dismiss()
             }
+            .build()
     }
 
     override fun onBackPressed() {
@@ -148,7 +148,7 @@ class MainActivity : BaseActivity() {
                     )
                 }
 
-                mFirebaseAnalytics.logEvent(
+                firebaseAnalytics.logEvent(
                     getString(R.string.analytics_event_terminated),
                     bundle
                 )

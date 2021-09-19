@@ -59,40 +59,42 @@ class PlayRecipeEndFragment : Fragment() {
     }
 
     private fun loadData() {
-        GlideImageLoadDelegator.loadRecipeImage(
-            requireContext(),
-            recipePhase.recipe_img,
-            binding.playrecipeItemImg
-        )
+        binding.apply {
+            GlideImageLoadDelegator.loadRecipeImage(
+                requireContext(),
+                recipePhase.recipe_img,
+                playrecipeItemImg
+            )
 
-        binding.playrecipeItemTips.removeAllViews()
-        for (text in recipePhase.tips) {
-            val tiptext = layoutInflater.inflate(R.layout.v_tip, null) as AppCompatTextView
-            tiptext.text = text
-            binding.playrecipeItemTips.addView(tiptext)
+            playrecipeItemTips.removeAllViews()
+            for (text in recipePhase.tips) {
+                val tiptext = layoutInflater.inflate(R.layout.v_tip, null) as AppCompatTextView
+                tiptext.text = text
+                playrecipeItemTips.addView(tiptext)
+            }
+
+            playrecipeItemIngredients.removeAllViews()
+            for (ingredient in recipePhase.ingredients) {
+                val ingredientContainer =
+                    layoutInflater.inflate(R.layout.v_ingredient, playrecipeItemIngredients,false) as ConstraintLayout
+                val ingredientName: AppCompatTextView =
+                    ingredientContainer.findViewById(R.id.v_ingredient_name)
+                ingredientName.text = ingredient.name
+                val ingredientAmount: AppCompatTextView =
+                    ingredientContainer.findViewById(R.id.v_ingredient_amount)
+                ingredientAmount.text = ingredient.amount
+                playrecipeItemIngredients.addView(ingredientContainer)
+            }
+            playrecipeItemContents.text = recipePhase.contents
+            playrecipeEndGroup.visibility = View.VISIBLE
+
+            playrecipeEndLike.setImageResource(
+                if (isLikeThis) R.drawable.ic_favorite_red
+                else R.drawable.ic_favorite_black
+            )
+
+            playrecipeEndReviewOk.setOnClickListener { addReview() }
         }
-
-        binding.playrecipeItemIngredients.removeAllViews()
-        for (ingredient in recipePhase.ingredients) {
-            val ingredientContainer =
-                layoutInflater.inflate(R.layout.v_ingredient, binding.playrecipeItemIngredients,false) as ConstraintLayout
-            val ingredientName: AppCompatTextView =
-                ingredientContainer.findViewById(R.id.v_ingredient_name)
-            ingredientName.text = ingredient.name
-            val ingredientAmount: AppCompatTextView =
-                ingredientContainer.findViewById(R.id.v_ingredient_amount)
-            ingredientAmount.text = ingredient.amount
-            binding.playrecipeItemIngredients.addView(ingredientContainer)
-        }
-        binding.playrecipeItemContents.text = recipePhase.contents
-        binding.playrecipeEndGroup.visibility = View.VISIBLE
-
-        binding.playrecipeEndLike.setImageResource(
-            if (isLikeThis) R.drawable.ic_favorite_red
-            else R.drawable.ic_favorite_black
-        )
-
-        binding.playrecipeEndReviewOk.setOnClickListener { addReview() }
     }
 
     private fun addReview() = CoroutineScope(Dispatchers.Main).launch {

@@ -16,15 +16,19 @@ open class BaseActivity : AppCompatActivity() {
     private var progressDialog: AppCompatDialog? = null
     val compositeDisposable: CompositeDisposable by lazy { CompositeDisposable() }
 
-    // TODO
-    // 용도가?
+    override fun onDestroy() {
+        super.onDestroy()
+        progressOFF()
+        if (!compositeDisposable.isDisposed) compositeDisposable.clear()
+    }
+
+    // 홈버튼 = 백버튼
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
 
-    // TODO
-    // 용도가?
+    // Edittext 키보드 내리기
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         val view = currentFocus
         val ret = super.dispatchTouchEvent(event)
@@ -44,33 +48,29 @@ open class BaseActivity : AppCompatActivity() {
         return ret
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        progressOFF()
-        if (!compositeDisposable.isDisposed) compositeDisposable.clear()
-    }
-
     fun progressON(activity: Activity?) {
         if (activity == null || activity.isFinishing) {
             return
         }
         if (progressDialog == null || !progressDialog!!.isShowing) {
-            progressDialog = AppCompatDialog(activity)
-            progressDialog!!.setCancelable(false)
-            progressDialog!!.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            progressDialog!!.setContentView(R.layout.v_progress)
-            progressDialog!!.show()
+            progressDialog = AppCompatDialog(activity).apply {
+                progressDialog?.setCancelable(false)
+                progressDialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                progressDialog?.setContentView(R.layout.v_progress)
+                progressDialog?.show()
+            }
         }
     }
 
     fun progressOFF() {
         if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
+            progressDialog?.dismiss()
         }
     }
 
     fun hideKeyboard(view: View) {
-        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        val inputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
