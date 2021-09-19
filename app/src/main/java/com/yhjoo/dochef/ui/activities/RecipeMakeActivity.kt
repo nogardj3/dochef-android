@@ -2,7 +2,6 @@ package com.yhjoo.dochef.ui.activities
 
 import android.os.Bundle
 import com.yhjoo.dochef.databinding.ARecipemakeBinding
-import com.yhjoo.dochef.ui.activities.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
     /*

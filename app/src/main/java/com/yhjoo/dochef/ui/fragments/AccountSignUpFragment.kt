@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.auth.AuthResult
@@ -33,6 +35,42 @@ class AccountSignUpFragment : Fragment() {
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.apply {
+            accountSignupEmailEdittext.textChanged {
+                binding.accountSignupEmailLayout.error = null
+            }
+            binding.accountSignupEmailEdittext.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (Utils.emailValidation(binding.accountSignupEmailEdittext.text.toString()) == Utils.EmailValidate.INVALID) {
+                        binding.accountSignupEmailLayout.error = "이메일 형식이 올바르지 않습니다."
+                    } else {
+                        binding.accountSignupEmailLayout.error = null
+                        (requireActivity() as BaseActivity).hideKeyboard(binding.accountSignupEmailLayout)
+                    }
+                    true
+                } else
+                    false
+            }
+
+            accountSignupPasswordEdittext.textChanged {
+                binding.accountSignupPasswordLayout.error = null
+            }
+            accountSignupPasswordEdittext.setOnEditorActionListener { v, actionId, event ->
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    if (Utils.pwValidation(binding.accountSignupPasswordEdittext.text.toString()) == Utils.PWValidate.LENGTH) {
+                        binding.accountSignupPasswordLayout.error =
+                            "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
+                    } else if (Utils.pwValidation(binding.accountSignupPasswordEdittext.text.toString()) == Utils.PWValidate.INVALID) {
+                        binding.accountSignupPasswordLayout.error =
+                            "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
+                    } else {
+                        binding.accountSignupPasswordLayout.error = null
+                        (requireActivity() as BaseActivity).hideKeyboard(binding.accountSignupPasswordLayout)
+                    }
+                    true
+                } else
+                    false
+            }
+
             accountSignupOk.setOnClickListener { startSignUp() }
         }
 
@@ -40,54 +78,47 @@ class AccountSignUpFragment : Fragment() {
     }
 
     private fun startSignUp() {
-        val email = binding.accountSignupEmail.text.toString()
-        val pw = binding.accountSignupPassword.text.toString()
+        val email = binding.accountSignupEmailEdittext.text.toString()
+        val pw = binding.accountSignupPasswordEdittext.text.toString()
 
-        when {
-            Utils.emailValidation(email) == Utils.EmailValidate.NODATA || Utils.pwValidation(email) == Utils.PWValidate.NODATA ->
-                App.showToast("이메일과 비밀번호를 모두 입력해주세요.")
-            Utils.emailValidation(email) == Utils.EmailValidate.INVALID ->
-                App.showToast("이메일 형식이 올바르지 않습니다.")
-            Utils.pwValidation(pw) == Utils.PWValidate.LENGTH ->
-                App.showToast("비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요.")
-            Utils.pwValidation(pw) == Utils.PWValidate.INVALID ->
-                App.showToast("비밀번호 형식을 확인 해 주세요. 숫자, 알파벳 대소문자만 사용가능합니다.")
-            else -> {
-                (requireActivity() as BaseActivity).progressON(requireActivity())
-                firebaseAuth.createUserWithEmailAndPassword(email, pw)
-                    .addOnCompleteListener { authTask: Task<AuthResult> ->
-                        if (!authTask.isSuccessful) {
-                            (requireActivity() as BaseActivity).progressOFF()
+        if (Utils.emailValidation(email) != Utils.EmailValidate.VALID)
+            binding.accountSignupEmailLayout.requestFocus()
+        else if (Utils.pwValidation(pw) != Utils.PWValidate.VALID)
+            binding.accountSignupPasswordEdittext.requestFocus()
+        else
+            (requireActivity() as BaseActivity).progressON(requireActivity())
+        firebaseAuth.createUserWithEmailAndPassword(email, pw)
+            .addOnCompleteListener { authTask: Task<AuthResult> ->
+                if (!authTask.isSuccessful) {
+                    (requireActivity() as BaseActivity).progressOFF()
 
-                            when (authTask.exception) {
-                                is FirebaseAuthException -> {
-                                    val fbae =
-                                        (authTask.exception as FirebaseAuthException).errorCode
-                                    if ("ERROR_EMAIL_ALREADY_IN_USE" == fbae)
-                                        App.showToast("이미 가입되있는 이메일입니다.")
-                                    else
-                                        App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
-                                }
-                                is FirebaseNetworkException ->
-                                    App.showToast("네트워크 상태를 확인해주세요.")
-                                else ->
-                                    App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
-                            }
-                        } else {
-                            authTask.result!!.user!!.getIdToken(true)
-                                .addOnCompleteListener { task: Task<GetTokenResult> ->
-                                    if (!task.isSuccessful) {
-                                        (requireActivity() as BaseActivity).progressOFF()
-                                        App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
-                                    } else {
-                                        val idToken = task.result!!.token!!
-                                        (requireActivity() as AccountActivity).checkUserInfo(
-                                            idToken,R.id.action_accountSignUpFragment_to_accountSignUpNickFragment)
-                                    }
-                                }
+                    when (authTask.exception) {
+                        is FirebaseAuthException -> {
+                            val fbae =
+                                (authTask.exception as FirebaseAuthException).errorCode
+                            if ("ERROR_EMAIL_ALREADY_IN_USE" == fbae)
+                                App.showToast("이미 가입되있는 이메일입니다.")
+                            else
+                                App.showToast("알 수 없는 오류 발생. 다시 시도해 주세요.")
                         }
+                        is FirebaseNetworkException ->
+                            App.showToast("네트워크 상태를 확인해주세요.")
+                        else ->
+                            App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
                     }
+                } else {
+                    authTask.result!!.user!!.getIdToken(true)
+                        .addOnCompleteListener { task: Task<GetTokenResult> ->
+                            if (!task.isSuccessful) {
+                                (requireActivity() as BaseActivity).progressOFF()
+                                App.showToast("알 수 없는 오류가 발생. 다시 시도해 주세요")
+                            } else {
+                                val idToken = task.result!!.token!!
+                                (requireActivity() as AccountActivity).checkUserInfo(
+                                    idToken,R.id.action_accountSignUpFragment_to_accountSignUpNickFragment)
+                            }
+                        }
+                }
             }
-        }
     }
 }

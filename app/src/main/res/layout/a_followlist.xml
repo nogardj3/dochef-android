@@ -7,6 +7,7 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/followlist_toolbar"
+        style="@style/BaseTheme.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:theme="@style/BaseTheme.Toolbar"

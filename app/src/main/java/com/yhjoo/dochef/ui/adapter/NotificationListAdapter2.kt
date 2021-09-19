@@ -12,7 +12,7 @@ import com.yhjoo.dochef.utilities.Utils
 
 class NotificationListAdapter2(private val items: ArrayList<NotificationEntity>) :
     RecyclerView.Adapter<NotificationListAdapter2.NoticeViewHolder>() {
-    lateinit var ctx: Context
+    private lateinit var ctx: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
         ctx = parent.context

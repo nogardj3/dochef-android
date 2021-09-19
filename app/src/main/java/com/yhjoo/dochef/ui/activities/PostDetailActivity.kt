@@ -3,6 +3,8 @@ package com.yhjoo.dochef.ui.activities
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -86,8 +88,31 @@ class PostDetailActivity : BaseActivity() {
             powerMenu.showAsAnchorCenter(view)
         }
 
-        binding.postCommentRecycler.layoutManager = LinearLayoutManager(this)
-        binding.postCommentRecycler.adapter = commentListAdapter
+        binding.apply{
+            postCommentRecycler.layoutManager = LinearLayoutManager(this@PostDetailActivity)
+            postCommentRecycler.adapter = commentListAdapter
+            postCommentEdittext.addTextChangedListener(object : TextWatcher {
+                var prevText = ""
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    prevText = s.toString()
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    if(binding.postCommentEdittext.lineCount > 3 || s.toString().length >= 120){
+                        binding.postCommentEdittext.setText(prevText)
+                        binding.postCommentEdittext.setSelection(prevText.length -1)
+                    }
+                }
+            })
+        }
 
         if (App.isServerAlive)
             loadData()

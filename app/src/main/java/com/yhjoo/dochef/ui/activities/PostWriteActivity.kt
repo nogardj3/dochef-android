@@ -5,8 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.*
 import androidx.core.app.ActivityCompat
+import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageView
@@ -69,8 +72,31 @@ class PostWriteActivity : BaseActivity() {
         setSupportActionBar(binding.postwriteToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.postwritePostimgAdd.setOnClickListener { addImage() }
-        binding.postwriteOk.setOnClickListener { doneClicked() }
+        binding.apply{
+            postwriteContents.addTextChangedListener(object : TextWatcher{
+                var prevText = ""
+
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                    prevText = s.toString()
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+                override fun afterTextChanged(s: Editable?) {
+                    if(binding.postwriteContents.lineCount > 3 || s.toString().length >= 120){
+                        binding.postwriteContents.setText(prevText)
+                        binding.postwriteContents.setSelection(prevText.length -1)
+                    }
+                }
+            })
+            postwritePostimgAdd.setOnClickListener { addImage() }
+            postwriteOk.setOnClickListener { doneClicked() }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

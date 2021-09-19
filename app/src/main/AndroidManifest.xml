@@ -40,7 +40,7 @@
             android:windowSoftInputMode="adjustNothing" />
 
         <activity
-            android:name="com.yhjoo.dochef.activities.RecipeMakeActivity"
+            android:name="com.yhjoo.dochef.ui.activities.RecipeMakeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustResize" />

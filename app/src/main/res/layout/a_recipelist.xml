@@ -9,6 +9,7 @@
         android:id="@+id/recipelist_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        style="@style/BaseTheme.Toolbar"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
         app:title="레시피" />
