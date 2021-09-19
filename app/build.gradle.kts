@@ -57,19 +57,35 @@ android {
     }
 }
 
+
+
 dependencies {
+    val kotlinVersion = "1.6.0"
+    val kotlinMainVersion = "1.5.2"
+    val lifecycleVersion = "2.3.1"
+    val roomVersion = "2.3.0"
+    val navigationVersion = "2.3.5"
+    val preferenceVersion = "1.1.1"
+    val pagingVersion = "3.0.1"
+    val workManagerVersion = "2.5.0"
+
     // Core
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
-    implementation("androidx.room:room-runtime:2.3.0")
-    implementation("androidx.room:room-ktx:2.3.0")
-    kapt("androidx.room:room-compiler:2.3.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
-    implementation("androidx.preference:preference-ktx:1.1.1")
+    implementation("androidx.core:core-ktx:$kotlinVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinMainVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinMainVersion")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
+    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
+    implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
+    implementation("androidx.preference:preference-ktx:$preferenceVersion")
+    implementation("androidx.paging:paging-runtime:$pagingVersion")
+    implementation("androidx.work:work-runtime-ktx:$workManagerVersion")
+
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
     implementation("com.google.code.gson:gson:2.8.8")
