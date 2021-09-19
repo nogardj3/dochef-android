@@ -8,7 +8,7 @@ import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.db.NotificationDatabase
+import com.yhjoo.dochef.db.AppDatabase
 import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.ui.activities.NotificationActivity
 import com.yhjoo.dochef.utilities.Utils
@@ -41,6 +41,7 @@ class ChefMessagingService : FirebaseMessagingService() {
 
     private fun addDB(data: Map<String, String>) {
         val notiData = NotificationEntity(
+
             null,
             data["type"]!!.toInt(),
             data["target_intent"]!!,
@@ -51,11 +52,11 @@ class ChefMessagingService : FirebaseMessagingService() {
             0
         )
 
-        val db = NotificationDatabase.getInstance(applicationContext)
-        CoroutineScope(Dispatchers.IO).launch {
-            db!!.notificationDao().insert(notiData)
-            Utils.log("message received",data.toString())
-        }
+//        val db = AppDatabase.getDatabase(applicationContext,)
+//        CoroutineScope(Dispatchers.IO).launch {
+//            db!!.notificationDao().insert(notiData)
+//            Utils.log("message received",data.toString())
+//        }
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {

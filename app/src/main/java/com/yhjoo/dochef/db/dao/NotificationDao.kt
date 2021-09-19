@@ -1,21 +1,22 @@
 package com.yhjoo.dochef.db.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.Query
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.yhjoo.dochef.db.entity.NotificationEntity
 
 @Dao
 interface NotificationDao {
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(notification: NotificationEntity)
 
-    @Query("UPDATE chef_notification SET is_read = 1 WHERE id = :id")
-    fun setLike(id: Long)
+    @Query("SELECT * from notification_table WHERE date_time > :dateTime ORDER BY date_time DESC")
+    fun getRecentList(dateTime: Long): LiveData<List<NotificationEntity>>
 
-    @Query("SELECT * from chef_notification WHERE date_time > :dateTime ORDER BY date_time DESC")
-    fun getRecentList(dateTime: Long): List<NotificationEntity>
+    @Query("UPDATE notification_table SET is_read = 1 WHERE id = :id")
+    fun setRead(id: Long)
+
+    @Update
+    fun update(notification: NotificationEntity)
 
     @Delete
     fun delete(notification: NotificationEntity)

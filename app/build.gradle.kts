@@ -5,6 +5,7 @@ plugins {
     id ("com.google.gms.google-services")
     id ("com.google.firebase.crashlytics")
     id ("kotlin-android")
+    id ("kotlin-kapt")
     id ("org.jetbrains.kotlin.kapt")
 //    id("androidx.navigation.safeargs.kotlin")
 }
@@ -50,14 +51,9 @@ android {
 
     buildFeatures {
         viewBinding = true
-    }
-
-    dataBinding {
-        true
+        dataBinding = true
     }
 }
-
-
 
 dependencies {
     val kotlinVersion = "1.6.0"
@@ -73,6 +69,7 @@ dependencies {
     implementation("androidx.core:core-ktx:$kotlinVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinMainVersion")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinMainVersion")
+    kapt("com.android.databinding:compiler:4.0.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")

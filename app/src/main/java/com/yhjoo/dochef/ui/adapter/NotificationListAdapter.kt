@@ -10,7 +10,7 @@ import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 import com.yhjoo.dochef.utilities.Utils
 
 class NotificationListAdapter :
-    BaseQuickAdapter<NotificationEntity, BaseViewHolder>(R.layout.li_notification) {
+    BaseQuickAdapter<NotificationEntity, BaseViewHolder>(R.layout.notification_item) {
     override fun convert(helper: BaseViewHolder, entity: NotificationEntity) {
         GlideImageLoadDelegator.loadUserImage(
             mContext,

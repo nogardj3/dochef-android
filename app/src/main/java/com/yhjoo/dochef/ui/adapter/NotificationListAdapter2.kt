@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.LiNotificationBinding
+import com.yhjoo.dochef.databinding.NotificationItemBinding
 import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 import com.yhjoo.dochef.utilities.Utils
@@ -17,7 +17,7 @@ class NotificationListAdapter2(private val items: ArrayList<NotificationEntity>)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
         ctx = parent.context
 
-        val binding = LiNotificationBinding.inflate(
+        val binding = NotificationItemBinding.inflate(
             LayoutInflater.from(ctx), parent, false
         )
 
@@ -45,7 +45,7 @@ class NotificationListAdapter2(private val items: ArrayList<NotificationEntity>)
 
     override fun getItemCount(): Int = items.size
 
-    class NoticeViewHolder(val binding: LiNotificationBinding) :
+    class NoticeViewHolder(val binding: NotificationItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
 

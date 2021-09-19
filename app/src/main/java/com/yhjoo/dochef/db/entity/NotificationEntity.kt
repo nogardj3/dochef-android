@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "chef_notification")
+@Entity(tableName = "notification_table")
 data class NotificationEntity(
     @PrimaryKey(autoGenerate = true) val id: Long? = null,
     @ColumnInfo(name = "type") val type: Int,
