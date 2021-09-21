@@ -1,13 +1,14 @@
 package com.yhjoo.dochef.viewmodel
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.repository.NotificationRepository
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val repository: NotificationRepository) : ViewModel() {
+    val allnotifications: LiveData<List<NotificationEntity>> = repository.notifications.asLiveData()
+
     var type = MutableLiveData<Int>()
     var intent = MutableLiveData<String>()
     var intentData = MutableLiveData<String>()
@@ -15,12 +16,6 @@ class NotificationViewModel(private val repository: NotificationRepository) : Vi
     var img = MutableLiveData<String>()
     var date_time = MutableLiveData<Long>()
     var isRead = MutableLiveData<Int>()
-
-    fun getRecentList(dateTime: Long) {
-        viewModelScope.launch {
-            repository.getRecentList(dateTime)
-        }
-    }
 }
 
 class NotificationViewModelFactory(private val repository: NotificationRepository) :
@@ -31,5 +26,4 @@ class NotificationViewModelFactory(private val repository: NotificationRepositor
         }
         throw IllegalArgumentException("Unknown View Model class")
     }
-
 }

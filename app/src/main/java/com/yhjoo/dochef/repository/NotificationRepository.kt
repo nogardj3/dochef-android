@@ -1,26 +1,49 @@
 package com.yhjoo.dochef.repository
 
+import android.content.Context
+import androidx.annotation.WorkerThread
+import com.yhjoo.dochef.App
+import com.yhjoo.dochef.R
+import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.db.dao.NotificationDao
 import com.yhjoo.dochef.db.entity.NotificationEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
-class NotificationRepository (private val dao: NotificationDao) {
+class NotificationRepository(private val context : Context, private val notificationDao: NotificationDao) {
+    val notifications: Flow<List<NotificationEntity>> = getData()
 
-    val subscribers = dao.getAllNotifications()
-
+    @WorkerThread
     suspend fun insert(notificationEntity: NotificationEntity): Long {
-        return dao.insert(notificationEntity)
+        return notificationDao.insert(notificationEntity)
     }
 
+    @WorkerThread
     suspend fun update(notificationEntity: NotificationEntity): Int {
-        return dao.update(notificationEntity)
+        return notificationDao.update(notificationEntity)
     }
 
+    @WorkerThread
     suspend fun delete(notificationEntity: NotificationEntity): Int {
-        return dao.delete(notificationEntity)
+        return notificationDao.delete(notificationEntity)
     }
 
-    suspend fun getRecentList(dateTime: Long): Flow<List<NotificationEntity>> {
-        return dao.getRecentList(dateTime)
+    @WorkerThread
+    suspend fun setRead(id: Long){
+        notificationDao.setRead(id)
+    }
+
+    private fun getData(): Flow<List<NotificationEntity>> {
+        return if (App.isServerAlive)
+            notificationDao.getRecentList(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 3)
+        else
+            flow{
+                emit(
+                    DataGenerator.make(
+                        context.resources,
+                        context.resources.getInteger(R.integer.DATA_TYPE_NOTIFICATION)
+                    ) as List<NotificationEntity>
+                )
+            }
     }
 }

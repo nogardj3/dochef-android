@@ -10,12 +10,17 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
+import com.yhjoo.dochef.db.NotificationDatabase
+import com.yhjoo.dochef.repository.NotificationRepository
 import com.yhjoo.dochef.utilities.Utils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.SupervisorJob
 
 class App : Application() {
-    // TODO
-    // 1. RX error Handler
-    // 2. 세로 막기
+    val applicationScope = CoroutineScope(SupervisorJob())
+
+    val notificationDatabase by lazy { NotificationDatabase.getDatabase(this, applicationScope) }
+    val notificationRepository by lazy { NotificationRepository(applicationContext, notificationDatabase.notificationDao()) }
 
     companion object {
         var isServerAlive = false

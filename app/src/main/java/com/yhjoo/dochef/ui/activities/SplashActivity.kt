@@ -55,13 +55,13 @@ class SplashActivity : BaseActivity() {
     private fun goWhere() {
         Utils.log(serverAlive.toString() + "", isLogin.toString() + "")
         if (serverAlive) {
-            App.showToast("서버가 동작하지 않습니다. 체험모드로 실행합니다.")
-            startMain()
-        } else {
             if (isLogin)
                 startMain()
             else
                 startAccount()
+        } else {
+            App.showToast("서버가 동작하지 않습니다. 체험모드로 실행합니다.")
+            startMain()
         }
         finish()
     }

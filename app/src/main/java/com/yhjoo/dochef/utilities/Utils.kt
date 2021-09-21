@@ -102,6 +102,7 @@ object Utils {
         return when {
             secDiff < 60 -> "방금 전"
             secDiff / 60 < 60 -> (secDiff / 60).toString() + "분 전"
+            secDiff / 60 / 60 < 24 -> (secDiff / 60 / 60).toString() + "시간 전"
             secDiff / 60 / 60 / 24 < 7 -> (secDiff / 60 / 60 / 24).toString() + "일 전"
             else -> {
                 val formatter = SimpleDateFormat("yyyy-MM-dd")

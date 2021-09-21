@@ -1,27 +1,31 @@
 package com.yhjoo.dochef.ui.activities
 
+import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.adapter.NotificationListAdapter
 import com.yhjoo.dochef.databinding.NotificationActivityBinding
-import com.yhjoo.dochef.db.NotificationDatabase
 import com.yhjoo.dochef.db.entity.NotificationEntity
-import com.yhjoo.dochef.repository.NotificationRepository
-import com.yhjoo.dochef.adapter.NotificationListAdapter2
+import com.yhjoo.dochef.utilities.Utils
 import com.yhjoo.dochef.viewmodel.NotificationViewModel
 import com.yhjoo.dochef.viewmodel.NotificationViewModelFactory
 import kotlinx.coroutines.*
 
+
 class NotificationActivity : BaseActivity() {
     private val binding: NotificationActivityBinding by lazy {
-        DataBindingUtil.setContentView(this,R.layout.notification_activity)
+        DataBindingUtil.setContentView(this, R.layout.notification_activity)
     }
-    private lateinit var viewModel: NotificationViewModel
+    private val notificationViewModel: NotificationViewModel by viewModels {
+        NotificationViewModelFactory((application as App).notificationRepository)
+    }
 
-    private lateinit var notificationListAdapter: NotificationListAdapter2
-    private var notifications: ArrayList<NotificationEntity> = ArrayList()
+    private lateinit var notificationListAdapter: NotificationListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,87 +33,46 @@ class NotificationActivity : BaseActivity() {
         setSupportActionBar(binding.notificationToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        // initializing viewmodel
-        val dao = NotificationDatabase.getInstance(this).notificationDao
-        val repository = NotificationRepository(dao)
-        val factory = NotificationViewModelFactory(repository)
-        viewModel = ViewModelProvider(this,factory).get(NotificationViewModel::class.java)
+        notificationViewModel.allnotifications
+            .observe(this, Observer {
+                notificationListAdapter.submitList(it) {
+                    binding.notificationRecycler.scrollToPosition(0)
+                }
+                Utils.log(it.toString())
+            })
 
         binding.apply {
-            this.viewModel = viewModel
             lifecycleOwner = this@NotificationActivity
 
-            notificationListAdapter = NotificationListAdapter2(notifications).apply {
-//            setEmptyView(
-//                R.layout.rv_loading,
-//                binding.notificationRecycler.parent as ViewGroup
-//            )
-//            setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
-//                if (App.isServerAlive) {
-//                    val db = NotificationDatabase.getInstance(applicationContext)
-//                    CoroutineScope(Dispatchers.IO).launch {
-//                        db!!.notificationDao().setRead(notifications[position].id!!)
-//                    }
-//
-//                    val notiType = notifications[position].type
-//                    if (notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_1)
-//                        || notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_2)
-//                    ) {
-//                        val intent =
-//                            Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
-//                                .putExtra("recipeID", notifications[position].intentData.toInt())
-//                        startActivity(intent)
-//                    } else if (notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_3)) {
-//                        val intent =
-//                            Intent(this@NotificationActivity, PostDetailActivity::class.java)
-//                                .putExtra("postID", notifications[position].intentData.toInt())
-//                        startActivity(intent)
-//                    } else if (notiType == resources.getInteger(R.integer.NOTIFICATION_TYPE_4)) {
-//                        val intent = Intent(this@NotificationActivity, HomeActivity::class.java)
-//                            .putExtra("postID", notifications[position].intentData)
-//                        startActivity(intent)
-//                    }
-//                }
-//            }
+            notificationListAdapter = NotificationListAdapter { notificationItem ->
+                CoroutineScope(Dispatchers.IO).launch {
+                    Utils.log(notificationItem.toString())
+                    if (App.isServerAlive) {
+                        (application as App).notificationRepository.setRead(notificationItem.id!!)
+                        val intent = when (notificationItem.type) {
+                            resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
+                            resources.getInteger(R.integer.NOTIFICATION_TYPE_2) -> {
+                                Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
+                                    .putExtra("recipeID", notificationItem.intentData.toInt())
+                            }
+                            resources.getInteger(R.integer.NOTIFICATION_TYPE_3) -> {
+                                Intent(this@NotificationActivity, PostDetailActivity::class.java)
+                                    .putExtra("postID", notificationItem.intentData.toInt())
+                            }
+                            else -> {
+                                Intent(this@NotificationActivity, HomeActivity::class.java)
+                                    .putExtra("postID", notificationItem.intentData)
+                            }
+                        }
+                        startActivity(intent)
+                    }
+                }
             }
 
-            notificationRecycler.apply{
+            notificationRecycler.apply {
                 layoutManager = LinearLayoutManager(this@NotificationActivity)
                 adapter = notificationListAdapter
             }
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-
-        CoroutineScope(Dispatchers.Main).launch {
-//            notifications =
-//                if (App.isServerAlive) {
-//                    readDataFromDB()
-//                } else {
-//                    DataGenerator.make(
-//                        resources,
-//                        resources.getInteger(R.integer.DATA_TYPE_NOTIFICATION)
-//                    )
-//                }
-        }
-
-//        notificationListAdapter.setNewData(notifications)
-//        notificationListAdapter.setEmptyView(
-//            R.layout.rv_empty_notification,
-//            binding.notificationRecycler.parent as ViewGroup
-//        )
-    }
-
-//    private suspend fun readDataFromDB(): ArrayList<NotificationEntity> =
-//        withContext(Dispatchers.IO) {
-//            val db = AppDatabase.getDatabase(applicationContext,viewModel)
-//            val resList = ArrayList(
-//                db!!.notificationDao()
-//                    .getRecentList(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 3)
-//            )
-//
-//            resList
-//        }
 }
