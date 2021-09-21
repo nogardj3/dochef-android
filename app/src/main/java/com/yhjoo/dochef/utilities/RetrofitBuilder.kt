@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.utilities
 
 import android.content.Context
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import okhttp3.OkHttpClient
 import retrofit2.HttpException
@@ -23,7 +24,6 @@ object RetrofitBuilder {
 //            .client(retrofitClient)
             .baseUrl(context.getString(R.string.server_url))
             .addConverterFactory(GsonConverterFactory.create())
-            // use RxJava, return Call -> Observable, Single
             // .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
             .create(service)

@@ -16,7 +16,6 @@ import com.yhjoo.dochef.viewmodel.NotificationViewModel
 import com.yhjoo.dochef.viewmodel.NotificationViewModelFactory
 import kotlinx.coroutines.*
 
-
 class NotificationActivity : BaseActivity() {
     private val binding: NotificationActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.notification_activity)
@@ -38,40 +37,43 @@ class NotificationActivity : BaseActivity() {
                 notificationListAdapter.submitList(it) {
                     binding.notificationRecycler.scrollToPosition(0)
                 }
-                Utils.log(it.toString())
             })
 
         binding.apply {
             lifecycleOwner = this@NotificationActivity
 
             notificationListAdapter = NotificationListAdapter { notificationItem ->
-                CoroutineScope(Dispatchers.IO).launch {
-                    Utils.log(notificationItem.toString())
-                    if (App.isServerAlive) {
-                        (application as App).notificationRepository.setRead(notificationItem.id!!)
-                        val intent = when (notificationItem.type) {
-                            resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
-                            resources.getInteger(R.integer.NOTIFICATION_TYPE_2) -> {
-                                Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
-                                    .putExtra("recipeID", notificationItem.intentData.toInt())
-                            }
-                            resources.getInteger(R.integer.NOTIFICATION_TYPE_3) -> {
-                                Intent(this@NotificationActivity, PostDetailActivity::class.java)
-                                    .putExtra("postID", notificationItem.intentData.toInt())
-                            }
-                            else -> {
-                                Intent(this@NotificationActivity, HomeActivity::class.java)
-                                    .putExtra("postID", notificationItem.intentData)
-                            }
-                        }
-                        startActivity(intent)
-                    }
-                }
+                itemClicked(notificationItem)
             }
 
             notificationRecycler.apply {
                 layoutManager = LinearLayoutManager(this@NotificationActivity)
                 adapter = notificationListAdapter
+            }
+        }
+    }
+
+    private fun itemClicked(notificationItem: NotificationEntity): Unit {
+        CoroutineScope(Dispatchers.IO).launch {
+            Utils.log(notificationItem.toString())
+            if (App.isServerAlive) {
+                (application as App).notificationRepository.setRead(notificationItem.id!!)
+                val intent = when (notificationItem.type) {
+                    resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
+                    resources.getInteger(R.integer.NOTIFICATION_TYPE_2) -> {
+                        Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
+                            .putExtra("recipeID", notificationItem.intentData.toInt())
+                    }
+                    resources.getInteger(R.integer.NOTIFICATION_TYPE_3) -> {
+                        Intent(this@NotificationActivity, PostDetailActivity::class.java)
+                            .putExtra("postID", notificationItem.intentData.toInt())
+                    }
+                    else -> {
+                        Intent(this@NotificationActivity, HomeActivity::class.java)
+                            .putExtra("postID", notificationItem.intentData)
+                    }
+                }
+                startActivity(intent)
             }
         }
     }

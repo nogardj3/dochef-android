@@ -2,7 +2,6 @@ package com.yhjoo.dochef.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
@@ -14,7 +13,7 @@ import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 import com.yhjoo.dochef.utilities.Utils
 
-class NotificationListAdapter(private val clickListener: (NotificationEntity)->Unit) :
+class NotificationListAdapter(private val clickListener: (NotificationEntity) -> Unit) :
     ListAdapter<NotificationEntity, NotificationListAdapter.NoticeViewHolder>(NotificationComparator()) {
     lateinit var context: Context
 
@@ -39,9 +38,14 @@ class NotificationListAdapter(private val clickListener: (NotificationEntity)->U
         RecyclerView.ViewHolder(binding.root) {
         fun bind(notification: NotificationEntity) {
             binding.apply {
-                notificationItem.setOnClickListener{
+                root.setBackgroundColor(
+                    if (notification.isRead == 0) context.getColor(R.color.white)
+                    else context.getColor(R.color.grey)
+                )
+                root.setOnClickListener {
                     clickListener(notification)
                 }
+
                 GlideImageLoadDelegator.loadUserImage(
                     context,
                     notification.img,
@@ -50,10 +54,6 @@ class NotificationListAdapter(private val clickListener: (NotificationEntity)->U
 
                 notificationContents.text = notification.contents
                 notificationDate.text = Utils.convertMillisToText(notification.dateTime)
-                notificationItem.setBackgroundColor(
-                    if (notification.isRead == 0) context.getColor(R.color.white)
-                    else context.getColor(R.color.grey)
-                )
             }
         }
     }

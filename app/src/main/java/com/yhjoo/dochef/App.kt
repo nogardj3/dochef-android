@@ -13,14 +13,20 @@ import com.orhanobut.logger.Logger
 import com.yhjoo.dochef.db.NotificationDatabase
 import com.yhjoo.dochef.repository.NotificationRepository
 import com.yhjoo.dochef.utilities.Utils
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 
 class App : Application() {
-    val applicationScope = CoroutineScope(SupervisorJob())
+    private val notificationDatabase by lazy {
+        NotificationDatabase.getDatabase(
+            this
+        )
+    }
 
-    val notificationDatabase by lazy { NotificationDatabase.getDatabase(this, applicationScope) }
-    val notificationRepository by lazy { NotificationRepository(applicationContext, notificationDatabase.notificationDao()) }
+    val notificationRepository by lazy {
+        NotificationRepository(
+            applicationContext,
+            notificationDatabase.notificationDao()
+        )
+    }
 
     companion object {
         var isServerAlive = false

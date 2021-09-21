@@ -11,7 +11,7 @@ import com.yhjoo.dochef.databinding.AFollowlistBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.adapter.FollowListAdapter
+import com.yhjoo.dochef.adapter.FollowListAdapterOld
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.UserService
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +28,7 @@ class FollowListActivity : BaseActivity() {
     private val binding: AFollowlistBinding by lazy { AFollowlistBinding.inflate(layoutInflater) }
 
     private lateinit var rxUserService: UserService
-    private lateinit var followListAdapter: FollowListAdapter
+    private lateinit var followListAdapterOld: FollowListAdapterOld
     private lateinit var userDetailInfo: UserDetail
     private lateinit var userList: ArrayList<UserBrief>
     private lateinit var activeUserid: String
@@ -51,7 +51,7 @@ class FollowListActivity : BaseActivity() {
         binding.apply {
             followlistToolbar.title = if (currentMode == UIMODE.FOLLOWER) "팔로워" else "팔로잉"
 
-            followListAdapter = FollowListAdapter(activeUserid).apply {
+            followListAdapterOld = FollowListAdapterOld(activeUserid).apply {
                 setEmptyView(R.layout.rv_loading, followlistRecycler.parent as ViewGroup)
                 setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
                     Utils.log((adapter.data[position] as UserBrief).userID)
@@ -70,7 +70,7 @@ class FollowListActivity : BaseActivity() {
 
             followlistRecycler.apply {
                 layoutManager = LinearLayoutManager(this@FollowListActivity)
-                adapter = followListAdapter
+                adapter = followListAdapterOld
             }
         }
 
@@ -132,7 +132,7 @@ class FollowListActivity : BaseActivity() {
     }
 
     private fun setListData() {
-        followListAdapter.apply {
+        followListAdapterOld.apply {
             settingUserFollow(userDetailInfo.follow)
             setNewData(userList)
             setEmptyView(
