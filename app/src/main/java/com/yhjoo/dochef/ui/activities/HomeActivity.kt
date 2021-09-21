@@ -25,8 +25,8 @@ import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.ui.adapter.PostListAdapter
-import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
+import com.yhjoo.dochef.adapter.PostListAdapter
+import com.yhjoo.dochef.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.*
 import kotlinx.coroutines.CoroutineScope

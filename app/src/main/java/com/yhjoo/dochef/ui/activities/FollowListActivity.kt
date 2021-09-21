@@ -11,7 +11,7 @@ import com.yhjoo.dochef.databinding.AFollowlistBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.ui.adapter.FollowListAdapter
+import com.yhjoo.dochef.adapter.FollowListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.UserService
 import kotlinx.coroutines.CoroutineScope

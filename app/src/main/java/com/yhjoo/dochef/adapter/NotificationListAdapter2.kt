@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -48,21 +48,3 @@ class NotificationListAdapter2(private val items: ArrayList<NotificationEntity>)
     class NoticeViewHolder(val binding: NotificationItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
-
-
-//:
-//    BaseQuickAdapter<NotificationEntity, BaseViewHolder>(R.layout.li_notification) {
-//    override fun convert(helper: BaseViewHolder, entity: NotificationEntity) {
-//        GlideImageLoadDelegator.loadUserImage(
-//            mContext,
-//            entity.img,
-//            helper.getView<View>(R.id.notification_userimg) as AppCompatImageView
-//        )
-//        helper.setText(R.id.notification_contents, entity.contents)
-//        helper.setText(R.id.notification_date, Utils.convertMillisToText(entity.dateTime))
-//        helper.setBackgroundColor(
-//            R.id.notification_item,
-//            if (entity.isRead == 0) mContext.getColor(R.color.white) else mContext.getColor(R.color.grey)
-//        )
-//    }
-//}

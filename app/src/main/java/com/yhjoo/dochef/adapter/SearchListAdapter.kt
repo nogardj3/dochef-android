@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.adapter
 
 import android.graphics.Typeface
 import android.view.View

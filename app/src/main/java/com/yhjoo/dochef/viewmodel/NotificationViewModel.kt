@@ -1,25 +1,35 @@
 package com.yhjoo.dochef.viewmodel
 
-import android.app.Application
-import androidx.databinding.ObservableField
-import androidx.databinding.ObservableInt
-import androidx.databinding.ObservableLong
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.yhjoo.dochef.repository.NotificationRepository
 import kotlinx.coroutines.launch
 
-class NotificationViewModel (application: Application) : AndroidViewModel(application){
-    var type = ObservableInt()
-    var intent =  ObservableField<String>()
-    var intentData =  ObservableField<String>()
-    var contents =  ObservableField<String>()
-    var img =  ObservableField<String>()
-    var date_time =  ObservableLong()
-    var isRead =  ObservableInt()
+class NotificationViewModel(private val repository: NotificationRepository) : ViewModel() {
+    var type = MutableLiveData<Int>()
+    var intent = MutableLiveData<String>()
+    var intentData = MutableLiveData<String>()
+    var contents = MutableLiveData<String>()
+    var img = MutableLiveData<String>()
+    var date_time = MutableLiveData<Long>()
+    var isRead = MutableLiveData<Int>()
 
-    init {
+    fun getRecentList(dateTime: Long) {
         viewModelScope.launch {
-            // Coroutine that will be canceled when the ViewModel is cleared.
+            repository.getRecentList(dateTime)
         }
     }
+}
+
+class NotificationViewModelFactory(private val repository: NotificationRepository) :
+    ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        if(modelClass.isAssignableFrom(NotificationViewModel::class.java)){
+            return NotificationViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown View Model class")
+    }
+
 }

@@ -15,7 +15,7 @@ import com.yhjoo.dochef.model.SearchResult
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
-import com.yhjoo.dochef.ui.adapter.SearchListAdapter
+import com.yhjoo.dochef.adapter.SearchListAdapter
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import com.yhjoo.dochef.utilities.RetrofitServices.UserService

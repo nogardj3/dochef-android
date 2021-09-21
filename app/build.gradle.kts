@@ -6,7 +6,7 @@ plugins {
     id ("com.google.firebase.crashlytics")
     id ("kotlin-android")
     id ("kotlin-kapt")
-    id ("org.jetbrains.kotlin.kapt")
+//    id ("org.jetbrains.kotlin.kapt")
 //    id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -50,8 +50,8 @@ android {
     }
 
     buildFeatures {
-        viewBinding = true
         dataBinding = true
+        viewBinding = true
     }
 }
 
@@ -72,8 +72,10 @@ dependencies {
     kapt("com.android.databinding:compiler:4.0.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
-    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+//    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")

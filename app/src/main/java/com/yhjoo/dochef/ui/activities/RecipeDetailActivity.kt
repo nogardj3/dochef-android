@@ -14,7 +14,7 @@ import com.yhjoo.dochef.databinding.ARecipedetailBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.Review
-import com.yhjoo.dochef.ui.adapter.ReviewListAdapter
+import com.yhjoo.dochef.adapter.ReviewListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import com.yhjoo.dochef.utilities.RetrofitServices.ReviewService

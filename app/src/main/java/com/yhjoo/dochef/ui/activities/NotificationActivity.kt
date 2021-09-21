@@ -1,29 +1,24 @@
 package com.yhjoo.dochef.ui.activities
 
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.NotificationActivityBinding
-import com.yhjoo.dochef.db.AppDatabase
-import com.yhjoo.dochef.db.DataGenerator
+import com.yhjoo.dochef.db.NotificationDatabase
 import com.yhjoo.dochef.db.entity.NotificationEntity
-import com.yhjoo.dochef.ui.adapter.NotificationListAdapter2
+import com.yhjoo.dochef.repository.NotificationRepository
+import com.yhjoo.dochef.adapter.NotificationListAdapter2
 import com.yhjoo.dochef.viewmodel.NotificationViewModel
+import com.yhjoo.dochef.viewmodel.NotificationViewModelFactory
 import kotlinx.coroutines.*
 
 class NotificationActivity : BaseActivity() {
     private val binding: NotificationActivityBinding by lazy {
-        NotificationActivityBinding.inflate(
-            layoutInflater
-        )
+        DataBindingUtil.setContentView(this,R.layout.notification_activity)
     }
-    private val viewModel: NotificationViewModel by lazy {
-        ViewModelProvider(this).get(
-            NotificationViewModel::class.java
-        )
-    }
+    private lateinit var viewModel: NotificationViewModel
 
     private lateinit var notificationListAdapter: NotificationListAdapter2
     private var notifications: ArrayList<NotificationEntity> = ArrayList()
@@ -34,9 +29,16 @@ class NotificationActivity : BaseActivity() {
         setSupportActionBar(binding.notificationToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        viewModel
+        // initializing viewmodel
+        val dao = NotificationDatabase.getInstance(this).notificationDao
+        val repository = NotificationRepository(dao)
+        val factory = NotificationViewModelFactory(repository)
+        viewModel = ViewModelProvider(this,factory).get(NotificationViewModel::class.java)
 
         binding.apply {
+            this.viewModel = viewModel
+            lifecycleOwner = this@NotificationActivity
+
             notificationListAdapter = NotificationListAdapter2(notifications).apply {
 //            setEmptyView(
 //                R.layout.rv_loading,
@@ -71,8 +73,10 @@ class NotificationActivity : BaseActivity() {
 //            }
             }
 
-            notificationRecycler.layoutManager = LinearLayoutManager(this@NotificationActivity)
-            notificationRecycler.adapter = notificationListAdapter
+            notificationRecycler.apply{
+                layoutManager = LinearLayoutManager(this@NotificationActivity)
+                adapter = notificationListAdapter
+            }
         }
     }
 

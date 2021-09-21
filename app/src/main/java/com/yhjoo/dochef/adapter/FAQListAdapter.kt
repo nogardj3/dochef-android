@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.adapter
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder

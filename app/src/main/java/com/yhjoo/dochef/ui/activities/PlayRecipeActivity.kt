@@ -21,7 +21,7 @@ import com.yhjoo.dochef.databinding.APlayrecipeBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
-import com.yhjoo.dochef.ui.adapter.RecipeViewPagerAdapter
+import com.yhjoo.dochef.adapter.RecipeViewPagerAdapter
 import com.yhjoo.dochef.ui.fragments.*
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService

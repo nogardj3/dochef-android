@@ -22,7 +22,7 @@ import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Comment
 import com.yhjoo.dochef.model.Post
-import com.yhjoo.dochef.ui.adapter.CommentListAdapter
+import com.yhjoo.dochef.adapter.CommentListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.CommentService
 import com.yhjoo.dochef.utilities.RetrofitServices.PostService

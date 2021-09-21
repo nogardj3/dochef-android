@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.adapter
 
 import android.view.View
 import android.widget.LinearLayout

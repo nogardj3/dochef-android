@@ -15,7 +15,7 @@ import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.MultiItemRecipe
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
-import com.yhjoo.dochef.ui.adapter.RecipeMultiAdapter
+import com.yhjoo.dochef.adapter.RecipeMultiAdapter
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import kotlinx.coroutines.CoroutineScope
