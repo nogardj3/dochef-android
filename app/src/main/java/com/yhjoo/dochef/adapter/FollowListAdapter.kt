@@ -1,42 +1,108 @@
 package com.yhjoo.dochef.adapter
 
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
+import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.db.entity.NotificationEntity
+import com.yhjoo.dochef.databinding.FollowlistItemBinding
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 import com.yhjoo.dochef.utilities.Utils
-import java.util.*
+import java.util.ArrayList
 
 class FollowListAdapter(
-    var userID: String,
-    private val subscribeListener: (NotificationEntity) -> Unit,
-    private val itemClickListener: (NotificationEntity) -> Unit
+    var activeUserID: String,
+    private val subscribeListener: (UserBrief) -> Unit,
+    private val unsubscribeListener: (UserBrief) -> Unit,
+    private val itemClickListener: (UserBrief) -> Unit
     ) :
-    BaseQuickAdapter<UserBrief, BaseViewHolder>(R.layout.li_follow) {
+    ListAdapter<UserBrief, FollowListAdapter.FollowListViewHolder>(
+        FollowListComparator()
+    ) {
+    lateinit var context: Context
+    var activeUserFollowList =  ArrayList<String>()
 
-    override fun convert(helper: BaseViewHolder, item: UserBrief) {
-//        GlideImageLoadDelegator.loadUserImage(mContext, item.userImg, helper.getView(R.id.user_img))
-//        Utils.log(item.userID, userID)
-//
-//        if (item.userID != userID) {
-//            if (userFollow.contains(item.userID)) {
-//                helper.setVisible(R.id.user_follow_btn, true)
-//                helper.setVisible(R.id.user_followcancel_btn, false)
-//            } else {
-//                helper.setVisible(R.id.user_follow_btn, false)
-//                helper.setVisible(R.id.user_followcancel_btn, true)
-//            }
-//            helper.addOnClickListener(R.id.user_followcancel_btn)
-//            helper.addOnClickListener(R.id.user_follow_btn)
-//        }
-//
-//        helper.setText(
-//            R.id.user_follower_count, String.format(
-//                mContext.getString(R.string.format_follower), item.follower_count.toString()
-//            )
-//        )
-//        helper.setText(R.id.user_nickname, item.nickname)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowListViewHolder {
+        context = parent.context
+
+        val binding = DataBindingUtil.inflate<FollowlistItemBinding>(
+            LayoutInflater.from(parent.context),
+            R.layout.followlist_item,
+            parent,
+            false
+        )
+
+        return FollowListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: FollowListViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class FollowListViewHolder(val binding: FollowlistItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(userBrief: UserBrief) {
+            binding.apply {
+                root.setOnClickListener {
+                    itemClickListener(userBrief)
+                }
+
+                userFollowBtn.visibility = if (!activeUserFollowList.contains(userBrief.userID) &&userBrief.userID != activeUserID )
+                    View.VISIBLE
+                else
+                    View.GONE
+                userFollowcancelBtn.visibility = if (activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID)
+                    View.VISIBLE
+                else
+                    View.GONE
+//                if(activeUserFollowList.contains(userBrief.userID)){
+//                    userFollowBtn.visibility = View.GONE
+//                    userFollowcancelBtn.visibility = View.VISIBLE
+//                }
+//                else{
+//                    userFollowBtn.visibility = View.VISIBLE
+//                    userFollowcancelBtn.visibility = View.GONE
+//                }
+//                if(userBrief.userID == activeUserID){
+//                    userFollowBtn.visibility = View.VISIBLE
+//                    userFollowcancelBtn.visibility = View.GONE
+//                }
+
+
+                userFollowBtn.setOnClickListener {
+                    subscribeListener(userBrief)
+                }
+                userFollowcancelBtn.setOnClickListener {
+                    unsubscribeListener(userBrief)
+                }
+
+                GlideImageLoadDelegator.loadUserImage(context, userBrief.userImg, userImg)
+                userNickname.text = userBrief.nickname
+                userFollowerCount.text = String.format(
+                    context.getString(R.string.format_follower), userBrief.follower_count
+                )
+            }
+        }
+    }
+
+    class FollowListComparator : DiffUtil.ItemCallback<UserBrief>() {
+        override fun areItemsTheSame(
+            oldItem: UserBrief,
+            newItem: UserBrief
+        ): Boolean {
+            return oldItem.userID == newItem.userID
+        }
+
+        override fun areContentsTheSame(
+            oldItem: UserBrief,
+            newItem: UserBrief
+        ): Boolean {
+            return oldItem == newItem
+        }
     }
 }

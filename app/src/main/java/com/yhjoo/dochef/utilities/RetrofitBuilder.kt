@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.utilities
 
 import android.content.Context
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import okhttp3.OkHttpClient
 import retrofit2.HttpException

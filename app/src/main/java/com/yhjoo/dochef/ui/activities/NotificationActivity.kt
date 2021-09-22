@@ -53,7 +53,7 @@ class NotificationActivity : BaseActivity() {
         }
     }
 
-    private fun itemClicked(notificationItem: NotificationEntity): Unit {
+    private fun itemClicked(notificationItem: NotificationEntity) {
         CoroutineScope(Dispatchers.IO).launch {
             Utils.log(notificationItem.toString())
             if (App.isServerAlive) {

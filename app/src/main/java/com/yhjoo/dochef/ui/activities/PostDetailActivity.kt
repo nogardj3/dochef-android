@@ -18,11 +18,11 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.adapter.CommentListAdapter
 import com.yhjoo.dochef.databinding.APostdetailBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Comment
 import com.yhjoo.dochef.model.Post
-import com.yhjoo.dochef.adapter.CommentListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.CommentService
 import com.yhjoo.dochef.utilities.RetrofitServices.PostService

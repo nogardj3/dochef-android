@@ -14,12 +14,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter
 import com.yhjoo.dochef.databinding.MainInitFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.ui.activities.RecipeThemeActivity
-import com.yhjoo.dochef.adapter.RecipeHorizontalAdapter
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

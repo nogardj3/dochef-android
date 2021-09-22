@@ -9,13 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.adapter.SearchListAdapter
 import com.yhjoo.dochef.databinding.FResultBinding
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.SearchResult
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
-import com.yhjoo.dochef.adapter.SearchListAdapter
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import com.yhjoo.dochef.utilities.RetrofitServices.UserService
@@ -57,7 +57,7 @@ class SearchResultFragment : Fragment() {
                     SearchListAdapter(
                         type,
                         ArrayList(),
-                        R.layout.li_follow
+                        R.layout.followlist_item
                     )
                 else
                     SearchListAdapter(type, ArrayList(), R.layout.li_recipe_result)

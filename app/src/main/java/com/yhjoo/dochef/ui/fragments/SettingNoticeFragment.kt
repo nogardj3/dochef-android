@@ -9,12 +9,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.adapter.NoticeListAdapter
 import com.yhjoo.dochef.databinding.SettingNoticeFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.ExpandContents
 import com.yhjoo.dochef.model.ExpandTitle
 import com.yhjoo.dochef.model.Notice
-import com.yhjoo.dochef.adapter.NoticeListAdapter
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices
 import kotlinx.coroutines.CoroutineScope

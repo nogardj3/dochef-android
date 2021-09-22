@@ -10,12 +10,12 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.adapter.PostListAdapter
 import com.yhjoo.dochef.databinding.MainTimelineFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.PostDetailActivity
-import com.yhjoo.dochef.adapter.PostListAdapter
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.PostService
 import kotlinx.coroutines.CoroutineScope
