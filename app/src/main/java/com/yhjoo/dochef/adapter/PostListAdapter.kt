@@ -1,50 +1,111 @@
 package com.yhjoo.dochef.adapter
 
+import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
-import com.google.android.flexbox.FlexboxLayout
+import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
+import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.databinding.PostlistItemBinding
 import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
 import com.yhjoo.dochef.utilities.Utils
 
-class PostListAdapter : BaseQuickAdapter<Post, BaseViewHolder>(R.layout.li_timeline) {
-    override fun convert(helper: BaseViewHolder, item: Post) {
-        GlideImageLoadDelegator.loadPostImage(
-            mContext, item.postImg, helper.getView(R.id.timeline_postimg)
+class PostListAdapter(
+    private val userClickListener: (Post) -> Unit,
+    private val itemClickListener: (Post) -> Unit
+) :
+    ListAdapter<Post, PostListAdapter.PostListViewHolder>(
+        PostListComparator()
+    ) {
+    lateinit var context: Context
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListViewHolder {
+        context = parent.context
+
+        val binding = DataBindingUtil.inflate<PostlistItemBinding>(
+            LayoutInflater.from(parent.context),
+            R.layout.postlist_item,
+            parent,
+            false
         )
-        GlideImageLoadDelegator.loadUserImage(
-            mContext, item.userImg, helper.getView(R.id.timeline_userimg)
-        )
-        helper.setText(R.id.timeline_nickname, item.nickname)
-        helper.setText(R.id.timeline_likecount, item.likes.size.toString())
-        helper.setText(R.id.timeline_commentcount, item.comments.size.toString())
-        helper.setText(R.id.timeline_contents, " " + item.contents)
-        helper.setText(R.id.timeline_time, Utils.convertMillisToText(item.dateTime))
-        helper.addOnClickListener(R.id.timeline_userimg)
-        helper.addOnClickListener(R.id.timeline_nickname)
-        (helper.getView<View>(R.id.timeline_tags) as FlexboxLayout).removeAllViews()
-        for (tag in item.tags) {
-            val tagcontainer = mLayoutInflater.inflate(R.layout.v_tag_post, null) as LinearLayout
-            val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_post_text)
-            tagview.text = "#$tag"
-            (helper.getView<View>(R.id.timeline_tags) as FlexboxLayout).addView(tagcontainer)
-        }
-        if (item.comments.size != 0) {
-            GlideImageLoadDelegator.loadUserImage(
-                mContext, item.comments[0]!!.userImg, helper.getView(R.id.timeline_comment_img)
-            )
-            helper.setVisible(R.id.timeline_comment_group, true)
-            helper.setText(R.id.timeline_comment_nickname, item.comments[0]!!.nickName)
-            helper.setText(R.id.timeline_comment_contents, item.comments[0]!!.contents)
-            helper.setText(
-                R.id.timeline_comment_date, Utils.convertMillisToText(
-                    item.comments[0]!!.dateTime
+
+        return PostListViewHolder(binding)
+    }
+
+    override fun onBindViewHolder(holder: PostListViewHolder, position: Int) {
+        holder.bind(getItem(position))
+    }
+
+    inner class PostListViewHolder(val binding: PostlistItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(post: Post) {
+            binding.apply {
+                root.setOnClickListener {
+                    itemClickListener(post)
+                }
+                postlistUserImg.setOnClickListener {
+                    userClickListener(post)
+                }
+                postlistUserNickname.setOnClickListener {
+                    userClickListener(post)
+                }
+
+                GlideImageLoadDelegator.loadPostImage(
+                    context, post.postImg, postlistPostImg
                 )
-            )
-        } else helper.setVisible(R.id.timeline_comment_group, false)
+                GlideImageLoadDelegator.loadUserImage(
+                    context, post.userImg, postlistUserImg
+                )
+                postlistUserNickname.text = post.nickname
+                postlistLikeCount.text = post.likes.size.toString()
+                postlistCommentCount.text = post.comments.size.toString()
+                postlistContents.text = " " + post.contents
+                postlistTime.text = Utils.convertMillisToText(post.dateTime)
+
+                postlistTags.removeAllViews()
+                for (tag in post.tags) {
+                    val tagcontainer = LayoutInflater.from(context)
+                        .inflate(R.layout.v_tag_post, null) as LinearLayout
+                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_post_text)
+                    tagview.text = "#$tag"
+                    postlistTags.addView(tagcontainer)
+                }
+
+                if (post.comments.size != 0) {
+                    postlistCommentGroup.visibility = View.VISIBLE
+
+                    GlideImageLoadDelegator.loadUserImage(
+                        context, post.comments[0]!!.userImg, postlistCommentUserImg
+                    )
+
+                    postlistCommentUserNickname.text = post.comments[0]!!.nickName
+                    postlistCommentContents.text = post.comments[0]!!.contents
+                    postlistCommentDate.text =
+                        Utils.convertMillisToText(post.comments[0]!!.dateTime)
+                } else postlistCommentGroup.visibility = View.GONE
+            }
+        }
+    }
+
+    class PostListComparator : DiffUtil.ItemCallback<Post>() {
+        override fun areItemsTheSame(
+            oldItem: Post,
+            newItem: Post
+        ): Boolean {
+            return oldItem.postID == newItem.postID
+        }
+
+        override fun areContentsTheSame(
+            oldItem: Post,
+            newItem: Post
+        ): Boolean {
+            return oldItem == newItem
+        }
     }
 }

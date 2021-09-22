@@ -60,19 +60,6 @@ class FollowListAdapter(
                     View.VISIBLE
                 else
                     View.GONE
-//                if(activeUserFollowList.contains(userBrief.userID)){
-//                    userFollowBtn.visibility = View.GONE
-//                    userFollowcancelBtn.visibility = View.VISIBLE
-//                }
-//                else{
-//                    userFollowBtn.visibility = View.VISIBLE
-//                    userFollowcancelBtn.visibility = View.GONE
-//                }
-//                if(userBrief.userID == activeUserID){
-//                    userFollowBtn.visibility = View.VISIBLE
-//                    userFollowcancelBtn.visibility = View.GONE
-//                }
-
 
                 userFollowBtn.setOnClickListener {
                     subscribeListener(userBrief)

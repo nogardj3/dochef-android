@@ -20,9 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.PostListAdapter
+import com.yhjoo.dochef.adapter.PostListAdapterOld
 import com.yhjoo.dochef.adapter.RecipeHorizontalHomeAdapter
-import com.yhjoo.dochef.databinding.AHomeBinding
+import com.yhjoo.dochef.databinding.HomeActivityBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.model.Recipe
@@ -51,7 +51,7 @@ class HomeActivity : BaseActivity() {
         const val REVISE = 1
     }
 
-    val binding: AHomeBinding by lazy { AHomeBinding.inflate(layoutInflater) }
+    val binding: HomeActivityBinding by lazy { HomeActivityBinding.inflate(layoutInflater) }
 
     private lateinit var storageReference: StorageReference
     private lateinit var accountService: AccountService
@@ -60,7 +60,7 @@ class HomeActivity : BaseActivity() {
     private lateinit var postService: PostService
 
     private lateinit var recipeHorizontalHomeAdapter: RecipeHorizontalHomeAdapter
-    private lateinit var postListAdapter: PostListAdapter
+    private lateinit var postListAdapterOld: PostListAdapterOld
 
     private lateinit var reviseMenu: MenuItem
     private lateinit var okMenu: MenuItem
@@ -107,13 +107,13 @@ class HomeActivity : BaseActivity() {
                 }
             }
 
-            homeRecipeRecycler.apply{
+            homeRecipeRecycler.apply {
                 layoutManager =
                     LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = recipeHorizontalHomeAdapter
             }
 
-            postListAdapter = PostListAdapter().apply{
+            postListAdapterOld = PostListAdapterOld().apply {
                 setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
                     val intent = Intent(this@HomeActivity, PostDetailActivity::class.java)
                         .putExtra("postID", postList[position].postID)
@@ -121,7 +121,7 @@ class HomeActivity : BaseActivity() {
                 }
             }
 
-            homePostRecycler.apply{
+            homePostRecycler.apply {
                 layoutManager =
                     object : LinearLayoutManager(this@HomeActivity) {
                         override fun canScrollHorizontally(): Boolean {
@@ -132,7 +132,7 @@ class HomeActivity : BaseActivity() {
                             return false
                         }
                     }
-                adapter = postListAdapter
+                adapter = postListAdapterOld
             }
         }
 
@@ -148,7 +148,7 @@ class HomeActivity : BaseActivity() {
             setUserInfo()
 
             recipeHorizontalHomeAdapter.setNewData(recipeList)
-            postListAdapter.setNewData(postList)
+            postListAdapterOld.setNewData(postList)
         }
     }
 
@@ -260,13 +260,13 @@ class HomeActivity : BaseActivity() {
                 postList = res3.body()!!
                 setUserInfo()
 
-                recipeHorizontalHomeAdapter.apply{
+                recipeHorizontalHomeAdapter.apply {
                     setNewData(recipeList)
                     setEmptyView(
                         R.layout.rv_empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
                     )
                 }
-                postListAdapter.apply{
+                postListAdapterOld.apply {
                     setNewData(postList)
                     setEmptyView(
                         R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
@@ -281,8 +281,12 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun setUserInfo() {
-        binding.apply{
-            GlideImageLoadDelegator.loadUserImage(this@HomeActivity, userDetailInfo.userImg, homeUserimg)
+        binding.apply {
+            GlideImageLoadDelegator.loadUserImage(
+                this@HomeActivity,
+                userDetailInfo.userImg,
+                homeUserimg
+            )
             homeToolbar.title = userDetailInfo.nickname
             homeNickname.text = userDetailInfo.nickname
             homeProfiletext.text = userDetailInfo.profileText

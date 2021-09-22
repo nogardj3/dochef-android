@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/postlist_post_img"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@raw/dummy_post_0"
+                tools:visibility="visible" />
+
+            <!-- click listener 구현 -->
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/postlist_user_img"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/bg_round"
+                android:scaleType="fitXY"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postlist_post_img"
+                app:srcCompat="@drawable/ic_profile_black" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_user_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_user_img"
+                app:layout_constraintLeft_toRightOf="@+id/postlist_user_img"
+                app:layout_constraintTop_toTopOf="@+id/postlist_user_img"
+                tools:text="닉네임" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="5dp"
+                android:maxLines="1"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_user_img"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/postlist_user_img"
+                tools:text="1일 전" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_contents"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="5dp"
+                android:maxLines="4"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postlist_user_img"
+                tools:text="내용" />
+
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/postlist_tags"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                app:flexWrap="wrap"
+                app:layout_constraintLeft_toLeftOf="@+id/postlist_contents"
+                app:layout_constraintRight_toRightOf="@+id/postlist_time"
+                app:layout_constraintTop_toBottomOf="@+id/postlist_contents" />
+
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_like_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="5dp"
+                android:text="좋아요"
+                app:layout_constraintLeft_toLeftOf="@+id/postlist_contents"
+                app:layout_constraintTop_toBottomOf="@+id/postlist_tags" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_like_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_like_text"
+                app:layout_constraintLeft_toRightOf="@+id/postlist_like_text"
+                app:layout_constraintTop_toTopOf="@+id/postlist_like_text"
+                tools:text="0" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_comment_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:text="댓글"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_like_text"
+                app:layout_constraintLeft_toRightOf="@+id/postlist_like_count"
+                app:layout_constraintTop_toTopOf="@+id/postlist_like_text" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_comment_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_like_text"
+                app:layout_constraintLeft_toRightOf="@+id/postlist_comment_text"
+                app:layout_constraintTop_toTopOf="@+id/postlist_like_text"
+                tools:text="0" />
+
+            <androidx.constraintlayout.widget.Group
+                android:id="@+id/postlist_comment_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:constraint_referenced_ids="postlist_comment_user_img,
+            postlist_comment_user_nickname,postlist_comment_contents,postlist_comment_date"
+                tools:visibility="visible" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/postlist_comment_user_img"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="@+id/postlist_user_img"
+                app:layout_constraintTop_toBottomOf="@+id/postlist_like_text"
+                app:srcCompat="@drawable/ic_profile_black" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_comment_user_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:maxEms="5"
+                android:maxLines="1"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_comment_user_img"
+                app:layout_constraintLeft_toRightOf="@+id/postlist_comment_user_img"
+                app:layout_constraintTop_toTopOf="@+id/postlist_comment_user_img"
+                tools:text="닉네임" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_comment_contents"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:maxLines="2"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_comment_user_img"
+                app:layout_constraintLeft_toRightOf="@+id/postlist_comment_user_nickname"
+                app:layout_constraintRight_toLeftOf="@+id/postlist_comment_date"
+                app:layout_constraintTop_toTopOf="@+id/postlist_comment_user_img"
+                tools:text="내용" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/postlist_comment_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="@+id/postlist_comment_user_nickname"
+                app:layout_constraintRight_toRightOf="@+id/postlist_time"
+                app:layout_constraintTop_toTopOf="@+id/postlist_comment_user_nickname"
+                tools:text="날짜" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/postlist_comment_user_img" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+
+</layout>
