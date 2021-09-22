@@ -24,16 +24,11 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class MainRecipesFragment : Fragment(), OnRefreshListener {
-    /*
-        TODO
-        Recommend multi adapter 변경
-    */
-
     companion object VALUES {
         object SORT {
-            const val LATEST = 0
-            const val POPULAR = 1
-            const val RATING = 2
+            const val LATEST = "latest"
+            const val POPULAR = "popular"
+            const val RATING = "rating"
         }
     }
 
@@ -41,6 +36,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
     private lateinit var recipeService: RecipeService
     private lateinit var recipeMultiAdapter: RecipeMultiAdapter
     private lateinit var recommendTags: Array<String>
+
     private var recipeListItems = ArrayList<MultiItemRecipe>()
     private var currentMode = SORT.LATEST
 
@@ -55,14 +51,14 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
 
         binding.apply {
-            fRecipeSwipe.apply{
+            recipesSwipe.apply{
                 setOnRefreshListener(this@MainRecipesFragment)
                 setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
             }
             recipeMultiAdapter = RecipeMultiAdapter(recipeListItems).apply {
                 setEmptyView(
                     R.layout.rv_loading,
-                    fRecipeRecycler.parent as ViewGroup
+                    recipesRecycler.parent as ViewGroup
                 )
                 showNew = true
                 setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
@@ -80,7 +76,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
                     }
                 }
             }
-            fRecipeRecycler.apply{
+            recipesRecycler.apply{
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = recipeMultiAdapter
             }
@@ -116,16 +112,9 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         }
     }
 
-    private fun getRecipeList(sort: Int) = CoroutineScope(Dispatchers.Main).launch {
+    private fun getRecipeList(sort: String) = CoroutineScope(Dispatchers.Main).launch {
         runCatching {
-            var sortmode = ""
-            when (sort) {
-                SORT.LATEST -> sortmode = "latest"
-                SORT.POPULAR -> sortmode = "popular"
-                SORT.RATING -> sortmode = "rating"
-            }
-
-            val res1 = recipeService.getRecipes(sortmode)
+            val res1 = recipeService.getRecipes(sort)
             val arrayList = res1.body()!!
             recipeListItems.clear()
             for (i in arrayList.indices) {
@@ -140,8 +129,8 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
                 )
             }
             recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
-            binding.fRecipeRecycler.layoutManager!!.scrollToPosition(0)
-            binding.fRecipeSwipe.isRefreshing = false
+            binding.recipesRecycler.layoutManager!!.scrollToPosition(0)
+            binding.recipesSwipe.isRefreshing = false
         }
             .onSuccess { }
             .onFailure {
@@ -149,13 +138,13 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
             }
     }
 
-    fun changeSortMode(sort: Int) {
+    fun changeSortMode(sort: String) {
         if (currentMode != sort) {
             recipeMultiAdapter.apply{
                 setNewData(ArrayList())
                 setEmptyView(
                     R.layout.rv_loading,
-                    binding.fRecipeRecycler.parent as ViewGroup
+                    binding.recipesRecycler.parent as ViewGroup
                 )
             }
             currentMode = sort

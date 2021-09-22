@@ -219,7 +219,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun sortMenu(sort: Int) {
+    private fun sortMenu(sort: String) {
 //        (mainFragmentAdapter.getItem(1) as MainRecipesFragment).changeSortMode(sort)
     }
 

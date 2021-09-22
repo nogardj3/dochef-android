@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_marginBottom="10dp"
+        app:cardCornerRadius="5dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipemylist_recipeimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                tools:src="@raw/dummy_recipe_1" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_gradient"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recipemylist_recipetitle" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipemylist_yours"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_favorite_red" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipemylist_recipetitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="12dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/recipemylist_nickname"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="레시피" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipemylist_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="6dp"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="닉네임" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipemylist_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="4dp"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="1일 전" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipemylist_viewimg"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/recipemylist_date"
+                app:layout_constraintRight_toLeftOf="@+id/recipemylist_view"
+                app:srcCompat="@drawable/ic_view_black" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipemylist_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/recipemylist_viewimg"
+                app:layout_constraintRight_toRightOf="@+id/recipemylist_date"
+                app:layout_constraintTop_toTopOf="@+id/recipemylist_viewimg"
+                tools:text="0" />
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipemylist_ratingimg"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginEnd="4dp"
+                android:tint="@color/white"
+                app:layout_constraintBottom_toTopOf="@+id/recipemylist_date"
+                app:layout_constraintRight_toLeftOf="@+id/recipemylist_rating"
+                app:srcCompat="@drawable/ic_star_white"
+                app:tint="@color/colorPrimary" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipemylist_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="4dp"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@+id/recipemylist_viewimg"
+                app:layout_constraintRight_toLeftOf="@+id/recipemylist_viewimg"
+                app:layout_constraintTop_toTopOf="@+id/recipemylist_viewimg"
+                tools:text="0" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

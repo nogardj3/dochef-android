@@ -23,6 +23,13 @@ class PostListAdapter(
     ListAdapter<Post, PostListAdapter.PostListViewHolder>(
         PostListComparator()
     ) {
+    companion object{
+        object LAYOUTTYPE{
+            const val MAIN_TIMELINE = 0
+            const val HOME = 1
+        }
+    }
+
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostListViewHolder {
