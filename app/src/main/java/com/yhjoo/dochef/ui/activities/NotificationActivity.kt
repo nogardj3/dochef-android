@@ -33,7 +33,7 @@ class NotificationActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         notificationViewModel.allnotifications
-            .observe(this, Observer {
+            .observe(this, {
                 notificationListAdapter.submitList(it) {
                     binding.notificationRecycler.scrollToPosition(0)
                 }

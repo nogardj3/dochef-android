@@ -2,28 +2,26 @@ package com.yhjoo.dochef.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.RecipeMultiAdapter
+import com.yhjoo.dochef.adapter.RecipeVerticalListAdapter
 import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
-import com.yhjoo.dochef.db.DataGenerator
-import com.yhjoo.dochef.model.MultiItemRecipe
-import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.repository.RecipeListRepository
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
-import com.yhjoo.dochef.utilities.RetrofitBuilder
-import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.yhjoo.dochef.viewmodel.RecipeListViewModel
+import com.yhjoo.dochef.viewmodel.RecipeListViewModelFactory
 import java.util.*
 
 class MainRecipesFragment : Fragment(), OnRefreshListener {
+    /* TODO
+    1. sort
+    2. ad + item + recommend
+     */
+
     companion object VALUES {
         object SORT {
             const val LATEST = "latest"
@@ -33,53 +31,73 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
     }
 
     private lateinit var binding: MainRecipesFragmentBinding
-    private lateinit var recipeService: RecipeService
-    private lateinit var recipeMultiAdapter: RecipeMultiAdapter
-    private lateinit var recommendTags: Array<String>
+    private lateinit var recipeListViewModel: RecipeListViewModel
+    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
 
-    private var recipeListItems = ArrayList<MultiItemRecipe>()
-    private var currentMode = SORT.LATEST
+    private lateinit var recommendTags: Array<String>
+    private var currentSort = SORT.LATEST
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainRecipesFragmentBinding.inflate(inflater, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.main_recipes_fragment, container, false)
         val view: View = binding.root
 
-        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
+        val factory = RecipeListViewModelFactory(
+            RecipeListRepository(
+                requireContext().applicationContext
+            )
+        )
+
+        recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
+            allRecipeList.observe(viewLifecycleOwner, {
+                recipeListAdapter.submitList(it) {
+                    binding.recipesRecycler.scrollToPosition(0)
+                }
+                binding.recipesSwipe.isRefreshing = false
+            })
+        }
 
         binding.apply {
-            recipesSwipe.apply{
+            lifecycleOwner = viewLifecycleOwner
+
+            recipesSwipe.apply {
                 setOnRefreshListener(this@MainRecipesFragment)
-                setColorSchemeColors(resources.getColor(R.color.colorPrimary, null))
-            }
-            recipeMultiAdapter = RecipeMultiAdapter(recipeListItems).apply {
-                setEmptyView(
-                    R.layout.rv_loading,
-                    recipesRecycler.parent as ViewGroup
+                setColorSchemeColors(
+                    resources.getColor(
+                        R.color.colorPrimary,
+                        null
+                    )
                 )
-                showNew = true
-                setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
-                    if (adapter.getItemViewType(position) == RecipeMultiAdapter.VIEWHOLDER_ITEM) {
-                        val intent =
-                            Intent(
-                                this@MainRecipesFragment.context,
-                                RecipeDetailActivity::class.java
-                            )
-                                .putExtra(
-                                    "recipeID",
-                                    (adapter.data[position] as MultiItemRecipe).content!!.recipeID
-                                )
-                        startActivity(intent)
-                    }
+            }
+
+            recipeListAdapter = RecipeVerticalListAdapter(
+                RecipeVerticalListAdapter.MAIN_RECIPES,
+                activeUserID = null,
+                { item ->
+                    val intent =
+                        Intent(
+                            this@MainRecipesFragment.requireContext(),
+                            RecipeDetailActivity::class.java
+                        )
+                            .putExtra("recipeID", item.recipeID)
+                    startActivity(intent)
                 }
-            }
-            recipesRecycler.apply{
+            )
+
+            recipesRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = recipeMultiAdapter
+                adapter = recipeListAdapter
             }
+
+            recipeListViewModel.requestRecipeList(
+                searchby = RecipeListRepository.Companion.SEARCHBY.ALL,
+                sort = currentSort,
+                searchValue = null
+            )
 
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
@@ -88,67 +106,18 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
     }
 
     override fun onRefresh() {
-        Handler().postDelayed({ getRecipeList(currentMode) }, 1000)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (App.isServerAlive) getRecipeList(currentMode) else {
-            val temp = DataGenerator.make<ArrayList<Recipe>>(
-                resources,
-                resources.getInteger(R.integer.DATE_TYPE_RECIPE)
-            )
-            for (i in temp.indices) {
-                if (i != 0 && i % 4 == 0) {
-                    if (i / 4 % 2 == 0) recipeListItems.add(MultiItemRecipe(RecipeMultiAdapter.VIEWHOLDER_AD))
-                }
-                recipeListItems.add(
-                    MultiItemRecipe(
-                        RecipeMultiAdapter.VIEWHOLDER_ITEM,
-                        temp[i]
-                    )
-                )
-            }
-        }
-    }
-
-    private fun getRecipeList(sort: String) = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val res1 = recipeService.getRecipes(sort)
-            val arrayList = res1.body()!!
-            recipeListItems.clear()
-            for (i in arrayList.indices) {
-                if (i != 0 && i % 4 == 0) {
-                    recipeListItems.add(MultiItemRecipe(RecipeMultiAdapter.VIEWHOLDER_AD))
-                }
-                recipeListItems.add(
-                    MultiItemRecipe(
-                        RecipeMultiAdapter.VIEWHOLDER_ITEM,
-                        arrayList[i]
-                    )
-                )
-            }
-            recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
-            binding.recipesRecycler.layoutManager!!.scrollToPosition(0)
-            binding.recipesSwipe.isRefreshing = false
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
+        binding.recipesSwipe.isRefreshing = true
+        recipeListViewModel.requestRecipeList(
+            searchby = RecipeListRepository.Companion.SEARCHBY.ALL,
+            sort = currentSort,
+            searchValue = null
+        )
     }
 
     fun changeSortMode(sort: String) {
-        if (currentMode != sort) {
-            recipeMultiAdapter.apply{
-                setNewData(ArrayList())
-                setEmptyView(
-                    R.layout.rv_loading,
-                    binding.recipesRecycler.parent as ViewGroup
-                )
-            }
-            currentMode = sort
-            getRecipeList(currentMode)
+        if (currentSort != sort) {
+            currentSort = sort
+            onRefresh()
         }
     }
 }

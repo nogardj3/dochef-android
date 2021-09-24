@@ -8,12 +8,12 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayoutMediator
-import com.yhjoo.dochef.databinding.ASearchBinding
+import com.yhjoo.dochef.databinding.SearchActivityBinding
 import com.yhjoo.dochef.ui.fragments.*
 import com.yhjoo.dochef.utilities.Utils
 
 class SearchActivity : BaseActivity() {
-    private val binding: ASearchBinding by lazy { ASearchBinding.inflate(layoutInflater) }
+    private val binding: SearchActivityBinding by lazy { SearchActivityBinding.inflate(layoutInflater) }
     private lateinit var viewPagerAdapter: SearchViewPagerAdapter
     private val tabStrings = arrayOf(
         "유저",

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.*
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputField
@@ -20,15 +21,17 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.PostListAdapterOld
+import com.yhjoo.dochef.adapter.PostListAdapter
 import com.yhjoo.dochef.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.databinding.HomeActivityBinding
 import com.yhjoo.dochef.db.DataGenerator
-import com.yhjoo.dochef.model.Post
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.UserDetail
+import com.yhjoo.dochef.repository.PostListRepository
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.*
+import com.yhjoo.dochef.viewmodel.PostListViewModel
+import com.yhjoo.dochef.viewmodel.PostListViewModelFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -51,22 +54,24 @@ class HomeActivity : BaseActivity() {
         const val REVISE = 1
     }
 
-    val binding: HomeActivityBinding by lazy { HomeActivityBinding.inflate(layoutInflater) }
+    private val binding: HomeActivityBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.home_activity)
+    }
+    private lateinit var postListViewModel: PostListViewModel
+
+    private lateinit var postListAdapter: PostListAdapter
 
     private lateinit var storageReference: StorageReference
     private lateinit var accountService: AccountService
     private lateinit var userService: UserService
     private lateinit var recipeService: RecipeService
-    private lateinit var postService: PostService
 
     private lateinit var recipeHorizontalHomeAdapter: RecipeHorizontalHomeAdapter
-    private lateinit var postListAdapterOld: PostListAdapterOld
 
     private lateinit var reviseMenu: MenuItem
     private lateinit var okMenu: MenuItem
 
     private lateinit var recipeList: ArrayList<Recipe>
-    private lateinit var postList: ArrayList<Post>
     private lateinit var userDetailInfo: UserDetail
 
     private var currentMode: Int? = null
@@ -87,7 +92,6 @@ class HomeActivity : BaseActivity() {
         accountService = RetrofitBuilder.create(this, AccountService::class.java)
         userService = RetrofitBuilder.create(this, UserService::class.java)
         recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
-        postService = RetrofitBuilder.create(this, PostService::class.java)
 
         val userID = Utils.getUserBrief(this).userID
         if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == userID) {
@@ -98,7 +102,45 @@ class HomeActivity : BaseActivity() {
             currentUserID = intent.getStringExtra("userID")
         }
 
+        val factory = PostListViewModelFactory(
+            PostListRepository(applicationContext)
+        )
+        postListViewModel = factory.create(PostListViewModel::class.java).apply {
+            allPostList.observe(this@HomeActivity, {
+                postListAdapter.submitList(it){}
+            })
+        }
+
         binding.apply {
+            lifecycleOwner = this@HomeActivity
+
+            postListAdapter = PostListAdapter(
+                PostListAdapter.HOME,
+                { },
+                { item ->
+                    val intent = Intent(this@HomeActivity, PostDetailActivity::class.java)
+                        .putExtra("postID", item.postID)
+                    startActivity(intent)
+                }
+            )
+
+            homePostRecycler.apply {
+                layoutManager =
+                    object : LinearLayoutManager(this@HomeActivity) {
+                        override fun canScrollHorizontally(): Boolean {
+                            return false
+                        }
+
+                        override fun canScrollVertically(): Boolean {
+                            return false
+                        }
+                    }
+                adapter = postListAdapter
+            }
+
+            postListViewModel.requestPostListById(currentUserID!!)
+
+
             recipeHorizontalHomeAdapter = RecipeHorizontalHomeAdapter(currentUserID).apply {
                 setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
                     val intent = Intent(this@HomeActivity, RecipeDetailActivity::class.java)
@@ -112,28 +154,6 @@ class HomeActivity : BaseActivity() {
                     LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
                 adapter = recipeHorizontalHomeAdapter
             }
-
-            postListAdapterOld = PostListAdapterOld().apply {
-                setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
-                    val intent = Intent(this@HomeActivity, PostDetailActivity::class.java)
-                        .putExtra("postID", postList[position].postID)
-                    startActivity(intent)
-                }
-            }
-
-            homePostRecycler.apply {
-                layoutManager =
-                    object : LinearLayoutManager(this@HomeActivity) {
-                        override fun canScrollHorizontally(): Boolean {
-                            return false
-                        }
-
-                        override fun canScrollVertically(): Boolean {
-                            return false
-                        }
-                    }
-                adapter = postListAdapterOld
-            }
         }
 
         if (App.isServerAlive) {
@@ -143,12 +163,10 @@ class HomeActivity : BaseActivity() {
                 DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
             recipeList =
                 DataGenerator.make(resources, resources.getInteger(R.integer.DATE_TYPE_RECIPE))
-            postList = DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_POST))
 
             setUserInfo()
 
             recipeHorizontalHomeAdapter.setNewData(recipeList)
-            postListAdapterOld.setNewData(postList)
         }
     }
 
@@ -256,20 +274,14 @@ class HomeActivity : BaseActivity() {
                     .subList(0, res2.body()!!.size.coerceAtMost(10))
                 recipeList = ArrayList(res2Data)
 
-                val res3 = postService.getPostListByUserID(currentUserID!!)
-                postList = res3.body()!!
+                postListViewModel.requestPostListById(currentUserID!!)
+
                 setUserInfo()
 
                 recipeHorizontalHomeAdapter.apply {
                     setNewData(recipeList)
                     setEmptyView(
-                        R.layout.rv_empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
-                    )
-                }
-                postListAdapterOld.apply {
-                    setNewData(postList)
-                    setEmptyView(
-                        R.layout.rv_empty_post, binding.homePostRecycler.parent as ViewGroup
+                        R.layout.empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
                     )
                 }
             }

@@ -35,4 +35,21 @@ class PostListRepository(
                 )
         }
     }
+
+    @WorkerThread
+    suspend fun getPostListByUserId(userId: String): Flow<Response<ArrayList<Post>>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(postClient.getPostListByUserID(userId))
+            else
+                emit(
+                    Response.success(
+                        DataGenerator.make(
+                            context.resources,
+                            context.resources.getInteger(R.integer.DATA_TYPE_POST)
+                        )
+                    )
+                )
+        }
+    }
 }

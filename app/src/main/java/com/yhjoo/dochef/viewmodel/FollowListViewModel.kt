@@ -7,9 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.model.UserDetail
 import com.yhjoo.dochef.repository.FollowListRepository
-import com.yhjoo.dochef.utilities.RetrofitBuilder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

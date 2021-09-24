@@ -14,10 +14,6 @@ class PostListViewModel(
 ) : ViewModel() {
     val allPostList = MutableLiveData<List<Post>>()
 
-    init {
-        requestPostList()
-    }
-
     fun requestPostList() {
         viewModelScope.launch {
             repository.getPostList().collect {
@@ -25,6 +21,24 @@ class PostListViewModel(
             }
         }
     }
+
+    fun requestPostListById(userId: String) {
+        viewModelScope.launch {
+            repository.getPostListByUserId(userId).collect {
+                allPostList.value = it.body()
+            }
+        }
+    }
+
+
+    fun likePost(recipeId: Int, userId: String){
+
+    }
+
+    fun disLikePost(recipeId: Int, userId: String){
+
+    }
+
 }
 
 class PostListViewModelFactory(private val repository: PostListRepository) :

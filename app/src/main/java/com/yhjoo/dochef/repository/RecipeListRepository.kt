@@ -2,6 +2,7 @@ package com.yhjoo.dochef.repository
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.db.DataGenerator
@@ -76,6 +77,30 @@ class RecipeListRepository(
                         )
                     )
                 )
+        }
+    }
+
+    @WorkerThread
+    suspend fun likeRecipe(recipeId: Int,userId: String): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(recipeClient.setLikeRecipe(recipeId,userId,1))
+            else{
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun dislikeRecipe(recipeId: Int,userId: String): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(recipeClient.setLikeRecipe(recipeId,userId,-1))
+            else{
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
         }
     }
 }

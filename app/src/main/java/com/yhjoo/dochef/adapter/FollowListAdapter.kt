@@ -12,8 +12,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.FollowlistItemBinding
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
-import com.yhjoo.dochef.utilities.Utils
-import java.util.ArrayList
+import java.util.*
 
 class FollowListAdapter(
     var activeUserID: String,

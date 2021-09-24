@@ -189,7 +189,7 @@ class PostDetailActivity : BaseActivity() {
             setTopView()
             commentListAdapter.setNewData(commentList)
             commentListAdapter.setEmptyView(
-                R.layout.rv_empty_comment,
+                R.layout.empty_comment,
                 binding.postCommentRecycler.parent as ViewGroup
             )
             if (postInfo.postID == postID) {

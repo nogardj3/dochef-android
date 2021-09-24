@@ -23,7 +23,7 @@
                 android:paddingStart="5dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="5dp"
-                tools:listitem="@layout/postlist_item" />
+                tools:listitem="@layout/home_postlist_item" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,33 +2,31 @@ package com.yhjoo.dochef.ui.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.RecipeMultiAdapter
+import com.yhjoo.dochef.adapter.RecipeVerticalListAdapter
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
-import com.yhjoo.dochef.db.DataGenerator
-import com.yhjoo.dochef.model.MultiItemRecipe
-import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.repository.RecipeListRepository
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.utilities.*
-import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.yhjoo.dochef.viewmodel.RecipeListViewModel
+import com.yhjoo.dochef.viewmodel.RecipeListViewModelFactory
 import java.util.*
 
 class MainMyRecipeFragment : Fragment(), OnRefreshListener {
+    /* TODO
+    1. ad + item + recommend
+     */
+
     private lateinit var binding: MainMyrecipeFragmentBinding
-    private lateinit var recipeService: RecipeService
-    private lateinit var recipeMultiAdapter: RecipeMultiAdapter
+    private lateinit var recipeListViewModel: RecipeListViewModel
+    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
+
     private lateinit var recommendTags: Array<String>
-    private var recipeListItems = ArrayList<MultiItemRecipe>()
     private var userID: String? = null
 
     override fun onCreateView(
@@ -36,14 +34,29 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainMyrecipeFragmentBinding.inflate(inflater, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.main_myrecipe_fragment, container, false)
         val view: View = binding.root
 
-        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
         userID = Utils.getUserBrief(requireContext()).userID
 
+        val factory = RecipeListViewModelFactory(
+            RecipeListRepository(
+                requireContext().applicationContext
+            )
+        )
+
+        recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
+            allRecipeList.observe(viewLifecycleOwner, {
+                recipeListAdapter.submitList(it) {}
+                binding.myrecipeSwipe.isRefreshing = false
+            })
+        }
+
         binding.apply {
-            fMyrecipeSwipe.apply{
+            lifecycleOwner = viewLifecycleOwner
+
+            myrecipeSwipe.apply {
                 setOnRefreshListener(this@MainMyRecipeFragment)
                 setColorSchemeColors(
                     resources.getColor(
@@ -53,27 +66,30 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
                 )
             }
 
-            recipeMultiAdapter = RecipeMultiAdapter(recipeListItems).apply {
-                userid = userID
-                setEmptyView(R.layout.rv_loading, fMyrecipeRecycler.parent as ViewGroup)
-                showYours = true
-                setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
-                    if (adapter.getItemViewType(position) == RecipeMultiAdapter.VIEWHOLDER_ITEM) {
-                        val intent =
-                            Intent(
-                                this@MainMyRecipeFragment.context,
-                                RecipeDetailActivity::class.java
-                            )
-                                .putExtra("recipeID", recipeListItems[position].content!!.recipeID)
-                        startActivity(intent)
-                    }
+            recipeListAdapter = RecipeVerticalListAdapter(
+                RecipeVerticalListAdapter.MAIN_MYRECIPE,
+                activeUserID = userID,
+                { item ->
+                    val intent =
+                        Intent(
+                            this@MainMyRecipeFragment.requireContext(),
+                            RecipeDetailActivity::class.java
+                        )
+                            .putExtra("recipeID", item.recipeID)
+                    startActivity(intent)
                 }
+            )
+
+            myrecipeRecycler.apply {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = recipeListAdapter
             }
 
-            fMyrecipeRecycler.apply{
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = recipeMultiAdapter
-            }
+            recipeListViewModel.requestRecipeList(
+                searchby = RecipeListRepository.Companion.SEARCHBY.USERID,
+                sort = "latest",
+                searchValue = userID
+            )
 
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
@@ -82,65 +98,11 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
     }
 
     override fun onRefresh() {
-        Handler().postDelayed({ settingList() }, 1000)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (App.isServerAlive)
-            settingList()
-        else {
-            val temp = DataGenerator.make<ArrayList<Recipe>>(
-                resources,
-                resources.getInteger(R.integer.DATE_TYPE_RECIPE)
-            )
-
-            for (i in temp.indices) {
-                if (i != 0 && i % 4 == 0)
-                    recipeListItems.add(MultiItemRecipe(RecipeMultiAdapter.VIEWHOLDER_AD))
-                recipeListItems.add(
-                    MultiItemRecipe(
-                        RecipeMultiAdapter.VIEWHOLDER_ITEM,
-                        temp[i]
-                    )
-                )
-            }
-            recipeMultiAdapter.setNewData(recipeListItems as List<MultiItemRecipe?>?)
-        }
-    }
-
-    private fun settingList() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val res1 = recipeService.getRecipeByUserID(userID!!, "latest")
-
-            val temp = res1.body()!!
-            recipeListItems.clear()
-            for (i in temp.indices) {
-                if (i != 0 && i % 4 == 0) recipeListItems.add(
-                    MultiItemRecipe(
-                        RecipeMultiAdapter.VIEWHOLDER_AD
-                    )
-                )
-                recipeListItems.add(
-                    MultiItemRecipe(
-                        RecipeMultiAdapter.VIEWHOLDER_ITEM,
-                        temp[i]
-                    )
-                )
-            }
-
-            recipeMultiAdapter.apply{
-                setNewData(recipeListItems as List<MultiItemRecipe?>?)
-                setEmptyView(
-                    R.layout.rv_empty_recipe,
-                    binding.fMyrecipeRecycler.parent as ViewGroup
-                )
-            }
-            binding.fMyrecipeSwipe.isRefreshing = false
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
+        binding.myrecipeSwipe.isRefreshing = true
+        recipeListViewModel.requestRecipeList(
+            searchby = RecipeListRepository.Companion.SEARCHBY.USERID,
+            sort = "latest",
+            searchValue = userID
+        )
     }
 }

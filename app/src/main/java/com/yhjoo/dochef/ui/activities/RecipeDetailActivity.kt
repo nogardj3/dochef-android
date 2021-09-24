@@ -103,7 +103,7 @@ class RecipeDetailActivity : BaseActivity() {
             reviewListAdapter.apply {
                 setNewData(reviewList)
                 setEmptyView(
-                    R.layout.rv_empty_review,
+                    R.layout.empty_review,
                     binding.recipedetailReviewRecycler.parent as ViewGroup
                 )
             }

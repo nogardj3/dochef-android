@@ -8,7 +8,7 @@ import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
 import java.util.*
 
-class RecipeViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
+class PlayRecipeViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
     Fm!!
 ) {
     val fragments: MutableList<Fragment> = ArrayList()

@@ -17,7 +17,7 @@ import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.RecipeViewPagerAdapter
+import com.yhjoo.dochef.adapter.PlayRecipeViewPagerAdapter
 import com.yhjoo.dochef.databinding.APlayrecipeBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.RecipeDetail
@@ -41,7 +41,7 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
 
     private lateinit var recipeService: RecipeService
     private lateinit var speechRecognizer: SpeechRecognizer
-    private lateinit var recipeViewPagerAdapter: RecipeViewPagerAdapter
+    private lateinit var playRecipeViewPagerAdapter: PlayRecipeViewPagerAdapter
     private lateinit var recipeDetailInfo: RecipeDetail
     private lateinit var recipePhases: ArrayList<RecipePhase>
 
@@ -92,16 +92,16 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
     }
 
     private fun setPages() {
-        recipeViewPagerAdapter = RecipeViewPagerAdapter(supportFragmentManager)
-        recipeViewPagerAdapter.addFragment(PlayRecipeStartFragment(), recipeDetailInfo)
+        playRecipeViewPagerAdapter = PlayRecipeViewPagerAdapter(supportFragmentManager)
+        playRecipeViewPagerAdapter.addFragment(PlayRecipeStartFragment(), recipeDetailInfo)
         for (i in recipePhases.indices) {
-            if (i == recipePhases.size - 1) recipeViewPagerAdapter.addFragment(
+            if (i == recipePhases.size - 1) playRecipeViewPagerAdapter.addFragment(
                 PlayRecipeEndFragment(),
                 recipePhases[i],
                 recipeDetailInfo
-            ) else recipeViewPagerAdapter.addFragment(PlayRecipeItemFragment(), recipePhases[i])
+            ) else playRecipeViewPagerAdapter.addFragment(PlayRecipeItemFragment(), recipePhases[i])
         }
-        binding.playrecipeViewpager.adapter = recipeViewPagerAdapter
+        binding.playrecipeViewpager.adapter = playRecipeViewPagerAdapter
         binding.playrecipeViewpager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,

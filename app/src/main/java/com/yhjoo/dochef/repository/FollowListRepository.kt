@@ -6,7 +6,6 @@ import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.db.DataGenerator
-import com.yhjoo.dochef.db.entity.NotificationEntity
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.model.UserDetail
 import com.yhjoo.dochef.ui.activities.FollowListActivity

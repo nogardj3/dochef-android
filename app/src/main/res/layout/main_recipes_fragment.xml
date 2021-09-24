@@ -3,7 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.RecipeListViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.viewmodel.RecipeListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -21,7 +24,7 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingTop="10dp"
-                tools:listitem="@layout/li_recipe_main" />
+                tools:listitem="@layout/main_recipes_item" />
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

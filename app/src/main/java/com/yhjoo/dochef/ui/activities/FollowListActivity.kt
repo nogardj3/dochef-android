@@ -24,8 +24,7 @@ class FollowListActivity : BaseActivity() {
     private val binding: FollowlistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.followlist_activity)
     }
-
-    private lateinit var followlistViewModel: FollowListViewModel
+    private lateinit var followListViewModel: FollowListViewModel
 
     private lateinit var followListAdapter: FollowListAdapter
     private lateinit var activeUserId: String
@@ -51,10 +50,9 @@ class FollowListActivity : BaseActivity() {
                 currentUserId
             )
         )
-        followlistViewModel = factory.create(FollowListViewModel::class.java).apply {
+        followListViewModel = factory.create(FollowListViewModel::class.java).apply {
             activeUserDetail.observe(this@FollowListActivity, {
                 followListAdapter.activeUserFollowList = it.follow
-                followListAdapter.notifyDataSetChanged()
             })
             allFollowLists.observe(this@FollowListActivity, {
                 followListAdapter.submitList(it) {
@@ -70,8 +68,8 @@ class FollowListActivity : BaseActivity() {
 
             followListAdapter = FollowListAdapter(
                 activeUserId,
-                { item -> followlistViewModel.subscribeUser(item.userID) },
-                { item -> followlistViewModel.unsubscribeUser(item.userID) },
+                { item -> followListViewModel.subscribeUser(item.userID) },
+                { item -> followListViewModel.unsubscribeUser(item.userID) },
                 { item -> itemClicked(item) },
             )
 
@@ -82,7 +80,7 @@ class FollowListActivity : BaseActivity() {
         }
     }
 
-    private fun itemClicked(userBrief: UserBrief): Unit {
+    private fun itemClicked(userBrief: UserBrief) {
         val intent = Intent(this@FollowListActivity, HomeActivity::class.java)
             .putExtra("userID", userBrief.userID)
         startActivity(intent)

@@ -20,6 +20,10 @@ import com.yhjoo.dochef.viewmodel.PostListViewModelFactory
 import java.util.*
 
 class MainTimelineFragment : Fragment(), OnRefreshListener {
+    /* TODO
+    1. myfriend
+    2. AD
+     */
     private lateinit var binding: MainTimelineFragmentBinding
     private lateinit var postlistViewModel: PostListViewModel
     private lateinit var postListAdapter: PostListAdapter
@@ -49,6 +53,8 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         }
 
         binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+
             timelineSwipe.apply {
                 setOnRefreshListener(this@MainTimelineFragment)
                 setColorSchemeColors(
@@ -60,6 +66,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
             }
 
             postListAdapter = PostListAdapter(
+                PostListAdapter.MAIN_TIMELINE, // TODO companion object
                 { item -> userClick(item) },
                 { item -> itemClick(item) }
             )
@@ -68,6 +75,8 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = postListAdapter
             }
+
+            postlistViewModel.requestPostList()
         }
 
         return view

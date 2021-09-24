@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.SearchListAdapter
-import com.yhjoo.dochef.databinding.FResultBinding
+import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.SearchResult
 import com.yhjoo.dochef.model.UserBrief
@@ -31,7 +31,7 @@ class SearchResultFragment : Fragment() {
         const val ITEM_TAG = 4
     }
 
-    private lateinit var binding: FResultBinding
+    private lateinit var binding: SearchResultFragmentBinding
     private lateinit var userService: UserService
     private lateinit var recipeService: RecipeService
     private lateinit var searchListAdapter: SearchListAdapter
@@ -43,7 +43,7 @@ class SearchResultFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FResultBinding.inflate(layoutInflater)
+        binding = SearchResultFragmentBinding.inflate(layoutInflater)
         val view: View = binding.root
 
         userService = RetrofitBuilder.create(requireContext(), UserService::class.java)
@@ -51,7 +51,7 @@ class SearchResultFragment : Fragment() {
 
         type = requireArguments().getInt("type")
 
-        binding.apply{
+        binding.apply {
             searchListAdapter =
                 if (type == VIEWHOLDER.ITEM_USER)
                     SearchListAdapter(
@@ -60,8 +60,8 @@ class SearchResultFragment : Fragment() {
                         R.layout.followlist_item
                     )
                 else
-                    SearchListAdapter(type, ArrayList(), R.layout.li_recipe_result)
-            searchListAdapter.apply{
+                    SearchListAdapter(type, ArrayList(), R.layout.search_result_item)
+            searchListAdapter.apply {
                 setEmptyView(
                     R.layout.rv_search,
                     binding.resultRecycler.parent as ViewGroup
@@ -85,7 +85,7 @@ class SearchResultFragment : Fragment() {
                     }
                 }
             }
-            resultRecycler.apply{
+            resultRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = searchListAdapter
             }
@@ -94,7 +94,7 @@ class SearchResultFragment : Fragment() {
         return view
     }
 
-//    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+    //    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
 //        super.setUserVisibleHint(isVisibleToUser)
 //        if (isVisibleToUser) {
 //            if (activity != null && (requireActivity() as SearchActivity). .keyword != null) {

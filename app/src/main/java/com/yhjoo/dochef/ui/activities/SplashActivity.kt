@@ -7,7 +7,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.ASplashBinding
+import com.yhjoo.dochef.databinding.SplashActivityBinding
 import com.yhjoo.dochef.utilities.ChefAuth
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.BasicService
@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SplashActivity : BaseActivity() {
-    private val binding: ASplashBinding by lazy { ASplashBinding.inflate(layoutInflater) }
+    private val binding: SplashActivityBinding by lazy { SplashActivityBinding.inflate(layoutInflater) }
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var serverAlive = false
     private var isLogin = false

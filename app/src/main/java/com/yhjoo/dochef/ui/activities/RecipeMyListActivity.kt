@@ -3,29 +3,32 @@ package com.yhjoo.dochef.ui.activities
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.afollestad.materialdialogs.MaterialDialog
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.RecipeMyListAdapter
-import com.yhjoo.dochef.databinding.ARecipelistBinding
-import com.yhjoo.dochef.db.DataGenerator
-import com.yhjoo.dochef.model.Recipe
+import com.yhjoo.dochef.adapter.RecipeVerticalListAdapter
+import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
+import com.yhjoo.dochef.repository.RecipeListRepository
 import com.yhjoo.dochef.utilities.*
-import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
+import com.yhjoo.dochef.viewmodel.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeMyListActivity : BaseActivity() {
-    private val binding: ARecipelistBinding by lazy { ARecipelistBinding.inflate(layoutInflater) }
+    /* TODO
+    1. dislike and refresh recipe
+    2. ad + item + recommend
+     */
 
-    private lateinit var recipeService: RecipeService
-    private lateinit var recipeMyListAdapter: RecipeMyListAdapter
+    val binding: RecipemylistActivityBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.recipemylist_activity)
+    }
+    private lateinit var recipeListViewModel: RecipeListViewModel
+    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
+
     private lateinit var addMenu: MenuItem
-    private lateinit var recipeList: ArrayList<Recipe>
     private lateinit var userID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,52 +37,57 @@ class RecipeMyListActivity : BaseActivity() {
         setSupportActionBar(binding.recipelistToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
         userID = Utils.getUserBrief(this).userID
 
+        val factory = RecipeListViewModelFactory(
+            RecipeListRepository(
+                applicationContext
+            )
+        )
+
+        recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
+            allRecipeList.observe(this@RecipeMyListActivity, {
+                recipeListAdapter.submitList(it) {
+                    binding.recipelistRecycler.scrollToPosition(0)
+                }
+            })
+        }
+
         binding.apply {
-            recipeMyListAdapter = RecipeMyListAdapter(userID)
-            recipeMyListAdapter.apply {
-                setEmptyView(
-                    R.layout.rv_loading,
-                    recipelistRecycler.parent as ViewGroup
-                )
-                setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
+            lifecycleOwner = this@RecipeMyListActivity
+
+            recipeListAdapter = RecipeVerticalListAdapter(
+                RecipeVerticalListAdapter.MAIN_MYRECIPE,
+                activeUserID= userID,
+                { item ->
                     val intent = Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", recipeList[position].recipeID)
+                        .putExtra("recipeID", item.recipeID)
                     startActivity(intent)
                 }
-                setOnItemChildClickListener { adapter: BaseQuickAdapter<*, *>, view: View, position: Int ->
-                    if (view.id == R.id.recipemylist_yours) {
-                        MaterialDialog(this@RecipeMyListActivity).show {
-                            message(text = "레시피를 삭제 하시겠습니까?")
-                            positiveButton(text = "확인") {
-                                cancelLikeRecipe(
-                                    (adapter.data[position] as Recipe).recipeID
-                                )
-                            }
-                            negativeButton(text = "취소")
-                        }
-                    }
-                }
-            }
+            )
+
             recipelistRecycler.apply {
                 layoutManager = LinearLayoutManager(this@RecipeMyListActivity)
-                adapter = recipeMyListAdapter
+                adapter = recipeListAdapter
             }
-        }
-    }
 
-    override fun onResume() {
-        super.onResume()
-
-        if (App.isServerAlive)
-            loadData()
-        else {
-            recipeList = DataGenerator.make(
-                resources, resources.getInteger(R.integer.DATE_TYPE_RECIPE)
+            recipeListViewModel.requestRecipeList(
+                searchby = RecipeListRepository.Companion.SEARCHBY.USERID,
+                sort = "latest",
+                searchValue = userID
             )
-            recipeMyListAdapter.setNewData(recipeList)
+
+//            if (view.id == R.id.recipemylist_yours) {
+//                MaterialDialog(this@RecipeMyListActivity).show {
+//                    message(text = "레시피를 삭제 하시겠습니까?")
+//                    positiveButton(text = "확인") {
+//                        cancelLikeRecipe(
+//                            (adapter.data[position] as Recipe).recipeID
+//                        )
+//                    }
+//                    negativeButton(text = "취소")
+//                }
+//            }
         }
     }
 
@@ -97,28 +105,14 @@ class RecipeMyListActivity : BaseActivity() {
             super.onOptionsItemSelected(item)
     }
 
-    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
+    private fun dislikeRecipe(recipeid: Int) = CoroutineScope(Dispatchers.Main).launch {
         runCatching {
-            val res1 = recipeService.getRecipeByUserID(userID, "latest")
-            recipeList = res1.body()!!
-            recipeMyListAdapter.apply {
-                setNewData(recipeList)
-                setEmptyView(
-                    R.layout.rv_empty_recipe,
-                    binding.recipelistRecycler.parent as ViewGroup
-                )
-            }
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
-    }
-
-    private fun cancelLikeRecipe(recipeid: Int) = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            recipeService.setLikeRecipe(recipeid, userID, -1)
-            loadData()
+            recipeListViewModel.disLikeRecipe(recipeid, userID)
+            recipeListViewModel.requestRecipeList(
+                searchby = RecipeListRepository.Companion.SEARCHBY.USERID,
+                sort = "latest",
+                searchValue = userID
+            )
         }
             .onSuccess { }
             .onFailure {

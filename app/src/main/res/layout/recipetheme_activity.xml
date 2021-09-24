@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!--    <data>-->
-    <!--        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.PostListViewModel" />-->
-    <!--    </data>-->
+    <data>
+        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.RecipeListViewModel" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
-            tools:listitem="@layout/li_recipe_theme" />
+            tools:listitem="@layout/recipetheme_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -31,9 +31,9 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class MainInitFragment : Fragment() {
-    /*
-        TODO
-        sampledb 만들어지면 TODO로 바꾸기
+    /* TODO
+    1. Theme activity 이동 설정
+    2.
     */
 
     private lateinit var binding: MainInitFragmentBinding
@@ -68,16 +68,15 @@ class MainInitFragment : Fragment() {
                 Html.FROM_HTML_MODE_LEGACY
             )
             mainRecommendMore.setOnClickListener {
-//                    TODO
-//                    Intent intent = new Intent(getContext(), RecipeThemeActivity.class)
-//                            .putExtra("userID",recipeList.get(0).getUserID());
-                startActivity(Intent(context, RecipeThemeActivity::class.java))
+                val itt = Intent(requireContext(), RecipeThemeActivity::class.java)
+                    .putExtra("userID",recipeList[0].userID)
+                        startActivity(Intent(context, RecipeThemeActivity::class.java))
             }
 
             recipeHorizontalAdapter = RecipeHorizontalAdapter().apply {
                 setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
                     val intent = Intent(
-                        context, RecipeDetailActivity::class.java
+                        requireContext(), RecipeDetailActivity::class.java
                     )
                         .putExtra("recipeID", recipeList[position].recipeID)
                     startActivity(intent)
@@ -148,14 +147,10 @@ class MainInitFragment : Fragment() {
         RecyclerView.Adapter<MainAdPagerAdapter.ADViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
                 ADViewHolder = ADViewHolder(
-            LayoutInflater.from(parent.context).inflate(R.layout.adview, parent, false)
+            LayoutInflater.from(parent.context).inflate(R.layout.main_init_adview, parent, false)
         )
 
         override fun onBindViewHolder(holder: ADViewHolder, position: Int) {
-//            Glide.with(context)
-//                .load(img_ids[position])
-//                .centerInside()
-//                .into(holder.adItem)
             holder.adItem.setImageResource(img_ids[position])
         }
 
