@@ -11,7 +11,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.PostListAdapter
 import com.yhjoo.dochef.databinding.MainTimelineFragmentBinding
 import com.yhjoo.dochef.model.Post
-import com.yhjoo.dochef.repository.PostListRepository
+import com.yhjoo.dochef.repository.PostRepository
 import com.yhjoo.dochef.ui.activities.HomeActivity
 import com.yhjoo.dochef.ui.activities.PostDetailActivity
 import com.yhjoo.dochef.utilities.*
@@ -38,7 +38,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         val view: View = binding.root
 
         val factory = PostListViewModelFactory(
-            PostListRepository(
+            PostRepository(
                 requireContext().applicationContext
             )
         )

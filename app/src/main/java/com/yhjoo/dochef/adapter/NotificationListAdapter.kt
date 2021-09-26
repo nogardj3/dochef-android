@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.NotificationItemBinding
 import com.yhjoo.dochef.db.entity.NotificationEntity
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 import com.yhjoo.dochef.utilities.Utils
 
 class NotificationListAdapter(private val clickListener: (NotificationEntity) -> Unit) :
@@ -46,7 +46,7 @@ class NotificationListAdapter(private val clickListener: (NotificationEntity) ->
                     clickListener(notification)
                 }
 
-                GlideImageLoadDelegator.loadUserImage(
+                ChefImageLoader.loadUserImage(
                     context,
                     notification.img,
                     notificationUserimg

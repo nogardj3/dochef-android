@@ -61,7 +61,7 @@ class PostWriteActivity : BaseActivity() {
                 postwriteToolbar.title = "수정"
                 postwriteContents.setText(intent.getStringExtra("contents"))
                 if (intent.getStringExtra("postImg") != null) {
-                    GlideImageLoadDelegator.loadPostImage(
+                    ChefImageLoader.loadPostImage(
                         this@PostWriteActivity, intent.getStringExtra("postImg")!!, postwritePostimg
                     )
                 }

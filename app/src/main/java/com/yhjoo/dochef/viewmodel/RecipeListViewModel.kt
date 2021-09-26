@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.repository.RecipeListRepository
+import com.yhjoo.dochef.repository.RecipeRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecipeListViewModel(
-    private val repository: RecipeListRepository
+    private val repository: RecipeRepository
 ) : ViewModel() {
     val allRecipeList = MutableLiveData<List<Recipe>>()
 
@@ -35,7 +35,7 @@ class RecipeListViewModel(
     }
 }
 
-class RecipeListViewModelFactory(private val repository: RecipeListRepository) :
+class RecipeListViewModelFactory(private val repository: RecipeRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecipeListViewModel::class.java)) {

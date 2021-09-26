@@ -13,7 +13,7 @@ import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
 import com.yhjoo.dochef.ui.activities.BaseActivity
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 import com.yhjoo.dochef.utilities.RetrofitBuilder
 import com.yhjoo.dochef.utilities.RetrofitServices.RecipeService
 import com.yhjoo.dochef.utilities.RetrofitServices.ReviewService
@@ -60,7 +60,7 @@ class PlayRecipeEndFragment : Fragment() {
 
     private fun loadData() {
         binding.apply {
-            GlideImageLoadDelegator.loadRecipeImage(
+            ChefImageLoader.loadRecipeImage(
                 requireContext(),
                 recipePhase.recipe_img,
                 playrecipeItemImg

@@ -116,12 +116,12 @@ class RecipeDetailActivity : BaseActivity() {
 
     private fun setTopView() {
         binding.apply {
-            GlideImageLoadDelegator.loadRecipeImage(
+            ChefImageLoader.loadRecipeImage(
                 this@RecipeDetailActivity,
                 recipeDetailInfo.recipeImg,
                 recipedetailMainImg
             )
-            GlideImageLoadDelegator.loadUserImage(
+            ChefImageLoader.loadUserImage(
                 this@RecipeDetailActivity,
                 recipeDetailInfo.userImg,
                 recipedetailUserimg
@@ -144,7 +144,7 @@ class RecipeDetailActivity : BaseActivity() {
             recipedetailLike.setOnClickListener { if (recipeDetailInfo.userID != userID) setLike() }
             recipedetailStartrecipe.setOnClickListener {
                 startActivity(
-                    Intent(this@RecipeDetailActivity, PlayRecipeActivity::class.java)
+                    Intent(this@RecipeDetailActivity, RecipePlayActivity::class.java)
                         .putExtra("recipe", recipeDetailInfo)
                 )
             }

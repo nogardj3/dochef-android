@@ -6,12 +6,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.model.UserBrief
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.repository.FollowListRepository
+import com.yhjoo.dochef.repository.FollowRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FollowListViewModel(
-    private val repository: FollowListRepository
+    private val repository: FollowRepository
 ) : ViewModel() {
     val activeUserDetail = MutableLiveData<UserDetail>()
     val allFollowLists = MutableLiveData<List<UserBrief>>()
@@ -58,7 +58,7 @@ class FollowListViewModel(
     }
 }
 
-class FollowListViewModelFactory(private val repository: FollowListRepository) :
+class FollowListViewModelFactory(private val repository: FollowRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FollowListViewModel::class.java)) {

@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
 
-class PostListRepository(
+class PostRepository(
     private val context: Context
 ) {
     private val postClient =

@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.FollowlistItemBinding
 import com.yhjoo.dochef.model.UserBrief
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 import java.util.*
 
 class FollowListAdapter(
@@ -67,7 +67,7 @@ class FollowListAdapter(
                     unsubscribeListener(userBrief)
                 }
 
-                GlideImageLoadDelegator.loadUserImage(context, userBrief.userImg, userImg)
+                ChefImageLoader.loadUserImage(context, userBrief.userImg, userImg)
                 userNickname.text = userBrief.nickname
                 userFollowerCount.text = String.format(
                     context.getString(R.string.format_follower), userBrief.follower_count

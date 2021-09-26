@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.FAQListAdapter
+import com.yhjoo.dochef.adapter.ExpandableFAQListAdapter
 import com.yhjoo.dochef.databinding.SettingFaqFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.ExpandContents
@@ -26,7 +26,7 @@ import java.util.*
 class SettingFAQFragment : Fragment() {
     private lateinit var binding: SettingFaqFragmentBinding
     private lateinit var basicService: RetrofitServices.BasicService
-    private lateinit var faqListAdapter: FAQListAdapter
+    private lateinit var expandableFaqListAdapter: ExpandableFAQListAdapter
     private var faqList = ArrayList<MultiItemEntity>()
 
     override fun onCreateView(
@@ -39,9 +39,9 @@ class SettingFAQFragment : Fragment() {
 
         basicService =
             RetrofitBuilder.create(requireContext(), RetrofitServices.BasicService::class.java)
-        faqListAdapter = FAQListAdapter(faqList)
+        expandableFaqListAdapter = ExpandableFAQListAdapter(faqList)
         binding.apply {
-            faqRecycler.adapter = faqListAdapter
+            faqRecycler.adapter = expandableFaqListAdapter
             faqRecycler.layoutManager = LinearLayoutManager(requireContext())
         }
 
@@ -79,6 +79,6 @@ class SettingFAQFragment : Fragment() {
             title.addSubItem(ExpandContents(item.contents, 0))
             faqList.add(title)
         }
-        faqListAdapter.setNewData(faqList as List<MultiItemEntity?>?)
+        expandableFaqListAdapter.setNewData(faqList as List<MultiItemEntity?>?)
     }
 }

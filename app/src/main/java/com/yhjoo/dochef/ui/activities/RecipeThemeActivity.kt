@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.RecipeVerticalListAdapter
 import com.yhjoo.dochef.databinding.RecipethemeActivityBinding
-import com.yhjoo.dochef.repository.RecipeListRepository
+import com.yhjoo.dochef.repository.RecipeRepository
 import com.yhjoo.dochef.viewmodel.RecipeListViewModel
 import com.yhjoo.dochef.viewmodel.RecipeListViewModelFactory
 import java.util.*
@@ -47,7 +47,7 @@ class RecipeThemeActivity : BaseActivity() {
         }
 
         val factory = RecipeListViewModelFactory(
-            RecipeListRepository(
+            RecipeRepository(
                 applicationContext
             )
         )
@@ -85,13 +85,13 @@ class RecipeThemeActivity : BaseActivity() {
 
             if (currentMode == QUERY.POPULAR) {
                 recipeListViewModel.requestRecipeList(
-                    searchby = RecipeListRepository.Companion.SEARCHBY.ALL,
+                    searchby = RecipeRepository.Companion.SEARCHBY.ALL,
                     sort = "popular",
                     searchValue = null
                 )
             } else {
                 recipeListViewModel.requestRecipeList(
-                    searchby = RecipeListRepository.Companion.SEARCHBY.TAG,
+                    searchby = RecipeRepository.Companion.SEARCHBY.TAG,
                     sort = "popular",
                     searchValue = tagName
                 )

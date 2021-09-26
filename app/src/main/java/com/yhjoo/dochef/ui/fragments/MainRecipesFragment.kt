@@ -10,7 +10,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.RecipeVerticalListAdapter
 import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
-import com.yhjoo.dochef.repository.RecipeListRepository
+import com.yhjoo.dochef.repository.RecipeRepository
 import com.yhjoo.dochef.ui.activities.RecipeDetailActivity
 import com.yhjoo.dochef.viewmodel.RecipeListViewModel
 import com.yhjoo.dochef.viewmodel.RecipeListViewModelFactory
@@ -47,7 +47,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         val view: View = binding.root
 
         val factory = RecipeListViewModelFactory(
-            RecipeListRepository(
+            RecipeRepository(
                 requireContext().applicationContext
             )
         )
@@ -94,7 +94,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
             }
 
             recipeListViewModel.requestRecipeList(
-                searchby = RecipeListRepository.Companion.SEARCHBY.ALL,
+                searchby = RecipeRepository.Companion.SEARCHBY.ALL,
                 sort = currentSort,
                 searchValue = null
             )
@@ -108,7 +108,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
     override fun onRefresh() {
         binding.recipesSwipe.isRefreshing = true
         recipeListViewModel.requestRecipeList(
-            searchby = RecipeListRepository.Companion.SEARCHBY.ALL,
+            searchby = RecipeRepository.Companion.SEARCHBY.ALL,
             sort = currentSort,
             searchValue = null
         )

@@ -30,7 +30,7 @@ import io.reactivex.rxjava3.core.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class PlayRecipeActivity : BaseActivity(), SensorEventListener {
+class RecipePlayActivity : BaseActivity(), SensorEventListener {
     /*
         TODO
         센서근접 -> 음성인식 -> 인식결과에 따라 행동
@@ -166,7 +166,7 @@ class PlayRecipeActivity : BaseActivity(), SensorEventListener {
                     binding.playrecipeCircularTimerText.text =
                         String.format("%02d:%02d", t / 60, t % 60)
                 }, { throwable: Throwable -> throwable.printStackTrace() }) {
-                    mediaPlayer = MediaPlayer.create(this@PlayRecipeActivity, R.raw.ring_complete)
+                    mediaPlayer = MediaPlayer.create(this@RecipePlayActivity, R.raw.ring_complete)
                     mediaPlayer!!.setOnCompletionListener {
                         if (soundCount < 2) {
                             soundCount++

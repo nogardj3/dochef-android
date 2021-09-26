@@ -14,7 +14,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.HomePostlistItemBinding
 import com.yhjoo.dochef.databinding.MainTimelineItemBinding
 import com.yhjoo.dochef.model.Post
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 import com.yhjoo.dochef.utilities.Utils
 
 class PostListAdapter(
@@ -75,10 +75,10 @@ class PostListAdapter(
                     userClickListener(post)
                 }
 
-                GlideImageLoadDelegator.loadPostImage(
+                ChefImageLoader.loadPostImage(
                     context, post.postImg, timelinePostImg
                 )
-                GlideImageLoadDelegator.loadUserImage(
+                ChefImageLoader.loadUserImage(
                     context, post.userImg, timelineUserImg
                 )
                 timelineUserNickname.text = post.nickname
@@ -99,7 +99,7 @@ class PostListAdapter(
                 if (post.comments.size != 0) {
                     timelineCommentGroup.visibility = View.VISIBLE
 
-                    GlideImageLoadDelegator.loadUserImage(
+                    ChefImageLoader.loadUserImage(
                         context, post.comments[0]!!.userImg, timelineCommentUserImg
                     )
 
@@ -126,10 +126,10 @@ class PostListAdapter(
                     userClickListener(post)
                 }
 
-                GlideImageLoadDelegator.loadPostImage(
+                ChefImageLoader.loadPostImage(
                     context, post.postImg, postlistPostImg
                 )
-                GlideImageLoadDelegator.loadUserImage(
+                ChefImageLoader.loadUserImage(
                     context, post.userImg, postlistUserImg
                 )
                 postlistUserNickname.text = post.nickname
@@ -150,7 +150,7 @@ class PostListAdapter(
                 if (post.comments.size != 0) {
                     postlistCommentGroup.visibility = View.VISIBLE
 
-                    GlideImageLoadDelegator.loadUserImage(
+                    ChefImageLoader.loadUserImage(
                         context, post.comments[0]!!.userImg, postlistCommentUserImg
                     )
 

@@ -6,7 +6,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 
-object GlideImageLoadDelegator {
+object ChefImageLoader {
     fun loadUserImage(
         context: Context,
         filename: String,

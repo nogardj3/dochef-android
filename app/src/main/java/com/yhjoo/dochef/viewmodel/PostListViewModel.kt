@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.model.Post
-import com.yhjoo.dochef.repository.PostListRepository
+import com.yhjoo.dochef.repository.PostRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PostListViewModel(
-    private val repository: PostListRepository
+    private val repository: PostRepository
 ) : ViewModel() {
     val allPostList = MutableLiveData<List<Post>>()
 
@@ -41,7 +41,7 @@ class PostListViewModel(
 
 }
 
-class PostListViewModelFactory(private val repository: PostListRepository) :
+class PostListViewModelFactory(private val repository: PostRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostListViewModel::class.java)) {

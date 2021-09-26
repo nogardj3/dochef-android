@@ -205,12 +205,12 @@ class PostDetailActivity : BaseActivity() {
 
     private fun setTopView() {
         binding.apply {
-            GlideImageLoadDelegator.loadPostImage(
+            ChefImageLoader.loadPostImage(
                 this@PostDetailActivity,
                 postInfo.postImg,
                 binding.postPostimg
             )
-            GlideImageLoadDelegator.loadUserImage(
+            ChefImageLoader.loadUserImage(
                 this@PostDetailActivity,
                 postInfo.userImg,
                 binding.postUserimg

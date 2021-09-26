@@ -9,7 +9,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.FollowListAdapter
 import com.yhjoo.dochef.databinding.FollowlistActivityBinding
 import com.yhjoo.dochef.model.UserBrief
-import com.yhjoo.dochef.repository.FollowListRepository
+import com.yhjoo.dochef.repository.FollowRepository
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.viewmodel.FollowListViewModel
 import com.yhjoo.dochef.viewmodel.FollowListViewModelFactory
@@ -43,7 +43,7 @@ class FollowListActivity : BaseActivity() {
         currentUserId = intent.getStringExtra("userID").toString()
 
         val factory = FollowListViewModelFactory(
-            FollowListRepository(
+            FollowRepository(
                 applicationContext,
                 currentMode,
                 activeUserId,

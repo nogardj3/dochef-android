@@ -12,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
 import com.yhjoo.dochef.model.RecipePhase
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 
 class PlayRecipeItemFragment : Fragment() {
     private lateinit var binding: FPlayrecipeItemBinding
@@ -28,7 +28,7 @@ class PlayRecipeItemFragment : Fragment() {
         val recipePhase = requireArguments().getSerializable("item") as RecipePhase
 
         binding.apply {
-            GlideImageLoadDelegator.loadRecipeImage(
+            ChefImageLoader.loadRecipeImage(
                 requireContext(),
                 recipePhase.recipe_img,
                 playrecipeItemImg

@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.SearchListAdapter
+import com.yhjoo.dochef.adapter.SearchResultAdapter
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.SearchResult
@@ -34,7 +34,7 @@ class SearchResultFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
     private lateinit var userService: UserService
     private lateinit var recipeService: RecipeService
-    private lateinit var searchListAdapter: SearchListAdapter
+    private lateinit var searchResultAdapter: SearchResultAdapter
     private var keyword: String? = null
     private var type = 0
 
@@ -52,16 +52,16 @@ class SearchResultFragment : Fragment() {
         type = requireArguments().getInt("type")
 
         binding.apply {
-            searchListAdapter =
+            searchResultAdapter =
                 if (type == VIEWHOLDER.ITEM_USER)
-                    SearchListAdapter(
+                    SearchResultAdapter(
                         type,
                         ArrayList(),
                         R.layout.followlist_item
                     )
                 else
-                    SearchListAdapter(type, ArrayList(), R.layout.search_result_item)
-            searchListAdapter.apply {
+                    SearchResultAdapter(type, ArrayList(), R.layout.search_result_item)
+            searchResultAdapter.apply {
                 setEmptyView(
                     R.layout.rv_search,
                     binding.resultRecycler.parent as ViewGroup
@@ -87,7 +87,7 @@ class SearchResultFragment : Fragment() {
             }
             resultRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = searchListAdapter
+                adapter = searchResultAdapter
             }
         }
 

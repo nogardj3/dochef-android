@@ -15,7 +15,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
 
-class RecipeListRepository(
+class RecipeRepository(
     private val context: Context
 ) {
     companion object {

@@ -53,7 +53,7 @@ class MainUserFragment : Fragment() {
         else {
             userDetailInfo =
                 DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
-            GlideImageLoadDelegator.loadUserImage(
+            ChefImageLoader.loadUserImage(
                 requireContext(),
                 userDetailInfo.userImg,
                 binding.fmainUserImg
@@ -96,7 +96,7 @@ class MainUserFragment : Fragment() {
         runCatching {
             val res1 = userService.getUserDetail(userID)
             userDetailInfo = res1.body()!!
-            GlideImageLoadDelegator.loadUserImage(
+            ChefImageLoader.loadUserImage(
                 this@MainUserFragment.requireContext(),
                 userDetailInfo.userImg,
                 binding.fmainUserImg

@@ -4,13 +4,13 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 import com.yhjoo.dochef.utilities.Utils
 
 class RecipeHorizontalHomeAdapter(var userID: String?) :
     BaseQuickAdapter<Recipe, BaseViewHolder>(R.layout.li_recipe_home) {
     override fun convert(helper: BaseViewHolder, item: Recipe) {
-        GlideImageLoadDelegator.loadRecipeImage(
+        ChefImageLoader.loadRecipeImage(
             mContext,
             item.recipeImg,
             helper.getView(R.id.recipehome_recipeimg)

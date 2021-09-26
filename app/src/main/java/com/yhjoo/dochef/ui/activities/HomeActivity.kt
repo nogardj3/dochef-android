@@ -27,7 +27,7 @@ import com.yhjoo.dochef.databinding.HomeActivityBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.UserDetail
-import com.yhjoo.dochef.repository.PostListRepository
+import com.yhjoo.dochef.repository.PostRepository
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.*
 import com.yhjoo.dochef.viewmodel.PostListViewModel
@@ -103,7 +103,7 @@ class HomeActivity : BaseActivity() {
         }
 
         val factory = PostListViewModelFactory(
-            PostListRepository(applicationContext)
+            PostRepository(applicationContext)
         )
         postListViewModel = factory.create(PostListViewModel::class.java).apply {
             allPostList.observe(this@HomeActivity, {
@@ -189,7 +189,7 @@ class HomeActivity : BaseActivity() {
                     okMenu.isVisible = false
                     binding.apply {
                         homeRevisegroup.visibility = View.GONE
-                        GlideImageLoadDelegator.loadUserImage(
+                        ChefImageLoader.loadUserImage(
                             this@HomeActivity,
                             userDetailInfo.userImg,
                             homeUserimg
@@ -294,7 +294,7 @@ class HomeActivity : BaseActivity() {
 
     private fun setUserInfo() {
         binding.apply {
-            GlideImageLoadDelegator.loadUserImage(
+            ChefImageLoader.loadUserImage(
                 this@HomeActivity,
                 userDetailInfo.userImg,
                 homeUserimg

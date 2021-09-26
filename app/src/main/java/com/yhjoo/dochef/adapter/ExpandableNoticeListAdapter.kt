@@ -8,7 +8,7 @@ import com.yhjoo.dochef.model.ExpandContents
 import com.yhjoo.dochef.model.ExpandTitle
 import com.yhjoo.dochef.utilities.Utils
 
-class NoticeListAdapter(data: List<MultiItemEntity>?) :
+class ExpandableNoticeListAdapter(data: List<MultiItemEntity>?) :
     BaseMultiItemQuickAdapter<MultiItemEntity?, BaseViewHolder?>(data) {
     object EXPAND {
         const val DEPTH_0 = 0

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.entity.MultiItemEntity
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.adapter.NoticeListAdapter
+import com.yhjoo.dochef.adapter.ExpandableNoticeListAdapter
 import com.yhjoo.dochef.databinding.SettingNoticeFragmentBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.ExpandContents
@@ -26,7 +26,7 @@ import java.util.*
 class SettingNoticeFragment : Fragment() {
     private lateinit var binding: SettingNoticeFragmentBinding
     private lateinit var basicService: RetrofitServices.BasicService
-    private lateinit var noticeListAdapter: NoticeListAdapter
+    private lateinit var expandableNoticeListAdapter: ExpandableNoticeListAdapter
     private var noticeList = ArrayList<MultiItemEntity>()
 
     override fun onCreateView(
@@ -39,9 +39,9 @@ class SettingNoticeFragment : Fragment() {
 
         basicService =
             RetrofitBuilder.create(requireContext(), RetrofitServices.BasicService::class.java)
-        noticeListAdapter = NoticeListAdapter(noticeList)
+        expandableNoticeListAdapter = ExpandableNoticeListAdapter(noticeList)
         binding.apply {
-            noticeRecycler.adapter = noticeListAdapter
+            noticeRecycler.adapter = expandableNoticeListAdapter
             noticeRecycler.layoutManager = LinearLayoutManager(requireContext())
         }
 
@@ -79,6 +79,6 @@ class SettingNoticeFragment : Fragment() {
             title.addSubItem(ExpandContents(item.contents, 0))
             noticeList.add(title)
         }
-        noticeListAdapter.setNewData(noticeList as List<MultiItemEntity>)
+        expandableNoticeListAdapter.setNewData(noticeList as List<MultiItemEntity>)
     }
 }

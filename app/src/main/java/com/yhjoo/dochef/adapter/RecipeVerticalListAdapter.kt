@@ -14,7 +14,7 @@ import com.yhjoo.dochef.databinding.MainRecipesItemBinding
 import com.yhjoo.dochef.databinding.RecipemylistItemBinding
 import com.yhjoo.dochef.databinding.RecipethemeItemBinding
 import com.yhjoo.dochef.model.Recipe
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 import com.yhjoo.dochef.utilities.Utils
 
 class RecipeVerticalListAdapter(
@@ -26,8 +26,11 @@ class RecipeVerticalListAdapter(
     companion object {
         const val MAIN_RECIPES = 0
         const val MAIN_MYRECIPE = 1
-        const val MYLIST = 2
-        const val THEME = 3
+        const val SEARCH_RECIPE = 2
+        const val SEARCH_INGREDIENT = 3
+        const val SEARCH_TAG = 4
+        const val MYLIST = 5
+        const val THEME = 6
     }
 
     lateinit var context: Context
@@ -89,7 +92,7 @@ class RecipeVerticalListAdapter(
                     itemClickListener!!(recipe)
                 }
 
-                GlideImageLoadDelegator.loadRecipeImage(
+                ChefImageLoader.loadRecipeImage(
                     context,
                     recipe.recipeImg,
                     mainRecipesRecipeImg
@@ -125,7 +128,7 @@ class RecipeVerticalListAdapter(
                     itemClickListener!!(recipe)
                 }
 
-                GlideImageLoadDelegator.loadRecipeImage(
+                ChefImageLoader.loadRecipeImage(
                     context,
                     recipe.recipeImg,
                     mainmyrecipeRecipeimg
@@ -155,7 +158,7 @@ class RecipeVerticalListAdapter(
                     itemClickListener!!(recipe)
                 }
 
-                GlideImageLoadDelegator.loadRecipeImage(
+                ChefImageLoader.loadRecipeImage(
                     context,
                     recipe.recipeImg,
                     recipemylistRecipeimg
@@ -186,7 +189,7 @@ class RecipeVerticalListAdapter(
                     itemClickListener!!(recipe)
                 }
 
-                GlideImageLoadDelegator.loadRecipeImage(
+                ChefImageLoader.loadRecipeImage(
                     context, recipe.recipeImg, recipethemeImg
                 )
                 recipethemeTitle.text = recipe.recipeName

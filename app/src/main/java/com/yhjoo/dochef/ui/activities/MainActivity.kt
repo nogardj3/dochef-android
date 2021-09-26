@@ -159,7 +159,7 @@ class MainActivity : BaseActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.main, menu)
+        menuInflater.inflate(R.menu.menu_main, menu)
 
         menuNotification = menu.findItem(R.id.main_menu_notification)
         menuSort = menu.findItem(R.id.main_menu_sort)

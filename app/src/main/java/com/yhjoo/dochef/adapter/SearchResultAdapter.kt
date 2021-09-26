@@ -13,9 +13,9 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.Recipe
 import com.yhjoo.dochef.model.SearchResult
 import com.yhjoo.dochef.model.UserBrief
-import com.yhjoo.dochef.utilities.GlideImageLoadDelegator
+import com.yhjoo.dochef.utilities.ChefImageLoader
 
-class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: Int) :
+class SearchResultAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: Int) :
     BaseMultiItemQuickAdapter<SearchResult<*>?, BaseViewHolder?>(data) {
 
     object VIEWHOLDER {
@@ -31,7 +31,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
             when (helper.itemViewType) {
                 VIEWHOLDER.ITEM_USER -> {
                     val ele = item.content as UserBrief
-                    GlideImageLoadDelegator.loadUserImage(
+                    ChefImageLoader.loadUserImage(
                         mContext,
                         ele.userImg,
                         helper.getView(R.id.user_img)
@@ -46,7 +46,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                 }
                 VIEWHOLDER.ITEM_RECIPE_NAME -> {
                     val recipeItem = item.content as Recipe
-                    GlideImageLoadDelegator.loadRecipeImage(
+                    ChefImageLoader.loadRecipeImage(
                         mContext, recipeItem.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
                     )
                     helper.setText(R.id.reciperesult_title, recipeItem.recipeName)
@@ -68,7 +68,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                 }
                 VIEWHOLDER.ITEM_INGREDIENT -> {
                     val recipeItem2 = item.content as Recipe
-                    GlideImageLoadDelegator.loadRecipeImage(
+                    ChefImageLoader.loadRecipeImage(
                         mContext, recipeItem2.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
                     )
                     helper.setText(R.id.reciperesult_title, recipeItem2.recipeName)
@@ -94,7 +94,7 @@ class SearchListAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId: I
                 }
                 VIEWHOLDER.ITEM_TAG -> {
                     val recipeItem3 = item.content as Recipe
-                    GlideImageLoadDelegator.loadRecipeImage(
+                    ChefImageLoader.loadRecipeImage(
                         mContext, recipeItem3.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
                     )
                     helper.setText(R.id.reciperesult_title, recipeItem3.recipeName)

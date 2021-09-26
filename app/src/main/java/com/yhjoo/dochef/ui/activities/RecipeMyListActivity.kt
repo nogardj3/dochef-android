@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.RecipeVerticalListAdapter
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
-import com.yhjoo.dochef.repository.RecipeListRepository
+import com.yhjoo.dochef.repository.RecipeRepository
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.viewmodel.*
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +40,7 @@ class RecipeMyListActivity : BaseActivity() {
         userID = Utils.getUserBrief(this).userID
 
         val factory = RecipeListViewModelFactory(
-            RecipeListRepository(
+            RecipeRepository(
                 applicationContext
             )
         )
@@ -72,7 +72,7 @@ class RecipeMyListActivity : BaseActivity() {
             }
 
             recipeListViewModel.requestRecipeList(
-                searchby = RecipeListRepository.Companion.SEARCHBY.USERID,
+                searchby = RecipeRepository.Companion.SEARCHBY.USERID,
                 sort = "latest",
                 searchValue = userID
             )
@@ -109,7 +109,7 @@ class RecipeMyListActivity : BaseActivity() {
         runCatching {
             recipeListViewModel.disLikeRecipe(recipeid, userID)
             recipeListViewModel.requestRecipeList(
-                searchby = RecipeListRepository.Companion.SEARCHBY.USERID,
+                searchby = RecipeRepository.Companion.SEARCHBY.USERID,
                 sort = "latest",
                 searchValue = userID
             )
