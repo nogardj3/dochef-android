@@ -8,8 +8,8 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.RecipeplayItemFragmentBinding
 import com.yhjoo.dochef.data.model.RecipePhase
+import com.yhjoo.dochef.databinding.RecipeplayItemFragmentBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 
 class RecipePlayItemFragment : Fragment() {

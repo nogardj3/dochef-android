@@ -11,7 +11,7 @@ import java.util.*
 class RecipePlayViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
     Fm!!
 ) {
-    val fragments: MutableList<Fragment> = ArrayList()
+    private val fragments: MutableList<Fragment> = ArrayList()
     fun addFragment(fragment: Fragment, item: RecipePhase?) {
         val b = Bundle()
         b.putSerializable("item", item)

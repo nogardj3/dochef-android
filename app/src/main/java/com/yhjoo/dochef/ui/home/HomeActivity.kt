@@ -29,15 +29,14 @@ import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.HomeActivityBinding
-import com.yhjoo.dochef.ui.common.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
+import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel
+import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
 import com.yhjoo.dochef.ui.follow.FollowListActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
-import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel
-import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
 import com.yhjoo.dochef.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -73,7 +72,7 @@ class HomeActivity : BaseActivity() {
     private lateinit var userService: UserService
     private lateinit var recipeService: RecipeService
 
-    private lateinit var recipeHorizontalHomeAdapter: RecipeHorizontalHomeAdapter
+    private lateinit var recipeListAdapter: RecipeListAdapter
 
     private lateinit var reviseMenu: MenuItem
     private lateinit var okMenu: MenuItem
@@ -147,7 +146,7 @@ class HomeActivity : BaseActivity() {
             postListViewModel.requestPostListById(currentUserID!!)
 
 
-            recipeHorizontalHomeAdapter = RecipeHorizontalHomeAdapter(currentUserID).apply {
+            recipeListAdapter = RecipeListAdapter(currentUserID).apply {
                 setOnItemClickListener { _: BaseQuickAdapter<*, *>?, _: View?, position: Int ->
                     val intent = Intent(this@HomeActivity, RecipeDetailActivity::class.java)
                         .putExtra("recipeID", recipeList[position].recipeID)
@@ -158,7 +157,7 @@ class HomeActivity : BaseActivity() {
             homeRecipeRecycler.apply {
                 layoutManager =
                     LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
-                adapter = recipeHorizontalHomeAdapter
+                adapter = recipeListAdapter
             }
         }
 
@@ -172,7 +171,7 @@ class HomeActivity : BaseActivity() {
 
             setUserInfo()
 
-            recipeHorizontalHomeAdapter.setNewData(recipeList)
+            recipeListAdapter.setNewData(recipeList)
         }
     }
 
@@ -284,7 +283,7 @@ class HomeActivity : BaseActivity() {
 
                 setUserInfo()
 
-                recipeHorizontalHomeAdapter.apply {
+                recipeListAdapter.apply {
                     setNewData(recipeList)
                     setEmptyView(
                         R.layout.recipe_item_empty, binding.homeRecipeRecycler.parent as ViewGroup

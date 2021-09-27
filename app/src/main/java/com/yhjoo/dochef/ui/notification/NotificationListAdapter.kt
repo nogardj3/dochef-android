@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.NotificationItemBinding
 import com.yhjoo.dochef.data.entity.NotificationEntity
+import com.yhjoo.dochef.databinding.NotificationItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 

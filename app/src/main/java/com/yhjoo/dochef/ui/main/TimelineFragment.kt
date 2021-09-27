@@ -11,10 +11,10 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.MainTimelineFragmentBinding
-import com.yhjoo.dochef.ui.home.HomeActivity
-import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel
 import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
+import com.yhjoo.dochef.ui.home.HomeActivity
+import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 

@@ -17,14 +17,14 @@ import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.RecipeplayActivityBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.RecipePhase
 import com.yhjoo.dochef.data.network.RetrofitBuilder
+import com.yhjoo.dochef.data.network.RetrofitServices.RecipeService
+import com.yhjoo.dochef.databinding.RecipeplayActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.data.network.RetrofitServices.RecipeService
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.*

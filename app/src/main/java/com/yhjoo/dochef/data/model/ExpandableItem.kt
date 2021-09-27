@@ -7,7 +7,6 @@ class ExpandableItem(
     @SerializedName("contents") val contents: String,
     @SerializedName("datetime") val dateTime: Long,
     var expanded: Boolean = false
-
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -21,5 +20,13 @@ class ExpandableItem(
         if (expanded != other.expanded) return false
 
         return true
+    }
+
+    override fun hashCode(): Int {
+        var result = title.hashCode()
+        result = 31 * result + contents.hashCode()
+        result = 31 * result + dateTime.hashCode()
+        result = 31 * result + expanded.hashCode()
+        return result
     }
 }

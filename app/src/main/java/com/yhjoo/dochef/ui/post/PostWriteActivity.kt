@@ -17,11 +17,11 @@ import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.GlideApp
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.PostwriteActivityBinding
 import com.yhjoo.dochef.data.network.RetrofitBuilder
+import com.yhjoo.dochef.data.network.RetrofitServices.PostService
+import com.yhjoo.dochef.databinding.PostwriteActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.data.network.RetrofitServices.PostService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

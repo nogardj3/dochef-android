@@ -17,7 +17,6 @@ import com.yhjoo.dochef.databinding.SettingFragmentBinding
 import com.yhjoo.dochef.ui.account.AccountActivity
 import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class MainFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding

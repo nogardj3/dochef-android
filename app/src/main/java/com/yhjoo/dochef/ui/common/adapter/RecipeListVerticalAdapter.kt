@@ -9,11 +9,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.MainMyrecipeItemBinding
 import com.yhjoo.dochef.databinding.MainRecipesItemBinding
 import com.yhjoo.dochef.databinding.RecipemylistItemBinding
 import com.yhjoo.dochef.databinding.RecipethemeItemBinding
-import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil

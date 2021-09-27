@@ -7,15 +7,15 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.MainUserFragmentBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.network.RetrofitBuilder
+import com.yhjoo.dochef.data.network.RetrofitServices.UserService
+import com.yhjoo.dochef.databinding.MainUserFragmentBinding
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.data.network.RetrofitServices.UserService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

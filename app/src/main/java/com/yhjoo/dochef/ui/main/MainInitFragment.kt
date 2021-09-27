@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.main
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Html
@@ -59,7 +58,7 @@ class MainInitFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            mainInitAdviewpager.adapter = MainAdPagerAdapter(requireContext(), imgs)
+            mainInitAdviewpager.adapter = MainAdPagerAdapter(imgs)
             mainInitAdviewpagerIndicator.setViewPager2(mainInitAdviewpager)
             Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -104,7 +103,7 @@ class MainInitFragment : Fragment() {
         return view
     }
 
-    class MainAdPagerAdapter(private val context: Context, private val img_ids: Array<Int>) :
+    class MainAdPagerAdapter(private val img_ids: Array<Int>) :
         RecyclerView.Adapter<MainAdPagerAdapter.ADViewHolder>() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):
                 ADViewHolder = ADViewHolder(

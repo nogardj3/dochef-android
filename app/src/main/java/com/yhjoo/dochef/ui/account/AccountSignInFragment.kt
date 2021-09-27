@@ -18,11 +18,11 @@ import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.*
 import com.yhjoo.dochef.data.model.*
-import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.databinding.*
+import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
 

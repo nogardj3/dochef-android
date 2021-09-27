@@ -6,13 +6,13 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.utils.*
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.ui.common.viewmodel.*
+import com.yhjoo.dochef.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

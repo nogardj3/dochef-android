@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.databinding.*
+import com.yhjoo.dochef.databinding.HomeRecipelistItemBinding
+import com.yhjoo.dochef.databinding.RecipeHorizontalItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
 
 class RecipeListHorizontalAdapter(

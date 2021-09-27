@@ -8,13 +8,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
-import com.yhjoo.dochef.utils.*
+import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModel
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModelFactory
+import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
+import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class MainMyRecipeFragment : Fragment(), OnRefreshListener {

@@ -18,7 +18,6 @@ import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.net.InetAddress
 
 class SplashActivity : BaseActivity() {
     private val binding: SplashActivityBinding by lazy {

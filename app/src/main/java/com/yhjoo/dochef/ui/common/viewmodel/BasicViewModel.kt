@@ -9,7 +9,7 @@ import com.yhjoo.dochef.data.model.ExpandableItem
 import com.yhjoo.dochef.data.repository.BasicRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import java.util.*
 
 class BasicViewModel(
     private val repository: BasicRepository

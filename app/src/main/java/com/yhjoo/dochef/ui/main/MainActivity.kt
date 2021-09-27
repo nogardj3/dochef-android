@@ -21,9 +21,9 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.MainActivityBinding
-import com.yhjoo.dochef.ui.notification.NotificationActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
+import com.yhjoo.dochef.ui.notification.NotificationActivity
 import com.yhjoo.dochef.ui.post.PostWriteActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.ui.search.SearchActivity
