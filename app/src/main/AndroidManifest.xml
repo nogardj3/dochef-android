@@ -46,7 +46,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name="com.yhjoo.dochef.ui.HomeActivity"
+            android:name="com.yhjoo.dochef.ui.home.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />

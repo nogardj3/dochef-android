@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.common.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -11,7 +11,7 @@ class CommentListAdapter(private var mUserID: String) :
     override fun convert(helper: BaseViewHolder, item: Comment) {
         helper.setText(R.id.comment_nickname, item.nickName)
         helper.setText(R.id.comment_contents, item.contents)
-        helper.setText(R.id.comment_date, OtherUtil.convertMillisToText(item.dateTime))
+        helper.setText(R.id.comment_date, OtherUtil.millisToText(item.dateTime))
         helper.setVisible(R.id.comment_other, item.userID == mUserID)
         helper.addOnClickListener(R.id.comment_other)
     }

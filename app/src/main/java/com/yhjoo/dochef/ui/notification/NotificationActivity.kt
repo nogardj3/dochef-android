@@ -7,10 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.NotificationListAdapter
 import com.yhjoo.dochef.databinding.NotificationActivityBinding
 import com.yhjoo.dochef.data.entity.NotificationEntity
-import com.yhjoo.dochef.ui.HomeActivity
+import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity

@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.common.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -104,7 +104,7 @@ class RecipeVerticalListAdapter(
                         context.resources.getString(R.string.format_usernickname),
                         recipe.nickname
                     )
-                mainRecipesDate.text = OtherUtil.convertMillisToText(recipe.datetime)
+                mainRecipesDate.text = OtherUtil.millisToText(recipe.datetime)
                 mainRecipesRating.text = String.format("%.1f", recipe.rating)
                 mainRecipesView.text = recipe.viewCount.toString()
 
@@ -140,7 +140,7 @@ class RecipeVerticalListAdapter(
                         context.resources.getString(R.string.format_usernickname),
                         recipe.nickname
                     )
-                mainMyrecipeDate.text = OtherUtil.convertMillisToText(recipe.datetime)
+                mainMyrecipeDate.text = OtherUtil.millisToText(recipe.datetime)
                 mainMyrecipeRating.text = String.format("%.1f", recipe.rating)
                 mainMyrecipeView.text = recipe.viewCount.toString()
                 mainMyrecipeYours.visibility = if (activeUserID == recipe.userID)
@@ -170,7 +170,7 @@ class RecipeVerticalListAdapter(
                         context.resources.getString(R.string.format_usernickname),
                         recipe.nickname
                     )
-                recipemylistDate.text = OtherUtil.convertMillisToText(recipe.datetime)
+                recipemylistDate.text = OtherUtil.millisToText(recipe.datetime)
                 recipemylistRating.text = String.format("%.1f", recipe.rating)
                 recipemylistView.text = recipe.viewCount.toString()
 

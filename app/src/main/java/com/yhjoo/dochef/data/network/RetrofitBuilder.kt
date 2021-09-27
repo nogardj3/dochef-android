@@ -24,7 +24,6 @@ object RetrofitBuilder {
 //            .client(retrofitClient)
             .baseUrl(context.getString(R.string.server_url))
             .addConverterFactory(GsonConverterFactory.create())
-            // .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
             .create(service)
     }

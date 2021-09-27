@@ -13,21 +13,14 @@ object ImageLoaderUtil {
         filename: String,
         appCompatImageView: AppCompatImageView
     ) {
-        if (App.isServerAlive) {
-            if (filename != "default") {
-                val profileSrc = FirebaseStorage.getInstance().reference
-                    .child(context.getString(R.string.storage_path_profile) + filename)
-
-                GlideApp.with(context)
-                    .load(profileSrc)
-                    .circleCrop()
-                    .into(appCompatImageView)
-            }
-        } else
-            GlideApp.with(context)
-                .load(Integer.valueOf(filename))
-                .circleCrop()
-                .into(appCompatImageView)
+        val profileSrc = FirebaseStorage.getInstance().reference
+            .child(context.getString(R.string.storage_path_profile) + filename)
+        GlideApp.with(context)
+            .load(if (App.isServerAlive) profileSrc else Integer.valueOf(filename))
+            .error(R.drawable.ic_error)
+            .fallback(R.drawable.ic_person_white)
+            .circleCrop()
+            .into(appCompatImageView)
     }
 
     fun loadRecipeImage(
@@ -35,17 +28,14 @@ object ImageLoaderUtil {
         filename: String,
         appCompatImageView: AppCompatImageView
     ) {
-        if (App.isServerAlive) {
-            val recipeSrc = FirebaseStorage.getInstance().reference
-                .child(context.getString(R.string.storage_path_recipe) + filename)
+        val recipeSrc = FirebaseStorage.getInstance().reference
+            .child(context.getString(R.string.storage_path_recipe) + filename)
 
-            GlideApp.with(context)
-                .load(recipeSrc)
-                .into(appCompatImageView)
-        } else
-            GlideApp.with(context)
-                .load(Integer.valueOf(filename))
-                .into(appCompatImageView)
+        GlideApp.with(context)
+            .load(if (App.isServerAlive) recipeSrc else Integer.valueOf(filename))
+            .error(R.drawable.ic_error)
+            .fallback(R.drawable.ic_error)
+            .into(appCompatImageView)
     }
 
     fun loadPostImage(
@@ -53,17 +43,11 @@ object ImageLoaderUtil {
         filename: String,
         appCompatImageView: AppCompatImageView
     ) {
-        if (App.isServerAlive) {
-            if (filename != "") {
-                val postSrc = FirebaseStorage.getInstance().reference
-                    .child(context.getString(R.string.storage_path_post) + filename)
-
-                GlideApp.with(context)
-                    .load(postSrc)
-                    .into(appCompatImageView)
-            }
-        } else GlideApp.with(context)
-            .load(Integer.valueOf(filename))
+        val postSrc = FirebaseStorage.getInstance().reference
+            .child(context.getString(R.string.storage_path_post) + filename)
+        GlideApp.with(context)
+            .load(if (App.isServerAlive) postSrc else Integer.valueOf(filename))
+            .error(R.drawable.ic_error)
             .into(appCompatImageView)
     }
 }

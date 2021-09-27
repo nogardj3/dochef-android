@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui
+package com.yhjoo.dochef.ui.home
 
 import android.Manifest
 import android.content.Intent
@@ -29,15 +29,14 @@ import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.HomeActivityBinding
-import com.yhjoo.dochef.ui.adapter.PostListAdapter
-import com.yhjoo.dochef.ui.adapter.RecipeHorizontalHomeAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.follow.FollowListActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
-import com.yhjoo.dochef.ui.viewmodel.PostListViewModel
-import com.yhjoo.dochef.ui.viewmodel.PostListViewModelFactory
+import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel
+import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
 import com.yhjoo.dochef.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -122,7 +121,6 @@ class HomeActivity : BaseActivity() {
             lifecycleOwner = this@HomeActivity
 
             postListAdapter = PostListAdapter(
-                PostListAdapter.HOME,
                 { },
                 { item ->
                     val intent = Intent(this@HomeActivity, PostDetailActivity::class.java)

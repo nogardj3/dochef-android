@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.RecipeHorizontalAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeHorizontalAdapter
 import com.yhjoo.dochef.databinding.MainInitFragmentBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe

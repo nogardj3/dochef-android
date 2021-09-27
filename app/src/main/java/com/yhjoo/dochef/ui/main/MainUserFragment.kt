@@ -11,7 +11,7 @@ import com.yhjoo.dochef.databinding.MainUserFragmentBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.ui.HomeActivity
+import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
 import com.yhjoo.dochef.utils.*

@@ -10,13 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.ReviewListAdapter
+import com.yhjoo.dochef.ui.common.adapter.ReviewListAdapter
 import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.ui.HomeActivity
+import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.recipe.play.RecipePlayActivity
 import com.yhjoo.dochef.utils.*

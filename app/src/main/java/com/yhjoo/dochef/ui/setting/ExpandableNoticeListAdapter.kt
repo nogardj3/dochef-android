@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.setting
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -44,7 +44,7 @@ class ExpandableNoticeListAdapter(data: List<MultiItemEntity>?) :
                     helper.setText(R.id.exp_contents_contents, contents.text)
                     helper.setText(
                         R.id.exp_contents_date,
-                        OtherUtil.convertMillisToText(contents.date)
+                        OtherUtil.millisToText(contents.date)
                     )
                 }
             }

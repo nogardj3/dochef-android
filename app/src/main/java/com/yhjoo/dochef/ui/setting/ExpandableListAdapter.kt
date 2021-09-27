@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.setting
 
 import com.chad.library.adapter.base.BaseMultiItemQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
@@ -7,7 +7,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.ExpandContents
 import com.yhjoo.dochef.data.model.ExpandTitle
 
-class ExpandableFAQListAdapter(data: List<MultiItemEntity>) :
+class ExpandableListAdapter(data: List<MultiItemEntity>) :
     BaseMultiItemQuickAdapter<MultiItemEntity?, BaseViewHolder?>(data) {
     object EXPAND {
         const val DEPTH_0 = 0

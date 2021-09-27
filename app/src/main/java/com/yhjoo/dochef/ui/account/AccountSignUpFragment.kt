@@ -17,7 +17,6 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.AccountSignupFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
 
 class AccountSignUpFragment : Fragment() {
@@ -41,7 +40,7 @@ class AccountSignUpFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (ValidateUtil.emailValidation(signupEmailEdittext.text.toString()) == ValidateUtil.EmailValidate.INVALID) {
+                        if (ValidateUtil.emailValidate(signupEmailEdittext.text.toString()) == ValidateUtil.EmailResult.ERR_INVALID) {
                             signupEmailLayout.error = "이메일 형식이 올바르지 않습니다."
                         } else {
                             signupEmailLayout.error = null
@@ -60,10 +59,10 @@ class AccountSignUpFragment : Fragment() {
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         when {
-                            ValidateUtil.pwValidation(signupPasswordEdittext.text.toString()) == ValidateUtil.PWValidate.LENGTH ->
+                            ValidateUtil.pwValidate(signupPasswordEdittext.text.toString()) == ValidateUtil.PwResult.ERR_LENGTH ->
                                 signupPasswordLayout.error =
                                     "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
-                            ValidateUtil.pwValidation(signupPasswordEdittext.text.toString()) == ValidateUtil.PWValidate.INVALID ->
+                            ValidateUtil.pwValidate(signupPasswordEdittext.text.toString()) == ValidateUtil.PwResult.ERR_INVALID ->
                                 signupPasswordLayout.error =
                                     "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
                             else -> {
@@ -90,9 +89,9 @@ class AccountSignUpFragment : Fragment() {
         val pw = binding.signupPasswordEdittext.text.toString()
 
         when {
-            ValidateUtil.emailValidation(email) != ValidateUtil.EmailValidate.VALID ->
+            ValidateUtil.emailValidate(email) != ValidateUtil.EmailResult.VALID ->
                 binding.signupEmailLayout.requestFocus()
-            ValidateUtil.pwValidation(pw) != ValidateUtil.PWValidate.VALID ->
+            ValidateUtil.pwValidate(pw) != ValidateUtil.PwResult.VALID ->
                 binding.signupPasswordEdittext.requestFocus()
             else -> {
                 (requireActivity() as BaseActivity).progressON(requireActivity())

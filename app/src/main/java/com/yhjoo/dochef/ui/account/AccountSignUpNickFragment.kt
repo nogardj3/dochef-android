@@ -64,10 +64,10 @@ class AccountSignUpNickFragment : Fragment() {
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         when {
-                            ValidateUtil.pwValidation(signupnickNicknameEdittext.text.toString()) == ValidateUtil.PWValidate.LENGTH ->
+                            ValidateUtil.pwValidate(signupnickNicknameEdittext.text.toString()) == ValidateUtil.PwResult.ERR_LENGTH ->
                                 signupnickNicknameLayout.error =
                                     "닉네임 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요."
-                            ValidateUtil.pwValidation(signupnickNicknameEdittext.text.toString()) == ValidateUtil.PWValidate.INVALID ->
+                            ValidateUtil.pwValidate(signupnickNicknameEdittext.text.toString()) == ValidateUtil.PwResult.ERR_INVALID ->
                                 signupnickNicknameLayout.error =
                                     "닉네임 형식을 확인 해 주세요. 숫자, 알파벳 대소문자, 한글만 사용가능합니다."
                             else -> {
@@ -95,7 +95,7 @@ class AccountSignUpNickFragment : Fragment() {
     private fun signUpWithEmailPW() {
         val nickname = binding.signupnickNicknameEdittext.text.toString()
 
-        if (ValidateUtil.nicknameValidate(nickname) != ValidateUtil.EmailValidate.VALID)
+        if (ValidateUtil.nicknameValidate(nickname) != ValidateUtil.EmailResult.VALID)
             binding.signupnickNicknameLayout.requestFocus()
         else {
             (requireActivity() as BaseActivity).progressON(requireActivity())

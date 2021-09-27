@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.viewmodel
+package com.yhjoo.dochef.ui.common.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

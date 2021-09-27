@@ -80,4 +80,8 @@ class ChefMessagingService : FirebaseMessagingService() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notificationBuilder.build())
     }
+
+    override fun onNewToken(p0: String) {
+        super.onNewToken(p0)
+    }
 }

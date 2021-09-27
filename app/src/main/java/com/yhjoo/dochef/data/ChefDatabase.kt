@@ -7,7 +7,6 @@ import androidx.room.RoomDatabase
 import com.yhjoo.dochef.data.dao.NotificationDao
 import com.yhjoo.dochef.data.entity.NotificationEntity
 
-
 @Database(entities = [NotificationEntity::class], version = 1, exportSchema = false)
 abstract class NotificationDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao

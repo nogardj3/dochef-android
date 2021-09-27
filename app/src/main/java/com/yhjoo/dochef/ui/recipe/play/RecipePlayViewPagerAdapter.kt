@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.recipe.play
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.RecipePhase
 import java.util.*
 
-class PlayRecipeViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
+class RecipePlayViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
     Fm!!
 ) {
     val fragments: MutableList<Fragment> = ArrayList()

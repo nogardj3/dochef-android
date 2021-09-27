@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yhjoo.dochef.ui.view
+package com.yhjoo.dochef.ui.common.view
 
 import android.content.Context
 import android.util.AttributeSet

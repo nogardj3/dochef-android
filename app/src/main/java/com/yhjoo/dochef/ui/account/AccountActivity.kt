@@ -17,13 +17,13 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.AccountActivityBinding
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.network.RetrofitBuilder
+import com.yhjoo.dochef.data.network.RetrofitServices.AccountService
+import com.yhjoo.dochef.databinding.AccountActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.main.MainActivity
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.data.network.RetrofitServices.AccountService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

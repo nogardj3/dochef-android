@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.yhjoo.dochef.ui.viewmodel.PostListViewModel" />
+        <variable name="viewModel" type="com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

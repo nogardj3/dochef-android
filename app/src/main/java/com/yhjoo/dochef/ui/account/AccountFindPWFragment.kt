@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.yhjoo.dochef.databinding.AccountFindpwFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
 
 class AccountFindPWFragment : Fragment() {
@@ -30,7 +29,7 @@ class AccountFindPWFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (ValidateUtil.emailValidation(accountFindpwEdittext.text.toString()) == ValidateUtil.EmailValidate.INVALID) {
+                        if (ValidateUtil.emailValidate(accountFindpwEdittext.text.toString()) == ValidateUtil.EmailResult.ERR_INVALID) {
                             accountFindpwEmailLayout.error = "이메일 형식이 올바르지 않습니다."
                         } else {
                             accountFindpwEmailLayout.error = null

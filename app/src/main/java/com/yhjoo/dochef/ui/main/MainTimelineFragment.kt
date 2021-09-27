@@ -8,15 +8,14 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.PostListAdapter
-import com.yhjoo.dochef.databinding.MainTimelineFragmentBinding
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.PostRepository
-import com.yhjoo.dochef.ui.HomeActivity
+import com.yhjoo.dochef.databinding.MainTimelineFragmentBinding
+import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
+import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel
+import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
 import com.yhjoo.dochef.utils.*
-import com.yhjoo.dochef.ui.viewmodel.PostListViewModel
-import com.yhjoo.dochef.ui.viewmodel.PostListViewModelFactory
 import java.util.*
 
 class MainTimelineFragment : Fragment(), OnRefreshListener {
@@ -25,8 +24,8 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
     2. AD
      */
     private lateinit var binding: MainTimelineFragmentBinding
-    private lateinit var postlistViewModel: PostListViewModel
-    private lateinit var postListAdapter: PostListAdapter
+    private lateinit var timelineListViewModel: PostListViewModel
+    private lateinit var timelineListAdapter: TimelineListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,9 +42,9 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
             )
         )
 
-        postlistViewModel = factory.create(PostListViewModel::class.java).apply {
+        timelineListViewModel = factory.create(PostListViewModel::class.java).apply {
             allPostList.observe(viewLifecycleOwner, {
-                postListAdapter.submitList(it) {
+                timelineListAdapter.submitList(it) {
                     binding.timelineRecycler.scrollToPosition(0)
                 }
                 binding.timelineSwipe.isRefreshing = false
@@ -65,18 +64,17 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
                 )
             }
 
-            postListAdapter = PostListAdapter(
-                PostListAdapter.MAIN_TIMELINE, // TODO companion object
+            timelineListAdapter = TimelineListAdapter(
                 { item -> userClick(item) },
                 { item -> itemClick(item) }
             )
 
             timelineRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = postListAdapter
+                adapter = timelineListAdapter
             }
 
-            postlistViewModel.requestPostList()
+            timelineListViewModel.requestPostList()
         }
 
         return view
@@ -84,7 +82,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
 
     override fun onRefresh() {
         binding.timelineSwipe.isRefreshing = true
-        postlistViewModel.requestPostList()
+        timelineListViewModel.requestPostList()
     }
 
     private fun userClick(post: Post) {

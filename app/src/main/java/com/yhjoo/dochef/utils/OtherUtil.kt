@@ -8,8 +8,9 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object OtherUtil {
-    // TODO
-    // 1. TimeDiff 만들기
+    fun log(vararg msgs: String) {
+        Logger.d("YHJOO %s", msgs.joinToString())
+    }
 
     fun checkPermission(context: Context, RequirePermissions: Array<String>): Boolean {
         for (a in RequirePermissions)
@@ -22,11 +23,7 @@ object OtherUtil {
         return true
     }
 
-    fun log(vararg msgs: String) {
-        Logger.d("YHJOO %s", msgs.joinToString())
-    }
-
-    fun convertMillisToText(millis: Long): String {
+    fun millisToText(millis: Long): String {
         val currentMillis = Date().time
         val secDiff = (currentMillis - millis) / 1000
 

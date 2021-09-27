@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.follow
 
 import android.content.Context
 import android.view.LayoutInflater

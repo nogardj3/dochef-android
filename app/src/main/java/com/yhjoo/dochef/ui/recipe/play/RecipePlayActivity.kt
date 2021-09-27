@@ -17,7 +17,6 @@ import androidx.core.app.ActivityCompat
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.PlayRecipeViewPagerAdapter
 import com.yhjoo.dochef.databinding.RecipeplayActivityBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.RecipeDetail
@@ -46,7 +45,7 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
 
     private lateinit var recipeService: RecipeService
     private lateinit var speechRecognizer: SpeechRecognizer
-    private lateinit var playRecipeViewPagerAdapter: PlayRecipeViewPagerAdapter
+    private lateinit var recipePlayViewPagerAdapter: RecipePlayViewPagerAdapter
     private lateinit var recipeDetailInfo: RecipeDetail
     private lateinit var recipePhases: ArrayList<RecipePhase>
 
@@ -97,16 +96,16 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
     }
 
     private fun setPages() {
-        playRecipeViewPagerAdapter = PlayRecipeViewPagerAdapter(supportFragmentManager)
-        playRecipeViewPagerAdapter.addFragment(RecipePlayStartFragment(), recipeDetailInfo)
+        recipePlayViewPagerAdapter = RecipePlayViewPagerAdapter(supportFragmentManager)
+        recipePlayViewPagerAdapter.addFragment(RecipePlayStartFragment(), recipeDetailInfo)
         for (i in recipePhases.indices) {
-            if (i == recipePhases.size - 1) playRecipeViewPagerAdapter.addFragment(
+            if (i == recipePhases.size - 1) recipePlayViewPagerAdapter.addFragment(
                 RecipePlayEndFragment(),
                 recipePhases[i],
                 recipeDetailInfo
-            ) else playRecipeViewPagerAdapter.addFragment(RecipePlayItemFragment(), recipePhases[i])
+            ) else recipePlayViewPagerAdapter.addFragment(RecipePlayItemFragment(), recipePhases[i])
         }
-        binding.recipeplayViewpager.adapter = playRecipeViewPagerAdapter
+        binding.recipeplayViewpager.adapter = recipePlayViewPagerAdapter
         binding.recipeplayViewpager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,

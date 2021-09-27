@@ -78,7 +78,7 @@ class AccountSignInFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (ValidateUtil.emailValidation(text.toString()) == ValidateUtil.EmailValidate.INVALID) {
+                        if (ValidateUtil.emailValidate(text.toString()) == ValidateUtil.EmailResult.ERR_INVALID) {
                             signinEmailLayout.error = "이메일 형식이 올바르지 않습니다."
                         } else {
                             signinEmailLayout.error = null
@@ -96,10 +96,10 @@ class AccountSignInFragment : Fragment() {
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
                         when {
-                            ValidateUtil.pwValidation(signinPasswordEdittext.text.toString()) == ValidateUtil.PWValidate.LENGTH ->
+                            ValidateUtil.pwValidate(signinPasswordEdittext.text.toString()) == ValidateUtil.PwResult.ERR_LENGTH ->
                                 signinPasswordLayout.error =
                                     "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
-                            ValidateUtil.pwValidation(signinPasswordEdittext.text.toString()) == ValidateUtil.PWValidate.INVALID ->
+                            ValidateUtil.pwValidate(signinPasswordEdittext.text.toString()) == ValidateUtil.PwResult.ERR_INVALID ->
                                 signinPasswordLayout.error =
                                     "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
                             else -> {
@@ -157,9 +157,9 @@ class AccountSignInFragment : Fragment() {
         val signinPw = binding.signinPasswordEdittext.text.toString()
 
         when {
-            ValidateUtil.emailValidation(signinEmail) != ValidateUtil.EmailValidate.VALID ->
+            ValidateUtil.emailValidate(signinEmail) != ValidateUtil.EmailResult.VALID ->
                 binding.signinEmailLayout.requestFocus()
-            ValidateUtil.pwValidation(signinPw) != ValidateUtil.PWValidate.VALID ->
+            ValidateUtil.pwValidate(signinPw) != ValidateUtil.PwResult.VALID ->
                 binding.signinPasswordEdittext.requestFocus()
             else -> {
                 firebaseAuth

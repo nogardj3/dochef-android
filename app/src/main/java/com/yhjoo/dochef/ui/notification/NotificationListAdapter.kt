@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.notification
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -53,7 +53,7 @@ class NotificationListAdapter(private val clickListener: (NotificationEntity) ->
                 )
 
                 notificationContents.text = notification.contents
-                notificationDate.text = OtherUtil.convertMillisToText(notification.dateTime)
+                notificationDate.text = OtherUtil.millisToText(notification.dateTime)
             }
         }
     }

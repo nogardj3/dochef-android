@@ -18,13 +18,13 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.adapter.CommentListAdapter
+import com.yhjoo.dochef.ui.common.adapter.CommentListAdapter
 import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.ui.HomeActivity
+import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
 import com.yhjoo.dochef.data.network.RetrofitServices.CommentService
@@ -231,7 +231,7 @@ class PostDetailActivity : BaseActivity() {
 
             postNickname.text = postInfo.nickname
             postContents.text = postInfo.contents
-            postTime.text = OtherUtil.convertMillisToText(postInfo.dateTime)
+            postTime.text = OtherUtil.millisToText(postInfo.dateTime)
             postLikecount.text = postInfo.likes.size.toString()
             postCommentcount.text = postInfo.comments.size.toString()
 

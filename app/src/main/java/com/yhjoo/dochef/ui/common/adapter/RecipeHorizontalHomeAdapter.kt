@@ -1,11 +1,10 @@
-package com.yhjoo.dochef.ui.adapter
+package com.yhjoo.dochef.ui.common.adapter
 
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
 
 class RecipeHorizontalHomeAdapter(var userID: String?) :

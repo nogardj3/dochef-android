@@ -8,10 +8,9 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
-import com.yhjoo.dochef.ui.follow.FollowListActivity
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
-import com.yhjoo.dochef.utils.OtherUtil
+import com.yhjoo.dochef.ui.follow.FollowListActivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -28,7 +27,7 @@ class FollowRepository(
 
     @WorkerThread
     suspend fun getUserDetail(): Flow<Response<UserDetail>> {
-        return flow{
+        return flow {
             if (App.isServerAlive)
                 emit(userClient.getUserDetail(activeUserId))
             else
@@ -45,7 +44,7 @@ class FollowRepository(
 
     @WorkerThread
     suspend fun getFollowList(): Flow<Response<ArrayList<UserBrief>>> {
-        return flow{
+        return flow {
             if (uiMode == FollowListActivity.UIMODE.FOLLOWER)
                 emit(getFollowers())
             else
@@ -81,7 +80,6 @@ class FollowRepository(
 
     @WorkerThread
     suspend fun subscribeUser(targetId: String): Response<JsonObject>? {
-        OtherUtil.log("sub!!!!!!!!!!!!!!!")
         return if (App.isServerAlive)
             userClient.subscribeUser(activeUserId, targetId)
         else
@@ -90,7 +88,6 @@ class FollowRepository(
 
     @WorkerThread
     suspend fun unsubscribeUser(targetId: String): Response<JsonObject>? {
-        OtherUtil.log("unSub!!!!!!!!!!!!!!!")
         return if (App.isServerAlive)
             userClient.unsubscribeUser(activeUserId, targetId)
         else
