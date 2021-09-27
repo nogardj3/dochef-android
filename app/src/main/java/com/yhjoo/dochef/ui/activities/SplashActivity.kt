@@ -17,7 +17,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SplashActivity : BaseActivity() {
-    private val binding: SplashActivityBinding by lazy { SplashActivityBinding.inflate(layoutInflater) }
+    private val binding: SplashActivityBinding by lazy {
+        SplashActivityBinding.inflate(
+            layoutInflater
+        )
+    }
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var serverAlive = false
     private var isLogin = false

@@ -16,7 +16,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.APostwriteBinding
+import com.yhjoo.dochef.databinding.PostwriteActivityBinding
 import com.yhjoo.dochef.utilities.*
 import com.yhjoo.dochef.utilities.RetrofitServices.PostService
 import kotlinx.coroutines.CoroutineScope
@@ -36,7 +36,11 @@ class PostWriteActivity : BaseActivity() {
         }
     }
 
-    private val binding: APostwriteBinding by lazy { APostwriteBinding.inflate(layoutInflater) }
+    private val binding: PostwriteActivityBinding by lazy {
+        PostwriteActivityBinding.inflate(
+            layoutInflater
+        )
+    }
     private lateinit var storageReference: StorageReference
     private lateinit var postService: PostService
     private lateinit var userID: String
@@ -71,8 +75,8 @@ class PostWriteActivity : BaseActivity() {
         setSupportActionBar(binding.postwriteToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.apply{
-            postwriteContents.addTextChangedListener(object : TextWatcher{
+        binding.apply {
+            postwriteContents.addTextChangedListener(object : TextWatcher {
                 var prevText = ""
 
                 override fun beforeTextChanged(
@@ -87,9 +91,9 @@ class PostWriteActivity : BaseActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
                 override fun afterTextChanged(s: Editable?) {
-                    if(binding.postwriteContents.lineCount > 3 || s.toString().length >= 120){
+                    if (binding.postwriteContents.lineCount > 3 || s.toString().length >= 120) {
                         binding.postwriteContents.setText(prevText)
-                        binding.postwriteContents.setSelection(prevText.length -1)
+                        binding.postwriteContents.setSelection(prevText.length - 1)
                     }
                 }
             })

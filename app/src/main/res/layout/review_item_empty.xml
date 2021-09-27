@@ -6,10 +6,9 @@
     android:layout_margin="5dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/empty_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="댓글이 없습니다."
+        android:text="리뷰가 없습니다."
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

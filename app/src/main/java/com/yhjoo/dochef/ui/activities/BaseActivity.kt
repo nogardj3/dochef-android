@@ -56,7 +56,7 @@ open class BaseActivity : AppCompatActivity() {
             progressDialog = AppCompatDialog(activity).apply {
                 progressDialog?.setCancelable(false)
                 progressDialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                progressDialog?.setContentView(R.layout.v_progress)
+                progressDialog?.setContentView(R.layout.view_progress)
                 progressDialog?.show()
             }
         }

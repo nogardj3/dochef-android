@@ -11,6 +11,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/li_expand_title" />
+        tools:listitem="@layout/expand_item_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

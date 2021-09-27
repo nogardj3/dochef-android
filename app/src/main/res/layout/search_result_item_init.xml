@@ -6,7 +6,7 @@
     android:layout_margin="5dp">
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/search_img"
+        android:id="@+id/resultinit_img"
         android:layout_width="80dp"
         android:layout_height="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -23,6 +23,6 @@
         android:text="검색어를 입력 해 주세요."
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_img" />
+        app:layout_constraintTop_toBottomOf="@+id/resultinit_img" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

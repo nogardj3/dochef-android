@@ -17,14 +17,14 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/mainmyrecipe_recipeimg"
+                android:id="@+id/main_myrecipe_recipeimg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 tools:src="@raw/dummy_recipe_1" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/mainmyrecipe_new"
+                android:id="@+id/main_myrecipe_new"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="2dp"
@@ -35,7 +35,7 @@
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/mainmyrecipe_yours"
+                android:id="@+id/main_myrecipe_yours"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="4dp"
@@ -50,10 +50,10 @@
                 android:layout_height="0dp"
                 android:background="@drawable/bg_gradient"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/mainmyrecipe_title" />
+                app:layout_constraintTop_toTopOf="@+id/main_myrecipe_title" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mainmyrecipe_title"
+                android:id="@+id/main_myrecipe_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -61,13 +61,13 @@
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/mainmyrecipe_nickname"
+                app:layout_constraintBottom_toTopOf="@+id/main_myrecipe_nickname"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 tools:text="레시피" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mainmyrecipe_nickname"
+                android:id="@+id/main_myrecipe_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
@@ -78,7 +78,7 @@
                 tools:text="닉네임" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mainmyrecipe_date"
+                android:id="@+id/main_myrecipe_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -90,45 +90,45 @@
                 tools:text="1일 전" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/mainmyrecipe_viewimg"
+                android:id="@+id/main_myrecipe_viewimg"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="4dp"
                 android:tint="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/mainmyrecipe_date"
-                app:layout_constraintRight_toLeftOf="@+id/mainmyrecipe_view"
+                app:layout_constraintBottom_toTopOf="@+id/main_myrecipe_date"
+                app:layout_constraintRight_toLeftOf="@+id/main_myrecipe_view"
                 app:srcCompat="@drawable/ic_view_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mainmyrecipe_view"
+                android:id="@+id/main_myrecipe_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/mainmyrecipe_viewimg"
-                app:layout_constraintRight_toRightOf="@+id/mainmyrecipe_date"
-                app:layout_constraintTop_toTopOf="@+id/mainmyrecipe_viewimg"
+                app:layout_constraintBottom_toBottomOf="@+id/main_myrecipe_viewimg"
+                app:layout_constraintRight_toRightOf="@+id/main_myrecipe_date"
+                app:layout_constraintTop_toTopOf="@+id/main_myrecipe_viewimg"
                 tools:text="0" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/mainmyrecipe_ratingimg"
+                android:id="@+id/main_myrecipe_ratingimg"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="4dp"
                 android:tint="@color/white"
-                app:layout_constraintBottom_toTopOf="@+id/mainmyrecipe_date"
-                app:layout_constraintRight_toLeftOf="@+id/mainmyrecipe_rating"
+                app:layout_constraintBottom_toTopOf="@+id/main_myrecipe_date"
+                app:layout_constraintRight_toLeftOf="@+id/main_myrecipe_rating"
                 app:srcCompat="@drawable/ic_star_white"
                 app:tint="@color/colorPrimary" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/mainmyrecipe_rating"
+                android:id="@+id/main_myrecipe_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
                 android:textColor="@color/white"
-                app:layout_constraintBottom_toBottomOf="@+id/mainmyrecipe_viewimg"
-                app:layout_constraintRight_toLeftOf="@+id/mainmyrecipe_viewimg"
-                app:layout_constraintTop_toTopOf="@+id/mainmyrecipe_viewimg"
+                app:layout_constraintBottom_toBottomOf="@+id/main_myrecipe_viewimg"
+                app:layout_constraintRight_toLeftOf="@+id/main_myrecipe_viewimg"
+                app:layout_constraintTop_toTopOf="@+id/main_myrecipe_viewimg"
                 tools:text="0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -131,18 +131,18 @@ class RecipeVerticalListAdapter(
                 ChefImageLoader.loadRecipeImage(
                     context,
                     recipe.recipeImg,
-                    mainmyrecipeRecipeimg
+                    mainMyrecipeRecipeimg
                 )
-                mainmyrecipeTitle.text = recipe.recipeName
-                mainmyrecipeNickname.text =
+                mainMyrecipeTitle.text = recipe.recipeName
+                mainMyrecipeNickname.text =
                     String.format(
                         context.resources.getString(R.string.format_usernickname),
                         recipe.nickname
                     )
-                mainmyrecipeDate.text = Utils.convertMillisToText(recipe.datetime)
-                mainmyrecipeRating.text = String.format("%.1f", recipe.rating)
-                mainmyrecipeView.text = recipe.viewCount.toString()
-                mainmyrecipeYours.visibility = if (activeUserID == recipe.userID)
+                mainMyrecipeDate.text = Utils.convertMillisToText(recipe.datetime)
+                mainMyrecipeRating.text = String.format("%.1f", recipe.rating)
+                mainMyrecipeView.text = recipe.viewCount.toString()
+                mainMyrecipeYours.visibility = if (activeUserID == recipe.userID)
                     View.VISIBLE
                 else
                     View.GONE

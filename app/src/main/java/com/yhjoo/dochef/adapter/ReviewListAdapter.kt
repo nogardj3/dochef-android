@@ -6,7 +6,7 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.model.Review
 import com.yhjoo.dochef.utilities.Utils
 
-class ReviewListAdapter : BaseQuickAdapter<Review, BaseViewHolder>(R.layout.li_review) {
+class ReviewListAdapter : BaseQuickAdapter<Review, BaseViewHolder>(R.layout.review_item) {
     override fun convert(helper: BaseViewHolder, item: Review) {
         helper.setText(R.id.review_nickname, item.nickname)
         helper.setText(R.id.review_contents, item.contents)

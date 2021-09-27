@@ -16,8 +16,8 @@ class ExpandableNoticeListAdapter(data: List<MultiItemEntity>?) :
     }
 
     init {
-        addItemType(EXPAND.DEPTH_0, R.layout.li_expand_title)
-        addItemType(EXPAND.CONTENTS, R.layout.li_expand_contents)
+        addItemType(EXPAND.DEPTH_0, R.layout.expand_item_title)
+        addItemType(EXPAND.CONTENTS, R.layout.expand_item_contents)
     }
 
     override fun convert(helper: BaseViewHolder?, item: MultiItemEntity?) {

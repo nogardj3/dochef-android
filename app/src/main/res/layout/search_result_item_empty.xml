@@ -6,7 +6,6 @@
     android:layout_margin="5dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/empty_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="결과가 없습니다."

@@ -11,7 +11,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.ReviewListAdapter
-import com.yhjoo.dochef.databinding.ARecipedetailBinding
+import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.Review
@@ -30,7 +30,11 @@ class RecipeDetailActivity : BaseActivity() {
         review userdetail 넘어가기 확인
     */
 
-    private val binding: ARecipedetailBinding by lazy { ARecipedetailBinding.inflate(layoutInflater) }
+    private val binding: RecipedetailActivityBinding by lazy {
+        RecipedetailActivityBinding.inflate(
+            layoutInflater
+        )
+    }
 
     private lateinit var recipeService: RecipeService
     private lateinit var reviewService: ReviewService
@@ -98,12 +102,12 @@ class RecipeDetailActivity : BaseActivity() {
 
             val res2 = reviewService.getReview(recipeID)
             reviewList = res2.body()!!
-            
+
             setTopView()
             reviewListAdapter.apply {
                 setNewData(reviewList)
                 setEmptyView(
-                    R.layout.empty_review,
+                    R.layout.review_item_empty,
                     binding.recipedetailReviewRecycler.parent as ViewGroup
                 )
             }
@@ -158,8 +162,8 @@ class RecipeDetailActivity : BaseActivity() {
             recipedetailTags.removeAllViews()
             for (tag in recipeDetailInfo.tags) {
                 val tagcontainer =
-                    layoutInflater.inflate(R.layout.v_tag_recipe, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_recipe_text)
+                    layoutInflater.inflate(R.layout.view_tag_recipe, null) as LinearLayout
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagrecipe_contents)
                 tagview.text = "#$tag"
                 recipedetailTags.addView(tagcontainer)
             }
@@ -167,7 +171,7 @@ class RecipeDetailActivity : BaseActivity() {
             recipedetailIngredients.removeAllViews()
             for (ingredient in recipeDetailInfo.ingredients) {
                 val ingredientContainer =
-                    layoutInflater.inflate(R.layout.v_ingredient, null) as ConstraintLayout
+                    layoutInflater.inflate(R.layout.view_ingredient, null) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
                     ingredientContainer.findViewById(R.id.v_ingredient_name)
                 val ingredientAmount: AppCompatTextView =

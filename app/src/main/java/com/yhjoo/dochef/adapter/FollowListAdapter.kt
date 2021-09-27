@@ -51,25 +51,25 @@ class FollowListAdapter(
                     itemClickListener(userBrief)
                 }
 
-                userFollowBtn.visibility = if (!activeUserFollowList.contains(userBrief.userID) &&userBrief.userID != activeUserID )
+                followlistFollowBtn.visibility = if (!activeUserFollowList.contains(userBrief.userID) &&userBrief.userID != activeUserID )
                     View.VISIBLE
                 else
                     View.GONE
-                userFollowcancelBtn.visibility = if (activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID)
+                followlistFollowcancelBtn.visibility = if (activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID)
                     View.VISIBLE
                 else
                     View.GONE
 
-                userFollowBtn.setOnClickListener {
+                followlistFollowBtn.setOnClickListener {
                     subscribeListener(userBrief)
                 }
-                userFollowcancelBtn.setOnClickListener {
+                followlistFollowcancelBtn.setOnClickListener {
                     unsubscribeListener(userBrief)
                 }
 
-                ChefImageLoader.loadUserImage(context, userBrief.userImg, userImg)
-                userNickname.text = userBrief.nickname
-                userFollowerCount.text = String.format(
+                ChefImageLoader.loadUserImage(context, userBrief.userImg, followlistImg)
+                followlistNickname.text = userBrief.nickname
+                followlistFollowerCount.text = String.format(
                     context.getString(R.string.format_follower), userBrief.follower_count
                 )
             }

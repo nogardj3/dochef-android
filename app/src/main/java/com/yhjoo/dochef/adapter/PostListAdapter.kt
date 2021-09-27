@@ -68,46 +68,46 @@ class PostListAdapter(
                 root.setOnClickListener {
                     itemClickListener(post)
                 }
-                timelineUserImg.setOnClickListener {
+                mainTimelineUserImg.setOnClickListener {
                     userClickListener(post)
                 }
-                timelineUserNickname.setOnClickListener {
+                mainTimelineUserNickname.setOnClickListener {
                     userClickListener(post)
                 }
 
                 ChefImageLoader.loadPostImage(
-                    context, post.postImg, timelinePostImg
+                    context, post.postImg, mainTimelinePostImg
                 )
                 ChefImageLoader.loadUserImage(
-                    context, post.userImg, timelineUserImg
+                    context, post.userImg, mainTimelineUserImg
                 )
-                timelineUserNickname.text = post.nickname
-                timelineLikeCount.text = post.likes.size.toString()
-                timelineCommentCount.text = post.comments.size.toString()
-                timelineContents.text = " " + post.contents
-                timelineTime.text = Utils.convertMillisToText(post.dateTime)
+                mainTimelineUserNickname.text = post.nickname
+                mainTimelineLikeCount.text = post.likes.size.toString()
+                mainTimelineCommentCount.text = post.comments.size.toString()
+                mainTimelineContents.text = " " + post.contents
+                mainTimelineTime.text = Utils.convertMillisToText(post.dateTime)
 
-                timelineTags.removeAllViews()
+                mainTimelineTags.removeAllViews()
                 for (tag in post.tags) {
                     val tagcontainer = LayoutInflater.from(context)
-                        .inflate(R.layout.v_tag_post, null) as LinearLayout
-                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_post_text)
+                        .inflate(R.layout.view_tag_post, null) as LinearLayout
+                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagpost_contents)
                     tagview.text = "#$tag"
-                    timelineTags.addView(tagcontainer)
+                    mainTimelineTags.addView(tagcontainer)
                 }
 
                 if (post.comments.size != 0) {
-                    timelineCommentGroup.visibility = View.VISIBLE
+                    mainTimelineCommentGroup.visibility = View.VISIBLE
 
                     ChefImageLoader.loadUserImage(
-                        context, post.comments[0]!!.userImg, timelineCommentUserImg
+                        context, post.comments[0]!!.userImg, mainTimelineCommentUserImg
                     )
 
-                    timelineCommentUserNickname.text = post.comments[0]!!.nickName
-                    timelineCommentContents.text = post.comments[0]!!.contents
-                    timelineCommentDate.text =
+                    mainTimelineCommentUserNickname.text = post.comments[0]!!.nickName
+                    mainTimelineCommentContents.text = post.comments[0]!!.contents
+                    mainTimelineCommentDate.text =
                         Utils.convertMillisToText(post.comments[0]!!.dateTime)
-                } else timelineCommentGroup.visibility = View.GONE
+                } else mainTimelineCommentGroup.visibility = View.GONE
             }
         }
     }
@@ -119,46 +119,46 @@ class PostListAdapter(
                 root.setOnClickListener {
                     itemClickListener(post)
                 }
-                postlistUserImg.setOnClickListener {
+                homePostUserImg.setOnClickListener {
                     userClickListener(post)
                 }
-                postlistUserNickname.setOnClickListener {
+                homePostUserNickname.setOnClickListener {
                     userClickListener(post)
                 }
 
                 ChefImageLoader.loadPostImage(
-                    context, post.postImg, postlistPostImg
+                    context, post.postImg, homePostPostImg
                 )
                 ChefImageLoader.loadUserImage(
-                    context, post.userImg, postlistUserImg
+                    context, post.userImg, homePostUserImg
                 )
-                postlistUserNickname.text = post.nickname
-                postlistLikeCount.text = post.likes.size.toString()
-                postlistCommentCount.text = post.comments.size.toString()
-                postlistContents.text = " " + post.contents
-                postlistTime.text = Utils.convertMillisToText(post.dateTime)
+                homePostUserNickname.text = post.nickname
+                homePostLikeCount.text = post.likes.size.toString()
+                homePostCommentCount.text = post.comments.size.toString()
+                homePostContents.text = " " + post.contents
+                homePostTime.text = Utils.convertMillisToText(post.dateTime)
 
-                postlistTags.removeAllViews()
+                homePostTags.removeAllViews()
                 for (tag in post.tags) {
                     val tagcontainer = LayoutInflater.from(context)
-                        .inflate(R.layout.v_tag_post, null) as LinearLayout
-                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_post_text)
+                        .inflate(R.layout.view_tag_post, null) as LinearLayout
+                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagpost_contents)
                     tagview.text = "#$tag"
-                    postlistTags.addView(tagcontainer)
+                    homePostTags.addView(tagcontainer)
                 }
 
                 if (post.comments.size != 0) {
-                    postlistCommentGroup.visibility = View.VISIBLE
+                    homePostCommentGroup.visibility = View.VISIBLE
 
                     ChefImageLoader.loadUserImage(
-                        context, post.comments[0]!!.userImg, postlistCommentUserImg
+                        context, post.comments[0]!!.userImg, homePostCommentUserImg
                     )
 
-                    postlistCommentUserNickname.text = post.comments[0]!!.nickName
-                    postlistCommentContents.text = post.comments[0]!!.contents
-                    postlistCommentDate.text =
+                    homePostCommentUserNickname.text = post.comments[0]!!.nickName
+                    homePostCommentContents.text = post.comments[0]!!.contents
+                    homePostCommentDate.text =
                         Utils.convertMillisToText(post.comments[0]!!.dateTime)
-                } else postlistCommentGroup.visibility = View.GONE
+                } else homePostCommentGroup.visibility = View.GONE
             }
         }
     }

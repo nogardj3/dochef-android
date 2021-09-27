@@ -7,9 +7,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/post_toolbar"
+        style="@style/BaseTheme.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        style="@style/BaseTheme.Toolbar"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,7 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="1"
-                tools:src="@raw/dummy_post_0"/>
+                tools:src="@raw/dummy_post_0" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/post_userimg"
@@ -66,10 +66,10 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:foreground="?selectableItemBackground"
-                app:layout_constraintTop_toTopOf="@+id/post_userimg"
                 app:layout_constraintBottom_toBottomOf="@+id/post_userimg"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
-                app:layout_constraintRight_toRightOf="@+id/post_nickname"/>
+                app:layout_constraintRight_toRightOf="@+id/post_nickname"
+                app:layout_constraintTop_toTopOf="@+id/post_userimg" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/post_time"
@@ -162,7 +162,7 @@
                 app:layout_constraintRight_toRightOf="@id/post_time"
                 app:layout_constraintTop_toBottomOf="@+id/post_like"
                 tools:itemCount="2"
-                tools:listitem="@layout/li_comment" />
+                tools:listitem="@layout/comment_item" />
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/post_comment_edittext"
@@ -171,12 +171,12 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/bg_stroke_2dp"
-                android:lines="3"
-                android:inputType="textMultiLine|textNoSuggestions"
-                android:maxLines="4"
-                android:theme="@style/BaseTheme.EditTextStyle"
-                android:textSize="16dp"
                 android:backgroundTint="@null"
+                android:inputType="textMultiLine|textNoSuggestions"
+                android:lines="3"
+                android:maxLines="4"
+                android:textSize="16dp"
+                android:theme="@style/BaseTheme.EditTextStyle"
                 app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                 app:layout_constraintRight_toLeftOf="@+id/post_comment_ok"
                 app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler" />

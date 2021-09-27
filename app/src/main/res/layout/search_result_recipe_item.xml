@@ -13,7 +13,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/reciperesult_recipeimg"
+            android:id="@+id/resultrecipe_recipeimg"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:foreground="@drawable/bg_translucent"
@@ -21,7 +21,7 @@
             tools:src="@raw/dummy_recipe_1" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/reciperesult_title"
+            android:id="@+id/resultrecipe_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -33,16 +33,16 @@
             tools:text="레시피" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/reciperesult_nickname"
+            android:id="@+id/resultrecipe_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            app:layout_constraintLeft_toLeftOf="@+id/reciperesult_title"
-            app:layout_constraintTop_toBottomOf="@+id/reciperesult_title"
+            app:layout_constraintLeft_toLeftOf="@+id/resultrecipe_title"
+            app:layout_constraintTop_toBottomOf="@+id/resultrecipe_title"
             tools:text="닉네임" />
 
         <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/reciperesult_ingredients"
+            android:id="@+id/resultrecipe_ingredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
@@ -54,7 +54,7 @@
             tools:visibility="gone" />
 
         <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/reciperesult_tags"
+            android:id="@+id/resultrecipe_tags"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"

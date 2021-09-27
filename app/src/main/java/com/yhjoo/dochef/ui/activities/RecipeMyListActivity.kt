@@ -58,7 +58,7 @@ class RecipeMyListActivity : BaseActivity() {
 
             recipeListAdapter = RecipeVerticalListAdapter(
                 RecipeVerticalListAdapter.MAIN_MYRECIPE,
-                activeUserID= userID,
+                activeUserID = userID,
                 { item ->
                     val intent = Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
                         .putExtra("recipeID", item.recipeID)

@@ -7,7 +7,7 @@ import com.yhjoo.dochef.model.Comment
 import com.yhjoo.dochef.utilities.Utils
 
 class CommentListAdapter(private var mUserID: String) :
-    BaseQuickAdapter<Comment, BaseViewHolder>(R.layout.li_comment) {
+    BaseQuickAdapter<Comment, BaseViewHolder>(R.layout.comment_item) {
     override fun convert(helper: BaseViewHolder, item: Comment) {
         helper.setText(R.id.comment_nickname, item.nickName)
         helper.setText(R.id.comment_contents, item.contents)

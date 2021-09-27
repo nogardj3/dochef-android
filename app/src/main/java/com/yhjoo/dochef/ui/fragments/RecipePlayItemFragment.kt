@@ -10,19 +10,19 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
+import com.yhjoo.dochef.databinding.RecipeplayItemFragmentBinding
 import com.yhjoo.dochef.model.RecipePhase
 import com.yhjoo.dochef.utilities.ChefImageLoader
 
-class PlayRecipeItemFragment : Fragment() {
-    private lateinit var binding: FPlayrecipeItemBinding
+class RecipePlayItemFragment : Fragment() {
+    private lateinit var binding: RecipeplayItemFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FPlayrecipeItemBinding.inflate(inflater, container, false)
+        binding = RecipeplayItemFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         val recipePhase = requireArguments().getSerializable("item") as RecipePhase
@@ -31,21 +31,21 @@ class PlayRecipeItemFragment : Fragment() {
             ChefImageLoader.loadRecipeImage(
                 requireContext(),
                 recipePhase.recipe_img,
-                playrecipeItemImg
+                recipeplayItemImg
             )
-            playrecipeItemTips.removeAllViews()
+            recipeplayItemTips.removeAllViews()
             for (text in recipePhase.tips) {
-                val tiptext = layoutInflater.inflate(R.layout.v_tip, null) as AppCompatTextView
+                val tiptext = layoutInflater.inflate(R.layout.view_tip, null) as AppCompatTextView
                 tiptext.text = text
-                playrecipeItemTips.addView(tiptext)
+                recipeplayItemTips.addView(tiptext)
             }
 
-            playrecipeItemIngredients.removeAllViews()
+            recipeplayItemIngredients.removeAllViews()
             for (ingredient in recipePhase.ingredients) {
                 val ingredientContainer =
                     layoutInflater.inflate(
-                        R.layout.v_ingredient,
-                        playrecipeItemIngredients,
+                        R.layout.view_ingredient,
+                        recipeplayItemIngredients,
                         false
                     ) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
@@ -54,31 +54,9 @@ class PlayRecipeItemFragment : Fragment() {
                 val ingredientAmount: AppCompatTextView =
                     ingredientContainer.findViewById(R.id.v_ingredient_amount)
                 ingredientAmount.text = ingredient.amount
-                playrecipeItemIngredients.addView(ingredientContainer)
+                recipeplayItemIngredients.addView(ingredientContainer)
             }
-            playrecipeItemContents.text = recipePhase.contents
-
-            playrecipeEndReviewEdittext.addTextChangedListener(object : TextWatcher {
-                var prevText = ""
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    prevText = s.toString()
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (playrecipeEndReviewEdittext.lineCount > 3 || s.toString().length >= 120) {
-                        playrecipeEndReviewEdittext.setText(prevText)
-                        playrecipeEndReviewEdittext.setSelection(prevText.length - 1)
-                    }
-                }
-            })
+            recipeplayItemContents.text = recipePhase.contents
         }
 
         return view

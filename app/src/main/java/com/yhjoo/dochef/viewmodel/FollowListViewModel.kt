@@ -16,12 +16,12 @@ class FollowListViewModel(
     val activeUserDetail = MutableLiveData<UserDetail>()
     val allFollowLists = MutableLiveData<List<UserBrief>>()
 
-    init{
+    init {
         requestActiveUserDetail()
         requestFollowLists()
     }
 
-    fun requestActiveUserDetail(){
+    fun requestActiveUserDetail() {
         viewModelScope.launch {
             repository.getUserDetail().collect {
                 activeUserDetail.value = it.body()
@@ -37,20 +37,20 @@ class FollowListViewModel(
         }
     }
 
-    fun subscribeUser(targetID: String){
+    fun subscribeUser(targetID: String) {
         viewModelScope.launch {
             val result = repository.subscribeUser(targetID)
-            if(result!!.isSuccessful){
+            if (result!!.isSuccessful) {
                 requestActiveUserDetail()
                 requestFollowLists()
             }
         }
     }
 
-    fun unsubscribeUser(targetID: String){
+    fun unsubscribeUser(targetID: String) {
         viewModelScope.launch {
             val result = repository.unsubscribeUser(targetID)
-            if(result!!.isSuccessful){
+            if (result!!.isSuccessful) {
                 requestActiveUserDetail()
                 requestFollowLists()
             }

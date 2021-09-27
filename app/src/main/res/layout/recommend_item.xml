@@ -13,10 +13,10 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginTop="10dp"
+        android:background="@drawable/bg_tag_post"
         android:paddingHorizontal="10dp"
         android:paddingVertical="4dp"
         android:textColor="@color/white"
-        android:background="@drawable/bg_tag_post"
         android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -42,7 +42,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recommend_title"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/li_recipe_recommend"
+        tools:listitem="@layout/recipe_horizontal_item"
         tools:orientation="horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

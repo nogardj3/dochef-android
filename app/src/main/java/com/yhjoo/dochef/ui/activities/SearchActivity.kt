@@ -13,7 +13,11 @@ import com.yhjoo.dochef.ui.fragments.*
 import com.yhjoo.dochef.utilities.Utils
 
 class SearchActivity : BaseActivity() {
-    private val binding: SearchActivityBinding by lazy { SearchActivityBinding.inflate(layoutInflater) }
+    private val binding: SearchActivityBinding by lazy {
+        SearchActivityBinding.inflate(
+            layoutInflater
+        )
+    }
     private lateinit var viewPagerAdapter: SearchViewPagerAdapter
     private val tabStrings = arrayOf(
         "유저",
@@ -40,7 +44,7 @@ class SearchActivity : BaseActivity() {
 //                    addFragment(searchTypes[i].fragmentSearch, searchTypes[i].title)
 //                }
 //            }
-            searchViewpager.apply{
+            searchViewpager.apply {
                 offscreenPageLimit = 4
                 adapter = viewPagerAdapter
             }
@@ -48,7 +52,7 @@ class SearchActivity : BaseActivity() {
                 tab.text = tabStrings[position]
             }.attach()
 
-            searchSearchview.apply{
+            searchSearchview.apply {
                 isSubmitButtonEnabled = true
                 setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextChange(newText: String?): Boolean {

@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.RecipeListViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.viewmodel.RecipeListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

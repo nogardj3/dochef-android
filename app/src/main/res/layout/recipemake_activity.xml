@@ -6,9 +6,9 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/recipemake_toolbar"
+        style="@style/BaseTheme.Toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        style="@style/BaseTheme.Toolbar"
         android:theme="@style/BaseTheme.Toolbar"
         app:layout_constraintTop_toTopOf="parent"
         app:title="레시피 작성" />

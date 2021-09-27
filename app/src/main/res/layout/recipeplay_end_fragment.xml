@@ -15,7 +15,7 @@
             android:paddingBottom="70dp">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/playrecipe_item_img"
+                android:id="@+id/recipeplay_end_img"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
@@ -27,18 +27,18 @@
                 tools:src="@raw/dummy_recipe_1" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/playrecipe_item_contents"
+                android:id="@+id/recipeplay_end_contents"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
-                android:layout_marginRight="4dp"
                 android:layout_marginTop="4dp"
+                android:layout_marginRight="4dp"
                 android:maxLines="4"
                 android:textColor="@color/black"
                 android:textSize="16dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_img"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_img"
                 tools:text="내용\n\n\n" />
 
             <View
@@ -46,111 +46,102 @@
                 android:layout_height="0.5dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/grey"
-                app:layout_constraintTop_toBottomOf="@id/playrecipe_item_contents"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintRight_toRightOf="@+id/playrecipe_item_contents" />
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintRight_toRightOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@id/recipeplay_end_contents" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/playrecipe_item_tipimg"
+                android:id="@+id/recipeplay_end_tipimg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:tint="@color/colorSecondary"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_ingredient_text"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_contents"
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_ingredient_text"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_contents"
                 app:srcCompat="@drawable/ic_tip_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/playrecipe_item_tiptext"
+                android:id="@+id/recipeplay_end_tiptext"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="4dp"
+                android:text="팁"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@+id/playrecipe_item_tipimg"
-                app:layout_constraintLeft_toRightOf="@+id/playrecipe_item_tipimg"
-                app:layout_constraintTop_toTopOf="@+id/playrecipe_item_tipimg"
-                android:text="팁" />
+                app:layout_constraintBottom_toBottomOf="@+id/recipeplay_end_tipimg"
+                app:layout_constraintLeft_toRightOf="@+id/recipeplay_end_tipimg"
+                app:layout_constraintTop_toTopOf="@+id/recipeplay_end_tipimg" />
 
             <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/playrecipe_item_tips"
+                android:id="@+id/recipeplay_end_tips"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:flexDirection="column"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintRight_toRightOf="@+id/playrecipe_item_contents"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_tipimg"/>
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintRight_toRightOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_tipimg" />
 
             <View
                 android:layout_width="0dp"
                 android:layout_height="0.5dp"
                 android:layout_marginTop="4dp"
                 android:background="@color/grey"
-                app:layout_constraintTop_toBottomOf="@id/playrecipe_item_tips"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintRight_toRightOf="@+id/playrecipe_item_contents" />
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintRight_toRightOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@id/recipeplay_end_tips" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/playrecipe_item_ingredient_text"
+                android:id="@+id/recipeplay_end_ingredient_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="재료"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_tips" />
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_tips" />
 
             <com.google.android.flexbox.FlexboxLayout
-                android:id="@+id/playrecipe_item_ingredients"
+                android:id="@+id/recipeplay_end_ingredients"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 app:flexDirection="column"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintRight_toRightOf="@+id/playrecipe_item_contents"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_ingredient_text"/>
-
-            <androidx.constraintlayout.widget.Group
-                android:id="@+id/playrecipe_end_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                app:constraint_referenced_ids="playrecipe_end_divider,
-            playrecipe_end_like, playrecipe_end_review_text, playrecipe_end_rating, playrecipe_end_review_edittext,playrecipe_end_review_ok "
-                tools:visibility="visible" />
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintRight_toRightOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_ingredient_text" />
 
             <View
-                android:id="@+id/playrecipe_end_divider"
+                android:id="@+id/recipeplay_end_divider"
                 android:layout_width="match_parent"
                 android:layout_height="0.5dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:background="@color/grey"
-                app:layout_constraintLeft_toLeftOf="@id/playrecipe_item_contents"
-                app:layout_constraintRight_toRightOf="@id/playrecipe_item_contents"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_item_ingredients" />
+                app:layout_constraintLeft_toLeftOf="@id/recipeplay_end_contents"
+                app:layout_constraintRight_toRightOf="@id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_ingredients" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/playrecipe_end_review_text"
+                android:id="@+id/recipeplay_end_review_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:text="리뷰"
                 android:textStyle="bold"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_end_divider" />
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_divider" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/playrecipe_end_like"
+                android:id="@+id/recipeplay_end_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
-                app:layout_constraintBottom_toBottomOf="@+id/playrecipe_item_contents"
-                app:layout_constraintRight_toRightOf="@+id/playrecipe_item_contents"
+                app:layout_constraintBottom_toBottomOf="@+id/recipeplay_end_contents"
+                app:layout_constraintRight_toRightOf="@+id/recipeplay_end_contents"
                 app:srcCompat="@drawable/ic_favorite_black" />
 
             <androidx.appcompat.widget.AppCompatRatingBar
-                android:id="@+id/playrecipe_end_rating"
+                android:id="@+id/recipeplay_end_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -161,27 +152,27 @@
                 android:theme="@style/BaseTheme.RatingBar"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_end_review_text" />
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_review_text" />
 
             <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/playrecipe_end_review_edittext"
+                android:id="@+id/recipeplay_end_review_edittext"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginRight="12dp"
                 android:background="@drawable/bg_stroke_2dp"
+                android:backgroundTint="@null"
                 android:inputType="textMultiLine|textNoSuggestions"
                 android:lines="3"
                 android:maxLines="4"
-                android:theme="@style/BaseTheme.EditTextStyle"
                 android:textSize="16dp"
-                android:backgroundTint="@null"
-                app:layout_constraintLeft_toLeftOf="@+id/playrecipe_item_contents"
-                app:layout_constraintRight_toLeftOf="@+id/playrecipe_end_review_ok"
-                app:layout_constraintTop_toBottomOf="@+id/playrecipe_end_rating" />
+                android:theme="@style/BaseTheme.EditTextStyle"
+                app:layout_constraintLeft_toLeftOf="@+id/recipeplay_end_contents"
+                app:layout_constraintRight_toLeftOf="@+id/recipeplay_end_review_ok"
+                app:layout_constraintTop_toBottomOf="@+id/recipeplay_end_rating" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/playrecipe_end_review_ok"
+                android:id="@+id/recipeplay_end_review_ok"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_marginStart="5dp"
@@ -192,9 +183,9 @@
                 android:text="입력"
                 android:textColor="@color/white"
                 app:backgroundTint="@color/colorPrimary"
-                app:layout_constraintBottom_toBottomOf="@+id/playrecipe_end_review_edittext"
-                app:layout_constraintRight_toRightOf="@+id/playrecipe_item_contents"
-                app:layout_constraintTop_toTopOf="@+id/playrecipe_end_review_edittext" />
+                app:layout_constraintBottom_toBottomOf="@+id/recipeplay_end_review_edittext"
+                app:layout_constraintRight_toRightOf="@+id/recipeplay_end_contents"
+                app:layout_constraintTop_toTopOf="@+id/recipeplay_end_review_edittext" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

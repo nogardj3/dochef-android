@@ -34,11 +34,11 @@ class SearchResultAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId:
                     ChefImageLoader.loadUserImage(
                         mContext,
                         ele.userImg,
-                        helper.getView(R.id.user_img)
+                        helper.getView(R.id.resultuser_img)
                     )
-                    helper.setText(R.id.user_nickname, ele.nickname)
+                    helper.setText(R.id.resultuser_nickname, ele.nickname)
                     helper.setText(
-                        R.id.user_follower_count, String.format(
+                        R.id.resultuser_follower_count, String.format(
                             mContext.getString(R.string.format_follower),
                             ele.follower_count.toString()
                         )
@@ -47,19 +47,19 @@ class SearchResultAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId:
                 VIEWHOLDER.ITEM_RECIPE_NAME -> {
                     val recipeItem = item.content as Recipe
                     ChefImageLoader.loadRecipeImage(
-                        mContext, recipeItem.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
+                        mContext, recipeItem.recipeImg, helper.getView(R.id.resultrecipe_recipeimg)
                     )
-                    helper.setText(R.id.reciperesult_title, recipeItem.recipeName)
+                    helper.setText(R.id.resultrecipe_title, recipeItem.recipeName)
                     helper.setTextColor(
-                        R.id.reciperesult_title,
+                        R.id.resultrecipe_title,
                         mContext.getColor(R.color.colorSecondary)
                     )
-                    (helper.getView<View>(R.id.reciperesult_title) as AppCompatTextView).setTypeface(
+                    (helper.getView<View>(R.id.resultrecipe_title) as AppCompatTextView).setTypeface(
                         null,
                         Typeface.BOLD
                     )
                     helper.setText(
-                        R.id.reciperesult_nickname,
+                        R.id.resultrecipe_nickname,
                         String.format(
                             mContext.resources.getString(R.string.format_usernickname),
                             recipeItem.nickname
@@ -69,25 +69,25 @@ class SearchResultAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId:
                 VIEWHOLDER.ITEM_INGREDIENT -> {
                     val recipeItem2 = item.content as Recipe
                     ChefImageLoader.loadRecipeImage(
-                        mContext, recipeItem2.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
+                        mContext, recipeItem2.recipeImg, helper.getView(R.id.resultrecipe_recipeimg)
                     )
-                    helper.setText(R.id.reciperesult_title, recipeItem2.recipeName)
+                    helper.setText(R.id.resultrecipe_title, recipeItem2.recipeName)
                     helper.setText(
-                        R.id.reciperesult_nickname,
+                        R.id.resultrecipe_nickname,
                         String.format(
                             mContext.resources.getString(R.string.format_usernickname),
                             recipeItem2.nickname
                         )
                     )
-                    helper.setVisible(R.id.reciperesult_ingredients, true)
-                    (helper.getView<View>(R.id.reciperesult_ingredients) as FlexboxLayout).removeAllViews()
+                    helper.setVisible(R.id.resultrecipe_ingredients, true)
+                    (helper.getView<View>(R.id.resultrecipe_ingredients) as FlexboxLayout).removeAllViews()
                     for (ingredient in recipeItem2.ingredients) {
                         val tagcontainer =
-                            mLayoutInflater.inflate(R.layout.v_tag_post, null) as LinearLayout
+                            mLayoutInflater.inflate(R.layout.view_tag_post, null) as LinearLayout
                         val tagview: AppCompatTextView =
-                            tagcontainer.findViewById(R.id.vtag_post_text)
+                            tagcontainer.findViewById(R.id.tagpost_contents)
                         tagview.text = "#$ingredient.name"
-                        (helper.getView<View>(R.id.reciperesult_ingredients) as FlexboxLayout).addView(
+                        (helper.getView<View>(R.id.resultrecipe_ingredients) as FlexboxLayout).addView(
                             tagcontainer
                         )
                     }
@@ -95,25 +95,25 @@ class SearchResultAdapter(type: Int, data: List<SearchResult<*>?>?, layoutResId:
                 VIEWHOLDER.ITEM_TAG -> {
                     val recipeItem3 = item.content as Recipe
                     ChefImageLoader.loadRecipeImage(
-                        mContext, recipeItem3.recipeImg, helper.getView(R.id.reciperesult_recipeimg)
+                        mContext, recipeItem3.recipeImg, helper.getView(R.id.resultrecipe_recipeimg)
                     )
-                    helper.setText(R.id.reciperesult_title, recipeItem3.recipeName)
+                    helper.setText(R.id.resultrecipe_title, recipeItem3.recipeName)
                     helper.setText(
-                        R.id.reciperesult_nickname,
+                        R.id.resultrecipe_nickname,
                         String.format(
                             mContext.resources.getString(R.string.format_usernickname),
                             recipeItem3.nickname
                         )
                     )
-                    helper.setVisible(R.id.reciperesult_tags, true)
-                    (helper.getView<View>(R.id.reciperesult_tags) as FlexboxLayout).removeAllViews()
+                    helper.setVisible(R.id.resultrecipe_tags, true)
+                    (helper.getView<View>(R.id.resultrecipe_tags) as FlexboxLayout).removeAllViews()
                     for (tag in recipeItem3.tags) {
                         val tagcontainer =
-                            mLayoutInflater.inflate(R.layout.v_tag_post, null) as LinearLayout
+                            mLayoutInflater.inflate(R.layout.view_tag_post, null) as LinearLayout
                         val tagview: AppCompatTextView =
-                            tagcontainer.findViewById(R.id.vtag_post_text)
+                            tagcontainer.findViewById(R.id.tagpost_contents)
                         tagview.text = "#$tag"
-                        (helper.getView<View>(R.id.reciperesult_tags) as FlexboxLayout).addView(
+                        (helper.getView<View>(R.id.resultrecipe_tags) as FlexboxLayout).addView(
                             tagcontainer
                         )
                     }

@@ -107,7 +107,7 @@ class HomeActivity : BaseActivity() {
         )
         postListViewModel = factory.create(PostListViewModel::class.java).apply {
             allPostList.observe(this@HomeActivity, {
-                postListAdapter.submitList(it){}
+                postListAdapter.submitList(it) {}
             })
         }
 
@@ -281,7 +281,7 @@ class HomeActivity : BaseActivity() {
                 recipeHorizontalHomeAdapter.apply {
                     setNewData(recipeList)
                     setEmptyView(
-                        R.layout.empty_recipe, binding.homeRecipeRecycler.parent as ViewGroup
+                        R.layout.recipe_item_empty, binding.homeRecipeRecycler.parent as ViewGroup
                     )
                 }
             }

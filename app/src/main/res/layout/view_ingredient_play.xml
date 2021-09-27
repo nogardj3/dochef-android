@@ -4,27 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="5dp"
-    android:foreground="?attr/selectableItemBackground">
+    android:paddingVertical="2dp"
+    tools:background="@color/grey_text"
+    >
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/ingredient_product"
+        android:id="@+id/v_ingredientplay_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginLeft="8dp"
+        android:textColor="@color/white"
+        android:textSize="12dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="재료" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/ingredient_quantity"
+        android:id="@+id/v_ingredientplay_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginRight="8dp"
+        android:textColor="@color/white"
+        android:textSize="12dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="1 큰술" />
+        tools:text="양" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

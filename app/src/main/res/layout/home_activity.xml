@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.PostListViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.viewmodel.PostListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,8 +38,7 @@
                     android:layout_height="wrap_content"
                     android:visibility="gone"
                     app:constraint_referenced_ids="home_userimg_revise,
-                home_nickname_revise,
-                home_profiletext_revise, "
+                    home_nickname_revise,home_profiletext_revise, "
                     tools:visibility="visible" />
 
                 <androidx.constraintlayout.widget.Group
@@ -276,7 +278,7 @@
                     android:layout_marginTop="4dp"
                     app:layout_constraintTop_toBottomOf="@+id/home_recipe_text"
                     tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/li_recipe_home"
+                    tools:listitem="@layout/home_recipelist_item"
                     tools:orientation="horizontal" />
 
                 <androidx.appcompat.widget.AppCompatTextView

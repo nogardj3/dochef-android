@@ -7,7 +7,7 @@
     android:paddingBottom="4dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/vtag_post_text"
+        android:id="@+id/tagpost_contents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorSecondary"

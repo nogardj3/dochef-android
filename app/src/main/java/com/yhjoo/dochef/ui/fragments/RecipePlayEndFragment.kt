@@ -9,7 +9,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.FPlayrecipeItemBinding
+import com.yhjoo.dochef.databinding.RecipeplayEndFragmentBinding
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
 import com.yhjoo.dochef.ui.activities.BaseActivity
@@ -22,14 +22,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class PlayRecipeEndFragment : Fragment() {
+class RecipePlayEndFragment : Fragment() {
     /*
         TODO
         1. 분기 - end용 처리하기
         2. 리뷰작성 기능
     */
 
-    private lateinit var binding: FPlayrecipeItemBinding
+    private lateinit var binding: RecipeplayEndFragmentBinding
     private lateinit var recipeService: RecipeService
     private lateinit var reviewService: ReviewService
     private lateinit var recipePhase: RecipePhase
@@ -42,7 +42,7 @@ class PlayRecipeEndFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FPlayrecipeItemBinding.inflate(inflater, container, false)
+        binding = RecipeplayEndFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
@@ -63,48 +63,51 @@ class PlayRecipeEndFragment : Fragment() {
             ChefImageLoader.loadRecipeImage(
                 requireContext(),
                 recipePhase.recipe_img,
-                playrecipeItemImg
+                recipeplayEndImg
             )
 
-            playrecipeItemTips.removeAllViews()
+            recipeplayEndTips.removeAllViews()
             for (text in recipePhase.tips) {
-                val tiptext = layoutInflater.inflate(R.layout.v_tip, null) as AppCompatTextView
+                val tiptext = layoutInflater.inflate(R.layout.view_tip, null) as AppCompatTextView
                 tiptext.text = text
-                playrecipeItemTips.addView(tiptext)
+                recipeplayEndTips.addView(tiptext)
             }
 
-            playrecipeItemIngredients.removeAllViews()
+            recipeplayEndIngredients.removeAllViews()
             for (ingredient in recipePhase.ingredients) {
                 val ingredientContainer =
-                    layoutInflater.inflate(R.layout.v_ingredient, playrecipeItemIngredients,false) as ConstraintLayout
+                    layoutInflater.inflate(
+                        R.layout.view_ingredient,
+                        recipeplayEndIngredients,
+                        false
+                    ) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
                     ingredientContainer.findViewById(R.id.v_ingredient_name)
                 ingredientName.text = ingredient.name
                 val ingredientAmount: AppCompatTextView =
                     ingredientContainer.findViewById(R.id.v_ingredient_amount)
                 ingredientAmount.text = ingredient.amount
-                playrecipeItemIngredients.addView(ingredientContainer)
+                recipeplayEndIngredients.addView(ingredientContainer)
             }
-            playrecipeItemContents.text = recipePhase.contents
-            playrecipeEndGroup.visibility = View.VISIBLE
+            recipeplayEndContents.text = recipePhase.contents
 
-            playrecipeEndLike.setImageResource(
+            recipeplayEndLike.setImageResource(
                 if (isLikeThis) R.drawable.ic_favorite_red
                 else R.drawable.ic_favorite_black
             )
 
-            playrecipeEndReviewOk.setOnClickListener { addReview() }
+            recipeplayEndReviewOk.setOnClickListener { addReview() }
         }
     }
 
     private fun addReview() = CoroutineScope(Dispatchers.Main).launch {
         runCatching {
 
-            if (binding.playrecipeEndReviewEdittext.text.toString() != "") {
+            if (binding.recipeplayEndReviewEdittext.text.toString() != "") {
                 reviewService.createReview(
                     recipeDetail.recipeID, userID!!,
-                    binding.playrecipeEndReviewEdittext.text.toString(),
-                    binding.playrecipeEndRating.rating.toLong(), System.currentTimeMillis()
+                    binding.recipeplayEndReviewEdittext.text.toString(),
+                    binding.recipeplayEndRating.rating.toLong(), System.currentTimeMillis()
                 )
                 App.showToast("리뷰가 등록되었습니다.")
                 (requireActivity() as BaseActivity?)!!.finish()

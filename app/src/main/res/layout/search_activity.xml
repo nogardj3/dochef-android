@@ -18,14 +18,13 @@
                 android:id="@+id/search_searchview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:searchIcon="@drawable/ic_search_primary"
-                app:queryHint="검색"
-                app:iconifiedByDefault="false"
                 android:imeOptions="actionSearch"
                 android:theme="@style/BaseTheme.SearchView"
-                />
+                app:iconifiedByDefault="false"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:queryHint="검색"
+                app:searchIcon="@drawable/ic_search_primary" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/search_tablayout"

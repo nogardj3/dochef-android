@@ -50,11 +50,8 @@ class AccountSignInFragment : Fragment() {
         googleSignInClient = GoogleSignIn.getClient(
             requireActivity(),
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(
-                    getString(
-                        R.string.default_web_client_id
-                    )
-                )
+//                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("227618773978-c5ptgsjltcrv8hl1dmgci6rnedd8ene9.apps.googleusercontent.com")
                 .requestEmail()
                 .build()
         )
@@ -75,7 +72,7 @@ class AccountSignInFragment : Fragment() {
         )
 
         binding.apply {
-            signinEmailEdittext.apply{
+            signinEmailEdittext.apply {
                 textChanged {
                     signinEmailLayout.error = null
                 }
@@ -92,7 +89,7 @@ class AccountSignInFragment : Fragment() {
                         false
                 }
             }
-            signinPasswordEdittext.apply{
+            signinPasswordEdittext.apply {
                 textChanged {
                     error = null
                 }
@@ -107,7 +104,9 @@ class AccountSignInFragment : Fragment() {
                                     "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
                             else -> {
                                 signinPasswordLayout.error = null
-                                (requireActivity() as BaseActivity).hideKeyboard(signinPasswordLayout)
+                                (requireActivity() as BaseActivity).hideKeyboard(
+                                    signinPasswordLayout
+                                )
                             }
                         }
                         true
@@ -124,9 +123,11 @@ class AccountSignInFragment : Fragment() {
                 )
             }
             signinSignupBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_accountSignInFragment_to_accountSignUpFragment) }
+                findNavController().navigate(R.id.action_accountSignInFragment_to_accountSignUpFragment)
+            }
             signinFindpwBtn.setOnClickListener {
-                findNavController().navigate(R.id.action_accountSignInFragment_to_accountFindPWFragment) }
+                findNavController().navigate(R.id.action_accountSignInFragment_to_accountFindPWFragment)
+            }
         }
 
         return view

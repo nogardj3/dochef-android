@@ -3,13 +3,11 @@
 
     <string name="SP_ACTIVATEDDEVICE">AutoLogin</string>
     <string name="SP_USERINFO">UserInfo</string>
-    <string name="SP_CHANNEL">NotificationChannelCreated</string>
+
+    <string name="admob_banner_test_id">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- server -->
     <string name="server_url">http://10.0.2.2:4000/chef/</string>
-
-    <!-- admob test -->
-    <string name="admob_banner_id_test">ca-app-pub-3940256099942544/6300978111</string>
 
     <!-- firebase storage path -->
     <string name="storage_path_profile">profile/</string>
@@ -34,7 +32,7 @@
     <string name="format_follower">팔로워 : %d</string>
     <string name="format_upload_file">%s_%s.jpg</string>
 
-    <!-- notification -->
+    <!-- notification channel -->
     <string name="notification_channel_id">default</string>
 
 </resources>

@@ -19,7 +19,7 @@ import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.CommentListAdapter
-import com.yhjoo.dochef.databinding.APostdetailBinding
+import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.Comment
 import com.yhjoo.dochef.model.Post
@@ -32,7 +32,11 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class PostDetailActivity : BaseActivity() {
-    private val binding: APostdetailBinding by lazy { APostdetailBinding.inflate(layoutInflater) }
+    private val binding: PostdetailActivityBinding by lazy {
+        PostdetailActivityBinding.inflate(
+            layoutInflater
+        )
+    }
 
     private lateinit var postService: PostService
     private lateinit var commentService: CommentService
@@ -189,7 +193,7 @@ class PostDetailActivity : BaseActivity() {
             setTopView()
             commentListAdapter.setNewData(commentList)
             commentListAdapter.setEmptyView(
-                R.layout.empty_comment,
+                R.layout.comment_item_empty,
                 binding.postCommentRecycler.parent as ViewGroup
             )
             if (postInfo.postID == postID) {
@@ -237,8 +241,9 @@ class PostDetailActivity : BaseActivity() {
 
             postTags.removeAllViews()
             for (tag in postInfo.tags) {
-                val tagcontainer = layoutInflater.inflate(R.layout.v_tag_post, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_post_text)
+                val tagcontainer =
+                    layoutInflater.inflate(R.layout.view_tag_post, null) as LinearLayout
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagpost_contents)
                 tagview.text = "#$tag"
                 binding.postTags.addView(tagcontainer)
             }

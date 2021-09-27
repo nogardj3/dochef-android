@@ -47,9 +47,7 @@
     </style>
 
     <style name="BaseTheme.SearchView">
-        <!--bubble 색상-->
         <item name="colorAccent">@color/colorPrimary</item>
-        <!--버튼 색상-->
         <item name="colorControlNormal">#aaaaaa</item>
     </style>
 
@@ -59,18 +57,13 @@
 
 
     <style name="TextInputLayoutStyle.Outlined" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <!--FilledBox일 경우 밑줄 색상, OutlinedBox일 경우 테두리 색상-->
         <item name="boxStrokeColor">@color/colorPrimary</item>
-        <!--Counter-->
+
         <item name="counterTextAppearance">@style/CounterTextAppearance</item>
-        <!--EditText에 있을때의 Hint-->
         <item name="android:textColorHint">@color/grey_text</item>
-        <!--상단에 있을때의 Hint-->
         <item name="hintTextColor">@color/colorPrimary</item>
         <item name="hintTextAppearance">@style/HintTextAppearance</item>
-        <!--Helper-->
         <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
-        <!--Error-->
         <item name="errorEnabled">true</item>
         <item name="colorError">@color/colorSecondary</item>
         <item name="errorIconDrawable">@android:color/transparent</item>
@@ -80,18 +73,12 @@
     <style name="TextInputLayoutStyle.Filled" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
         <item name="boxBackgroundColor">@android:color/transparent</item>
 
-        <!--FilledBox일 경우 밑줄 색상, OutlinedBox일 경우 테두리 색상-->
         <item name="boxStrokeColor">@android:color/transparent</item>
-        <!--Counter-->
         <item name="counterTextAppearance">@style/CounterTextAppearance</item>
-        <!--EditText에 있을때의 Hint-->
         <item name="android:textColorHint">@color/grey_text</item>
-        <!--상단에 있을때의 Hint-->
         <item name="hintTextColor">@color/colorPrimary</item>
         <item name="hintTextAppearance">@style/HintTextAppearance</item>
-        <!--Helper-->
         <item name="helperTextTextAppearance">@style/HelperTextAppearance</item>
-        <!--Error-->
         <item name="errorEnabled">true</item>
         <item name="colorError">@color/colorSecondary</item>
         <item name="errorIconDrawable">@android:color/transparent</item>

@@ -57,13 +57,13 @@ class SearchResultFragment : Fragment() {
                     SearchResultAdapter(
                         type,
                         ArrayList(),
-                        R.layout.followlist_item
+                        R.layout.search_result_user_item
                     )
                 else
-                    SearchResultAdapter(type, ArrayList(), R.layout.search_result_item)
+                    SearchResultAdapter(type, ArrayList(), R.layout.search_result_recipe_item)
             searchResultAdapter.apply {
                 setEmptyView(
-                    R.layout.rv_search,
+                    R.layout.search_result_item_init,
                     binding.resultRecycler.parent as ViewGroup
                 )
                 setOnItemClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->

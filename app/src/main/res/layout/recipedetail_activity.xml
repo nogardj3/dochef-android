@@ -64,10 +64,10 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:foreground="?selectableItemBackground"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg"
             app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_userimg"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_nickname"/>
+            app:layout_constraintRight_toRightOf="@+id/recipedetail_nickname"
+            app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg" />
 
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -241,7 +241,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
             app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
             app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_rating_text"
-            tools:listitem="@layout/li_review" />
+            tools:listitem="@layout/review_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -1,7 +1,7 @@
 package com.yhjoo.dochef.ui.activities
 
 import android.os.Bundle
-import com.yhjoo.dochef.databinding.ARecipemakeBinding
+import com.yhjoo.dochef.databinding.RecipemakeActivityBinding
 
 class RecipeMakeActivity : BaseActivity() {
     /*
@@ -14,7 +14,11 @@ class RecipeMakeActivity : BaseActivity() {
         const val REVISE = 1
     }
 
-    private val binding: ARecipemakeBinding by lazy { ARecipemakeBinding.inflate(layoutInflater) }
+    private val binding: RecipemakeActivityBinding by lazy {
+        RecipemakeActivityBinding.inflate(
+            layoutInflater
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -31,11 +31,11 @@ class PostListViewModel(
     }
 
 
-    fun likePost(recipeId: Int, userId: String){
+    fun likePost(recipeId: Int, userId: String) {
 
     }
 
-    fun disLikePost(recipeId: Int, userId: String){
+    fun disLikePost(recipeId: Int, userId: String) {
 
     }
 

@@ -9,19 +9,19 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.databinding.FPlayrecipeStartBinding
+import com.yhjoo.dochef.databinding.RecipeplayStartFragmentBinding
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.utilities.ChefImageLoader
 
-class PlayRecipeStartFragment : Fragment() {
-    private lateinit var binding: FPlayrecipeStartBinding
+class RecipePlayStartFragment : Fragment() {
+    private lateinit var binding: RecipeplayStartFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FPlayrecipeStartBinding.inflate(inflater, container, false)
+        binding = RecipeplayStartFragmentBinding.inflate(inflater, container, false)
         val view: View = binding.root
 
         val recipeDetail = requireArguments().getSerializable("item") as RecipeDetail
@@ -30,31 +30,36 @@ class PlayRecipeStartFragment : Fragment() {
             ChefImageLoader.loadRecipeImage(
                 requireContext(),
                 recipeDetail.recipeImg,
-                playrecipeStartImg
+                recipeplayStartImg
             )
 
-            playrecipeStartTitle.text = recipeDetail.recipeName
-            playrecipeStartContents.text = recipeDetail.contents
+            recipeplayStartTitle.text = recipeDetail.recipeName
+            recipeplayStartContents.text = recipeDetail.contents
 
-            playrecipeStartTags.removeAllViews()
+            recipeplayStartTags.removeAllViews()
             for (tag in recipeDetail.tags) {
-                val tagcontainer = layoutInflater.inflate(R.layout.v_tag_recipe, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.vtag_recipe_text)
+                val tagcontainer =
+                    layoutInflater.inflate(R.layout.view_tag_recipe, null) as LinearLayout
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagrecipe_contents)
                 tagview.text = "#$tag"
-                playrecipeStartTags.addView(tagcontainer)
+                recipeplayStartTags.addView(tagcontainer)
             }
 
-            playrecipeStartIngredients.removeAllViews()
+            recipeplayStartIngredients.removeAllViews()
             for (ingredient in recipeDetail.ingredients) {
                 val ingredientContainer =
-                    layoutInflater.inflate(R.layout.v_ingredient_play,playrecipeStartIngredients, false) as ConstraintLayout
+                    layoutInflater.inflate(
+                        R.layout.view_ingredient_play,
+                        recipeplayStartIngredients,
+                        false
+                    ) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
                     ingredientContainer.findViewById(R.id.v_ingredientplay_name)
                 ingredientName.text = ingredient.name
                 val ingredientAmount: AppCompatTextView =
                     ingredientContainer.findViewById(R.id.v_ingredientplay_amount)
                 ingredientAmount.text = ingredient.amount
-                playrecipeStartIngredients.addView(ingredientContainer)
+                recipeplayStartIngredients.addView(ingredientContainer)
             }
         }
 

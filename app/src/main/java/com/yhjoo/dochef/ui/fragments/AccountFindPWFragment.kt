@@ -33,7 +33,9 @@ class AccountFindPWFragment : Fragment() {
                             accountFindpwEmailLayout.error = "이메일 형식이 올바르지 않습니다."
                         } else {
                             accountFindpwEmailLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(accountFindpwEmailLayout)
+                            (requireActivity() as BaseActivity).hideKeyboard(
+                                accountFindpwEmailLayout
+                            )
                             findpw()
                         }
                         true

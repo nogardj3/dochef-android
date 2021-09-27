@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/main_adviewpager"
+        android:id="@+id/main_init_adviewpager"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
@@ -17,51 +17,51 @@
         app:layout_constraintWidth_percent="1" />
 
     <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
-        android:id="@+id/main_adviewpager_indicator"
+        android:id="@+id/main_init_adviewpager_indicator"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/main_adviewpager"
-        android:layout_alignBottom="@+id/main_adviewpager"
+        android:layout_alignEnd="@+id/main_init_adviewpager"
+        android:layout_alignBottom="@+id/main_init_adviewpager"
         android:layout_marginVertical="8dp"
         app:dotsColor="@color/colorPrimary"
         app:dotsSize="10dp"
         app:dotsStrokeWidth="2dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager" />
+        app:layout_constraintTop_toBottomOf="@+id/main_init_adviewpager" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/main_recommend_text"
+        android:id="@+id/main_init_recommend_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         tools:text="Chef의 레시피"
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_adviewpager_indicator" />
+        app:layout_constraintTop_toBottomOf="@+id/main_init_adviewpager_indicator" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/main_recommend_more"
+        android:id="@+id/main_init_recommend_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="5dp"
         android:text="더보기"
         android:textColor="@color/grey_text"
-        app:layout_constraintBottom_toBottomOf="@+id/main_recommend_text"
+        app:layout_constraintBottom_toBottomOf="@+id/main_init_recommend_text"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/main_recommend_text" />
+        app:layout_constraintTop_toTopOf="@+id/main_init_recommend_text" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_recommend_recyclerview"
+        android:id="@+id/main_init_recommend_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="190dp"
         android:paddingLeft="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/main_recommend_text"
+        app:layout_constraintTop_toBottomOf="@+id/main_init_recommend_text"
         tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/li_recipe_recommend"
+        tools:listitem="@layout/recipe_horizontal_item"
         tools:orientation="horizontal" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

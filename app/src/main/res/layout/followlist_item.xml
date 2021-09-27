@@ -9,7 +9,7 @@
         android:foreground="?attr/selectableItemBackground">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/user_img"
+            android:id="@+id/followlist_img"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
@@ -20,26 +20,26 @@
             app:srcCompat="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/user_nickname"
+            android:id="@+id/followlist_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:textStyle="bold"
-            app:layout_constraintLeft_toRightOf="@+id/user_img"
-            app:layout_constraintTop_toTopOf="@+id/user_img"
+            app:layout_constraintLeft_toRightOf="@+id/followlist_img"
+            app:layout_constraintTop_toTopOf="@+id/followlist_img"
             tools:text="닉네임" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/user_follower_count"
+            android:id="@+id/followlist_follower_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/user_nickname"
-            app:layout_constraintTop_toBottomOf="@+id/user_nickname"
+            app:layout_constraintLeft_toLeftOf="@+id/followlist_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/followlist_nickname"
             tools:text="팔로워 : 1" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/user_follow_btn"
+            android:id="@+id/followlist_follow_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
@@ -54,7 +54,7 @@
             tools:visibility="visible" />
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/user_followcancel_btn"
+            android:id="@+id/followlist_followcancel_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"

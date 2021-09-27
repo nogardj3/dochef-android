@@ -54,23 +54,23 @@ class MainInitFragment : Fragment() {
         val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
         binding.apply {
-            mainAdviewpager.adapter = MainAdPagerAdapter(requireContext(), imgs)
-            mainAdviewpagerIndicator.setViewPager2(binding.mainAdviewpager)
+            mainInitAdviewpager.adapter = MainAdPagerAdapter(requireContext(), imgs)
+            mainInitAdviewpagerIndicator.setViewPager2(mainInitAdviewpager)
             Observable.interval(5, TimeUnit.SECONDS)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { count: Long ->
-                    binding.mainAdviewpager.currentItem = count.toInt() % 2
+                    binding.mainInitAdviewpager.currentItem = count.toInt() % 2
                 }
 
-            mainRecommendText.text = Html.fromHtml(
+            mainInitRecommendText.text = Html.fromHtml(
                 String.format(getString(R.string.format_recommend_title), "Chef"),
                 Html.FROM_HTML_MODE_LEGACY
             )
-            mainRecommendMore.setOnClickListener {
+            mainInitRecommendMore.setOnClickListener {
                 val itt = Intent(requireContext(), RecipeThemeActivity::class.java)
-                    .putExtra("userID",recipeList[0].userID)
-                        startActivity(Intent(context, RecipeThemeActivity::class.java))
+                    .putExtra("userID", recipeList[0].userID)
+                startActivity(Intent(context, RecipeThemeActivity::class.java))
             }
 
             recipeHorizontalAdapter = RecipeHorizontalAdapter().apply {
@@ -83,7 +83,7 @@ class MainInitFragment : Fragment() {
                 }
                 setNewData(recipeList)
             }
-            mainRecommendRecyclerview.apply{
+            mainInitRecommendRecyclerview.apply {
                 layoutManager =
                     LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                 adapter = recipeHorizontalAdapter

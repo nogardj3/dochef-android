@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="4dp"
     android:background="@drawable/bg_stroke_2dp"
     android:paddingHorizontal="2dp"
     android:paddingTop="4dp"
-    android:paddingBottom="8dp"
-    android:layout_marginBottom="4dp">
+    android:paddingBottom="8dp">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/review_userimg"
@@ -40,10 +40,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:foreground="?selectableItemBackground"
-        app:layout_constraintTop_toTopOf="@+id/review_userimg"
         app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
         app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
-        app:layout_constraintRight_toRightOf="@+id/review_nickname"/>
+        app:layout_constraintRight_toRightOf="@+id/review_nickname"
+        app:layout_constraintTop_toTopOf="@+id/review_userimg" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/review_datetext"

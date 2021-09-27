@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.NotificationViewModel" />
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.viewmodel.NotificationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,9 +16,9 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/notification_toolbar"
+            style="@style/BaseTheme.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            style="@style/BaseTheme.Toolbar"
             android:theme="@style/BaseTheme.Toolbar"
             app:layout_constraintTop_toTopOf="parent"
             app:title="알림" />
@@ -24,11 +27,10 @@
             android:id="@+id/notification_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            tools:listitem="@layout/notification_item"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/notification_toolbar"
-            app:layout_constraintBottom_toBottomOf="parent"/>
+            tools:listitem="@layout/notification_item" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>
 

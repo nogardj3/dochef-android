@@ -18,7 +18,7 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.adapter.PlayRecipeViewPagerAdapter
-import com.yhjoo.dochef.databinding.APlayrecipeBinding
+import com.yhjoo.dochef.databinding.RecipeplayActivityBinding
 import com.yhjoo.dochef.db.DataGenerator
 import com.yhjoo.dochef.model.RecipeDetail
 import com.yhjoo.dochef.model.RecipePhase
@@ -37,7 +37,11 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
         시작/다음/이전/타이머 시작/타이머 정지
     */
 
-    private val binding: APlayrecipeBinding by lazy { APlayrecipeBinding.inflate(layoutInflater) }
+    private val binding: RecipeplayActivityBinding by lazy {
+        RecipeplayActivityBinding.inflate(
+            layoutInflater
+        )
+    }
 
     private lateinit var recipeService: RecipeService
     private lateinit var speechRecognizer: SpeechRecognizer
@@ -70,8 +74,8 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mClssensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
-        binding.playrecipeCircularTimer.setOnClickListener { onClickTimer() }
-        binding.playrecipeCircularTimerText.setOnClickListener { onClickTimer() }
+        binding.recipeplayCircularTimer.setOnClickListener { onClickTimer() }
+        binding.recipeplayCircularTimerText.setOnClickListener { onClickTimer() }
 
         if (App.isServerAlive) {
             setPages()
@@ -93,16 +97,16 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
 
     private fun setPages() {
         playRecipeViewPagerAdapter = PlayRecipeViewPagerAdapter(supportFragmentManager)
-        playRecipeViewPagerAdapter.addFragment(PlayRecipeStartFragment(), recipeDetailInfo)
+        playRecipeViewPagerAdapter.addFragment(RecipePlayStartFragment(), recipeDetailInfo)
         for (i in recipePhases.indices) {
             if (i == recipePhases.size - 1) playRecipeViewPagerAdapter.addFragment(
-                PlayRecipeEndFragment(),
+                RecipePlayEndFragment(),
                 recipePhases[i],
                 recipeDetailInfo
-            ) else playRecipeViewPagerAdapter.addFragment(PlayRecipeItemFragment(), recipePhases[i])
+            ) else playRecipeViewPagerAdapter.addFragment(RecipePlayItemFragment(), recipePhases[i])
         }
-        binding.playrecipeViewpager.adapter = playRecipeViewPagerAdapter
-        binding.playrecipeViewpager.addOnPageChangeListener(object : OnPageChangeListener {
+        binding.recipeplayViewpager.adapter = playRecipeViewPagerAdapter
+        binding.recipeplayViewpager.addOnPageChangeListener(object : OnPageChangeListener {
             override fun onPageScrolled(
                 position: Int,
                 positionOffset: Float,
@@ -111,7 +115,7 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
             }
 
             override fun onPageSelected(position: Int) {
-                binding.playrecipeCircularToolsGroup.visibility =
+                binding.recipeplayCircularToolsGroup.visibility =
                     if (position == 0 || position == recipePhases.size) View.GONE else View.VISIBLE
                 if (timerSet) stopTimer()
                 if (mediaPlayer != null && mediaPlayer!!.isPlaying) mediaPlayer!!.stop()
@@ -120,8 +124,8 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
 
             override fun onPageScrollStateChanged(state: Int) {}
         })
-        binding.playrecipeStepindicator.setupWithViewPager(binding.playrecipeViewpager)
-        binding.playrecipeStepindicator.isClickable = false
+        binding.recipeplayStepindicator.setupWithViewPager(binding.recipeplayViewpager)
+        binding.recipeplayStepindicator.isClickable = false
     }
 
     override fun onDestroy() {
@@ -144,16 +148,16 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
     private fun setTimer(position: Int) {
         val restr = recipePhases[position - 1].time_amount.replace("[^0-9]".toRegex(), "")
         timerValue = restr.toInt() * 60
-        binding.playrecipeCircularTimer.max = timerValue
-        binding.playrecipeCircularTimer.setProgressCompat(0, true)
-        binding.playrecipeCircularTimerText.text =
+        binding.recipeplayCircularTimer.max = timerValue
+        binding.recipeplayCircularTimer.setProgressCompat(0, true)
+        binding.recipeplayCircularTimerText.text =
             String.format("%02d:%02d", timerValue / 60, timerValue % 60)
     }
 
     private fun startTimer() {
         timerSet = true
-        binding.playrecipeCircularTimer.max = timerValue
-        binding.playrecipeCircularTimerText.text =
+        binding.recipeplayCircularTimer.max = timerValue
+        binding.recipeplayCircularTimerText.text =
             String.format("%02d:%02d", timerValue / 60, timerValue % 60)
         compositeDisposable.add(
             Observable.interval(0, 1, TimeUnit.SECONDS)
@@ -162,8 +166,8 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
                 .takeUntil { aLong: Long -> aLong == timerValue.toLong() }
                 .subscribe({ aLong: Long ->
                     val t = timerValue - aLong
-                    binding.playrecipeCircularTimer.setProgressCompat(t.toInt(), true)
-                    binding.playrecipeCircularTimerText.text =
+                    binding.recipeplayCircularTimer.setProgressCompat(t.toInt(), true)
+                    binding.recipeplayCircularTimerText.text =
                         String.format("%02d:%02d", t / 60, t % 60)
                 }, { throwable: Throwable -> throwable.printStackTrace() }) {
                     mediaPlayer = MediaPlayer.create(this@RecipePlayActivity, R.raw.ring_complete)
@@ -187,9 +191,9 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
         soundCount = 0
         compositeDisposable.clear()
 
-        binding.playrecipeCircularTimer.max = timerValue
-        binding.playrecipeCircularTimer.setProgressCompat(0, true)
-        binding.playrecipeCircularTimerText.text =
+        binding.recipeplayCircularTimer.max = timerValue
+        binding.recipeplayCircularTimer.setProgressCompat(0, true)
+        binding.recipeplayCircularTimerText.text =
             String.format("%02d:%02d", timerValue / 60, timerValue % 60)
     }
 
@@ -217,14 +221,14 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
                 val rs = arrayOfNulls<String>(mResult.size)
 
                 mResult.toArray(rs)
-                binding.playrecipeTts.text = rs[0]
+                binding.recipeplayTts.text = rs[0]
                 when (rs[0]) {
-                    "다음" -> if (binding.playrecipeViewpager.currentItem != recipePhases.size) binding.playrecipeViewpager.currentItem =
-                        binding.playrecipeViewpager.currentItem + 1
-                    "이전" -> if (binding.playrecipeViewpager.currentItem != 0) binding.playrecipeViewpager.currentItem =
-                        binding.playrecipeViewpager.currentItem - 1
-                    "시작" -> if (binding.playrecipeViewpager.currentItem != 0 || binding.playrecipeViewpager.currentItem != recipePhases.size - 1) startTimer()
-                    "정지" -> if (binding.playrecipeViewpager.currentItem != 0 || binding.playrecipeViewpager.currentItem != recipePhases.size - 1) stopTimer()
+                    "다음" -> if (binding.recipeplayViewpager.currentItem != recipePhases.size) binding.recipeplayViewpager.currentItem =
+                        binding.recipeplayViewpager.currentItem + 1
+                    "이전" -> if (binding.recipeplayViewpager.currentItem != 0) binding.recipeplayViewpager.currentItem =
+                        binding.recipeplayViewpager.currentItem - 1
+                    "시작" -> if (binding.recipeplayViewpager.currentItem != 0 || binding.recipeplayViewpager.currentItem != recipePhases.size - 1) startTimer()
+                    "정지" -> if (binding.recipeplayViewpager.currentItem != 0 || binding.recipeplayViewpager.currentItem != recipePhases.size - 1) stopTimer()
                 }
             }
 

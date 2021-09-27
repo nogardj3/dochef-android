@@ -38,10 +38,10 @@ class MainUserFragment : Fragment() {
         userID = Utils.getUserBrief(requireContext()).userID
 
         binding.apply {
-            fmainUserHome.setOnClickListener { goHome() }
-            fmainUserRecipe.setOnClickListener { goMyRecipe() }
-            fmainUserSetting.setOnClickListener { goSetting() }
-            fmainUserReview.setOnClickListener { goReview() }
+            mainUserHome.setOnClickListener { goHome() }
+            mainUserRecipe.setOnClickListener { goMyRecipe() }
+            mainUserSetting.setOnClickListener { goSetting() }
+            mainUserReview.setOnClickListener { goReview() }
         }
         return view
     }
@@ -56,9 +56,9 @@ class MainUserFragment : Fragment() {
             ChefImageLoader.loadUserImage(
                 requireContext(),
                 userDetailInfo.userImg,
-                binding.fmainUserImg
+                binding.mainUserImg
             )
-            binding.fmainUserNickname.text = userDetailInfo.nickname
+            binding.mainUserNickname.text = userDetailInfo.nickname
         }
     }
 
@@ -99,9 +99,9 @@ class MainUserFragment : Fragment() {
             ChefImageLoader.loadUserImage(
                 this@MainUserFragment.requireContext(),
                 userDetailInfo.userImg,
-                binding.fmainUserImg
+                binding.mainUserImg
             )
-            binding.fmainUserNickname.text = userDetailInfo.nickname
+            binding.mainUserNickname.text = userDetailInfo.nickname
         }
             .onSuccess { }
             .onFailure {

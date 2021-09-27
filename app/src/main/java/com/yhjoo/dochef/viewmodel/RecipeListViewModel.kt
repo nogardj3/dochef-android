@@ -22,15 +22,15 @@ class RecipeListViewModel(
         }
     }
 
-    fun addCount(recipeId: Int){
+    fun addCount(recipeId: Int) {
 
     }
 
-    fun likeRecipe(recipeId: Int, userId: String){
+    fun likeRecipe(recipeId: Int, userId: String) {
 
     }
 
-    fun disLikeRecipe(recipeId: Int, userId: String){
+    fun disLikeRecipe(recipeId: Int, userId: String) {
 
     }
 }
