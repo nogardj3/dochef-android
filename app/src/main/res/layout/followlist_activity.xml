@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="viewModel" type="com.yhjoo.dochef.viewmodel.FollowListViewModel" />
+        <variable name="viewModel" type="com.yhjoo.dochef.ui.follow.FollowListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

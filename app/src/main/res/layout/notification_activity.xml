@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.yhjoo.dochef.viewmodel.NotificationViewModel" />
+            type="com.yhjoo.dochef.ui.notification.NotificationViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -9,26 +9,27 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.db.entity.NotificationEntity
-import com.yhjoo.dochef.ui.activities.NotificationActivity
-import com.yhjoo.dochef.utilities.Utils
+import com.yhjoo.dochef.data.entity.NotificationEntity
+import com.yhjoo.dochef.ui.notification.NotificationActivity
+import com.yhjoo.dochef.utils.DatastoreUtil
+import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ChefMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
-        Utils.log("Message : " + remoteMessage.data.toString())
+        OtherUtil.log("Message : " + remoteMessage.data.toString())
 
         if (remoteMessage.notification != null) {
-            Utils.log(
+            OtherUtil.log(
                 "Message Notification Body: " + remoteMessage.notification!!.body
             )
 
             val type = remoteMessage.data["type"]
             if (type != "0") addDB(remoteMessage.data)
 
-            val mSharedPreferences = Utils.getSharedPreferences(this)
+            val mSharedPreferences = DatastoreUtil.getSharedPreferences(this)
             val settingEnable = mSharedPreferences.getBoolean(
                 resources.getStringArray(R.array.sp_noti)[type!!.toInt()], true
             )

@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.yhjoo.dochef.viewmodel.PostListViewModel" />
+            type="com.yhjoo.dochef.ui.viewmodel.PostListViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

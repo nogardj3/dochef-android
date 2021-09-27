@@ -10,9 +10,10 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-import com.yhjoo.dochef.db.NotificationDatabase
-import com.yhjoo.dochef.repository.NotificationRepository
-import com.yhjoo.dochef.utilities.Utils
+import com.yhjoo.dochef.data.NotificationDatabase
+import com.yhjoo.dochef.data.repository.NotificationRepository
+import com.yhjoo.dochef.utils.DatastoreUtil
+import com.yhjoo.dochef.utils.OtherUtil
 
 class App : Application() {
     private val notificationDatabase by lazy {
@@ -92,7 +93,7 @@ class App : Application() {
 
 
     private fun createNotificationChannel() {
-        val mSharedPreferences = Utils.getSharedPreferences(this)
+        val mSharedPreferences = DatastoreUtil.getSharedPreferences(this)
         val channelCreated = mSharedPreferences.getBoolean("channel_created", false)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && !channelCreated) {
@@ -107,7 +108,7 @@ class App : Application() {
                 .addOnCompleteListener { task: Task<Void?> ->
                     if (!task.isSuccessful) {
                         task.exception!!.printStackTrace()
-                        Utils.log(task.exception.toString())
+                        OtherUtil.log(task.exception.toString())
                     }
                 }
 

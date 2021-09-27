@@ -6,17 +6,17 @@
     app:startDestination="@id/accountSignInFragment">
     <fragment
         android:id="@+id/accountSignUpNickFragment"
-        android:name="com.yhjoo.dochef.ui.fragments.AccountSignUpNickFragment"
+        android:name="com.yhjoo.dochef.ui.account.AccountSignUpNickFragment"
         android:label="AccountSignUpNickFragment"
         tools:layout="@layout/account_signupnick_fragment"/>
     <fragment
         android:id="@+id/accountFindPWFragment"
-        android:name="com.yhjoo.dochef.ui.fragments.AccountFindPWFragment"
+        android:name="com.yhjoo.dochef.ui.account.AccountFindPWFragment"
         android:label="AccountFindPWFragment"
         tools:layout="@layout/account_findpw_fragment"/>
     <fragment
         android:id="@+id/accountSignInFragment"
-        android:name="com.yhjoo.dochef.ui.fragments.AccountSignInFragment"
+        android:name="com.yhjoo.dochef.ui.account.AccountSignInFragment"
         android:label="AccountSignInFragment"
         tools:layout="@layout/account_signin_fragment">
         <action
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/accountSignUpFragment"
-        android:name="com.yhjoo.dochef.ui.fragments.AccountSignUpFragment"
+        android:name="com.yhjoo.dochef.ui.account.AccountSignUpFragment"
         android:label="AccountSignUpFragment"
         tools:layout="@layout/account_signup_fragment">
         <action
