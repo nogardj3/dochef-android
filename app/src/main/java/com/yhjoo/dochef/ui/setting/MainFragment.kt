@@ -19,7 +19,7 @@ import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
 
-class SettingMainFragment : Fragment() {
+class MainFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var notiSettingArray: Array<String>

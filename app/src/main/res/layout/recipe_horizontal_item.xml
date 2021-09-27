@@ -1,96 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="210dp"
-    android:layout_height="wrap_content"
-    android:layout_marginStart="2dp"
-    android:layout_marginTop="2dp"
-    android:layout_marginEnd="5dp"
-    android:layout_marginBottom="2dp"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="5dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="2dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="5dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipehorizontal_recipeimg"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="140dp"
-            android:scaleType="fitXY"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@raw/dummy_recipe_1" />
+            android:layout_height="match_parent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/bg_gradient"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHeight_percent="0.35" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipehorizontal_recipeimg"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:scaleType="fitXY"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@raw/dummy_recipe_1" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipehorizontal_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/recipehorizontal_rating_img"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            tools:text="레시피" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:background="@drawable/bg_gradient"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHeight_percent="0.35" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipehorizontal_rating_img"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginBottom="4dp"
-            android:tint="@color/colorPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_chainStyle="packed"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_rating"
-            app:srcCompat="@drawable/ic_star_white" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipehorizontal_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/recipehorizontal_rating_img"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:text="레시피" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipehorizontal_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowRadius="1.5"
-            android:textColor="@color/white"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipehorizontal_rating_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginBottom="4dp"
+                android:tint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_rating"
+                app:srcCompat="@drawable/ic_star_white" />
 
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"
-            app:layout_constraintLeft_toRightOf="@+id/recipehorizontal_rating_img"
-            app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_view_img"
-            app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
-            tools:text="4.5" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipehorizontal_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowRadius="1.5"
+                android:textColor="@color/white"
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipehorizontal_view_img"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"
-            app:layout_constraintLeft_toRightOf="@+id/recipehorizontal_rating"
-            app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_view"
-            app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
-            app:srcCompat="@drawable/ic_view_black"
-            app:tint="@color/white" />
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"
+                app:layout_constraintLeft_toRightOf="@+id/recipehorizontal_rating_img"
+                app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_view_img"
+                app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
+                tools:text="4.5" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipehorizontal_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:shadowRadius="1.5"
-            android:textColor="@color/white"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"
-            app:layout_constraintLeft_toRightOf="@+id/recipehorizontal_view_img"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
-            tools:text="4.5" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipehorizontal_view_img"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"
+                app:layout_constraintLeft_toRightOf="@+id/recipehorizontal_rating"
+                app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_view"
+                app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
+                app:srcCompat="@drawable/ic_view_black"
+                app:tint="@color/white" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipehorizontal_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:shadowRadius="1.5"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"
+                app:layout_constraintLeft_toRightOf="@+id/recipehorizontal_view_img"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
+                tools:text="4.5" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

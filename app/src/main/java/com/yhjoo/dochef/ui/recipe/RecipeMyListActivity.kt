@@ -6,7 +6,7 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.common.adapter.RecipeVerticalListAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -28,7 +28,7 @@ class RecipeMyListActivity : BaseActivity() {
         DataBindingUtil.setContentView(this, R.layout.recipemylist_activity)
     }
     private lateinit var recipeListViewModel: RecipeListViewModel
-    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
+    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var addMenu: MenuItem
     private lateinit var userID: String
@@ -49,7 +49,7 @@ class RecipeMyListActivity : BaseActivity() {
 
         recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
             allRecipeList.observe(this@RecipeMyListActivity, {
-                recipeListAdapter.submitList(it) {
+                recipeListVerticalAdapter.submitList(it) {
                     binding.recipelistRecycler.scrollToPosition(0)
                 }
             })
@@ -58,8 +58,8 @@ class RecipeMyListActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@RecipeMyListActivity
 
-            recipeListAdapter = RecipeVerticalListAdapter(
-                RecipeVerticalListAdapter.MAIN_MYRECIPE,
+            recipeListVerticalAdapter = RecipeListVerticalAdapter(
+                RecipeListVerticalAdapter.MAIN_MYRECIPE,
                 activeUserID = userID,
                 { item ->
                     val intent = Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
@@ -70,12 +70,12 @@ class RecipeMyListActivity : BaseActivity() {
 
             recipelistRecycler.apply {
                 layoutManager = LinearLayoutManager(this@RecipeMyListActivity)
-                adapter = recipeListAdapter
+                adapter = recipeListVerticalAdapter
             }
 
             recipeListViewModel.requestRecipeList(
                 searchby = RecipeRepository.Companion.SEARCHBY.USERID,
-                sort = "latest",
+                sort = RecipeListVerticalAdapter.Companion.SORT.LATEST,
                 searchValue = userID
             )
 
@@ -112,7 +112,7 @@ class RecipeMyListActivity : BaseActivity() {
             recipeListViewModel.disLikeRecipe(recipeid, userID)
             recipeListViewModel.requestRecipeList(
                 searchby = RecipeRepository.Companion.SEARCHBY.USERID,
-                sort = "latest",
+                sort = RecipeListVerticalAdapter.Companion.SORT.LATEST,
                 searchValue = userID
             )
         }

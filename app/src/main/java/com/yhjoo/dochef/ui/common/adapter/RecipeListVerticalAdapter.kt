@@ -18,7 +18,7 @@ import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
 
-class RecipeVerticalListAdapter(
+class RecipeListVerticalAdapter(
     private val layoutType: Int,
     private val activeUserID: String?,
     private val itemClickListener: ((Recipe) -> Unit)?
@@ -32,6 +32,12 @@ class RecipeVerticalListAdapter(
         const val SEARCH_TAG = 4
         const val MYLIST = 5
         const val THEME = 6
+
+        object SORT {
+            const val LATEST = "latest"
+            const val POPULAR = "popular"
+            const val RATING = "rating"
+        }
     }
 
     lateinit var context: Context

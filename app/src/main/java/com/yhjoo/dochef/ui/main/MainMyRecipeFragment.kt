@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.common.adapter.RecipeVerticalListAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
@@ -24,7 +24,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
 
     private lateinit var binding: MainMyrecipeFragmentBinding
     private lateinit var recipeListViewModel: RecipeListViewModel
-    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
+    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var recommendTags: Array<String>
     private var userID: String? = null
@@ -48,7 +48,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
 
         recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
             allRecipeList.observe(viewLifecycleOwner, {
-                recipeListAdapter.submitList(it) {}
+                recipeListVerticalAdapter.submitList(it) {}
                 binding.myrecipeSwipe.isRefreshing = false
             })
         }
@@ -66,8 +66,8 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
                 )
             }
 
-            recipeListAdapter = RecipeVerticalListAdapter(
-                RecipeVerticalListAdapter.MAIN_MYRECIPE,
+            recipeListVerticalAdapter = RecipeListVerticalAdapter(
+                RecipeListVerticalAdapter.MAIN_MYRECIPE,
                 activeUserID = userID,
                 { item ->
                     val intent =
@@ -82,12 +82,12 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
 
             myrecipeRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = recipeListAdapter
+                adapter = recipeListVerticalAdapter
             }
 
             recipeListViewModel.requestRecipeList(
                 searchby = RecipeRepository.Companion.SEARCHBY.USERID,
-                sort = "latest",
+                sort = RecipeListVerticalAdapter.Companion.SORT.LATEST,
                 searchValue = userID
             )
 
@@ -101,7 +101,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         binding.myrecipeSwipe.isRefreshing = true
         recipeListViewModel.requestRecipeList(
             searchby = RecipeRepository.Companion.SEARCHBY.USERID,
-            sort = "latest",
+            sort = RecipeListVerticalAdapter.Companion.SORT.LATEST,
             searchValue = userID
         )
     }

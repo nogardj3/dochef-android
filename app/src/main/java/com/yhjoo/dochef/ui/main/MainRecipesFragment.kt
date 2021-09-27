@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.common.adapter.RecipeVerticalListAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
@@ -22,20 +22,12 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
     2. ad + item + recommend
      */
 
-    companion object VALUES {
-        object SORT {
-            const val LATEST = "latest"
-            const val POPULAR = "popular"
-            const val RATING = "rating"
-        }
-    }
-
     private lateinit var binding: MainRecipesFragmentBinding
     private lateinit var recipeListViewModel: RecipeListViewModel
-    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
+    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var recommendTags: Array<String>
-    private var currentSort = SORT.LATEST
+    private var currentSort = RecipeListVerticalAdapter.Companion.SORT.LATEST
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,7 +46,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
 
         recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
             allRecipeList.observe(viewLifecycleOwner, {
-                recipeListAdapter.submitList(it) {
+                recipeListVerticalAdapter.submitList(it) {
                     binding.recipesRecycler.scrollToPosition(0)
                 }
                 binding.recipesSwipe.isRefreshing = false
@@ -74,8 +66,8 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
                 )
             }
 
-            recipeListAdapter = RecipeVerticalListAdapter(
-                RecipeVerticalListAdapter.MAIN_RECIPES,
+            recipeListVerticalAdapter = RecipeListVerticalAdapter(
+                RecipeListVerticalAdapter.MAIN_RECIPES,
                 activeUserID = null,
                 { item ->
                     val intent =
@@ -90,7 +82,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
 
             recipesRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = recipeListAdapter
+                adapter = recipeListVerticalAdapter
             }
 
             recipeListViewModel.requestRecipeList(

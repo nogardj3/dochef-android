@@ -18,7 +18,7 @@ import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
-class MainTimelineFragment : Fragment(), OnRefreshListener {
+class TimelineFragment : Fragment(), OnRefreshListener {
     /* TODO
     1. myfriend
     2. AD
@@ -43,7 +43,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
         )
 
         timelineListViewModel = factory.create(PostListViewModel::class.java).apply {
-            allPostList.observe(viewLifecycleOwner, {
+            allPosts.observe(viewLifecycleOwner, {
                 timelineListAdapter.submitList(it) {
                     binding.timelineRecycler.scrollToPosition(0)
                 }
@@ -55,7 +55,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
             lifecycleOwner = viewLifecycleOwner
 
             timelineSwipe.apply {
-                setOnRefreshListener(this@MainTimelineFragment)
+                setOnRefreshListener(this@TimelineFragment)
                 setColorSchemeColors(
                     resources.getColor(
                         R.color.colorPrimary,
@@ -94,7 +94,7 @@ class MainTimelineFragment : Fragment(), OnRefreshListener {
     private fun itemClick(post: Post) {
         val intent =
             Intent(
-                this@MainTimelineFragment.context,
+                this@TimelineFragment.context,
                 PostDetailActivity::class.java
             )
                 .putExtra("postID", post.postID)

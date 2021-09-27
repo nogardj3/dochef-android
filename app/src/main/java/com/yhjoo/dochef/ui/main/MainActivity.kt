@@ -23,12 +23,12 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.MainActivityBinding
 import com.yhjoo.dochef.ui.notification.NotificationActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.ui.post.PostWriteActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.ui.search.SearchActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
 import com.yhjoo.dochef.utils.DatastoreUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class MainActivity : BaseActivity() {
     private val tabIcons = intArrayOf(
@@ -124,9 +124,9 @@ class MainActivity : BaseActivity() {
             .setBackgroundAlpha(0f)
             .setOnMenuItemClickListener { position, _ ->
                 when (position) {
-                    0 -> sortMenu(MainRecipesFragment.VALUES.SORT.LATEST)
-                    1 -> sortMenu(MainRecipesFragment.VALUES.SORT.POPULAR)
-                    2 -> sortMenu(MainRecipesFragment.VALUES.SORT.RATING)
+                    0 -> sortMenu(RecipeListVerticalAdapter.Companion.SORT.LATEST)
+                    1 -> sortMenu(RecipeListVerticalAdapter.Companion.SORT.POPULAR)
+                    2 -> sortMenu(RecipeListVerticalAdapter.Companion.SORT.RATING)
                 }
                 powerMenu.selectedPosition = position
                 powerMenu.dismiss()
@@ -240,7 +240,7 @@ class MainActivity : BaseActivity() {
                 0 -> MainInitFragment()
                 1 -> MainRecipesFragment()
                 2 -> MainMyRecipeFragment()
-                3 -> MainTimelineFragment()
+                3 -> TimelineFragment()
                 4 -> MainUserFragment()
                 else -> throw Throwable("limit ")
             }

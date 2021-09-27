@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
 
-class FollowRepository(
+class UserRepository(
     private val context: Context,
     private val uiMode: Int,
     private val activeUserId: String,

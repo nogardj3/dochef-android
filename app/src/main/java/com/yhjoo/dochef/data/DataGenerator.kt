@@ -30,17 +30,17 @@ object DataGenerator {
 
         return when (type) {
             resources.getInteger(R.integer.DATA_TYPE_FAQ) -> {
-                val arrayList = ArrayList<FAQ>()
+                val arrayList = ArrayList<ExpandableItem>()
                 for (i in 1..9) {
-                    arrayList.add(FAQ("FAQ Title $i", "FAQ$i"))
+                    arrayList.add(ExpandableItem("FAQ Title $i", "FAQ$i",0))
                 }
                 arrayList as T
             }
             resources.getInteger(R.integer.DATA_TYPE_NOTICE) -> {
-                val arrayList = ArrayList<Notice>()
+                val arrayList = ArrayList<ExpandableItem>()
                 for (i in 1..9) {
                     arrayList.add(
-                        Notice(
+                        ExpandableItem(
                             "Notice Title $i",
                             "Notice$i",
                             System.currentTimeMillis()

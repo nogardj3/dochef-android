@@ -31,6 +31,7 @@ import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.HomeActivityBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeHorizontalHomeAdapter
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.ui.follow.FollowListActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
@@ -112,7 +113,7 @@ class HomeActivity : BaseActivity() {
             PostRepository(applicationContext)
         )
         postListViewModel = factory.create(PostListViewModel::class.java).apply {
-            allPostList.observe(this@HomeActivity, {
+            allPosts.observe(this@HomeActivity, {
                 postListAdapter.submitList(it) {}
             })
         }
@@ -274,7 +275,7 @@ class HomeActivity : BaseActivity() {
                 val res1 = userService.getUserDetail(currentUserID!!)
                 userDetailInfo = res1.body()!!
 
-                val res2 = recipeService.getRecipeByUserID(currentUserID!!, "latest")
+                val res2 = recipeService.getRecipeByUserID(currentUserID!!, RecipeListVerticalAdapter.Companion.SORT.LATEST)
                 val res2Data: List<Recipe?> = res2.body()!!
                     .subList(0, res2.body()!!.size.coerceAtMost(10))
                 recipeList = ArrayList(res2Data)

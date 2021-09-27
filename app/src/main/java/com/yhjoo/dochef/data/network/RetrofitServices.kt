@@ -9,10 +9,10 @@ import java.util.*
 class RetrofitServices {
     interface BasicService {
         @GET("notice")
-        suspend fun getNotice(): Response<ArrayList<Notice>>
+        suspend fun getNotice(): Response<ArrayList<ExpandableItem>>
 
         @GET("faq")
-        suspend fun getFAQ(): Response<ArrayList<FAQ>>
+        suspend fun getFAQ(): Response<ArrayList<ExpandableItem>>
 
         @GET("tos")
         suspend fun getTOS(): Response<JsonObject>

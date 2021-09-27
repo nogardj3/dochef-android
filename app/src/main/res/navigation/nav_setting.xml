@@ -6,12 +6,12 @@
     app:startDestination="@id/settingMainFragment">
     <fragment
         android:id="@+id/settingTosFragment"
-        android:name="com.yhjoo.dochef.ui.setting.SettingTosFragment"
+        android:name="com.yhjoo.dochef.ui.setting.TosFragment"
         android:label="SettingTosFragment"
         tools:layout="@layout/setting_tos_fragment"/>
     <fragment
         android:id="@+id/settingMainFragment"
-        android:name="com.yhjoo.dochef.ui.setting.SettingMainFragment"
+        android:name="com.yhjoo.dochef.ui.setting.MainFragment"
         android:label="SettingMainFragment"
         tools:layout="@layout/setting_fragment">
         <action
@@ -26,12 +26,12 @@
     </fragment>
     <fragment
         android:id="@+id/settingNoticeFragment"
-        android:name="com.yhjoo.dochef.ui.setting.SettingNoticeFragment"
+        android:name="com.yhjoo.dochef.ui.setting.NoticeFragment"
         android:label="SettingNoticeFragment"
         tools:layout="@layout/setting_notice_fragment"/>
     <fragment
         android:id="@+id/settingFAQFragment"
-        android:name="com.yhjoo.dochef.ui.setting.SettingFAQFragment"
+        android:name="com.yhjoo.dochef.ui.setting.FAQFragment"
         android:label="SettingFAQFragment"
         tools:layout="@layout/setting_faq_fragment"/>
 </navigation>

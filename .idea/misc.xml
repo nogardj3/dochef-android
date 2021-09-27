@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/bg_commentedittextok.xml" value="0.35435897435897434" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/ic_alarm_white.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/ic_alarm_white_off.xml" value="0.11851851851851852" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/ic_arrow_back_white.xml" value="0.11851851851851852" />
@@ -29,6 +30,7 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/empty_post.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/expand_item_contents.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/expand_item_title.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/expandable_item.xml" value="0.33" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/f_playrecipe_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/f_playrecipe_start.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/f_result.xml" value="0.1730067743616467" />
@@ -98,7 +100,7 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/search_result_user_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/setting_activity.xml" value="0.21354166666666666" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/setting_faq_fragment.xml" value="0.34791666666666665" />
-        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/setting_fragment.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/setting_fragment.xml" value="0.18" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/setting_notice_fragment.xml" value="0.24814814814814815" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/setting_tos_fragment.xml" value="0.24814814814814815" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/splash_activity.xml" value="0.34791666666666665" />

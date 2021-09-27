@@ -6,7 +6,7 @@ import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.ui.common.adapter.RecipeVerticalListAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.databinding.RecipethemeActivityBinding
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.ui.base.BaseActivity
@@ -29,7 +29,7 @@ class RecipeThemeActivity : BaseActivity() {
         DataBindingUtil.setContentView(this, R.layout.recipetheme_activity)
     }
     private lateinit var recipeListViewModel: RecipeListViewModel
-    private lateinit var recipeListAdapter: RecipeVerticalListAdapter
+    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var tagName: String
     private var currentMode: Int? = null
@@ -55,7 +55,7 @@ class RecipeThemeActivity : BaseActivity() {
 
         recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
             allRecipeList.observe(this@RecipeThemeActivity, {
-                recipeListAdapter.submitList(it) {
+                recipeListVerticalAdapter.submitList(it) {
                     binding.recipethemeRecycler.scrollToPosition(0)
                 }
             })
@@ -64,8 +64,8 @@ class RecipeThemeActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@RecipeThemeActivity
 
-            recipeListAdapter = RecipeVerticalListAdapter(
-                RecipeVerticalListAdapter.THEME,
+            recipeListVerticalAdapter = RecipeListVerticalAdapter(
+                RecipeListVerticalAdapter.THEME,
                 activeUserID = null,
                 { item ->
                     val intent =
@@ -80,20 +80,20 @@ class RecipeThemeActivity : BaseActivity() {
 
             recipethemeRecycler.apply {
                 layoutManager = GridLayoutManager(this@RecipeThemeActivity, 2)
-                adapter = recipeListAdapter
+                adapter = recipeListVerticalAdapter
             }
 
 
             if (currentMode == QUERY.POPULAR) {
                 recipeListViewModel.requestRecipeList(
                     searchby = RecipeRepository.Companion.SEARCHBY.ALL,
-                    sort = "popular",
+                    sort = RecipeListVerticalAdapter.Companion.SORT.POPULAR,
                     searchValue = null
                 )
             } else {
                 recipeListViewModel.requestRecipeList(
                     searchby = RecipeRepository.Companion.SEARCHBY.TAG,
-                    sort = "popular",
+                    sort = RecipeListVerticalAdapter.Companion.SORT.POPULAR,
                     searchValue = tagName
                 )
             }
