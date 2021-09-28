@@ -1,6 +1,6 @@
 package com.yhjoo.dochef.ui.common.viewmodel
 
-import android.text.Html
+import androidx.core.text.parseAsHtml
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -37,9 +37,7 @@ class BasicViewModel(
     fun requestTosText() {
         viewModelScope.launch {
             repository.getTOS().collect {
-                val message = it.body()!!["message"].asString
-                val text = Html.fromHtml(message, Html.FROM_HTML_MODE_LEGACY)
-                tosText.value = text
+                tosText.value = it.body()!!["message"].asString.parseAsHtml()
             }
         }
     }

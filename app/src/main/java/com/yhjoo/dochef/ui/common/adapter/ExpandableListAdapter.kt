@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -47,10 +48,10 @@ class ExpandableListAdapter(
 
                 expTitleTitle.text = expandableItem.title
 
-                expandableContents.visibility = if (expandableItem.expanded) View.VISIBLE else View.GONE
+                expandableContents.isVisible = expandableItem.expanded
                 expContentsContents.text = expandableItem.contents
+                expContentsDate.isVisible = showDate
                 expContentsDate.text = OtherUtil.millisToText(expandableItem.dateTime)
-                expContentsDate.visibility = if (showDate) View.VISIBLE else View.GONE
             }
         }
     }

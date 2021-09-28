@@ -7,6 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
+import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.FollowlistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
@@ -43,11 +44,9 @@ class FollowListActivity : BaseActivity() {
 
         val factory = FollowListViewModelFactory(
             UserRepository(
-                applicationContext,
-                currentMode,
-                activeUserId,
-                currentUserId
-            )
+                applicationContext
+            ),
+            currentMode
         )
         followListViewModel = factory.create(FollowListViewModel::class.java).apply {
             activeUserDetail.observe(this@FollowListActivity, {
@@ -67,8 +66,8 @@ class FollowListActivity : BaseActivity() {
 
             followListAdapter = FollowListAdapter(
                 activeUserId,
-                { item -> followListViewModel.subscribeUser(item.userID) },
-                { item -> followListViewModel.unsubscribeUser(item.userID) },
+                { item -> followListViewModel.subscribeUser(activeUserId, item.userID) },
+                { item -> followListViewModel.unsubscribeUser(activeUserId, item.userID) },
                 { item -> itemClicked(item) },
             )
 

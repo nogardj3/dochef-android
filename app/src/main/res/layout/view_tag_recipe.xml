@@ -7,7 +7,7 @@
     android:paddingBottom="4dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tagrecipe_contents"
+        android:id="@+id/tag_recipe_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorPrimary"

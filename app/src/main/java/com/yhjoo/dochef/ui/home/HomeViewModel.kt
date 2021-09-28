@@ -23,9 +23,9 @@ class HomeViewModel(
     val allRecipeList = MutableLiveData<List<Recipe>>()
     val allPosts = MutableLiveData<List<Post>>()
 
-    fun requestActiveUserDetail() {
+    fun requestActiveUserDetail(userId: String) {
         viewModelScope.launch {
-            userRepository.getUserDetail().collect {
+            userRepository.getUserDetail(userId).collect {
                 activeUserDetail.value = it.body()
             }
         }

@@ -14,6 +14,7 @@ import android.speech.SpeechRecognizer
 import android.util.Log
 import android.view.*
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
@@ -115,8 +116,8 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
             }
 
             override fun onPageSelected(position: Int) {
-                binding.recipeplayCircularToolsGroup.visibility =
-                    if (position == 0 || position == recipePhases.size) View.GONE else View.VISIBLE
+                binding.recipeplayCircularToolsGroup.isVisible =
+                    position == 0 || position == recipePhases.size
                 if (timerSet) stopTimer()
                 if (mediaPlayer != null && mediaPlayer!!.isPlaying) mediaPlayer!!.stop()
                 if (position != 0) setTimer(position)

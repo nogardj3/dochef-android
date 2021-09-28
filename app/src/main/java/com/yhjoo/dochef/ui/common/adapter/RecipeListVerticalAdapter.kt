@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -27,9 +28,6 @@ class RecipeListVerticalAdapter(
     companion object {
         const val MAIN_RECIPES = 0
         const val MAIN_MYRECIPE = 1
-        const val SEARCH_RECIPE = 2
-        const val SEARCH_INGREDIENT = 3
-        const val SEARCH_TAG = 4
         const val MYLIST = 5
         const val THEME = 6
 
@@ -82,7 +80,6 @@ class RecipeListVerticalAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        OtherUtil.log("bindbind~~~~", holder.toString())
         when (holder) {
             is MainRecipesViewHolder -> holder.bind(getItem(position))
             is MainMyRecipeViewHolder -> holder.bind(getItem(position))
@@ -114,15 +111,8 @@ class RecipeListVerticalAdapter(
                 mainRecipesRating.text = String.format("%.1f", recipe.rating)
                 mainRecipesView.text = recipe.viewCount.toString()
 
-                mainRecipesNew.visibility = if (ValidateUtil.checkNew(recipe.datetime))
-                    View.VISIBLE
-                else
-                    View.GONE
-
-                mainRecipesYours.visibility = if (activeUserID == recipe.userID)
-                    View.VISIBLE
-                else
-                    View.GONE
+                mainRecipesNew.isVisible = ValidateUtil.checkNew(recipe.datetime)
+                mainRecipesYours.isVisible = activeUserID == recipe.userID
             }
         }
     }
@@ -149,10 +139,7 @@ class RecipeListVerticalAdapter(
                 mainMyrecipeDate.text = OtherUtil.millisToText(recipe.datetime)
                 mainMyrecipeRating.text = String.format("%.1f", recipe.rating)
                 mainMyrecipeView.text = recipe.viewCount.toString()
-                mainMyrecipeYours.visibility = if (activeUserID == recipe.userID)
-                    View.VISIBLE
-                else
-                    View.GONE
+                mainMyrecipeYours.isVisible = activeUserID == recipe.userID
             }
         }
     }
@@ -180,10 +167,7 @@ class RecipeListVerticalAdapter(
                 recipemylistRating.text = String.format("%.1f", recipe.rating)
                 recipemylistView.text = recipe.viewCount.toString()
 
-                recipemylistYours.visibility = if (activeUserID == recipe.userID)
-                    View.VISIBLE
-                else
-                    View.GONE
+                recipemylistYours.isVisible = activeUserID == recipe.userID
             }
         }
     }

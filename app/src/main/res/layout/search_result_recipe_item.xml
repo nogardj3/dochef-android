@@ -1,69 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="170dp"
-    android:layout_margin="5dp"
-    android:foreground="?attr/selectableItemBackground"
-    app:cardCornerRadius="5dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="170dp"
+        android:layout_margin="5dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:cardCornerRadius="5dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/resultrecipe_recipeimg"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:foreground="@drawable/bg_translucent"
-            android:scaleType="centerCrop"
-            tools:src="@raw/dummy_recipe_1" />
+            android:layout_height="match_parent">
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/resultrecipe_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/white"
-            android:textSize="20sp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="레시피" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/resultrecipe_recipeimg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:foreground="@drawable/bg_translucent"
+                android:scaleType="centerCrop"
+                tools:src="@raw/dummy_recipe_1" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/resultrecipe_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            app:layout_constraintLeft_toLeftOf="@+id/resultrecipe_title"
-            app:layout_constraintTop_toBottomOf="@+id/resultrecipe_title"
-            tools:text="닉네임" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/resultrecipe_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="레시피" />
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/resultrecipe_ingredients"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="4dp"
-            app:alignItems="flex_start"
-            app:flexWrap="wrap"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:visibility="gone" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/resultrecipe_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                app:layout_constraintLeft_toLeftOf="@+id/resultrecipe_title"
+                app:layout_constraintTop_toBottomOf="@+id/resultrecipe_title"
+                tools:text="닉네임" />
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/resultrecipe_tags"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginBottom="4dp"
-            app:alignItems="flex_start"
-            app:flexWrap="wrap"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:visibility="gone" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/resultrecipe_ingredients"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="4dp"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:visibility="gone" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.cardview.widget.CardView>
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/resultrecipe_tags"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginBottom="4dp"
+                app:alignItems="flex_start"
+                app:flexWrap="wrap"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                tools:visibility="gone" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

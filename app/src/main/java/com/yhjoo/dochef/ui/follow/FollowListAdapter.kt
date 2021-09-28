@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -51,14 +52,8 @@ class FollowListAdapter(
                     itemClickListener(userBrief)
                 }
 
-                followlistFollowBtn.visibility = if (!activeUserFollowList.contains(userBrief.userID) &&userBrief.userID != activeUserID )
-                    View.VISIBLE
-                else
-                    View.GONE
-                followlistFollowcancelBtn.visibility = if (activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID)
-                    View.VISIBLE
-                else
-                    View.GONE
+                followlistFollowBtn.isVisible = !activeUserFollowList.contains(userBrief.userID) &&userBrief.userID != activeUserID
+                followlistFollowcancelBtn.isVisible = activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID
 
                 followlistFollowBtn.setOnClickListener {
                     subscribeListener(userBrief)

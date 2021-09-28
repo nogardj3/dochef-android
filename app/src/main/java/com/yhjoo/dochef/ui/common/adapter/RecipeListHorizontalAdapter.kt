@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -94,19 +95,9 @@ class RecipeListHorizontalAdapter(
 
                 homeRecipeName.text = recipe.recipeName
 
-                homeRecipeMy.visibility = if (activeUserID == recipe.userID)
-                    View.VISIBLE
-                else
-                    View.GONE
-                homeRecipeIsFavorite.visibility = if (activeUserID != recipe.userID)
-                    View.VISIBLE
-                else
-                    View.GONE
-
-                homeRecipeNew.visibility = if (ValidateUtil.checkNew(recipe.datetime))
-                    View.VISIBLE
-                else
-                    View.GONE
+                homeRecipeMy.isVisible = activeUserID == recipe.userID
+                homeRecipeIsFavorite.isVisible = activeUserID != recipe.userID
+                homeRecipeNew.isVisible = ValidateUtil.checkNew(recipe.datetime)
             }
         }
     }

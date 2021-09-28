@@ -2,13 +2,14 @@ package com.yhjoo.dochef.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Html
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.text.parseAsHtml
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
@@ -30,7 +31,9 @@ class MainInitFragment : Fragment() {
     */
 
     private lateinit var binding: MainInitFragmentBinding
-    private lateinit var recipeListViewModel: RecipeListViewModel
+    private val recipeListViewModel: RecipeListViewModel by viewModels() {
+        RecipeListViewModelFactory(RecipeRepository(requireContext().applicationContext))
+    }
     private lateinit var recipeListHorizontalAdapter: RecipeListHorizontalAdapter
 
     override fun onCreateView(
@@ -42,18 +45,6 @@ class MainInitFragment : Fragment() {
         val view: View = binding.root
 
         val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
-
-        val factory = RecipeListViewModelFactory(
-            RecipeRepository(
-                requireContext().applicationContext
-            )
-        )
-
-        recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
-            allRecipeList.observe(viewLifecycleOwner, {
-                recipeListHorizontalAdapter.submitList(it) {}
-            })
-        }
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -67,10 +58,8 @@ class MainInitFragment : Fragment() {
                     binding.mainInitAdviewpager.currentItem = count.toInt() % 2
                 }
 
-            mainInitRecommendText.text = Html.fromHtml(
-                String.format(getString(R.string.format_recommend_title), "Chef"),
-                Html.FROM_HTML_MODE_LEGACY
-            )
+            mainInitRecommendText.text =
+                String.format(getString(R.string.format_recommend_title), "Chef").parseAsHtml()
             mainInitRecommendMore.setOnClickListener {
                 startActivity(Intent(context, RecipeThemeActivity::class.java))
             }
@@ -92,6 +81,10 @@ class MainInitFragment : Fragment() {
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 adapter = recipeListHorizontalAdapter
             }
+
+            recipeListViewModel.allRecipeList.observe(viewLifecycleOwner, {
+                recipeListHorizontalAdapter.submitList(it) {}
+            })
 
             recipeListViewModel.requestRecipeList(
                 searchby = RecipeRepository.Companion.SEARCHBY.ALL,

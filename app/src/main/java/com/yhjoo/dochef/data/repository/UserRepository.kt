@@ -10,7 +10,6 @@ import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
-import com.yhjoo.dochef.ui.follow.FollowListActivity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -18,18 +17,15 @@ import java.util.*
 
 class UserRepository(
     private val context: Context,
-    private val uiMode: Int,
-    private val activeUserId: String,
-    private val currentUserId: String,
 ) {
     private val userClient =
         RetrofitBuilder.create(context, RetrofitServices.UserService::class.java)
 
     @WorkerThread
-    suspend fun getUserDetail(): Flow<Response<UserDetail>> {
+    suspend fun getUserDetail(userId: String): Flow<Response<UserDetail>> {
         return flow {
             if (App.isServerAlive)
-                emit(userClient.getUserDetail(activeUserId))
+                emit(userClient.getUserDetail(userId))
             else
                 emit(
                     Response.success(
@@ -43,53 +39,68 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun getFollowList(): Flow<Response<ArrayList<UserBrief>>> {
+    suspend fun getUserByNickname(nickname: String): Flow<Response<ArrayList<UserBrief>>> {
         return flow {
-            if (uiMode == FollowListActivity.UIMODE.FOLLOWER)
-                emit(getFollowers())
+            if (App.isServerAlive)
+                emit(userClient.getUserByNickname(nickname))
             else
-                emit(getFollowings())
+                emit(
+                    Response.success(
+                        DataGenerator.make(
+                            context.resources,
+                            context.resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF)
+                        )
+                    )
+                )
         }
     }
 
     @WorkerThread
-    suspend fun getFollowers(): Response<ArrayList<UserBrief>> {
-        return if (App.isServerAlive)
-            userClient.getFollowers(currentUserId)
-        else
-            Response.success(
-                DataGenerator.make(
-                    context.resources,
-                    context.resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF)
+    suspend fun getFollowers(userId: String): Flow<Response<ArrayList<UserBrief>>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(userClient.getFollowers(userId))
+            else
+                emit(
+                    Response.success(
+                        DataGenerator.make(
+                            context.resources,
+                            context.resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF)
+                        )
+                    )
                 )
-            )
+        }
     }
 
     @WorkerThread
-    suspend fun getFollowings(): Response<ArrayList<UserBrief>> {
-        return if (App.isServerAlive)
-            userClient.getFollowings(currentUserId)
-        else
-            Response.success(
-                DataGenerator.make(
-                    context.resources,
-                    context.resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF)
+    suspend fun getFollowings(userId: String): Flow<Response<ArrayList<UserBrief>>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(userClient.getFollowings(userId))
+            else
+                emit(
+                    Response.success(
+                        DataGenerator.make(
+                            context.resources,
+                            context.resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF)
+                        )
+                    )
                 )
-            )
+        }
     }
 
     @WorkerThread
-    suspend fun subscribeUser(targetId: String): Response<JsonObject>? {
+    suspend fun subscribeUser(userId: String, targetId: String): Response<JsonObject>? {
         return if (App.isServerAlive)
-            userClient.subscribeUser(activeUserId, targetId)
+            userClient.subscribeUser(userId, targetId)
         else
             Response.error(444, null)
     }
 
     @WorkerThread
-    suspend fun unsubscribeUser(targetId: String): Response<JsonObject>? {
+    suspend fun unsubscribeUser(userId: String, targetId: String): Response<JsonObject>? {
         return if (App.isServerAlive)
-            userClient.unsubscribeUser(activeUserId, targetId)
+            userClient.unsubscribeUser(userId, targetId)
         else
             Response.error(444, null)
     }

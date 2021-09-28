@@ -2,10 +2,10 @@ package com.yhjoo.dochef.ui.home
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -71,13 +71,14 @@ class PostListAdapter(
                     val tagcontainer = LayoutInflater.from(context)
                         .inflate(R.layout.view_tag_post, null) as LinearLayout
                     val tagview: AppCompatTextView =
-                        tagcontainer.findViewById(R.id.tagpost_contents)
+                        tagcontainer.findViewById(R.id.tag_post_text)
                     tagview.text = "#$tag"
                     homePostTags.addView(tagcontainer)
                 }
 
+
                 if (post.comments.size != 0) {
-                    homePostCommentGroup.visibility = View.VISIBLE
+                    homePostCommentGroup.isVisible = true
 
                     ImageLoaderUtil.loadUserImage(
                         context, post.comments[0]!!.userImg, homePostCommentUserImg
@@ -87,7 +88,7 @@ class PostListAdapter(
                     homePostCommentContents.text = post.comments[0]!!.contents
                     homePostCommentDate.text =
                         OtherUtil.millisToText(post.comments[0]!!.dateTime)
-                } else homePostCommentGroup.visibility = View.GONE
+                } else homePostCommentGroup.isVisible = false
             }
         }
     }

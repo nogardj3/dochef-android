@@ -7,10 +7,11 @@
     android:paddingBottom="4dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tag_post_text"
+        android:id="@+id/tag_search_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorSecondary"
-        android:textSize="12dp"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="14dp"
         tools:text="태그" />
 </LinearLayout>

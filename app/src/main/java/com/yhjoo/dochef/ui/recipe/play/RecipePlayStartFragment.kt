@@ -40,7 +40,7 @@ class RecipePlayStartFragment : Fragment() {
             for (tag in recipeDetail.tags) {
                 val tagcontainer =
                     layoutInflater.inflate(R.layout.view_tag_recipe, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagrecipe_contents)
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_recipe_text)
                 tagview.text = "#$tag"
                 recipeplayStartTags.addView(tagcontainer)
             }

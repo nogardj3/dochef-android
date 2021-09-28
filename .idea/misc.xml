@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/bg_commentedittextok.xml" value="0.35435897435897434" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/bg_translucent.xml" value="0.35989583333333336" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/ic_alarm_white.xml" value="0.18958333333333333" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/ic_alarm_white_off.xml" value="0.11851851851851852" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/drawable/ic_arrow_back_white.xml" value="0.11851851851851852" />
@@ -120,6 +121,7 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/view_recommend.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/view_tag_post.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/view_tag_recipe.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/view_tag_searc h.xml" value="0.34375" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/view_tip.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/menu/main.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/menu/menu_comment_owner.xml" value="0.1" />

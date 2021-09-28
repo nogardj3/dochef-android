@@ -167,7 +167,7 @@ class RecipeDetailActivity : BaseActivity() {
             for (tag in recipeDetailInfo.tags) {
                 val tagcontainer =
                     layoutInflater.inflate(R.layout.view_tag_recipe, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagrecipe_contents)
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_recipe_text)
                 tagview.text = "#$tag"
                 recipedetailTags.addView(tagcontainer)
             }

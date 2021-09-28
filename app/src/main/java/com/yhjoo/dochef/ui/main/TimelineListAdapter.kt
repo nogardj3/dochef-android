@@ -2,10 +2,10 @@ package com.yhjoo.dochef.ui.main
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -71,13 +71,13 @@ class TimelineListAdapter(
                 for (tag in post.tags) {
                     val tagcontainer = LayoutInflater.from(context)
                         .inflate(R.layout.view_tag_post, null) as LinearLayout
-                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagpost_contents)
+                    val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_post_text)
                     tagview.text = "#$tag"
                     mainTimelineTags.addView(tagcontainer)
                 }
 
                 if (post.comments.size != 0) {
-                    mainTimelineCommentGroup.visibility = View.VISIBLE
+                    mainTimelineCommentGroup.isVisible = true
 
                     ImageLoaderUtil.loadUserImage(
                         context, post.comments[0]!!.userImg, mainTimelineCommentUserImg
@@ -87,7 +87,7 @@ class TimelineListAdapter(
                     mainTimelineCommentContents.text = post.comments[0]!!.contents
                     mainTimelineCommentDate.text =
                         OtherUtil.millisToText(post.comments[0]!!.dateTime)
-                } else mainTimelineCommentGroup.visibility = View.GONE
+                } else mainTimelineCommentGroup.isVisible = false
             }
         }
     }

@@ -246,7 +246,7 @@ class PostDetailActivity : BaseActivity() {
             for (tag in postInfo.tags) {
                 val tagcontainer =
                     layoutInflater.inflate(R.layout.view_tag_post, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tagpost_contents)
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_post_text)
                 tagview.text = "#$tag"
                 binding.postTags.addView(tagcontainer)
             }

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.*
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -193,7 +194,7 @@ class HomeActivity : BaseActivity() {
                     reviseMenu.isVisible = true
                     okMenu.isVisible = false
                     binding.apply {
-                        homeRevisegroup.visibility = View.GONE
+                        homeRevisegroup.isVisible = false
                         ImageLoaderUtil.loadUserImage(
                             this@HomeActivity,
                             userDetailInfo.userImg,
@@ -214,7 +215,7 @@ class HomeActivity : BaseActivity() {
                 currentOperation = OPERATION.REVISE
                 reviseMenu.isVisible = false
                 okMenu.isVisible = true
-                binding.homeRevisegroup.visibility = View.VISIBLE
+                binding.homeRevisegroup.isVisible = true
                 true
             }
             R.id.menu_home_owner_revise_ok -> {
@@ -310,8 +311,7 @@ class HomeActivity : BaseActivity() {
             homeRecipecount.text = userDetailInfo.recipeCount.toString()
             homeFollowercount.text = userDetailInfo.followerCount.toString()
             homeFollowingcount.text = userDetailInfo.followingCount.toString()
-            homeFollowBtn.visibility =
-                if (currentMode == UIMODE.OTHERS) View.VISIBLE else View.GONE
+            homeFollowBtn.isVisible = currentMode == UIMODE.OTHERS
 
             homeUserimgRevise.setOnClickListener { reviseProfileImage() }
             homeNicknameRevise.setOnClickListener { clickReviseNickname() }
@@ -444,7 +444,7 @@ class HomeActivity : BaseActivity() {
                 currentOperation = OPERATION.VIEW
                 reviseMenu.isVisible = true
                 okMenu.isVisible = false
-                binding.homeRevisegroup.visibility = View.VISIBLE
+                binding.homeRevisegroup.isVisible = true
                 imageUri = null
                 progressOFF()
             }

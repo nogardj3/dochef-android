@@ -56,7 +56,9 @@ android {
 
 dependencies {
     val kotlinVersion = "1.6.0"
-    val kotlinMainVersion = "1.5.2"
+    val activityVersion = "1.3.1"
+    val fragmentVersion = "1.3.6"
+    val coroutineVersion = "1.5.2"
     val lifecycleVersion = "2.3.1"
     val roomVersion = "2.3.0"
     val navigationVersion = "2.3.5"
@@ -66,15 +68,17 @@ dependencies {
 
     // Core
     implementation("androidx.core:core-ktx:$kotlinVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlinMainVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinMainVersion")
+    implementation("androidx.activity:activity-ktx:$activityVersion")
+    implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutineVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutineVersion")
     kapt("com.android.databinding:compiler:4.0.1")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
-    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
-//    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
+//    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     kapt("androidx.room:room-compiler:$roomVersion")

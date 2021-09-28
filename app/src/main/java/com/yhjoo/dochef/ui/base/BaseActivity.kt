@@ -52,20 +52,21 @@ open class BaseActivity : AppCompatActivity() {
         if (activity == null || activity.isFinishing) {
             return
         }
-        if (progressDialog == null || !progressDialog!!.isShowing) {
-            progressDialog = AppCompatDialog(activity).apply {
-                progressDialog?.setCancelable(false)
-                progressDialog?.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                progressDialog?.setContentView(R.layout.view_progress)
-                progressDialog?.show()
-            }
+        progressDialog?.apply {
+            dismiss()
+        }
+
+        progressDialog = AppCompatDialog(this)
+        progressDialog?.apply {
+            setCancelable(false)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            setContentView(R.layout.view_progress)
+            show()
         }
     }
 
     fun progressOFF() {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog?.dismiss()
-        }
+        progressDialog?.dismiss()
     }
 
     fun hideKeyboard(view: View) {
