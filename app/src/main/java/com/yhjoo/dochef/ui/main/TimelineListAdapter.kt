@@ -23,7 +23,6 @@ class TimelineListAdapter(
     ListAdapter<Post, TimelineListAdapter.TimelineViewHolder>(TimelineListComparator()) {
     lateinit var context: Context
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
         context = parent.context
 

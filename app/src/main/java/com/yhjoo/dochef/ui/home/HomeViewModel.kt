@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
@@ -34,8 +35,8 @@ class HomeViewModel(
     fun requestRecipeList(userId: String) {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RecipeRepository.Companion.SEARCHBY.USERID,
-                RecipeListVerticalAdapter.Companion.SORT.LATEST,
+                RECIPE.SEARCHBY.USERID,
+                RECIPE.SORT.LATEST,
                 userId
             ).collect {
                 allRecipeList.value = it.body()

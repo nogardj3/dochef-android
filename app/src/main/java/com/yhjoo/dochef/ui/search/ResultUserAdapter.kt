@@ -2,20 +2,15 @@ package com.yhjoo.dochef.ui.search
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.ExpandableItem
-import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.databinding.ExpandableItemBinding
 import com.yhjoo.dochef.databinding.SearchResultUserItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class ResultUserAdapter(
     private val itemClickListener: (UserBrief) -> Unit

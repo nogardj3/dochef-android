@@ -4,11 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -35,8 +35,8 @@ class SearchViewModel(
     fun requestRecipeByName(query: String) {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RecipeRepository.Companion.SEARCHBY.RECIPENAME,
-                RecipeListVerticalAdapter.Companion.SORT.POPULAR,
+                RECIPE.SEARCHBY.RECIPENAME,
+                RECIPE.SORT.POPULAR,
                 query
             ).collect {
                 queriedRecipeByName.value = it.body()
@@ -47,8 +47,8 @@ class SearchViewModel(
     fun requestRecipeByIngredients(query: String) {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RecipeRepository.Companion.SEARCHBY.INGREDIENT,
-                RecipeListVerticalAdapter.Companion.SORT.POPULAR,
+                RECIPE.SEARCHBY.INGREDIENT,
+                RECIPE.SORT.POPULAR,
                 query
             ).collect {
                 queriedRecipeByIngredient.value = it.body()
@@ -59,8 +59,8 @@ class SearchViewModel(
     fun requestRecipeByTag(query: String) {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RecipeRepository.Companion.SEARCHBY.TAG,
-                RecipeListVerticalAdapter.Companion.SORT.POPULAR,
+                RECIPE.SEARCHBY.TAG,
+                RECIPE.SORT.POPULAR,
                 query
             ).collect {
                 queriedRecipeByTag.value = it.body()

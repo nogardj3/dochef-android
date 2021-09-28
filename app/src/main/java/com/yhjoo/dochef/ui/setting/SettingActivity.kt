@@ -6,19 +6,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.NavHostFragment
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.BasicRepository
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
-import com.yhjoo.dochef.databinding.SearchActivityBinding
 import com.yhjoo.dochef.databinding.SettingActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.search.SearchViewModel
-import com.yhjoo.dochef.ui.search.SearchViewModelFactory
 
 class SettingActivity : BaseActivity() {
     private val binding: SettingActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.setting_activity)
     }
-    private val settingViewModel: SettingViewModel by viewModels() {
+    private val settingViewModel: SettingViewModel by viewModels {
         SettingViewModelFactory(
             BasicRepository(applicationContext)
         )

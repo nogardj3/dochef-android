@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.Gravity
 import android.view.Menu
 import android.view.MenuItem
+import androidx.activity.viewModels
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -20,24 +22,45 @@ import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.RECIPE
+import com.yhjoo.dochef.data.repository.PostRepository
+import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.ui.notification.NotificationActivity
 import com.yhjoo.dochef.ui.post.PostWriteActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.ui.search.SearchActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
 import com.yhjoo.dochef.utils.DatastoreUtil
+import com.yhjoo.dochef.utils.OtherUtil
 
 class MainActivity : BaseActivity() {
-    private val tabIcons = intArrayOf(
-        R.drawable.ic_home_white, R.drawable.ic_hot_white,
-        R.drawable.ic_favorite_white, R.drawable.ic_article_white,
-        R.drawable.ic_person_white
+    private val mainTabs = arrayOf(
+        Pair(R.drawable.ic_home_white, MainInitFragment()),
+        Pair(R.drawable.ic_hot_white, MainRecipesFragment()),
+        Pair(R.drawable.ic_favorite_white, MainMyRecipeFragment()),
+        Pair(R.drawable.ic_article_white, TimelineFragment()),
+        Pair(R.drawable.ic_person_white, MainUserFragment())
     )
 
-    val binding: MainActivityBinding by lazy { MainActivityBinding.inflate(layoutInflater) }
+    val binding: MainActivityBinding by lazy {
+        DataBindingUtil.setContentView(this, R.layout.main_activity)
+    }
+    private val mainViewModel: MainViewModel by viewModels {
+        MainViewModelFactory(
+            UserRepository(
+                applicationContext
+            ),
+            RecipeRepository(
+                applicationContext
+            ),
+            PostRepository(
+                applicationContext
+            )
+        )
+    }
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var mainFragmentAdapter: FragmentStateAdapter
 
@@ -54,8 +77,7 @@ class MainActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.mainToolbar)
-
-        val actionBar = supportActionBar!!.apply {
+        supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(false)
             setDisplayShowTitleEnabled(false)
         }
@@ -68,6 +90,10 @@ class MainActivity : BaseActivity() {
         mainFragmentAdapter = MainFragmentAdapter(this)
 
         binding.apply {
+            lifecycleOwner = this@MainActivity
+
+            mainViewModel.userId.postValue(userID)
+
             mainViewpager.apply {
                 offscreenPageLimit = 5
                 adapter = mainFragmentAdapter
@@ -75,7 +101,7 @@ class MainActivity : BaseActivity() {
             }
 
             TabLayoutMediator(mainTablayout, mainViewpager) { tab, position ->
-                tab.setIcon(tabIcons[position])
+                tab.setIcon(mainTabs[position].first)
             }.attach()
             mainTablayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
                 override fun onTabSelected(tab: TabLayout.Tab) {
@@ -123,11 +149,13 @@ class MainActivity : BaseActivity() {
             .setSelectedMenuColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .setBackgroundAlpha(0f)
             .setOnMenuItemClickListener { position, _ ->
-                when (position) {
-                    0 -> sortMenu(RecipeListVerticalAdapter.Companion.SORT.LATEST)
-                    1 -> sortMenu(RecipeListVerticalAdapter.Companion.SORT.POPULAR)
-                    2 -> sortMenu(RecipeListVerticalAdapter.Companion.SORT.RATING)
+                val mode = when (position) {
+                    0 -> RECIPE.SORT.LATEST
+                    1 -> RECIPE.SORT.POPULAR
+                    2 -> RECIPE.SORT.RATING
+                    else -> ""
                 }
+                mainViewModel.changeRecipesSort(mode)
                 powerMenu.selectedPosition = position
                 powerMenu.dismiss()
             }
@@ -225,25 +253,14 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun sortMenu(sort: String) {
-//        (mainFragmentAdapter.getItem(1) as MainRecipesFragment).changeSortMode(sort)
-    }
-
-    class MainFragmentAdapter(fragmentActivity: FragmentActivity) :
+    inner class MainFragmentAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int {
             return 5
         }
 
         override fun createFragment(position: Int): Fragment {
-            return when (position) {
-                0 -> MainInitFragment()
-                1 -> MainRecipesFragment()
-                2 -> MainMyRecipeFragment()
-                3 -> TimelineFragment()
-                4 -> MainUserFragment()
-                else -> throw Throwable("limit ")
-            }
+            return mainTabs[position].second
         }
     }
 }

@@ -23,6 +23,7 @@ import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.GlideApp
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
@@ -275,7 +276,7 @@ class HomeActivity : BaseActivity() {
                 val res1 = userService.getUserDetail(currentUserID!!)
                 userDetailInfo = res1.body()!!
 
-                val res2 = recipeService.getRecipeByUserID(currentUserID!!, RecipeListVerticalAdapter.Companion.SORT.LATEST)
+                val res2 = recipeService.getRecipeByUserID(currentUserID!!, RECIPE.SORT.LATEST)
                 val res2Data: List<Recipe?> = res2.body()!!
                     .subList(0, res2.body()!!.size.coerceAtMost(10))
                 recipeList = ArrayList(res2Data)

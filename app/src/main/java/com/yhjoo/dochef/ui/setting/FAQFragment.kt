@@ -15,7 +15,7 @@ import com.yhjoo.dochef.ui.common.adapter.ExpandableListAdapter
 
 class FAQFragment : Fragment() {
     private lateinit var binding: SettingFaqFragmentBinding
-    private val settingViewModel: SettingViewModel by activityViewModels() {
+    private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
             BasicRepository(requireContext().applicationContext)
         )

@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
@@ -18,7 +17,7 @@ import com.yhjoo.dochef.utils.OtherUtil
 
 class ResultUserFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
-    private val userViewModel: SearchViewModel by activityViewModels(){
+    private val userViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)

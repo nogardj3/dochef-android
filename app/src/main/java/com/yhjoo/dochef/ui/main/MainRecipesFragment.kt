@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModel
-import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModelFactory
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import java.util.*
 
@@ -23,11 +25,22 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
      */
 
     private lateinit var binding: MainRecipesFragmentBinding
-    private lateinit var recipeListViewModel: RecipeListViewModel
+    private val mainViewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(
+            UserRepository(
+                requireContext().applicationContext
+            ),
+            RecipeRepository(
+                requireContext().applicationContext
+            ),
+            PostRepository(
+                requireContext().applicationContext
+            )
+        )
+    }
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var recommendTags: Array<String>
-    private var currentSort = RecipeListVerticalAdapter.Companion.SORT.LATEST
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,21 +50,6 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.main_recipes_fragment, container, false)
         val view: View = binding.root
-
-        val factory = RecipeListViewModelFactory(
-            RecipeRepository(
-                requireContext().applicationContext
-            )
-        )
-
-        recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
-            allRecipeList.observe(viewLifecycleOwner, {
-                recipeListVerticalAdapter.submitList(it) {
-                    binding.recipesRecycler.scrollToPosition(0)
-                }
-                binding.recipesSwipe.isRefreshing = false
-            })
-        }
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -68,28 +66,30 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 RecipeListVerticalAdapter.MAIN_RECIPES,
-                activeUserID = null,
-                { item ->
-                    val intent =
-                        Intent(
-                            this@MainRecipesFragment.requireContext(),
-                            RecipeDetailActivity::class.java
-                        )
-                            .putExtra("recipeID", item.recipeID)
-                    startActivity(intent)
-                }
-            )
+                activeUserID = mainViewModel.userId.value
+            ) { item ->
+                Intent(
+                    this@MainRecipesFragment.requireContext(),
+                    RecipeDetailActivity::class.java
+                )
+                    .putExtra("recipeID", item.recipeID).apply {
+                        startActivity(this)
+                    }
+            }
 
             recipesRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = recipeListVerticalAdapter
             }
 
-            recipeListViewModel.requestRecipeList(
-                searchby = RecipeRepository.Companion.SEARCHBY.ALL,
-                sort = currentSort,
-                searchValue = null
-            )
+            mainViewModel.allRecipesList.observe(viewLifecycleOwner, {
+                recipeListVerticalAdapter.submitList(it) {
+                    binding.recipesRecycler.scrollToPosition(0)
+                }
+                binding.recipesSwipe.isRefreshing = false
+            })
+
+            mainViewModel.refreshRecipesList()
 
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
@@ -99,17 +99,6 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
 
     override fun onRefresh() {
         binding.recipesSwipe.isRefreshing = true
-        recipeListViewModel.requestRecipeList(
-            searchby = RecipeRepository.Companion.SEARCHBY.ALL,
-            sort = currentSort,
-            searchValue = null
-        )
-    }
-
-    fun changeSortMode(sort: String) {
-        if (currentSort != sort) {
-            currentSort = sort
-            onRefresh()
-        }
+        mainViewModel.refreshRecipesList()
     }
 }

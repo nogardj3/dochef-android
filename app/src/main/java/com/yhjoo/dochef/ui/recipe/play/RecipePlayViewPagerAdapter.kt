@@ -1,6 +1,6 @@
 package com.yhjoo.dochef.ui.recipe.play
 
-import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
@@ -13,24 +13,24 @@ class RecipePlayViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
 ) {
     private val fragments: MutableList<Fragment> = ArrayList()
     fun addFragment(fragment: Fragment, item: RecipePhase?) {
-        val b = Bundle()
-        b.putSerializable("item", item)
-        fragment.arguments = b
+        fragment.arguments = bundleOf(
+            Pair("item", item)
+        )
         fragments.add(fragment)
     }
 
     fun addFragment(fragment: Fragment, item: RecipeDetail?) {
-        val b = Bundle()
-        b.putSerializable("item", item)
-        fragment.arguments = b
+        fragment.arguments = bundleOf(
+            Pair("item", item)
+        )
         fragments.add(fragment)
     }
 
     fun addFragment(fragment: Fragment, item: RecipePhase?, item2: RecipeDetail?) {
-        val b = Bundle()
-        b.putSerializable("item", item)
-        b.putSerializable("item2", item2)
-        fragment.arguments = b
+        fragment.arguments = bundleOf(
+            Pair("item", item),
+            Pair("item2", item2)
+        )
         fragments.add(fragment)
     }
 
@@ -41,5 +41,4 @@ class RecipePlayViewPagerAdapter(Fm: FragmentManager?) : FragmentPagerAdapter(
     override fun getCount(): Int {
         return fragments.size
     }
-
 }

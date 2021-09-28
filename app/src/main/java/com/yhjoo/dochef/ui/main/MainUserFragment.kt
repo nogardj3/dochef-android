@@ -3,64 +3,73 @@ package com.yhjoo.dochef.ui.main
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.UserDetail
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices.UserService
+import com.yhjoo.dochef.data.repository.PostRepository
+import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainUserFragmentBinding
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
-import com.yhjoo.dochef.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import com.yhjoo.dochef.utils.ImageLoaderUtil
+import com.yhjoo.dochef.utils.OtherUtil
 
 class MainUserFragment : Fragment() {
     private lateinit var binding: MainUserFragmentBinding
-    private lateinit var userService: UserService
-    private lateinit var userDetailInfo: UserDetail
-    private lateinit var userID: String
+    private val mainViewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(
+            UserRepository(
+                requireContext().applicationContext
+            ),
+            RecipeRepository(
+                requireContext().applicationContext
+            ),
+            PostRepository(
+                requireContext().applicationContext
+            )
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = MainUserFragmentBinding.inflate(inflater, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.main_user_fragment, container, false)
         val view: View = binding.root
 
-        userService = RetrofitBuilder.create(requireContext(), UserService::class.java)
-
-        userID = DatastoreUtil.getUserBrief(requireContext()).userID
-
         binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+
             mainUserHome.setOnClickListener { goHome() }
             mainUserRecipe.setOnClickListener { goMyRecipe() }
             mainUserSetting.setOnClickListener { goSetting() }
             mainUserReview.setOnClickListener { goReview() }
+
+            mainViewModel.userDetail.observe(viewLifecycleOwner, {
+                ImageLoaderUtil.loadUserImage(
+                    requireContext(),
+                    it.userImg,
+                    binding.mainUserImg
+                )
+                binding.mainUserNickname.text = it.nickname
+            })
+            mainViewModel.userId.observe(viewLifecycleOwner, {
+                OtherUtil.log(it)
+                if (it != null)
+                    mainViewModel.requestActiveUserDetail()
+            })
         }
         return view
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (App.isServerAlive)
-            settingUserDetail()
-        else {
-            userDetailInfo =
-                DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_USER_DETAIL))
-            ImageLoaderUtil.loadUserImage(
-                requireContext(),
-                userDetailInfo.userImg,
-                binding.mainUserImg
-            )
-            binding.mainUserNickname.text = userDetailInfo.nickname
-        }
     }
 
     private fun goHome() {
@@ -68,9 +77,10 @@ class MainUserFragment : Fragment() {
     }
 
     private fun goMyRecipe() {
-        val intent = Intent(context, RecipeMyListActivity::class.java)
-            .putExtra("userID", userDetailInfo.userID)
-        startActivity(intent)
+        Intent(context, RecipeMyListActivity::class.java)
+            .putExtra("userID", mainViewModel.userId.value).apply {
+                startActivity(this)
+            }
     }
 
     private fun goSetting() {
@@ -78,35 +88,19 @@ class MainUserFragment : Fragment() {
     }
 
     private fun goReview() {
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.setData(
-            Uri.parse(
-                "https://play.google.com/store/apps/details?id=com.yhjoo.dochef"
-            )
-        )
-            .setPackage("com.android.vending")
         try {
-            startActivity(intent)
+            Intent(Intent.ACTION_VIEW)
+                .setData(
+                    Uri.parse(
+                        "https://play.google.com/store/apps/details?id=com.yhjoo.dochef"
+                    )
+                )
+                .setPackage("com.android.vending").apply {
+                    startActivity(this)
+                }
         } catch (e: Exception) {
             OtherUtil.log(e.toString())
             App.showToast("스토어 열기 실패")
         }
-    }
-
-    private fun settingUserDetail() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val res1 = userService.getUserDetail(userID)
-            userDetailInfo = res1.body()!!
-            ImageLoaderUtil.loadUserImage(
-                this@MainUserFragment.requireContext(),
-                userDetailInfo.userImg,
-                binding.mainUserImg
-            )
-            binding.mainUserNickname.text = userDetailInfo.nickname
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
     }
 }

@@ -16,7 +16,6 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.SearchResultRecipeItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 
-
 class ResultRecipeAdapter(
     private val layoutType: Int,
     private val itemClickListener: (Recipe) -> Unit
@@ -65,17 +64,18 @@ class ResultRecipeAdapter(
                     recipe.nickname
                 )
 
-                when(layoutType){
-                    NAME ->{
-                        resultrecipeTitle.setTypeface(null,Typeface.BOLD)
+                when (layoutType) {
+                    NAME -> {
+                        resultrecipeTitle.setTypeface(null, Typeface.BOLD)
                     }
-                    INGREDIENT->{
+                    INGREDIENT -> {
                         resultrecipeIngredients.isVisible = true
                         resultrecipeIngredients.removeAllViews()
 
                         for (ingredient in recipe.ingredients) {
                             val tagcontainer =
-                                LayoutInflater.from(context).inflate(R.layout.view_tag_search, null) as LinearLayout
+                                LayoutInflater.from(context)
+                                    .inflate(R.layout.view_tag_search, null) as LinearLayout
                             val tagview: AppCompatTextView =
                                 tagcontainer.findViewById(R.id.tag_search_text)
 
@@ -84,13 +84,14 @@ class ResultRecipeAdapter(
                             resultrecipeIngredients.addView(tagcontainer)
                         }
                     }
-                    TAG->{
+                    TAG -> {
                         resultrecipeTags.isVisible = true
                         resultrecipeTags.removeAllViews()
 
                         for (tag in recipe.tags) {
                             val tagcontainer =
-                                LayoutInflater.from(context).inflate(R.layout.view_tag_search, null) as LinearLayout
+                                LayoutInflater.from(context)
+                                    .inflate(R.layout.view_tag_search, null) as LinearLayout
                             val tagview: AppCompatTextView =
                                 tagcontainer.findViewById(R.id.tag_search_text)
                             tagview.text = "#$tag"

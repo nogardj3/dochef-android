@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.yhjoo.dochef.App
@@ -28,16 +29,13 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeDetailActivity : BaseActivity() {
-    /*
-        TODO
-        recipe revise, delete 추가
-        review userdetail 넘어가기 확인
-    */
+    /* TODO
+    1. recipe revise, delete 추가
+    2. review userdetail 넘어가기 확인
+     */
 
     private val binding: RecipedetailActivityBinding by lazy {
-        RecipedetailActivityBinding.inflate(
-            layoutInflater
-        )
+        DataBindingUtil.setContentView(this, R.layout.recipedetail_activity)
     }
 
     private lateinit var recipeService: RecipeService
@@ -63,9 +61,10 @@ class RecipeDetailActivity : BaseActivity() {
             reviewListAdapter = ReviewListAdapter().apply {
                 onItemChildClickListener =
                     BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
-                        val intent = Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                            .putExtra("userID", (adapter.data[position] as Review).userID)
-                        startActivity(intent)
+                        Intent(this@RecipeDetailActivity, HomeActivity::class.java)
+                            .putExtra("userID", (adapter.data[position] as Review).userID).apply {
+                                startActivity(this)
+                            }
                     }
             }
             recipedetailReviewRecycler.layoutManager =

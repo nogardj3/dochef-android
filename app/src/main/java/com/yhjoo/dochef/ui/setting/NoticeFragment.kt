@@ -15,7 +15,7 @@ import com.yhjoo.dochef.ui.common.adapter.ExpandableListAdapter
 
 class NoticeFragment : Fragment() {
     private lateinit var binding: SettingNoticeFragmentBinding
-    private val settingViewModel: SettingViewModel by activityViewModels() {
+    private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
             BasicRepository(requireContext().applicationContext)
         )
@@ -34,9 +34,7 @@ class NoticeFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            expandableListAdapter = ExpandableListAdapter(
-                true
-            )
+            expandableListAdapter = ExpandableListAdapter(true)
 
             noticeRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())

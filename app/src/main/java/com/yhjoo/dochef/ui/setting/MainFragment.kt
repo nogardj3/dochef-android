@@ -23,7 +23,7 @@ import com.yhjoo.dochef.utils.DatastoreUtil
 
 class MainFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding
-    private val settingViewModel: SettingViewModel by activityViewModels() {
+    private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
             BasicRepository(requireContext().applicationContext)
         )

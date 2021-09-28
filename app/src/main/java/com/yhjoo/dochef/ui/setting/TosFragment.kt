@@ -13,7 +13,7 @@ import com.yhjoo.dochef.databinding.SettingTosFragmentBinding
 
 class TosFragment : Fragment() {
     private lateinit var binding: SettingTosFragmentBinding
-    private val settingViewModel: SettingViewModel by activityViewModels() {
+    private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
             BasicRepository(requireContext().applicationContext)
         )

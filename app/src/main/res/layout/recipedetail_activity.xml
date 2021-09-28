@@ -1,247 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:overScrollMode="never">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="10dp">
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipedetail_main_img"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintDimensionRatio="w,1:1.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_percent="1"
-            tools:src="@raw/dummy_recipe_2" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_recipetitle"
-            android:layout_width="wrap_content"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="5dp"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_main_img"
-            tools:text="레시피" />
+            android:paddingBottom="10dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipedetail_userimg"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="5dp"
-            android:background="@drawable/bg_round"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_recipetitle"
-            app:srcCompat="@drawable/ic_profile_black" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipedetail_main_img"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintDimensionRatio="w,1:1.5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="1"
+                tools:src="@raw/dummy_recipe_2" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_nickname"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="4dp"
-            android:layout_marginRight="10dp"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
-            app:layout_constraintLeft_toRightOf="@+id/recipedetail_userimg"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg"
-            tools:text="닉네임" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_recipetitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_main_img"
+                tools:text="레시피" />
 
-        <View
-            android:id="@+id/recipedetail_user_wrapper"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:foreground="?selectableItemBackground"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_userimg"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_nickname"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipedetail_userimg"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="5dp"
+                android:background="@drawable/bg_round"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_recipetitle"
+                app:srcCompat="@drawable/ic_profile_black" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_nickname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="10dp"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
+                app:layout_constraintLeft_toRightOf="@+id/recipedetail_userimg"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg"
+                tools:text="닉네임" />
+
+            <View
+                android:id="@+id/recipedetail_user_wrapper"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:foreground="?selectableItemBackground"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_userimg"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_userimg"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_nickname"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_userimg" />
 
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_explain"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:minLines="2"
-            android:textSize="16sp"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_userimg"
-            tools:text="내용" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_explain"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:minLines="2"
+                android:textSize="16sp"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_userimg"
+                tools:text="내용" />
 
-        <com.google.android.flexbox.FlexboxLayout
-            android:id="@+id/recipedetail_tags"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="4dp"
-            app:flexWrap="wrap"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_explain" />
+            <com.google.android.flexbox.FlexboxLayout
+                android:id="@+id/recipedetail_tags"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                app:flexWrap="wrap"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_explain" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_likecount_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="좋아요"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_likecount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="좋아요"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_likecount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintLeft_toRightOf="@+id/recipedetail_likecount_text"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
-            tools:text="0" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_likecount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintLeft_toRightOf="@+id/recipedetail_likecount_text"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
+                tools:text="0" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_viewcount_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:text="조회수"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintLeft_toRightOf="@+id/recipedetail_likecount"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_viewcount_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7dp"
+                android:text="조회수"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintLeft_toRightOf="@+id/recipedetail_likecount"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_viewcount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="3dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintLeft_toRightOf="@+id/recipedetail_viewcount_text"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
-            tools:text="0" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_viewcount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintLeft_toRightOf="@+id/recipedetail_viewcount_text"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
+                tools:text="0" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipedetail_like"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintRight_toLeftOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
-            app:srcCompat="@drawable/ic_favorite_black" />
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipedetail_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintRight_toLeftOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toTopOf="@+id/recipedetail_startrecipe"
+                app:srcCompat="@drawable/ic_favorite_black" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/recipedetail_startrecipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_marginRight="10dp"
-            android:text="시작하기"
-            android:textColor="@color/white"
-            app:backgroundTint="@color/colorPrimary"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_tags" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/recipedetail_startrecipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_marginRight="10dp"
+                android:text="시작하기"
+                android:textColor="@color/white"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_tags" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/grey"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_startrecipe" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/grey"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_startrecipe" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_ingredients_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="4dp"
-            android:text="재료"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_startrecipe" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_ingredients_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="4dp"
+                android:text="재료"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_startrecipe" />
 
-        <LinearLayout
-            android:id="@+id/recipedetail_ingredients"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:orientation="vertical"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients_text" />
+            <LinearLayout
+                android:id="@+id/recipedetail_ingredients"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:orientation="vertical"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients_text" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="@color/grey"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients" />
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="4dp"
+                android:background="@color/grey"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_review_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="리뷰"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_review_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="리뷰"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_ingredients" />
 
-        <androidx.appcompat.widget.AppCompatRatingBar
-            android:id="@+id/recipedetail_review_rating"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:isIndicator="true"
-            android:max="6"
-            android:numStars="5"
-            android:rating="4"
-            android:theme="@style/BaseTheme.RatingBar"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_text" />
+            <androidx.appcompat.widget.AppCompatRatingBar
+                android:id="@+id/recipedetail_review_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:isIndicator="true"
+                android:max="6"
+                android:numStars="5"
+                android:rating="4"
+                android:theme="@style/BaseTheme.RatingBar"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_text" />
 
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipedetail_review_rating_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_round2"
-            android:textColor="@color/black"
-            android:textSize="32sp"
-            android:textStyle="bold"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_rating"
-            tools:text="4.6" />
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/recipedetail_review_rating_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/bg_round2"
+                android:textColor="@color/black"
+                android:textSize="32sp"
+                android:textStyle="bold"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_rating"
+                tools:text="4.6" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipedetail_review_recycler"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
-            app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
-            app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_rating_text"
-            tools:listitem="@layout/review_item" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recipedetail_review_recycler"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
+                app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
+                app:layout_constraintTop_toBottomOf="@+id/recipedetail_review_rating_text"
+                tools:listitem="@layout/review_item" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

@@ -5,14 +5,16 @@ import android.os.Bundle
 import android.view.*
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModel
-import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModelFactory
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
@@ -23,11 +25,22 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
      */
 
     private lateinit var binding: MainMyrecipeFragmentBinding
-    private lateinit var recipeListViewModel: RecipeListViewModel
+    private val mainViewModel: MainViewModel by activityViewModels {
+        MainViewModelFactory(
+            UserRepository(
+                requireContext().applicationContext
+            ),
+            RecipeRepository(
+                requireContext().applicationContext
+            ),
+            PostRepository(
+                requireContext().applicationContext
+            )
+        )
+    }
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var recommendTags: Array<String>
-    private var userID: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,21 +50,6 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.main_myrecipe_fragment, container, false)
         val view: View = binding.root
-
-        userID = DatastoreUtil.getUserBrief(requireContext()).userID
-
-        val factory = RecipeListViewModelFactory(
-            RecipeRepository(
-                requireContext().applicationContext
-            )
-        )
-
-        recipeListViewModel = factory.create(RecipeListViewModel::class.java).apply {
-            allRecipeList.observe(viewLifecycleOwner, {
-                recipeListVerticalAdapter.submitList(it) {}
-                binding.myrecipeSwipe.isRefreshing = false
-            })
-        }
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -68,28 +66,34 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 RecipeListVerticalAdapter.MAIN_MYRECIPE,
-                activeUserID = userID,
-                { item ->
-                    val intent =
-                        Intent(
-                            this@MainMyRecipeFragment.requireContext(),
-                            RecipeDetailActivity::class.java
-                        )
-                            .putExtra("recipeID", item.recipeID)
-                    startActivity(intent)
-                }
-            )
+                activeUserID = mainViewModel.userId.value
+            ) { item ->
+                Intent(
+                    this@MainMyRecipeFragment.requireContext(),
+                    RecipeDetailActivity::class.java
+                )
+                    .putExtra("recipeID", item.recipeID).apply {
+                        startActivity(this)
+                    }
+            }
 
             myrecipeRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = recipeListVerticalAdapter
             }
 
-            recipeListViewModel.requestRecipeList(
-                searchby = RecipeRepository.Companion.SEARCHBY.USERID,
-                sort = RecipeListVerticalAdapter.Companion.SORT.LATEST,
-                searchValue = userID
-            )
+            mainViewModel.userId.observe(viewLifecycleOwner, {
+                OtherUtil.log(it)
+                if (it != null)
+                    mainViewModel.refreshMyrecipesList()
+            })
+
+            mainViewModel.allMyrecipeList.observe(viewLifecycleOwner, {
+                recipeListVerticalAdapter.submitList(it) {
+                    binding.myrecipeRecycler.scrollToPosition(0)
+                }
+                binding.myrecipeSwipe.isRefreshing = false
+            })
 
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
@@ -99,10 +103,6 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
 
     override fun onRefresh() {
         binding.myrecipeSwipe.isRefreshing = true
-        recipeListViewModel.requestRecipeList(
-            searchby = RecipeRepository.Companion.SEARCHBY.USERID,
-            sort = RecipeListVerticalAdapter.Companion.SORT.LATEST,
-            searchValue = userID
-        )
+        mainViewModel.refreshMyrecipesList()
     }
 }
