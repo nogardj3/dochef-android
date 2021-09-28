@@ -16,7 +16,7 @@ import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 
 class ResultIngredientFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
-    private val recipeViewModel: SearchViewModel by activityViewModels() {
+    private val recipeViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)

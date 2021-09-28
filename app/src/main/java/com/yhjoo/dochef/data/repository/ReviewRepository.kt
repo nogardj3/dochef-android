@@ -56,7 +56,7 @@ class ReviewRepository(
     }
 
     @WorkerThread
-    suspend fun deleteReview(recipeID: Int,): Flow<Response<JsonObject>> {
+    suspend fun deleteReview(recipeID: Int): Flow<Response<JsonObject>> {
         return flow {
             if (App.isServerAlive)
                 emit(reviewClient.deleteReview(recipeID))

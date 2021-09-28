@@ -11,7 +11,6 @@ import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 

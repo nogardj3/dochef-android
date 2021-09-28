@@ -30,15 +30,9 @@ class MainInitFragment : Fragment() {
     private lateinit var binding: MainInitFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            UserRepository(
-                requireContext().applicationContext
-            ),
-            RecipeRepository(
-                requireContext().applicationContext
-            ),
-            PostRepository(
-                requireContext().applicationContext
-            )
+            UserRepository(requireContext().applicationContext),
+            RecipeRepository(requireContext().applicationContext),
+            PostRepository(requireContext().applicationContext)
         )
     }
     private lateinit var recipeListHorizontalAdapter: RecipeListHorizontalAdapter

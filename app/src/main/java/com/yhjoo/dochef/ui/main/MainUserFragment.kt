@@ -25,15 +25,9 @@ class MainUserFragment : Fragment() {
     private lateinit var binding: MainUserFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            UserRepository(
-                requireContext().applicationContext
-            ),
-            RecipeRepository(
-                requireContext().applicationContext
-            ),
-            PostRepository(
-                requireContext().applicationContext
-            )
+            UserRepository(requireContext().applicationContext),
+            RecipeRepository(requireContext().applicationContext),
+            PostRepository(requireContext().applicationContext)
         )
     }
 

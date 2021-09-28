@@ -12,6 +12,7 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipethemeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.THEME
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModel
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModelFactory
 import java.util.*
@@ -52,11 +53,11 @@ class RecipeThemeActivity : BaseActivity() {
             lifecycleOwner = this@RecipeThemeActivity
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.THEME,
+                THEME,
                 activeUserID = null,
                 itemClickListener = { item ->
                     Intent(this@RecipeThemeActivity, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID",item.recipeID).apply {
+                        .putExtra("recipeID", item.recipeID).apply {
                             startActivity(this)
                         }
                 },

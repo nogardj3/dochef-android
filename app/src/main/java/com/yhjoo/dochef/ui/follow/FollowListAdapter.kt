@@ -2,7 +2,6 @@ package com.yhjoo.dochef.ui.follow
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -20,12 +19,10 @@ class FollowListAdapter(
     private val subscribeListener: (UserBrief) -> Unit,
     private val unsubscribeListener: (UserBrief) -> Unit,
     private val itemClickListener: (UserBrief) -> Unit
-    ) :
-    ListAdapter<UserBrief, FollowListAdapter.FollowListViewHolder>(
-        FollowListComparator()
-    ) {
+) :
+    ListAdapter<UserBrief, FollowListAdapter.FollowListViewHolder>(FollowListComparator()) {
     lateinit var context: Context
-    var activeUserFollowList =  ArrayList<String>()
+    var activeUserFollowList = ArrayList<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowListViewHolder {
         context = parent.context
@@ -52,8 +49,10 @@ class FollowListAdapter(
                     itemClickListener(userBrief)
                 }
 
-                followlistFollowBtn.isVisible = !activeUserFollowList.contains(userBrief.userID) &&userBrief.userID != activeUserID
-                followlistFollowcancelBtn.isVisible = activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID
+                followlistFollowBtn.isVisible =
+                    !activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID
+                followlistFollowcancelBtn.isVisible =
+                    activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID
 
                 followlistFollowBtn.setOnClickListener {
                     subscribeListener(userBrief)

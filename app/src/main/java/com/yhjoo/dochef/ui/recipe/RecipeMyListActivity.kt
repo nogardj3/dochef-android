@@ -9,16 +9,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.RECIPE
-import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MYLIST
 import com.yhjoo.dochef.ui.common.viewmodel.*
 import com.yhjoo.dochef.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeMyListActivity : BaseActivity() {
@@ -51,7 +48,7 @@ class RecipeMyListActivity : BaseActivity() {
             lifecycleOwner = this@RecipeMyListActivity
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.MYLIST,
+                MYLIST,
                 activeUserID = userID,
                 { item ->
                     Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
@@ -59,7 +56,7 @@ class RecipeMyListActivity : BaseActivity() {
                             startActivity(this)
                         }
                 },
-                childClickListener = {item->
+                childClickListener = { item ->
                     MaterialDialog(this@RecipeMyListActivity).show {
                         message(text = "즐겨찾기를 해제 하시겠습니까?")
                         positiveButton(text = "확인") {
@@ -82,7 +79,7 @@ class RecipeMyListActivity : BaseActivity() {
             }
 
             recipeListViewModel.listChanged.observe(this@RecipeMyListActivity, {
-                if(recipeListViewModel.listChanged.value!!){
+                if (recipeListViewModel.listChanged.value!!) {
                     recipeListViewModel.listChanged.value = false
                     recipeListViewModel.requestRecipeList(
                         searchby = RECIPE.SEARCHBY.USERID,

@@ -15,15 +15,12 @@ class FollowListViewModel(
     private val uiMode: Int
 ) : ViewModel() {
     companion object {
-        val FOLLOWER = 0
-        val FOLLOWING = 1
+        const val FOLLOWER = 0
+        const val FOLLOWING = 1
     }
 
     val activeUserDetail = MutableLiveData<UserDetail>()
     val allFollowLists = MutableLiveData<List<UserBrief>>()
-
-    init {
-    }
 
     fun requestActiveUserDetail(userId: String) {
         viewModelScope.launch {

@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 import java.io.Serializable
 import java.util.*
 
-data class RecipeDetail (
+data class RecipeDetail(
     @SerializedName("recipe_id") val recipeID: Int,
     @SerializedName("recipe_name") val recipeName: String,
     @SerializedName("user_id") val userID: String,

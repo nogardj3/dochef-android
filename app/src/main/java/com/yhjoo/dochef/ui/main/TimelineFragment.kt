@@ -27,15 +27,9 @@ class TimelineFragment : Fragment(), OnRefreshListener {
     private lateinit var binding: MainTimelineFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            UserRepository(
-                requireContext().applicationContext
-            ),
-            RecipeRepository(
-                requireContext().applicationContext
-            ),
-            PostRepository(
-                requireContext().applicationContext
-            )
+            UserRepository(requireContext().applicationContext),
+            RecipeRepository(requireContext().applicationContext),
+            PostRepository(requireContext().applicationContext)
         )
     }
     private lateinit var timelineListAdapter: TimelineListAdapter

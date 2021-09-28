@@ -5,13 +5,12 @@ import androidx.annotation.WorkerThread
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
-import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -20,16 +19,6 @@ import java.util.*
 class RecipeRepository(
     private val context: Context
 ) {
-    companion object {
-        object SEARCHBY {
-            const val ALL = 0
-            const val USERID = 1
-            const val INGREDIENT = 2
-            const val RECIPENAME = 3
-            const val TAG = 4
-        }
-    }
-
     private val recipeClient =
         RetrofitBuilder.create(context, RetrofitServices.RecipeService::class.java)
 
@@ -59,15 +48,25 @@ class RecipeRepository(
         return flow {
             if (App.isServerAlive) {
                 when (searchby) {
-                    SEARCHBY.USERID -> emit(recipeClient.getRecipeByUserID(searchValue!!, sort))
-                    SEARCHBY.INGREDIENT -> emit(
+                    RECIPE.SEARCHBY.USERID -> emit(
+                        recipeClient.getRecipeByUserID(
+                            searchValue!!,
+                            sort
+                        )
+                    )
+                    RECIPE.SEARCHBY.INGREDIENT -> emit(
                         recipeClient.getRecipeByIngredient(
                             searchValue!!,
                             sort
                         )
                     )
-                    SEARCHBY.RECIPENAME -> emit(recipeClient.getRecipeByName(searchValue!!, sort))
-                    SEARCHBY.TAG -> emit(recipeClient.getRecipeByTag(searchValue!!, sort))
+                    RECIPE.SEARCHBY.RECIPENAME -> emit(
+                        recipeClient.getRecipeByName(
+                            searchValue!!,
+                            sort
+                        )
+                    )
+                    RECIPE.SEARCHBY.TAG -> emit(recipeClient.getRecipeByTag(searchValue!!, sort))
                     else -> emit(recipeClient.getRecipes(sort))
                 }
             } else
@@ -83,11 +82,11 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun likeRecipe(recipeId: Int,userId: String): Flow<Response<JsonObject>> {
+    suspend fun likeRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject>> {
         return flow {
             if (App.isServerAlive)
-                emit(recipeClient.setLikeRecipe(recipeId,userId,1))
-            else{
+                emit(recipeClient.setLikeRecipe(recipeId, userId, 1))
+            else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
             }
@@ -95,11 +94,11 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun dislikeRecipe(recipeId: Int,userId: String): Flow<Response<JsonObject>> {
+    suspend fun dislikeRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject>> {
         return flow {
             if (App.isServerAlive)
-                emit(recipeClient.setLikeRecipe(recipeId,userId,-1))
-            else{
+                emit(recipeClient.setLikeRecipe(recipeId, userId, -1))
+            else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
             }
@@ -107,11 +106,11 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun deleteRecipe(recipeId: Int,userId: String): Flow<Response<JsonObject>> {
+    suspend fun deleteRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject>> {
         return flow {
             if (App.isServerAlive)
-                emit(recipeClient.deleteRecipe(recipeId,userId))
-            else{
+                emit(recipeClient.deleteRecipe(recipeId, userId))
+            else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
             }
@@ -123,7 +122,7 @@ class RecipeRepository(
         return flow {
             if (App.isServerAlive)
                 emit(recipeClient.addCount(recipeId))
-            else{
+            else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
             }

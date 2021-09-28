@@ -8,7 +8,6 @@ import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
-import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -19,13 +18,13 @@ class PostDetailViewModel(
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val allReviews = MutableLiveData<List<Review>>()
 
-    fun addCount(recipeId:Int){
+    fun addCount(recipeId: Int) {
         viewModelScope.launch {
-            recipeRepository.addCount(recipeId).collect{}
+            recipeRepository.addCount(recipeId).collect {}
         }
     }
 
-    fun requestRecipeDetail(recipeId:Int) {
+    fun requestRecipeDetail(recipeId: Int) {
         viewModelScope.launch {
             recipeRepository.getRecipeDetail(recipeId).collect {
                 recipeDetail.value = it.body()
@@ -33,7 +32,7 @@ class PostDetailViewModel(
         }
     }
 
-    fun requestReviews(recipeId:Int) {
+    fun requestReviews(recipeId: Int) {
         viewModelScope.launch {
             reviewRepository.getReviews(recipeId).collect {
                 allReviews.value = it.body()
@@ -41,14 +40,14 @@ class PostDetailViewModel(
         }
     }
 
-    fun toggleLikeRecipe(recipeId:Int, userId: String, like: Int) {
+    fun toggleLikeRecipe(recipeId: Int, userId: String, like: Int) {
         viewModelScope.launch {
             if (like == 1)
-                recipeRepository.likeRecipe(recipeId, userId).collect{
+                recipeRepository.likeRecipe(recipeId, userId).collect {
                     requestRecipeDetail(recipeId)
                 }
             else
-                recipeRepository.dislikeRecipe(recipeId, userId).collect{
+                recipeRepository.dislikeRecipe(recipeId, userId).collect {
                     requestRecipeDetail(recipeId)
                 }
         }

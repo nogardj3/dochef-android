@@ -11,16 +11,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.RecipeplayStartFragmentBinding
-import com.yhjoo.dochef.ui.main.MainViewModel
-import com.yhjoo.dochef.ui.main.MainViewModelFactory
 import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class RecipePlayStartFragment : Fragment() {
     private lateinit var binding: RecipeplayStartFragmentBinding
@@ -36,13 +30,14 @@ class RecipePlayStartFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.recipeplay_start_fragment, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.recipeplay_start_fragment, container, false)
         val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            recipePlayViewModel.recipeDetail.observe(viewLifecycleOwner, { rdrd->
+            recipePlayViewModel.recipeDetail.observe(viewLifecycleOwner, { rdrd ->
                 ImageLoaderUtil.loadRecipeImage(
                     requireContext(),
                     rdrd.recipeImg,

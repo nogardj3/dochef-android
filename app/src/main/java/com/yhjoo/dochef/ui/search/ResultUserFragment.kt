@@ -35,7 +35,7 @@ class ResultUserFragment : Fragment() {
         binding.apply {
             userListAdapter = UserListAdapter { item ->
                 Intent(context, HomeActivity::class.java)
-                    .putExtra("userID",item.userID).apply {
+                    .putExtra("userID", item.userID).apply {
                         startActivity(this)
                     }
             }

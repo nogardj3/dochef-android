@@ -14,6 +14,7 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MAIN_MYRECIPE
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
@@ -26,15 +27,9 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
     private lateinit var binding: MainMyrecipeFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            UserRepository(
-                requireContext().applicationContext
-            ),
-            RecipeRepository(
-                requireContext().applicationContext
-            ),
-            PostRepository(
-                requireContext().applicationContext
-            )
+            UserRepository(requireContext().applicationContext),
+            RecipeRepository(requireContext().applicationContext),
+            PostRepository(requireContext().applicationContext)
         )
     }
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
@@ -64,7 +59,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
             }
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.MAIN_MYRECIPE,
+                MAIN_MYRECIPE,
                 activeUserID = mainViewModel.userId.value,
                 itemClickListener = { item ->
                     Intent(

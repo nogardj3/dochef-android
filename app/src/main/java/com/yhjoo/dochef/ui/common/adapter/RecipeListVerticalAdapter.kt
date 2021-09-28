@@ -2,7 +2,6 @@ package com.yhjoo.dochef.ui.common.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -27,15 +26,11 @@ class RecipeListVerticalAdapter(
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
     companion object {
-        const val MAIN_RECIPES = 0
-        const val MAIN_MYRECIPE = 1
-        const val MYLIST = 5
-        const val THEME = 6
-
-        object SORT {
-            const val LATEST = "latest"
-            const val POPULAR = "popular"
-            const val RATING = "rating"
+        object LayoutType {
+            const val MAIN_RECIPES = 0
+            const val MAIN_MYRECIPE = 1
+            const val MYLIST = 2
+            const val THEME = 3
         }
     }
 
@@ -45,7 +40,7 @@ class RecipeListVerticalAdapter(
         context = parent.context
 
         return when (layoutType) {
-            MAIN_RECIPES -> MainRecipesViewHolder(
+            LayoutType.MAIN_RECIPES -> MainRecipesViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.main_recipes_item,
@@ -53,7 +48,7 @@ class RecipeListVerticalAdapter(
                     false
                 )
             )
-            MAIN_MYRECIPE -> MainMyRecipeViewHolder(
+            LayoutType.MAIN_MYRECIPE -> MainMyRecipeViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.main_myrecipe_item,
@@ -61,7 +56,7 @@ class RecipeListVerticalAdapter(
                     false
                 )
             )
-            MYLIST -> RecipeMyListViewHolder(
+            LayoutType.MYLIST -> RecipeMyListViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
                     R.layout.recipemylist_item,

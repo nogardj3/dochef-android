@@ -25,7 +25,7 @@ class BasicRepository(
         return flow {
             if (App.isServerAlive)
                 emit(basicClient.getFAQ())
-            else{
+            else {
                 emit(
                     Response.success(
                         DataGenerator.make(
@@ -43,7 +43,7 @@ class BasicRepository(
         return flow {
             if (App.isServerAlive)
                 emit(basicClient.getNotice())
-            else{
+            else {
                 emit(
                     Response.success(
                         DataGenerator.make(
@@ -61,9 +61,9 @@ class BasicRepository(
         return flow {
             if (App.isServerAlive)
                 emit(basicClient.getTOS())
-            else{
+            else {
                 val jsonObject = JsonObject().apply {
-                    addProperty("message","이용약관")
+                    addProperty("message", "이용약관")
                 }
                 emit(
                     Response.success(

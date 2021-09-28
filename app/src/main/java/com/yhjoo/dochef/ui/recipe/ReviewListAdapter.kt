@@ -7,13 +7,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.BaseViewHolder
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Review
-import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.ReviewItemBinding
-import com.yhjoo.dochef.databinding.SearchResultUserItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 

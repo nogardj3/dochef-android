@@ -32,7 +32,7 @@ object DataGenerator {
             resources.getInteger(R.integer.DATA_TYPE_FAQ) -> {
                 val arrayList = ArrayList<ExpandableItem>()
                 for (i in 1..9) {
-                    arrayList.add(ExpandableItem("FAQ Title $i", "FAQ$i",0))
+                    arrayList.add(ExpandableItem("FAQ Title $i", "FAQ$i", 0))
                 }
                 arrayList as T
             }

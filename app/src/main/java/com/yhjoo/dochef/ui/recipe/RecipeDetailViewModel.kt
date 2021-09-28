@@ -15,7 +15,7 @@ class RecipeDetailViewModel(
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
-    val isDeleted = MutableLiveData<Boolean>(false)
+    val isDeleted = MutableLiveData(false)
 
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val allReviews = MutableLiveData<List<Review>>()
@@ -58,7 +58,7 @@ class RecipeDetailViewModel(
     fun deleteRecipe(recipeId: Int, userId: String) {
         viewModelScope.launch {
             recipeRepository.deleteRecipe(recipeId, userId).collect {
-                if(it.isSuccessful)
+                if (it.isSuccessful)
                     isDeleted.value = true
             }
         }

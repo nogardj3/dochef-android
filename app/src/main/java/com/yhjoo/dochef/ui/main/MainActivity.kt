@@ -44,7 +44,7 @@ class MainActivity : BaseActivity() {
         Pair(R.drawable.ic_person_white, MainUserFragment())
     )
 
-    val binding: MainActivityBinding by lazy {
+    private val binding: MainActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.main_activity)
     }
     private val mainViewModel: MainViewModel by viewModels {

@@ -14,27 +14,21 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MAIN_RECIPES
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import java.util.*
 
 class MainRecipesFragment : Fragment(), OnRefreshListener {
     /* TODO
-    1. sort
-    2. ad + item + recommend
+    1. ad + item + recommend
      */
 
     private lateinit var binding: MainRecipesFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            UserRepository(
-                requireContext().applicationContext
-            ),
-            RecipeRepository(
-                requireContext().applicationContext
-            ),
-            PostRepository(
-                requireContext().applicationContext
-            )
+            UserRepository(requireContext().applicationContext),
+            RecipeRepository(requireContext().applicationContext),
+            PostRepository(requireContext().applicationContext)
         )
     }
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
@@ -64,7 +58,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
             }
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.MAIN_RECIPES,
+                MAIN_RECIPES,
                 activeUserID = mainViewModel.userId.value,
                 itemClickListener = { item ->
                     Intent(

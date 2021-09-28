@@ -10,26 +10,29 @@ import com.yhjoo.dochef.data.entity.NotificationEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class NotificationRepository(private val context : Context, private val notificationDao: NotificationDao) {
+class NotificationRepository(
+    private val context: Context,
+    private val notificationDao: NotificationDao
+) {
     val notifications: Flow<List<NotificationEntity>> = getData()
 
     @WorkerThread
-    suspend fun insert(notificationEntity: NotificationEntity): Long {
+    fun insert(notificationEntity: NotificationEntity): Long {
         return notificationDao.insert(notificationEntity)
     }
 
     @WorkerThread
-    suspend fun update(notificationEntity: NotificationEntity): Int {
+    fun update(notificationEntity: NotificationEntity): Int {
         return notificationDao.update(notificationEntity)
     }
 
     @WorkerThread
-    suspend fun delete(notificationEntity: NotificationEntity): Int {
+    fun delete(notificationEntity: NotificationEntity): Int {
         return notificationDao.delete(notificationEntity)
     }
 
     @WorkerThread
-    suspend fun setRead(id: Long){
+    fun setRead(id: Long) {
         notificationDao.setRead(id)
     }
 
@@ -37,7 +40,7 @@ class NotificationRepository(private val context : Context, private val notifica
         return if (App.isServerAlive)
             notificationDao.getRecentList(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 3)
         else
-            flow{
+            flow {
                 emit(
                     DataGenerator.make(
                         context.resources,

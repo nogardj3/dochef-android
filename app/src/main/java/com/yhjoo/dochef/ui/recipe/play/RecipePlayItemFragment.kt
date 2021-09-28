@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.RecipePhase
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipeplayItemFragmentBinding
@@ -31,7 +29,8 @@ class RecipePlayItemFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(inflater, R.layout.recipeplay_item_fragment, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.recipeplay_item_fragment, container, false)
         val view: View = binding.root
 
         binding.apply {
@@ -39,7 +38,7 @@ class RecipePlayItemFragment : Fragment() {
 
             val position = requireArguments().getInt("position")
 
-            recipePlayViewModel.recipePhases.observe(viewLifecycleOwner, { list->
+            recipePlayViewModel.recipePhases.observe(viewLifecycleOwner, { list ->
                 val recipePhase = list[position]
                 ImageLoaderUtil.loadRecipeImage(
                     requireContext(),
@@ -48,7 +47,8 @@ class RecipePlayItemFragment : Fragment() {
                 )
                 recipeplayItemTips.removeAllViews()
                 for (text in recipePhase.tips) {
-                    val tiptext = layoutInflater.inflate(R.layout.view_tip, null) as AppCompatTextView
+                    val tiptext =
+                        layoutInflater.inflate(R.layout.view_tip, null) as AppCompatTextView
                     tiptext.text = text
                     recipeplayItemTips.addView(tiptext)
                 }

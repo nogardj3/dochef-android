@@ -22,7 +22,7 @@ class RecipeAdapter(
 ) :
     ListAdapter<Recipe, RecipeAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
     companion object {
-        object LayoutType{
+        object LayoutType {
             const val NAME = 0
             const val INGREDIENT = 1
             const val TAG = 2
