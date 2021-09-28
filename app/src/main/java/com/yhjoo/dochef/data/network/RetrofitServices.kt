@@ -135,6 +135,12 @@ class RetrofitServices {
             //                                                  @Field("tags") ArrayList<String> tags,
             //                                                  @Field("phase") ArrayList<RecipePhase> phases
         ): Response<JsonObject>
+
+        @POST("recipe/delete")
+        suspend fun deleteRecipe(
+            @Field("recipe_id") recipeId: Int,
+            @Field("user_id") userId: String,
+        ): Response<JsonObject>
     }
 
     interface ReviewService {

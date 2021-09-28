@@ -107,9 +107,20 @@ class RecipeRepository(
     }
 
     @WorkerThread
+    suspend fun deleteRecipe(recipeId: Int,userId: String): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(recipeClient.deleteRecipe(recipeId,userId))
+            else{
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
+    }
+
+    @WorkerThread
     suspend fun addCount(recipeId: Int): Flow<Response<JsonObject>> {
         return flow {
-            OtherUtil.log("addadd")
             if (App.isServerAlive)
                 emit(recipeClient.addCount(recipeId))
             else{

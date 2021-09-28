@@ -35,7 +35,7 @@
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/main_recipes_yours"
+                android:id="@+id/main_recipes_ismine"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="4dp"
@@ -43,7 +43,7 @@
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_favorite_red" />
+                app:srcCompat="@drawable/ic_star_white" />
 
             <View
                 android:layout_width="match_parent"

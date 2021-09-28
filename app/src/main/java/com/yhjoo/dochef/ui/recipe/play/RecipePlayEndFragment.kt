@@ -6,130 +6,89 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.RecipePhase
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices.RecipeService
-import com.yhjoo.dochef.data.network.RetrofitServices.ReviewService
+import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipeplayEndFragmentBinding
-import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.ImageLoaderUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class RecipePlayEndFragment : Fragment() {
-    /*
-        TODO
-        1. 분기 - end용 처리하기
-        2. 리뷰작성 기능
+    /* TODO
+    1. likethis, setlike
+    2. show all review
+    3. create review
     */
 
     private lateinit var binding: RecipeplayEndFragmentBinding
-    private lateinit var recipeService: RecipeService
-    private lateinit var reviewService: ReviewService
-    private lateinit var recipePhase: RecipePhase
-    private lateinit var recipeDetail: RecipeDetail
-    private var isLikeThis = false
-    private var userID: String? = null
+    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels {
+        RecipePlayViewModelFactory(
+            RecipeRepository(requireContext().applicationContext),
+            ReviewRepository(requireContext().applicationContext)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = RecipeplayEndFragmentBinding.inflate(inflater, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.recipeplay_end_fragment, container, false)
         val view: View = binding.root
 
-        recipeService = RetrofitBuilder.create(requireContext(), RecipeService::class.java)
-        reviewService = RetrofitBuilder.create(requireContext(), ReviewService::class.java)
-
-        userID = DatastoreUtil.getUserBrief(requireContext()).userID
-        recipePhase = requireArguments().getSerializable("item") as RecipePhase
-        recipeDetail = requireArguments().getSerializable("item2") as RecipeDetail
-
-        isLikeThis = recipeDetail.likes.contains(userID)
-
-        loadData()
-        return view
-    }
-
-    private fun loadData() {
         binding.apply {
-            ImageLoaderUtil.loadRecipeImage(
-                requireContext(),
-                recipePhase.recipe_img,
-                recipeplayEndImg
-            )
+            lifecycleOwner = viewLifecycleOwner
 
-            recipeplayEndTips.removeAllViews()
-            for (text in recipePhase.tips) {
-                val tiptext = layoutInflater.inflate(R.layout.view_tip, null) as AppCompatTextView
-                tiptext.text = text
-                recipeplayEndTips.addView(tiptext)
-            }
+            recipePlayViewModel.recipePhases.observe(viewLifecycleOwner, { list ->
+                val recipePhase = list.last()
 
-            recipeplayEndIngredients.removeAllViews()
-            for (ingredient in recipePhase.ingredients) {
-                val ingredientContainer =
-                    layoutInflater.inflate(
-                        R.layout.view_ingredient,
-                        recipeplayEndIngredients,
-                        false
-                    ) as ConstraintLayout
-                val ingredientName: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.ingredient_name)
-                ingredientName.text = ingredient.name
-                val ingredientAmount: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.ingredient_amount)
-                ingredientAmount.text = ingredient.amount
-                recipeplayEndIngredients.addView(ingredientContainer)
-            }
-            recipeplayEndContents.text = recipePhase.contents
-
-            recipeplayEndLike.setImageResource(
-                if (isLikeThis) R.drawable.ic_favorite_red
-                else R.drawable.ic_favorite_black
-            )
-
-            recipeplayEndReviewOk.setOnClickListener { addReview() }
-        }
-    }
-
-    private fun addReview() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-
-            if (binding.recipeplayEndReviewEdittext.text.toString() != "") {
-                reviewService.createReview(
-                    recipeDetail.recipeID, userID!!,
-                    binding.recipeplayEndReviewEdittext.text.toString(),
-                    binding.recipeplayEndRating.rating.toLong(), System.currentTimeMillis()
+                ImageLoaderUtil.loadRecipeImage(
+                    requireContext(),
+                    recipePhase.recipe_img,
+                    recipeplayEndImg
                 )
-                App.showToast("리뷰가 등록되었습니다.")
-                (requireActivity() as BaseActivity?)!!.finish()
 
-            } else App.showToast("댓글을 입력 해 주세요")
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
-    }
+                recipeplayEndTips.removeAllViews()
+                for (text in recipePhase.tips) {
+                    val tiptext =
+                        layoutInflater.inflate(R.layout.view_tip, null) as AppCompatTextView
+                    tiptext.text = text
+                    recipeplayEndTips.addView(tiptext)
+                }
 
-    private fun setLike() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val like = if (isLikeThis) -1 else 1
-            recipeService.setLikeRecipe(recipeDetail.recipeID, userID!!, like)
-            isLikeThis = !isLikeThis
-            loadData()
+                recipeplayEndIngredients.removeAllViews()
+                for (ingredient in recipePhase.ingredients) {
+                    val ingredientContainer =
+                        layoutInflater.inflate(
+                            R.layout.view_ingredient,
+                            recipeplayEndIngredients,
+                            false
+                        ) as ConstraintLayout
+                    val ingredientName: AppCompatTextView =
+                        ingredientContainer.findViewById(R.id.ingredient_name)
+                    ingredientName.text = ingredient.name
+                    val ingredientAmount: AppCompatTextView =
+                        ingredientContainer.findViewById(R.id.ingredient_amount)
+                    ingredientAmount.text = ingredient.amount
+                    recipeplayEndIngredients.addView(ingredientContainer)
+                }
+                recipeplayEndContents.text = recipePhase.contents
+
+                recipeplayEndReviewOk.setOnClickListener {
+                    recipePlayViewModel.createReview(
+                        recipePlayViewModel.recipeDetail.value!!.recipeID,
+                        recipePlayViewModel.userId.value!!,
+                        binding.recipeplayEndReviewEdittext.text.toString(),
+                        binding.recipeplayEndRating.rating.toLong(), System.currentTimeMillis()
+                    )
+                    App.showToast("등록완료")
+                }
+            })
         }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
+        return view
     }
 }

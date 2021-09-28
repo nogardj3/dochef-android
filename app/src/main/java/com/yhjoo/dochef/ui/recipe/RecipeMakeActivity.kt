@@ -6,7 +6,7 @@ import com.yhjoo.dochef.ui.base.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
     /* TODO
-    ALL
+    ALL, REVISE 포함
      */
 
     object MODE {

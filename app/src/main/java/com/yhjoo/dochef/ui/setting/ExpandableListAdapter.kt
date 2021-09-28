@@ -1,8 +1,7 @@
-package com.yhjoo.dochef.ui.common.adapter
+package com.yhjoo.dochef.ui.setting
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
@@ -15,7 +14,7 @@ import com.yhjoo.dochef.databinding.ExpandableItemBinding
 import com.yhjoo.dochef.utils.OtherUtil
 
 class ExpandableListAdapter(
-    private val showDate: Boolean,
+    private val showDate: Boolean
 ) :
     ListAdapter<ExpandableItem, ExpandableListAdapter.ExpandableViewHolder>(ExpandableListComparator()) {
     lateinit var context: Context

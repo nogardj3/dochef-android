@@ -32,9 +32,6 @@ import com.yhjoo.dochef.data.network.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.HomeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModel
-import com.yhjoo.dochef.ui.common.viewmodel.PostListViewModelFactory
 import com.yhjoo.dochef.ui.follow.FollowListActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity

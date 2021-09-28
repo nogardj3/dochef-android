@@ -53,13 +53,15 @@ class RecipeThemeActivity : BaseActivity() {
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 RecipeListVerticalAdapter.THEME,
-                activeUserID = null
-            ) { item ->
-                Intent(this@RecipeThemeActivity, RecipeDetailActivity::class.java)
-                    .putExtra("recipeID",item.recipeID).apply {
-                        startActivity(this)
-                    }
-            }
+                activeUserID = null,
+                itemClickListener = { item ->
+                    Intent(this@RecipeThemeActivity, RecipeDetailActivity::class.java)
+                        .putExtra("recipeID",item.recipeID).apply {
+                            startActivity(this)
+                        }
+                },
+                null
+            )
 
             recipethemeRecycler.apply {
                 layoutManager = GridLayoutManager(this@RecipeThemeActivity, 2)

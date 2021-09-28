@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingNoticeFragmentBinding
-import com.yhjoo.dochef.ui.common.adapter.ExpandableListAdapter
 
 class NoticeFragment : Fragment() {
     private lateinit var binding: SettingNoticeFragmentBinding

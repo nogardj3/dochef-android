@@ -28,12 +28,11 @@
                 app:layout_constraintTop_toTopOf="@+id/recipemylist_recipetitle" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/recipemylist_yours"
+                android:id="@+id/recipemylist_islikerecipe"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="4dp"
-                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_favorite_red" />

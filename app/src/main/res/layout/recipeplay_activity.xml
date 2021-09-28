@@ -1,70 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/recipeplay_viewpager"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.ui.recipe.play.RecipePlayViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never" />
+        android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Group
-        android:id="@+id/recipeplay_circular_tools_group"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:constraint_referenced_ids="recipeplay_stepindicator, recipeplay_circular_timer, recipeplay_circular_timer_text"
-        tools:visibility="visible" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/recipeplay_viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:overScrollMode="never" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/recipeplay_circular_timer_text"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@drawable/bg_round2"
-        android:gravity="center"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/recipeplay_circular_timer"
-        app:layout_constraintLeft_toLeftOf="@+id/recipeplay_circular_timer"
-        app:layout_constraintRight_toRightOf="@+id/recipeplay_circular_timer"
-        app:layout_constraintTop_toTopOf="@+id/recipeplay_circular_timer"
-        tools:text="05:00" />
+        <androidx.constraintlayout.widget.Group
+            android:id="@+id/recipeplay_circular_tools_group"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:constraint_referenced_ids="recipeplay_pageindicator, recipeplay_circular_timer, recipeplay_circular_timer_text"
+            tools:visibility="visible" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/recipeplay_circular_timer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:elevation="8dp"
-        app:indicatorColor="@color/grey"
-        app:indicatorDirectionCircular="clockwise"
-        app:indicatorSize="60dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:trackColor="@color/colorSecondary"
-        app:trackThickness="8dp" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipeplay_circular_timer_text"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/bg_round2"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/recipeplay_circular_timer"
+            app:layout_constraintLeft_toLeftOf="@+id/recipeplay_circular_timer"
+            app:layout_constraintRight_toRightOf="@+id/recipeplay_circular_timer"
+            app:layout_constraintTop_toTopOf="@+id/recipeplay_circular_timer"
+            tools:text="05:00" />
 
-    <com.layer_net.stepindicator.StepIndicator
-        android:id="@+id/recipeplay_stepindicator"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintWidth_percent="0.8"
-        app:siBackgroundColor="@color/colorSecondary"
-        app:siStepColor="@color/colorSecondary" />
+        <com.google.android.material.progressindicator.CircularProgressIndicator
+            android:id="@+id/recipeplay_circular_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="8dp"
+            android:elevation="8dp"
+            app:indicatorColor="@color/grey"
+            app:indicatorDirectionCircular="clockwise"
+            app:indicatorSize="60dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:trackColor="@color/colorSecondary"
+            app:trackThickness="8dp" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/recipeplay_tts"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="parent" />
+        <com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+            android:id="@+id/recipeplay_pageindicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            app:dotsColor="@color/colorSecondary"
+            app:dotsSize="10dp"
+            app:dotsStrokeWidth="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintWidth_percent="0.8" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipeplay_tts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

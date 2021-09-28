@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 class RecipeListViewModel(
     private val repository: RecipeRepository
 ) : ViewModel() {
+    val listChanged = MutableLiveData<Boolean>(false)
     val allRecipeList = MutableLiveData<List<Recipe>>()
 
     fun requestRecipeList(searchby: Int, sort: String, searchValue: String?) {
@@ -22,16 +23,12 @@ class RecipeListViewModel(
         }
     }
 
-    fun addCount(recipeId: Int) {
-
-    }
-
-    fun likeRecipe(recipeId: Int, userId: String) {
-
-    }
-
     fun disLikeRecipe(recipeId: Int, userId: String) {
-
+        viewModelScope.launch {
+            repository.dislikeRecipe(recipeId,userId).collect {
+                listChanged.value = true
+            }
+        }
     }
 }
 

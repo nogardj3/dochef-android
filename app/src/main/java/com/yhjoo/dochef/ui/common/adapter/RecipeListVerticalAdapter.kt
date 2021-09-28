@@ -22,7 +22,8 @@ import com.yhjoo.dochef.utils.ValidateUtil
 class RecipeListVerticalAdapter(
     private val layoutType: Int,
     private val activeUserID: String?,
-    private val itemClickListener: ((Recipe) -> Unit)?
+    private val itemClickListener: ((Recipe) -> Unit)?,
+    private val childClickListener: ((Recipe) -> Unit)?
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
     companion object {
@@ -112,7 +113,7 @@ class RecipeListVerticalAdapter(
                 mainRecipesView.text = recipe.viewCount.toString()
 
                 mainRecipesNew.isVisible = ValidateUtil.checkNew(recipe.datetime)
-                mainRecipesYours.isVisible = activeUserID == recipe.userID
+                mainRecipesIsmine.isVisible = activeUserID == recipe.userID
             }
         }
     }
@@ -139,7 +140,7 @@ class RecipeListVerticalAdapter(
                 mainMyrecipeDate.text = OtherUtil.millisToText(recipe.datetime)
                 mainMyrecipeRating.text = String.format("%.1f", recipe.rating)
                 mainMyrecipeView.text = recipe.viewCount.toString()
-                mainMyrecipeYours.isVisible = activeUserID == recipe.userID
+                mainMyrecipeIslikerecipe.isVisible = activeUserID != recipe.userID
             }
         }
     }
@@ -167,7 +168,10 @@ class RecipeListVerticalAdapter(
                 recipemylistRating.text = String.format("%.1f", recipe.rating)
                 recipemylistView.text = recipe.viewCount.toString()
 
-                recipemylistYours.isVisible = activeUserID == recipe.userID
+                recipemylistIslikerecipe.isVisible = activeUserID != recipe.userID
+                recipemylistIslikerecipe.setOnClickListener {
+                    childClickListener!!(recipe)
+                }
             }
         }
     }

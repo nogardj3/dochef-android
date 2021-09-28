@@ -1,42 +1,32 @@
 package com.yhjoo.dochef.ui.recipe
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.yhjoo.dochef.App
+import com.skydoves.powermenu.MenuAnimation
+import com.skydoves.powermenu.PowerMenu
+import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.Review
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices.RecipeService
-import com.yhjoo.dochef.data.network.RetrofitServices.ReviewService
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.play.RecipePlayActivity
 import com.yhjoo.dochef.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class RecipeDetailActivity : BaseActivity() {
-    /* TODO
-    1. recipe revise, delete 추가
-    2. review userdetail 넘어가기 확인
-     */
-
     private val binding: RecipedetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipedetail_activity)
     }
@@ -48,8 +38,11 @@ class RecipeDetailActivity : BaseActivity() {
     }
     private lateinit var reviewListAdapter: ReviewListAdapter
 
+    private var powerMenu: PowerMenu? = null
+
     private var userID: String? = null
     private var recipeID = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,6 +80,10 @@ class RecipeDetailActivity : BaseActivity() {
             })
             recipeDetailViewModel.allReviews.observe(this@RecipeDetailActivity, {
                 reviewListAdapter.submitList(it) {}
+            })
+            recipeDetailViewModel.isDeleted.observe(this@RecipeDetailActivity, {
+                if (it)
+                    finish()
             })
 
             recipeDetailViewModel.addCount(recipeID)
@@ -162,6 +159,47 @@ class RecipeDetailActivity : BaseActivity() {
                 ingredientName.text = ingredient.name
                 ingredientAmount.text = ingredient.amount
                 recipedetailIngredients.addView(ingredientContainer)
+            }
+
+            recipedetailOwnermenu.isVisible = userID == recipeDetail.userID
+            recipedetailOwnermenu.setOnClickListener {
+                powerMenu = PowerMenu.Builder(this@RecipeDetailActivity)
+                    .addItem(PowerMenuItem("수정", false))
+                    .addItem(PowerMenuItem("삭제", false))
+                    .setAnimation(MenuAnimation.SHOWUP_TOP_RIGHT)
+                    .setMenuRadius(10f)
+                    .setMenuShadow(0f)
+                    .setTextColor(
+                        ContextCompat.getColor(
+                            this@RecipeDetailActivity,
+                            R.color.colorPrimary
+                        )
+                    )
+                    .setSelectedTextColor(Color.WHITE)
+                    .setTextGravity(Gravity.CENTER)
+                    .setMenuColor(Color.WHITE)
+                    .setSelectedMenuColor(
+                        ContextCompat.getColor(
+                            this@RecipeDetailActivity,
+                            R.color.colorPrimary
+                        )
+                    )
+                    .setBackgroundAlpha(0.2f)
+                    .setOnMenuItemClickListener { position, _ ->
+                        when (position) {
+                            0 -> {
+                                Intent(this@RecipeDetailActivity, RecipeMakeActivity::class.java)
+                                    .putExtra("recipeId", recipeDetail.recipeID)
+                                    .putExtra("mode", RecipeMakeActivity.MODE.REVISE).apply {
+                                        startActivity(this)
+                                    }
+                            }
+                            1 -> recipeDetailViewModel.deleteRecipe(recipeDetail.recipeID, userID!!)
+                        }
+                        powerMenu!!.dismiss()
+                    }
+                    .build()
+                powerMenu!!.showAsAnchorRightTop(recipedetailOwnermenu)
             }
         }
     }

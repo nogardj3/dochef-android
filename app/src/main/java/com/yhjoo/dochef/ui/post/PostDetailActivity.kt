@@ -26,7 +26,6 @@ import com.yhjoo.dochef.data.network.RetrofitServices.CommentService
 import com.yhjoo.dochef.data.network.RetrofitServices.PostService
 import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.common.adapter.CommentListAdapter
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.utils.*
 import kotlinx.coroutines.CoroutineScope

@@ -6,6 +6,7 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.afollestad.materialdialogs.MaterialDialog
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.network.RetrofitBuilder
@@ -22,8 +23,7 @@ import java.util.*
 
 class RecipeMyListActivity : BaseActivity() {
     /* TODO
-    1. dislike recipe
-    2. ad + item + recommend
+    1. ad + item + recommend
      */
 
     private val binding: RecipemylistActivityBinding by lazy {
@@ -51,19 +51,47 @@ class RecipeMyListActivity : BaseActivity() {
             lifecycleOwner = this@RecipeMyListActivity
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.MAIN_MYRECIPE,
-                activeUserID = userID
-            ) { item ->
-                Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
-                    .putExtra("recipeID", item.recipeID).apply {
-                        startActivity(this)
+                RecipeListVerticalAdapter.MYLIST,
+                activeUserID = userID,
+                { item ->
+                    Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
+                        .putExtra("recipeID", item.recipeID).apply {
+                            startActivity(this)
+                        }
+                },
+                childClickListener = {item->
+                    MaterialDialog(this@RecipeMyListActivity).show {
+                        message(text = "즐겨찾기를 해제 하시겠습니까?")
+                        positiveButton(text = "확인") {
+                            recipeListViewModel.disLikeRecipe(item.recipeID, userID)
+
+                            recipeListViewModel.requestRecipeList(
+                                searchby = RECIPE.SEARCHBY.USERID,
+                                sort = RECIPE.SORT.LATEST,
+                                searchValue = userID
+                            )
+                        }
+                        negativeButton(text = "취소")
                     }
-            }
+                }
+            )
 
             recipelistRecycler.apply {
                 layoutManager = LinearLayoutManager(this@RecipeMyListActivity)
                 adapter = recipeListVerticalAdapter
             }
+
+            recipeListViewModel.listChanged.observe(this@RecipeMyListActivity, {
+                if(recipeListViewModel.listChanged.value!!){
+                    recipeListViewModel.listChanged.value = false
+                    recipeListViewModel.requestRecipeList(
+                        searchby = RECIPE.SEARCHBY.USERID,
+                        sort = RECIPE.SORT.LATEST,
+                        searchValue = userID
+                    )
+                }
+            })
+
 
             recipeListViewModel.allRecipeList.observe(this@RecipeMyListActivity, {
                 recipeListVerticalAdapter.submitList(it) {
@@ -76,18 +104,6 @@ class RecipeMyListActivity : BaseActivity() {
                 sort = RECIPE.SORT.LATEST,
                 searchValue = userID
             )
-
-//            if (view.id == R.id.recipemylist_yours) {
-//                MaterialDialog(this@RecipeMyListActivity).show {
-//                    message(text = "레시피를 삭제 하시겠습니까?")
-//                    positiveButton(text = "확인") {
-//                        cancelLikeRecipe(
-//                            (adapter.data[position] as Recipe).recipeID
-//                        )
-//                    }
-//                    negativeButton(text = "취소")
-//                }
-//            }
         }
     }
 
@@ -103,20 +119,5 @@ class RecipeMyListActivity : BaseActivity() {
             true
         } else
             super.onOptionsItemSelected(item)
-    }
-
-    private fun dislikeRecipe(recipeid: Int) = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            recipeListViewModel.disLikeRecipe(recipeid, userID)
-            recipeListViewModel.requestRecipeList(
-                searchby = RECIPE.SEARCHBY.USERID,
-                sort = RECIPE.SORT.LATEST,
-                searchValue = userID
-            )
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
     }
 }

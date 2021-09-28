@@ -65,16 +65,18 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 RecipeListVerticalAdapter.MAIN_RECIPES,
-                activeUserID = mainViewModel.userId.value
-            ) { item ->
-                Intent(
-                    this@MainRecipesFragment.requireContext(),
-                    RecipeDetailActivity::class.java
-                )
-                    .putExtra("recipeID", item.recipeID).apply {
-                        startActivity(this)
-                    }
-            }
+                activeUserID = mainViewModel.userId.value,
+                itemClickListener = { item ->
+                    Intent(
+                        this@MainRecipesFragment.requireContext(),
+                        RecipeDetailActivity::class.java
+                    )
+                        .putExtra("recipeID", item.recipeID).apply {
+                            startActivity(this)
+                        }
+                },
+                null
+            )
 
             recipesRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
