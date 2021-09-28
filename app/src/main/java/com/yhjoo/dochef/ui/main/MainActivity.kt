@@ -34,7 +34,6 @@ import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.ui.search.SearchActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
 import com.yhjoo.dochef.utils.DatastoreUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class MainActivity : BaseActivity() {
     private val mainTabs = arrayOf(
@@ -256,7 +255,7 @@ class MainActivity : BaseActivity() {
     inner class MainFragmentAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int {
-            return 5
+            return mainTabs.size
         }
 
         override fun createFragment(position: Int): Fragment {

@@ -5,10 +5,9 @@ import com.yhjoo.dochef.databinding.RecipemakeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
-    /*
-        TODO
-        모든 기능
-    */
+    /* TODO
+    ALL
+     */
 
     object MODE {
         const val WRITE = 0

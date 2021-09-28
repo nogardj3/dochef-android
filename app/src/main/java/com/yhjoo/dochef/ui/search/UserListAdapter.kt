@@ -12,10 +12,10 @@ import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.SearchResultUserItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 
-class ResultUserAdapter(
+class UserListAdapter(
     private val itemClickListener: (UserBrief) -> Unit
 ) :
-    ListAdapter<UserBrief, ResultUserAdapter.ResultUserViewHolder>(ResultUserComparator()) {
+    ListAdapter<UserBrief, UserListAdapter.ResultUserViewHolder>(ResultUserComparator()) {
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultUserViewHolder {

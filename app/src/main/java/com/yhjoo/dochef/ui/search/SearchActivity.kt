@@ -32,7 +32,6 @@ class SearchActivity : BaseActivity() {
             RecipeRepository(applicationContext)
         )
     }
-
     private lateinit var viewPagerAdapter: SearchViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,7 +71,7 @@ class SearchActivity : BaseActivity() {
     inner class SearchViewPagerAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int {
-            return 4
+            return searchTabs.size
         }
 
         override fun createFragment(position: Int): Fragment {

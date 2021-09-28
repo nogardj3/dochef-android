@@ -10,7 +10,6 @@ import androidx.core.text.parseAsHtml
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
@@ -21,15 +20,11 @@ import com.yhjoo.dochef.databinding.MainInitFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListHorizontalAdapter
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeThemeActivity
-import com.yhjoo.dochef.utils.OtherUtil
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
 class MainInitFragment : Fragment() {
-    /* TODO
-    1. RecipeHorizontal Recycler 완성
-    */
     private val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
     private lateinit var binding: MainInitFragmentBinding

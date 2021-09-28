@@ -34,7 +34,6 @@ class RecipeMyListActivity : BaseActivity() {
             RecipeRepository(applicationContext)
         )
     }
-
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var addMenu: MenuItem

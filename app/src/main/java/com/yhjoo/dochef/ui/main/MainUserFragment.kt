@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.PostRepository
@@ -64,7 +63,6 @@ class MainUserFragment : Fragment() {
                 binding.mainUserNickname.text = it.nickname
             })
             mainViewModel.userId.observe(viewLifecycleOwner, {
-                OtherUtil.log(it)
                 if (it != null)
                     mainViewModel.requestActiveUserDetail()
             })

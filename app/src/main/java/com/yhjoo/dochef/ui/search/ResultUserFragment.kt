@@ -13,7 +13,6 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
 import com.yhjoo.dochef.ui.home.HomeActivity
-import com.yhjoo.dochef.utils.OtherUtil
 
 class ResultUserFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
@@ -23,8 +22,7 @@ class ResultUserFragment : Fragment() {
             RecipeRepository(requireContext().applicationContext)
         )
     }
-
-    private lateinit var resultUserAdapter: ResultUserAdapter
+    private lateinit var userListAdapter: UserListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,19 +33,16 @@ class ResultUserFragment : Fragment() {
         val view: View = binding.root
 
         binding.apply {
-            resultUserAdapter = ResultUserAdapter { item ->
-                val intent2 = Intent(context, HomeActivity::class.java)
-                    .putExtra(
-                        "userID",
-                        item.userID
-                    )
-                OtherUtil.log(item.userID)
-                startActivity(intent2)
+            userListAdapter = UserListAdapter { item ->
+                Intent(context, HomeActivity::class.java)
+                    .putExtra("userID",item.userID).apply {
+                        startActivity(this)
+                    }
             }
 
             resultRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = resultUserAdapter
+                adapter = userListAdapter
             }
 
             userViewModel.keyword.observe(viewLifecycleOwner, {
@@ -59,7 +54,7 @@ class ResultUserFragment : Fragment() {
                 resultRecycler.isVisible = it.isNotEmpty()
                 resultEmpty.isVisible = it.isEmpty()
 
-                resultUserAdapter.submitList(it)
+                userListAdapter.submitList(it)
             })
         }
 

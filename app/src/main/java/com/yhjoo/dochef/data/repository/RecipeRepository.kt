@@ -8,8 +8,10 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.RecipeDetail
+import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
@@ -97,6 +99,19 @@ class RecipeRepository(
         return flow {
             if (App.isServerAlive)
                 emit(recipeClient.setLikeRecipe(recipeId,userId,-1))
+            else{
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun addCount(recipeId: Int): Flow<Response<JsonObject>> {
+        return flow {
+            OtherUtil.log("addadd")
+            if (App.isServerAlive)
+                emit(recipeClient.addCount(recipeId))
             else{
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

@@ -30,7 +30,6 @@ class RecipeThemeActivity : BaseActivity() {
             RecipeRepository(applicationContext)
         )
     }
-
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var tagName: String

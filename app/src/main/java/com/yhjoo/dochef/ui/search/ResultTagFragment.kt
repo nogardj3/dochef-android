@@ -22,8 +22,7 @@ class ResultTagFragment : Fragment() {
             RecipeRepository(requireContext().applicationContext)
         )
     }
-
-    private lateinit var resultRecipeAdapter: ResultRecipeAdapter
+    private lateinit var recipeAdapter: RecipeAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,17 +33,16 @@ class ResultTagFragment : Fragment() {
         val view: View = binding.root
 
         binding.apply {
-            resultRecipeAdapter = ResultRecipeAdapter(
-                ResultRecipeAdapter.TAG
-            ) { item ->
-                val intent = Intent(context, RecipeDetailActivity::class.java)
-                    .putExtra("recipeID", item.recipeID)
-                startActivity(intent)
+            recipeAdapter = RecipeAdapter(RecipeAdapter.Companion.LayoutType.TAG) { item ->
+                Intent(context, RecipeDetailActivity::class.java)
+                    .putExtra("recipeID", item.recipeID).apply {
+                        startActivity(this)
+                    }
             }
 
             resultRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
-                adapter = resultRecipeAdapter
+                adapter = recipeAdapter
             }
 
             recipeViewModel.keyword.observe(viewLifecycleOwner, {
@@ -56,7 +54,7 @@ class ResultTagFragment : Fragment() {
                 resultRecycler.isVisible = it.isNotEmpty()
                 resultEmpty.isVisible = it.isEmpty()
 
-                resultRecipeAdapter.submitList(it)
+                recipeAdapter.submitList(it)
             })
         }
 

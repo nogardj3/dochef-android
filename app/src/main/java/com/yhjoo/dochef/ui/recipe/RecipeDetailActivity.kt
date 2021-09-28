@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
@@ -17,9 +18,11 @@ import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.RecipeService
 import com.yhjoo.dochef.data.network.RetrofitServices.ReviewService
+import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.ReviewRepository
+import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.common.adapter.ReviewListAdapter
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.play.RecipePlayActivity
 import com.yhjoo.dochef.utils.*
@@ -37,12 +40,13 @@ class RecipeDetailActivity : BaseActivity() {
     private val binding: RecipedetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipedetail_activity)
     }
-
-    private lateinit var recipeService: RecipeService
-    private lateinit var reviewService: ReviewService
+    private val recipeDetailViewModel: RecipeDetailViewModel by viewModels {
+        RecipeDetailViewModelFactory(
+            RecipeRepository(applicationContext),
+            ReviewRepository(applicationContext)
+        )
+    }
     private lateinit var reviewListAdapter: ReviewListAdapter
-    private lateinit var reviewList: ArrayList<Review>
-    private lateinit var recipeDetailInfo: RecipeDetail
 
     private var userID: String? = null
     private var recipeID = 0
@@ -51,119 +55,94 @@ class RecipeDetailActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        recipeService = RetrofitBuilder.create(this, RecipeService::class.java)
-        reviewService = RetrofitBuilder.create(this, ReviewService::class.java)
-
         userID = DatastoreUtil.getUserBrief(this).userID
-        recipeID = intent.getIntExtra("recipeID", 0)
+        recipeID = intent.getIntExtra("recipeID", recipeID)
 
         binding.apply {
-            reviewListAdapter = ReviewListAdapter().apply {
-                onItemChildClickListener =
-                    BaseQuickAdapter.OnItemChildClickListener { adapter: BaseQuickAdapter<*, *>, _: View?, position: Int ->
-                        Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                            .putExtra("userID", (adapter.data[position] as Review).userID).apply {
-                                startActivity(this)
-                            }
+            lifecycleOwner = this@RecipeDetailActivity
+
+            reviewListAdapter = ReviewListAdapter { item ->
+                Intent(this@RecipeDetailActivity, HomeActivity::class.java)
+                    .putExtra("userID", item.userID).apply {
+                        startActivity(this)
                     }
             }
-            recipedetailReviewRecycler.layoutManager =
-                object : LinearLayoutManager(this@RecipeDetailActivity) {
-                    override fun canScrollHorizontally(): Boolean {
-                        return false
-                    }
 
-                    override fun canScrollVertically(): Boolean {
-                        return false
+            recipedetailReviewRecycler.apply {
+                layoutManager =
+                    object : LinearLayoutManager(this@RecipeDetailActivity) {
+                        override fun canScrollHorizontally(): Boolean {
+                            return false
+                        }
+
+                        override fun canScrollVertically(): Boolean {
+                            return false
+                        }
                     }
-                }
-            recipedetailReviewRecycler.adapter = reviewListAdapter
+                adapter = reviewListAdapter
+            }
+
+            recipeDetailViewModel.recipeDetail.observe(this@RecipeDetailActivity, {
+                setTopView(it)
+            })
+            recipeDetailViewModel.allReviews.observe(this@RecipeDetailActivity, {
+                reviewListAdapter.submitList(it) {}
+            })
+
+            recipeDetailViewModel.addCount(recipeID)
+            recipeDetailViewModel.requestRecipeDetail(recipeID)
+            recipeDetailViewModel.requestReviews(recipeID)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (App.isServerAlive) {
-            addCount()
-            loadData()
-        } else {
-            recipeDetailInfo = DataGenerator.make(
-                resources,
-                resources.getInteger(R.integer.DATA_TYPE_RECIPE_DETAIL)
-            )
-            reviewList =
-                DataGenerator.make(resources, resources.getInteger(R.integer.DATA_TYPE_REVIEW))
-            setTopView()
-            reviewListAdapter.setNewData(reviewList)
-        }
-    }
-
-    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val res1 = recipeService.getRecipeDetail(recipeID)
-            recipeDetailInfo = res1.body()!!
-
-            val res2 = reviewService.getReview(recipeID)
-            reviewList = res2.body()!!
-
-            setTopView()
-            reviewListAdapter.apply {
-                setNewData(reviewList)
-                setEmptyView(
-                    R.layout.review_item_empty,
-                    binding.recipedetailReviewRecycler.parent as ViewGroup
-                )
-            }
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
-    }
-
-    private fun setTopView() {
+    private fun setTopView(recipeDetail: RecipeDetail) {
         binding.apply {
             ImageLoaderUtil.loadRecipeImage(
                 this@RecipeDetailActivity,
-                recipeDetailInfo.recipeImg,
+                recipeDetail.recipeImg,
                 recipedetailMainImg
             )
             ImageLoaderUtil.loadUserImage(
                 this@RecipeDetailActivity,
-                recipeDetailInfo.userImg,
+                recipeDetail.userImg,
                 recipedetailUserimg
             )
             recipedetailLike.setImageResource(
-                if (recipeDetailInfo.likes.contains(userID) || recipeDetailInfo.userID == userID)
+                if (recipeDetail.likes.contains(userID) || recipeDetail.userID == userID)
                     R.drawable.ic_favorite_red
                 else
                     R.drawable.ic_favorite_black
             )
 
-            recipedetailRecipetitle.text = recipeDetailInfo.recipeName
-            recipedetailNickname.text = recipeDetailInfo.nickname
-            recipedetailExplain.text = recipeDetailInfo.contents
-            recipedetailLikecount.text = recipeDetailInfo.likes.size.toString()
-            recipedetailViewcount.text = recipeDetailInfo.viewCount.toString()
-            recipedetailReviewRatingText.text = String.format("%.1f", recipeDetailInfo.rating)
-            recipedetailReviewRating.rating = recipeDetailInfo.rating
+            recipedetailRecipetitle.text = recipeDetail.recipeName
+            recipedetailNickname.text = recipeDetail.nickname
+            recipedetailExplain.text = recipeDetail.contents
+            recipedetailLikecount.text = recipeDetail.likes.size.toString()
+            recipedetailViewcount.text = recipeDetail.viewCount.toString()
+            recipedetailReviewRatingText.text = String.format("%.1f", recipeDetail.rating)
+            recipedetailReviewRating.rating = recipeDetail.rating
 
-            recipedetailLike.setOnClickListener { if (recipeDetailInfo.userID != userID) setLike() }
+            recipedetailLike.setOnClickListener {
+                if (recipeDetail.userID != userID) {
+                    val like = if (recipeDetail.likes.contains(userID)) -1 else 1
+                    recipeDetailViewModel.toggleLikeRecipe(recipeID, userID!!, like)
+                }
+            }
             recipedetailStartrecipe.setOnClickListener {
                 startActivity(
                     Intent(this@RecipeDetailActivity, RecipePlayActivity::class.java)
-                        .putExtra("recipe", recipeDetailInfo)
+                        .putExtra("recipe", recipeDetail)
                 )
             }
             recipedetailUserWrapper.setOnClickListener {
                 startActivity(
                     Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                        .putExtra("userID", recipeDetailInfo.userID)
+                        .putExtra("userID", recipeDetail.userID)
                 )
             }
 
             recipedetailTags.removeAllViews()
-            for (tag in recipeDetailInfo.tags) {
+            for (tag in recipeDetail.tags) {
                 val tagcontainer =
                     layoutInflater.inflate(R.layout.view_tag_recipe, null) as LinearLayout
                 val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_recipe_text)
@@ -172,7 +151,7 @@ class RecipeDetailActivity : BaseActivity() {
             }
 
             recipedetailIngredients.removeAllViews()
-            for (ingredient in recipeDetailInfo.ingredients) {
+            for (ingredient in recipeDetail.ingredients) {
                 val ingredientContainer =
                     layoutInflater.inflate(R.layout.view_ingredient, null) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
@@ -185,27 +164,5 @@ class RecipeDetailActivity : BaseActivity() {
                 recipedetailIngredients.addView(ingredientContainer)
             }
         }
-    }
-
-    private fun addCount() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            recipeService.addCount(recipeID)
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
-    }
-
-    private fun setLike() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val like = if (recipeDetailInfo.likes.contains(userID)) -1 else 1
-            recipeService.setLikeRecipe(recipeID, userID!!, like)
-            loadData()
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
     }
 }

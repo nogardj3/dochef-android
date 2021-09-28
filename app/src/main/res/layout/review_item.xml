@@ -1,82 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:background="@drawable/bg_stroke_2dp"
-    android:paddingHorizontal="2dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="8dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/review_userimg"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/bg_round"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_profile_black" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/review_nickname"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:maxEms="5"
-        android:maxLines="1"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
-        app:layout_constraintLeft_toRightOf="@+id/review_userimg"
-        app:layout_constraintTop_toTopOf="@+id/review_userimg"
-        tools:text="닉네임" />
-
-    <View
-        android:id="@+id/review_user_wrapper"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:foreground="?selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
-        app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
-        app:layout_constraintRight_toRightOf="@+id/review_nickname"
-        app:layout_constraintTop_toTopOf="@+id/review_userimg" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/review_datetext"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:textSize="12dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="1일 전" />
-
-    <androidx.appcompat.widget.AppCompatRatingBar
-        android:id="@+id/review_rating"
-        style="?android:attr/ratingBarStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:isIndicator="true"
-        android:numStars="5"
-        android:theme="@style/BaseTheme.RatingBar"
-        app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
-        app:layout_constraintTop_toBottomOf="@+id/review_userimg" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/review_contents"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
         android:layout_marginBottom="4dp"
-        android:textSize="12dp"
-        app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
-        app:layout_constraintTop_toBottomOf="@+id/review_rating"
-        tools:text="내용" />
+        android:background="@drawable/bg_stroke_2dp"
+        android:paddingHorizontal="2dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/review_userimg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_round"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_profile_black" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/review_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:maxEms="5"
+            android:maxLines="1"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
+            app:layout_constraintLeft_toRightOf="@+id/review_userimg"
+            app:layout_constraintTop_toTopOf="@+id/review_userimg"
+            tools:text="닉네임" />
+
+        <View
+            android:id="@+id/review_user_wrapper"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:foreground="?selectableItemBackground"
+            app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
+            app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
+            app:layout_constraintRight_toRightOf="@+id/review_nickname"
+            app:layout_constraintTop_toTopOf="@+id/review_userimg" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/review_datetext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:textSize="12dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1일 전" />
+
+        <androidx.appcompat.widget.AppCompatRatingBar
+            android:id="@+id/review_rating"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:isIndicator="true"
+            android:numStars="5"
+            android:theme="@style/BaseTheme.RatingBar"
+            app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
+            app:layout_constraintTop_toBottomOf="@+id/review_userimg" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/review_contents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="4dp"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
+            app:layout_constraintTop_toBottomOf="@+id/review_rating"
+            tools:text="내용" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

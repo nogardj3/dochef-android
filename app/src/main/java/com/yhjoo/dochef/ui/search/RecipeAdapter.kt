@@ -16,15 +16,17 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.SearchResultRecipeItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 
-class ResultRecipeAdapter(
+class RecipeAdapter(
     private val layoutType: Int,
     private val itemClickListener: (Recipe) -> Unit
 ) :
-    ListAdapter<Recipe, ResultRecipeAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
+    ListAdapter<Recipe, RecipeAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
     companion object {
-        const val NAME = 0
-        const val INGREDIENT = 1
-        const val TAG = 2
+        object LayoutType{
+            const val NAME = 0
+            const val INGREDIENT = 1
+            const val TAG = 2
+        }
     }
 
     lateinit var context: Context
@@ -65,10 +67,10 @@ class ResultRecipeAdapter(
                 )
 
                 when (layoutType) {
-                    NAME -> {
+                    LayoutType.NAME -> {
                         resultrecipeTitle.setTypeface(null, Typeface.BOLD)
                     }
-                    INGREDIENT -> {
+                    LayoutType.INGREDIENT -> {
                         resultrecipeIngredients.isVisible = true
                         resultrecipeIngredients.removeAllViews()
 
@@ -84,7 +86,7 @@ class ResultRecipeAdapter(
                             resultrecipeIngredients.addView(tagcontainer)
                         }
                     }
-                    TAG -> {
+                    LayoutType.TAG -> {
                         resultrecipeTags.isVisible = true
                         resultrecipeTags.removeAllViews()
 
