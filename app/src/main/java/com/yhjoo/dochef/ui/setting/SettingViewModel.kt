@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.common.viewmodel
+package com.yhjoo.dochef.ui.setting
 
 import androidx.core.text.parseAsHtml
 import androidx.lifecycle.MutableLiveData
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
-class BasicViewModel(
+class SettingViewModel(
     private val repository: BasicRepository
 ) : ViewModel() {
     val allNotices = MutableLiveData<ArrayList<ExpandableItem>>()
@@ -43,11 +43,11 @@ class BasicViewModel(
     }
 }
 
-class BasicViewModelFactory(private val repository: BasicRepository) :
+class SettingViewModelFactory(private val repository: BasicRepository) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(BasicViewModel::class.java)) {
-            return BasicViewModel(repository) as T
+        if (modelClass.isAssignableFrom(SettingViewModel::class.java)) {
+            return SettingViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

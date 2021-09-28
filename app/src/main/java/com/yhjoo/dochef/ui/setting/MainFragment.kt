@@ -8,11 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.edit
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.BuildConfig
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingFragmentBinding
 import com.yhjoo.dochef.ui.account.AccountActivity
 import com.yhjoo.dochef.utils.AuthUtil
@@ -20,6 +23,11 @@ import com.yhjoo.dochef.utils.DatastoreUtil
 
 class MainFragment : Fragment() {
     private lateinit var binding: SettingFragmentBinding
+    private val settingViewModel: SettingViewModel by activityViewModels() {
+        SettingViewModelFactory(
+            BasicRepository(requireContext().applicationContext)
+        )
+    }
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var notiSettingArray: Array<String>
 
@@ -28,7 +36,7 @@ class MainFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = SettingFragmentBinding.inflate(inflater, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.setting_fragment, container, false)
         val view: View = binding.root
 
         sharedPreferences = DatastoreUtil.getSharedPreferences(requireContext())

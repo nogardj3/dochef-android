@@ -82,10 +82,10 @@ class RecipePlayEndFragment : Fragment() {
                         false
                     ) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.v_ingredient_name)
+                    ingredientContainer.findViewById(R.id.ingredient_name)
                 ingredientName.text = ingredient.name
                 val ingredientAmount: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.v_ingredient_amount)
+                    ingredientContainer.findViewById(R.id.ingredient_amount)
                 ingredientAmount.text = ingredient.amount
                 recipeplayEndIngredients.addView(ingredientContainer)
             }

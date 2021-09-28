@@ -49,15 +49,15 @@ class RecipePlayStartFragment : Fragment() {
             for (ingredient in recipeDetail.ingredients) {
                 val ingredientContainer =
                     layoutInflater.inflate(
-                        R.layout.view_ingredient_play,
+                        R.layout.view_ingredient_start,
                         recipeplayStartIngredients,
                         false
                     ) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.v_ingredientplay_name)
+                    ingredientContainer.findViewById(R.id.ingredient_start_name)
                 ingredientName.text = ingredient.name
                 val ingredientAmount: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.v_ingredientplay_amount)
+                    ingredientContainer.findViewById(R.id.ingredient_start_amount)
                 ingredientAmount.text = ingredient.amount
                 recipeplayStartIngredients.addView(ingredientContainer)
             }

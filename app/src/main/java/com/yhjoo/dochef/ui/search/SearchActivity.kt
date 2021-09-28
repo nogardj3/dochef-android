@@ -70,10 +70,7 @@ class SearchActivity : BaseActivity() {
                     }
 
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        OtherUtil.log("submitsubmit", query!!)
-
                         searchViewModel.keyword.postValue(query)
-
                         hideKeyboard(searchSearchview)
                         return true
                     }

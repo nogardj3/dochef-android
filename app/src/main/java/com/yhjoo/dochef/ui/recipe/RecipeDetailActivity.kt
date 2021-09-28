@@ -177,9 +177,9 @@ class RecipeDetailActivity : BaseActivity() {
                 val ingredientContainer =
                     layoutInflater.inflate(R.layout.view_ingredient, null) as ConstraintLayout
                 val ingredientName: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.v_ingredient_name)
+                    ingredientContainer.findViewById(R.id.ingredient_name)
                 val ingredientAmount: AppCompatTextView =
-                    ingredientContainer.findViewById(R.id.v_ingredient_amount)
+                    ingredientContainer.findViewById(R.id.ingredient_amount)
 
                 ingredientName.text = ingredient.name
                 ingredientAmount.text = ingredient.amount

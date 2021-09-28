@@ -7,7 +7,7 @@
     android:paddingVertical="2dp">
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/v_ingredient_name"
+        android:id="@+id/ingredient_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="8dp"
@@ -18,7 +18,7 @@
         tools:text="재료" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/v_ingredient_amount"
+        android:id="@+id/ingredient_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="8dp"
