@@ -29,7 +29,7 @@ class FollowListAdapter(
 
         return FollowListViewHolder(
             DataBindingUtil.inflate(
-                LayoutInflater.from(parent.context),
+                LayoutInflater.from(context),
                 R.layout.followlist_item,
                 parent,
                 false

@@ -53,7 +53,6 @@ class AccountActivity : BaseActivity() {
                 .build()
         )
 
-
         FirebaseMessaging.getInstance().token
             .addOnCompleteListener { task: Task<String?> ->
                 if (!task.isSuccessful) {

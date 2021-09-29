@@ -65,8 +65,7 @@ class MainInitFragment : Fragment() {
             }
 
             recipeListHorizontalAdapter = RecipeListHorizontalAdapter(
-                RecipeListHorizontalAdapter.MAIN_INIT,
-                null
+                RecipeListHorizontalAdapter.MAIN_INIT
             ) { item ->
                 Intent(
                     requireContext(), RecipeDetailActivity::class.java

@@ -4,13 +4,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.yhjoo.dochef.data.model.Comment
-import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.data.repository.CommentRepository
 import com.yhjoo.dochef.data.repository.PostRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.ArrayList
+import java.util.*
 
 class PostWriteViewModel(
     private val postRepository: PostRepository,

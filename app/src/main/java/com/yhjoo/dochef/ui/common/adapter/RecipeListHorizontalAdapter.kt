@@ -14,7 +14,6 @@ import com.yhjoo.dochef.utils.ImageLoaderUtil
 
 class RecipeListHorizontalAdapter(
     private val layoutType: Int,
-    private val activeUserID: String?,
     private val itemClickListener: ((Recipe) -> Unit)?
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
@@ -30,7 +29,7 @@ class RecipeListHorizontalAdapter(
         return when (layoutType) {
             MAIN_INIT -> RecipeHorizontalViewHolder(
                 DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     R.layout.recipe_horizontal_item,
                     parent,
                     false
@@ -38,7 +37,7 @@ class RecipeListHorizontalAdapter(
             )
             else -> RecipeHorizontalViewHolder(
                 DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     R.layout.recipe_horizontal_item,
                     parent,
                     false

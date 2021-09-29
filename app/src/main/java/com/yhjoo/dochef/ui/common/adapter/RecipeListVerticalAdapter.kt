@@ -42,7 +42,7 @@ class RecipeListVerticalAdapter(
         return when (layoutType) {
             LayoutType.MAIN_RECIPES -> MainRecipesViewHolder(
                 DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     R.layout.main_recipes_item,
                     parent,
                     false
@@ -50,7 +50,7 @@ class RecipeListVerticalAdapter(
             )
             LayoutType.MAIN_MYRECIPE -> MainMyRecipeViewHolder(
                 DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     R.layout.main_myrecipe_item,
                     parent,
                     false
@@ -58,7 +58,7 @@ class RecipeListVerticalAdapter(
             )
             LayoutType.MYLIST -> RecipeMyListViewHolder(
                 DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     R.layout.recipemylist_item,
                     parent,
                     false
@@ -66,7 +66,7 @@ class RecipeListVerticalAdapter(
             )
             else -> RecipeThemeViewHolder(
                 DataBindingUtil.inflate(
-                    LayoutInflater.from(parent.context),
+                    LayoutInflater.from(context),
                     R.layout.recipetheme_item,
                     parent,
                     false
