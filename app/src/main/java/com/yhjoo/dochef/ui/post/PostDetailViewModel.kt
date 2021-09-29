@@ -4,64 +4,98 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.Review
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.ReviewRepository
+import com.yhjoo.dochef.data.model.Comment
+import com.yhjoo.dochef.data.model.Post
+import com.yhjoo.dochef.data.repository.CommentRepository
+import com.yhjoo.dochef.data.repository.PostRepository
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PostDetailViewModel(
-    private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val postRepository: PostRepository,
+    private val commentRepository: CommentRepository
 ) : ViewModel() {
-    val recipeDetail = MutableLiveData<RecipeDetail>()
-    val allReviews = MutableLiveData<List<Review>>()
+    val userId = MutableLiveData<String>()
+    val isDeleted = MutableLiveData(false)
+    val postDetail = MutableLiveData<Post>()
+    val allComments = MutableLiveData<List<Comment>>()
 
-    fun addCount(recipeId: Int) {
+    fun requestPostDetail() {
         viewModelScope.launch {
-            recipeRepository.addCount(recipeId).collect {}
-        }
-    }
-
-    fun requestRecipeDetail(recipeId: Int) {
-        viewModelScope.launch {
-            recipeRepository.getRecipeDetail(recipeId).collect {
-                recipeDetail.value = it.body()
+            postRepository.getPostDetail(postDetail.value!!.postID).collect {
+                postDetail.value = it.body()
             }
         }
     }
 
-    fun requestReviews(recipeId: Int) {
+    fun toggleLikePost() {
         viewModelScope.launch {
-            reviewRepository.getReviews(recipeId).collect {
-                allReviews.value = it.body()
-            }
-        }
-    }
+            val like = if (postDetail.value!!.likes.contains(userId.value!!))
+                1
+            else
+                -1
 
-    fun toggleLikeRecipe(recipeId: Int, userId: String, like: Int) {
-        viewModelScope.launch {
             if (like == 1)
-                recipeRepository.likeRecipe(recipeId, userId).collect {
-                    requestRecipeDetail(recipeId)
+                postRepository.dislikePost(userId.value!!,postDetail.value!!.postID).collect {
+                    postDetail.value!!.likes.remove(userId.value!!)
                 }
             else
-                recipeRepository.dislikeRecipe(recipeId, userId).collect {
-                    requestRecipeDetail(recipeId)
+                postRepository.likePost(userId.value!!,postDetail.value!!.postID).collect {
+                    postDetail.value!!.likes.add(userId.value!!)
                 }
+        }
+    }
+
+    fun deletePost() {
+        viewModelScope.launch {
+            postRepository.deletePost(
+                postDetail.value!!.postID
+            ).collect {
+                isDeleted.value = true
+            }
+        }
+    }
+
+    fun requestComments() {
+        viewModelScope.launch {
+            commentRepository.getComments(postDetail.value!!.postID).collect {
+                allComments.value = it.body()
+            }
+        }
+    }
+
+    fun createComment(contents: String) {
+        viewModelScope.launch {
+            commentRepository.createComment(
+                postDetail.value!!.postID,
+                userId.value!!,
+                contents,
+                System.currentTimeMillis()
+            ).collect {
+                requestComments()
+            }
+        }
+    }
+
+    fun deleteComment(commentId: Int) {
+        viewModelScope.launch {
+            commentRepository.deleteComment(
+                commentId,
+            ).collect {
+                requestComments()
+            }
         }
     }
 }
 
 class PostDetailViewModelFactory(
-    private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val postRepository: PostRepository,
+    private val commentRepository: CommentRepository
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostDetailViewModel::class.java)) {
-            return PostDetailViewModel(recipeRepository, reviewRepository) as T
+            return PostDetailViewModel(postRepository, commentRepository) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

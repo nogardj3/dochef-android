@@ -25,7 +25,7 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/account_signup_fragment.xml" value="0.190625" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/account_signupnick_fragment.xml" value="0.190625" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/adview.xml" value="0.1287037037037037" />
-        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/comment_item.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/comment_item.xml" value="0.14933333333333335" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/comment_item_empty.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/empty_default.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/empty_follower.xml" value="0.34791666666666665" />
@@ -40,7 +40,7 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/followlist_activity.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/followlist_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/followlist_item_empty.xml" value="0.34791666666666665" />
-        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/home_activity.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/home_activity.xml" value="0.18666666666666668" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/home_postlist_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/home_recipelist_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/ingredient_item.xml" value="0.34791666666666665" />
@@ -72,7 +72,7 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/notification_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/notification_item_empty.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/post_item_empty.xml" value="0.34791666666666665" />
-        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/postdetail_activity.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/postdetail_activity.xml" value="0.13066666666666665" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/postlist_item.xml" value="0.1" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/postwrite_activity.xml" value="0.176" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/layout/recipe_horizontal_item.xml" value="0.34791666666666665" />

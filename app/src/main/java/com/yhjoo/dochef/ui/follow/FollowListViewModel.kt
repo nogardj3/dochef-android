@@ -45,20 +45,22 @@ class FollowListViewModel(
 
     fun subscribeUser(userId: String, targetID: String) {
         viewModelScope.launch {
-            val result = repository.subscribeUser(userId, targetID)
-            if (result!!.isSuccessful) {
-                requestActiveUserDetail(userId)
-                requestFollowLists(userId)
+            repository.subscribeUser(userId, targetID).collect {
+                if(it.isSuccessful){
+                    requestActiveUserDetail(userId)
+                    requestFollowLists(userId)
+                }
             }
         }
     }
 
     fun unsubscribeUser(userId: String, targetID: String) {
         viewModelScope.launch {
-            val result = repository.unsubscribeUser(userId, targetID)
-            if (result!!.isSuccessful) {
-                requestActiveUserDetail(userId)
-                requestFollowLists(userId)
+            repository.unsubscribeUser(userId, targetID).collect {
+                if(it.isSuccessful){
+                    requestActiveUserDetail(userId)
+                    requestFollowLists(userId)
+                }
             }
         }
     }

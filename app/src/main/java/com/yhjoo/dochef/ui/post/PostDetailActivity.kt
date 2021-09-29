@@ -7,49 +7,43 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
-import com.chad.library.adapter.base.BaseQuickAdapter
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.DataGenerator
-import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices.CommentService
-import com.yhjoo.dochef.data.network.RetrofitServices.PostService
+import com.yhjoo.dochef.data.repository.CommentRepository
+import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class PostDetailActivity : BaseActivity() {
     private val binding: PostdetailActivityBinding by lazy {
-        PostdetailActivityBinding.inflate(
-            layoutInflater
+        DataBindingUtil.setContentView(this, R.layout.postdetail_activity)
+    }
+    private val postDetailViewModel: PostDetailViewModel by viewModels {
+        PostDetailViewModelFactory(
+            PostRepository(applicationContext),
+            CommentRepository(applicationContext)
         )
     }
-
-    private lateinit var postService: PostService
-    private lateinit var commentService: CommentService
     private lateinit var commentListAdapter: CommentListAdapter
-    private lateinit var commentList: ArrayList<Comment>
 
     private lateinit var reviseMenu: MenuItem
     private lateinit var deleteMenu: MenuItem
 
     private lateinit var userID: String
-    private lateinit var postInfo: Post
     private var postID = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,44 +52,49 @@ class PostDetailActivity : BaseActivity() {
         setSupportActionBar(binding.postToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        postService = RetrofitBuilder.create(this, PostService::class.java)
-        commentService = RetrofitBuilder.create(this, CommentService::class.java)
-
         userID = DatastoreUtil.getUserBrief(this).userID
         postID = intent.getIntExtra("postID", -1)
 
-        commentListAdapter = CommentListAdapter(userID)
-        commentListAdapter.setOnItemChildClickListener { baseQuickAdapter: BaseQuickAdapter<*, *>, view: View?, position: Int ->
-            val powerMenu = PowerMenu.Builder(this)
-                .addItem(PowerMenuItem("삭제", false))
-                .setAnimation(MenuAnimation.SHOW_UP_CENTER)
-                .setMenuRadius(10f)
-                .setMenuShadow(5.0f)
-                .setWidth(200)
-                .setTextColor(ContextCompat.getColor(this, R.color.colorPrimary))
-                .setTextGravity(Gravity.CENTER)
-                .setMenuColor(Color.WHITE)
-                .setBackgroundAlpha(0f)
-                .build()
-            powerMenu.onMenuItemClickListener =
-                OnMenuItemClickListener { pos: Int, _: PowerMenuItem? ->
-                    if (pos == 0) {
-                        MaterialDialog(this).show {
-                            message(text = "삭제 하시겠습니까?")
-                            positiveButton(text = "확인") {
-                                removeComment((baseQuickAdapter.getItem(position) as Comment).commentID)
-                            }
-                            negativeButton(text = "취소")
-                        }
-                        powerMenu.dismiss()
-                    }
-                }
-            powerMenu.showAsAnchorCenter(view)
-        }
-
         binding.apply {
-            postCommentRecycler.layoutManager = LinearLayoutManager(this@PostDetailActivity)
-            postCommentRecycler.adapter = commentListAdapter
+            lifecycleOwner = this@PostDetailActivity
+
+            commentListAdapter = CommentListAdapter(userID) { view, item ->
+                val powerMenu = PowerMenu.Builder(this@PostDetailActivity)
+                    .addItem(PowerMenuItem("삭제", false))
+                    .setAnimation(MenuAnimation.SHOW_UP_CENTER)
+                    .setMenuRadius(10f)
+                    .setMenuShadow(5.0f)
+                    .setWidth(200)
+                    .setTextColor(
+                        ContextCompat.getColor(
+                            this@PostDetailActivity,
+                            R.color.colorPrimary
+                        )
+                    )
+                    .setTextGravity(Gravity.CENTER)
+                    .setMenuColor(Color.WHITE)
+                    .setBackgroundAlpha(0f)
+                    .build()
+                powerMenu.onMenuItemClickListener =
+                    OnMenuItemClickListener { pos: Int, _: PowerMenuItem? ->
+                        if (pos == 0) {
+                            MaterialDialog(this@PostDetailActivity).show {
+                                message(text = "삭제 하시겠습니까?")
+                                positiveButton(text = "확인") {
+                                    postDetailViewModel.deleteComment(item.commentID)
+                                }
+                                negativeButton(text = "취소")
+                            }
+                            powerMenu.dismiss()
+                        }
+                    }
+                powerMenu.showAsAnchorCenter(view)
+            }
+
+            postCommentRecycler.apply {
+                layoutManager = LinearLayoutManager(this@PostDetailActivity)
+                adapter = commentListAdapter
+            }
             postCommentEdittext.addTextChangedListener(object : TextWatcher {
                 var prevText = ""
 
@@ -117,20 +116,29 @@ class PostDetailActivity : BaseActivity() {
                     }
                 }
             })
-        }
 
-        if (App.isServerAlive)
-            loadData()
-        else {
-            postInfo = (DataGenerator.make<Any>(
-                resources,
-                resources.getInteger(R.integer.DATA_TYPE_POST)
-            ) as ArrayList<Post>)[0]
-            commentList = DataGenerator.make(
-                resources, resources.getInteger(R.integer.DATA_TYPE_COMMENTS)
-            )
-            setTopView()
-            commentListAdapter.setNewData(commentList)
+            postDetailViewModel.userId.value = userID
+
+            postDetailViewModel.userId.observe(this@PostDetailActivity, {
+                postDetailViewModel.requestPostDetail()
+            })
+
+            postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
+                setTopView(it)
+                postDetailViewModel.requestComments()
+            })
+
+            postDetailViewModel.allComments.observe(this@PostDetailActivity, {
+                commentListAdapter.submitList(it) {}
+            })
+
+
+            postDetailViewModel.isDeleted.observe(this@PostDetailActivity, {
+                if(it){
+                    App.showToast("삭제되었습니다.")
+                    finish()
+                }
+            })
         }
     }
 
@@ -149,32 +157,22 @@ class PostDetailActivity : BaseActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.menu_post_owner_revise -> {
-                val intent = Intent(this@PostDetailActivity, PostWriteActivity::class.java)
+                val postInfo = postDetailViewModel.postDetail.value!!
+                Intent(this@PostDetailActivity, PostWriteActivity::class.java)
                     .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.REVISE)
                     .putExtra("postID", postInfo.postID)
                     .putExtra("postImg", postInfo.postImg)
                     .putExtra("contents", postInfo.contents)
-                    .putExtra("tags", postInfo.tags.toTypedArray())
-                startActivity(intent)
+                    .putExtra("tags", postInfo.tags.toTypedArray()).apply {
+                        startActivity(this)
+                    }
                 true
             }
             R.id.menu_post_owner_delete -> {
-                App.showToast("삭제")
-
                 MaterialDialog(this).show {
                     message(text = "삭제하시겠습니까?")
                     positiveButton(text = "확인") {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            runCatching {
-                                postService.deletePost(postID)
-                                finish()
-                            }
-                                .onSuccess {
-                                }
-                                .onFailure {
-                                    RetrofitBuilder.defaultErrorHandler(it)
-                                }
-                        }
+                        postDetailViewModel.deletePost()
                     }
                     negativeButton(text = "취소")
                 }
@@ -184,33 +182,13 @@ class PostDetailActivity : BaseActivity() {
         }
     }
 
-    private fun loadData() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            val res1 = postService.getPost(postID)
-            postInfo = res1.body()!!
-
-            val res2 = commentService.getComment(postID)
-            commentList = res2.body()!!
-
-            setTopView()
-            commentListAdapter.setNewData(commentList)
-            commentListAdapter.setEmptyView(
-                R.layout.comment_item_empty,
-                binding.postCommentRecycler.parent as ViewGroup
-            )
-            if (postInfo.postID == postID) {
+    private fun setTopView(postInfo: Post) {
+        binding.apply {
+            if (postInfo.userID == userID) {
                 reviseMenu.isVisible = true
                 deleteMenu.isVisible = true
             }
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
-    }
 
-    private fun setTopView() {
-        binding.apply {
             ImageLoaderUtil.loadPostImage(
                 this@PostDetailActivity,
                 postInfo.postImg,
@@ -221,13 +199,6 @@ class PostDetailActivity : BaseActivity() {
                 postInfo.userImg,
                 binding.postUserimg
             )
-            postLike.setImageResource(
-                if (postInfo.likes.contains(userID))
-                    R.drawable.ic_favorite_red
-                else
-                    R.drawable.ic_favorite_black
-            )
-
             postNickname.text = postInfo.nickname
             postContents.text = postInfo.contents
             postTime.text = OtherUtil.millisToText(postInfo.dateTime)
@@ -235,11 +206,21 @@ class PostDetailActivity : BaseActivity() {
             postCommentcount.text = postInfo.comments.size.toString()
 
             postUserWrapper.setOnClickListener {
-                val intent = Intent(this@PostDetailActivity, HomeActivity::class.java)
-                    .putExtra("userID", postInfo.userID)
-                startActivity(intent)
+                Intent(this@PostDetailActivity, HomeActivity::class.java)
+                    .putExtra("userID", postInfo.userID).apply {
+                        startActivity(this)
+                    }
             }
-            postLike.setOnClickListener { toggleLikePost(userID, postID) }
+
+            postLike.setImageResource(
+                if (postInfo.likes.contains(userID))
+                    R.drawable.ic_favorite_red
+                else
+                    R.drawable.ic_favorite_black
+            )
+            postLike.setOnClickListener {
+                postDetailViewModel.toggleLikePost()
+            }
 
             postTags.removeAllViews()
             for (tag in postInfo.tags) {
@@ -249,59 +230,13 @@ class PostDetailActivity : BaseActivity() {
                 tagview.text = "#$tag"
                 binding.postTags.addView(tagcontainer)
             }
-            binding.postCommentOk.setOnClickListener { writeComment() }
-        }
-    }
-
-    private fun toggleLikePost(userID: String, postID: Int) {
-        val newLike: Int
-        if (!postInfo.likes.contains(userID)) {
-            newLike = 1
-            binding.postLike.setImageResource(R.drawable.ic_favorite_black)
-        } else {
-            newLike = -1
-            binding.postLike.setImageResource(R.drawable.ic_favorite_red)
-        }
-
-        CoroutineScope(Dispatchers.Main).launch {
-            runCatching {
-                postService.setLikePost(userID, postID, newLike)
-                loadData()
-            }
-                .onSuccess { }
-                .onFailure {
-                    RetrofitBuilder.defaultErrorHandler(it)
+            binding.postCommentOk.setOnClickListener {
+                if (binding.postCommentEdittext.text.toString() != "") {
+                    postDetailViewModel.createComment(binding.postCommentEdittext.text.toString())
+                    hideKeyboard(binding.postCommentEdittext)
+                    binding.postCommentEdittext.setText("")
                 }
-        }
-    }
-
-    private fun writeComment() = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            if (binding.postCommentEdittext.text.toString() != "") {
-                commentService.createComment(
-                    postID, userID,
-                    binding.postCommentEdittext.text.toString(), System.currentTimeMillis()
-                )
-
-                hideKeyboard(binding.postCommentEdittext)
-                binding.postCommentEdittext.setText("")
-                loadData()
-            } else App.showToast("댓글을 입력 해 주세요")
-        }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
             }
-    }
-
-    private fun removeComment(commentID: Int) = CoroutineScope(Dispatchers.Main).launch {
-        runCatching {
-            commentService.deleteComment(commentID)
-            loadData()
         }
-            .onSuccess { }
-            .onFailure {
-                RetrofitBuilder.defaultErrorHandler(it)
-            }
     }
 }

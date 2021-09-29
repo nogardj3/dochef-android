@@ -2,6 +2,7 @@ package com.yhjoo.dochef.data.repository
 
 import android.content.Context
 import androidx.annotation.WorkerThread
+import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
@@ -18,6 +19,23 @@ class PostRepository(
 ) {
     private val postClient =
         RetrofitBuilder.create(context, RetrofitServices.PostService::class.java)
+
+    @WorkerThread
+    suspend fun getPostDetail(postId: Int): Flow<Response<Post>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(postClient.getPost(postId))
+            else
+                emit(
+                    Response.success(
+                        (DataGenerator.make(
+                            context.resources,
+                            context.resources.getInteger(R.integer.DATA_TYPE_POST)
+                        ) as ArrayList<Post>)[0]
+                    )
+                )
+        }
+    }
 
     @WorkerThread
     suspend fun getPostList(): Flow<Response<ArrayList<Post>>> {
@@ -50,6 +68,60 @@ class PostRepository(
                         )
                     )
                 )
+        }
+    }
+
+    @WorkerThread
+    suspend fun likePost(userID: String, postID: Int): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(postClient.setLikePost(userID, postID, 1))
+            else {
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun dislikePost(userID: String, postID: Int): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(postClient.setLikePost(userID, postID, -1))
+            else {
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun createPost(
+        userID: String,
+        postImgs: String,
+        contents: String,
+        datetime: Long,
+        tags: ArrayList<String>
+    ): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(postClient.createPost(userID, postImgs, contents, datetime, tags))
+            else {
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
+    }
+
+    @WorkerThread
+    suspend fun deletePost(postID: Int): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(postClient.deletePost(postID))
+            else {
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
         }
     }
 }

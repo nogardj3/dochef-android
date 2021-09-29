@@ -16,13 +16,7 @@ import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipeplayEndFragmentBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 
-class RecipePlayEndFragment : Fragment() {
-    /* TODO
-    1. likethis, setlike
-    2. show all review
-    3. create review
-    */
-
+class PlayEndFragment : Fragment() {
     private lateinit var binding: RecipeplayEndFragmentBinding
     private val recipePlayViewModel: RecipePlayViewModel by activityViewModels {
         RecipePlayViewModelFactory(
@@ -85,7 +79,24 @@ class RecipePlayEndFragment : Fragment() {
                         binding.recipeplayEndReviewEdittext.text.toString(),
                         binding.recipeplayEndRating.rating.toLong(), System.currentTimeMillis()
                     )
-                    App.showToast("등록완료")
+                }
+
+                recipeplayEndLike.setImageResource(
+                    if (recipePlayViewModel.recipeDetail.value!!.likes.contains(recipePlayViewModel.userId.value!!))
+                        R.drawable.ic_favorite_red
+                    else
+                        R.drawable.ic_favorite_black
+                )
+
+                recipeplayEndLike.setOnClickListener {
+                    recipePlayViewModel.toggleLikeRecipe()
+                }
+            })
+
+            recipePlayViewModel.reviewFinished.observe(viewLifecycleOwner, {
+                if(it){
+                    App.showToast("리뷰가 등록되었습니다.")
+                    requireActivity().finish()
                 }
             })
         }

@@ -63,8 +63,9 @@ dependencies {
     val roomVersion = "2.3.0"
     val navigationVersion = "2.3.5"
     val preferenceVersion = "1.1.1"
-    val pagingVersion = "3.0.1"
     val workManagerVersion = "2.5.0"
+    val datastoreVersion = "1.0.0"
+    val pagingVersion = "3.0.1"
 
     // Core
     implementation("androidx.core:core-ktx:$kotlinVersion")
@@ -77,26 +78,22 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:$lifecycleVersion")
-//    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")
     implementation("androidx.navigation:navigation-ui-ktx:$navigationVersion")
     implementation("androidx.preference:preference-ktx:$preferenceVersion")
-    implementation("androidx.paging:paging-runtime:$pagingVersion")
     implementation("androidx.work:work-runtime-ktx:$workManagerVersion")
+//    implementation("androidx.paging:paging-runtime:$pagingVersion")
 
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
     implementation("com.google.code.gson:gson:2.8.8")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
-
-    /* Later
-    implementation("androidx.datastore:datastore:1.0.0")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-     */
 
     // API
     implementation(platform("com.google.firebase:firebase-bom:28.1.0"))

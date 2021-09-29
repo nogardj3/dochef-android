@@ -23,7 +23,6 @@ class RecipeListHorizontalAdapter(
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
     companion object {
         const val MAIN_INIT = 0
-        const val HOME = 1
     }
 
     lateinit var context: Context
@@ -40,10 +39,10 @@ class RecipeListHorizontalAdapter(
                     false
                 )
             )
-            else -> HomeRecipeViewHolder(
+            else -> RecipeHorizontalViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(parent.context),
-                    R.layout.recipetheme_item,
+                    R.layout.recipe_horizontal_item,
                     parent,
                     false
                 )
@@ -54,7 +53,7 @@ class RecipeListHorizontalAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is RecipeHorizontalViewHolder -> holder.bind(getItem(position))
-            is HomeRecipeViewHolder -> holder.bind(getItem(position))
+//            is RecipeHorizontalViewHolder -> holder.bind(getItem(position))
         }
     }
 
@@ -74,29 +73,6 @@ class RecipeListHorizontalAdapter(
                 recipehorizontalTitle.text = recipe.recipeName
                 recipehorizontalRating.text = String.format("%.1f", recipe.rating)
                 recipehorizontalView.text = recipe.viewCount.toString()
-            }
-        }
-    }
-
-    inner class HomeRecipeViewHolder(val binding: HomeRecipelistItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bind(recipe: Recipe) {
-            binding.apply {
-                binding.root.setOnClickListener {
-                    itemClickListener!!(recipe)
-                }
-
-                ImageLoaderUtil.loadRecipeImage(
-                    context,
-                    recipe.recipeImg,
-                    homeRecipeRecipeimg
-                )
-
-                homeRecipeName.text = recipe.recipeName
-
-                homeRecipeMy.isVisible = activeUserID == recipe.userID
-                homeRecipeIsFavorite.isVisible = activeUserID != recipe.userID
-                homeRecipeNew.isVisible = ValidateUtil.checkNew(recipe.datetime)
             }
         }
     }

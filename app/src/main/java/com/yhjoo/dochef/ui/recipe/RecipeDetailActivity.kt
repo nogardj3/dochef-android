@@ -22,7 +22,7 @@ import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
-import com.yhjoo.dochef.ui.recipe.play.RecipePlayActivity
+import com.yhjoo.dochef.ui.recipe.play.PlayActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
@@ -127,7 +127,7 @@ class RecipeDetailActivity : BaseActivity() {
             }
             recipedetailStartrecipe.setOnClickListener {
                 startActivity(
-                    Intent(this@RecipeDetailActivity, RecipePlayActivity::class.java)
+                    Intent(this@RecipeDetailActivity, PlayActivity::class.java)
                         .putExtra("recipe", recipeDetail)
                 )
             }

@@ -90,18 +90,26 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun subscribeUser(userId: String, targetId: String): Response<JsonObject>? {
-        return if (App.isServerAlive)
-            userClient.subscribeUser(userId, targetId)
-        else
-            Response.error(444, null)
+    suspend fun subscribeUser(userId: String, targetId: String): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(userClient.subscribeUser(userId, targetId))
+            else{
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
     }
 
     @WorkerThread
-    suspend fun unsubscribeUser(userId: String, targetId: String): Response<JsonObject>? {
-        return if (App.isServerAlive)
-            userClient.unsubscribeUser(userId, targetId)
-        else
-            Response.error(444, null)
+    suspend fun unsubscribeUser(userId: String, targetId: String): Flow<Response<JsonObject>> {
+        return flow {
+            if (App.isServerAlive)
+                emit(userClient.unsubscribeUser(userId, targetId))
+            else{
+                val jsonObject = JsonObject()
+                emit(Response.success(jsonObject))
+            }
+        }
     }
 }

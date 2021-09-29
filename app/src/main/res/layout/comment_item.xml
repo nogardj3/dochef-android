@@ -1,69 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginBottom="4dp"
-    android:background="@drawable/bg_stroke_2dp"
-    android:paddingHorizontal="2dp"
-    android:paddingTop="4dp"
-    android:paddingBottom="8dp">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/comment_userimg"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:background="@drawable/bg_round"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_profile_black" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/comment_nickname"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:maxEms="5"
-        android:maxLines="1"
-        android:textSize="12dp"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toRightOf="@+id/comment_userimg"
-        app:layout_constraintTop_toTopOf="@+id/comment_userimg"
-        tools:text="닉네임" />
+        android:layout_marginBottom="4dp"
+        android:background="@drawable/bg_stroke_2dp"
+        android:paddingHorizontal="2dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/comment_contents"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12dp"
-        app:layout_constraintLeft_toLeftOf="@+id/comment_nickname"
-        app:layout_constraintTop_toBottomOf="@+id/comment_nickname"
-        tools:text="내용" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/comment_userimg"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:background="@drawable/bg_round"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_profile_black" />
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/comment_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:textSize="12dp"
-        app:layout_constraintRight_toLeftOf="@+id/comment_other"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="1일 전" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/comment_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:maxEms="5"
+            android:maxLines="1"
+            android:textSize="12dp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/comment_userimg"
+            app:layout_constraintTop_toTopOf="@+id/comment_userimg"
+            tools:text="닉네임" />
 
-    <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/comment_other"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        android:tint="@color/grey_text"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_more" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/comment_contents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12dp"
+            app:layout_constraintLeft_toLeftOf="@+id/comment_nickname"
+            app:layout_constraintTop_toBottomOf="@+id/comment_nickname"
+            tools:text="내용" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/comment_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginBottom="5dp"
+            android:textSize="12dp"
+            app:layout_constraintRight_toLeftOf="@+id/comment_other"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="1일 전" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/comment_other"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:tint="@color/grey_text"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_more" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

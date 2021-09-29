@@ -37,11 +37,10 @@ import io.reactivex.rxjava3.core.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-class RecipePlayActivity : BaseActivity(), SensorEventListener {
+class PlayActivity : BaseActivity(), SensorEventListener {
     /* TODO
-    1. mvvm
-    2. 센서근접 -> 음성인식 -> 인식결과에 따라 행동
-    3. 시작/다음/이전/타이머 시작/타이머 정지
+    1. 센서근접 -> 음성인식 -> 인식결과에 따라 행동
+    2. 시작/다음/이전/타이머 시작/타이머 정지
     */
 
     private val binding: RecipeplayActivityBinding by lazy {
@@ -87,7 +86,7 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
             recipeplayCircularTimer.setOnClickListener { onClickTimer() }
             recipeplayCircularTimerText.setOnClickListener { onClickTimer() }
 
-            recipePlayFragmentAdapter = RecipePlayFragmentAdapter(this@RecipePlayActivity)
+            recipePlayFragmentAdapter = RecipePlayFragmentAdapter(this@PlayActivity)
             recipeplayViewpager.apply {
                 offscreenPageLimit = 5
                 adapter = recipePlayFragmentAdapter
@@ -116,7 +115,7 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
             recipeplayViewModel.recipeDetail.value = recipeDetailInfo
             recipeplayViewModel.recipePhases.value = recipePhases
             recipeplayViewModel.userId.value =
-                DatastoreUtil.getUserBrief(this@RecipePlayActivity).userID
+                DatastoreUtil.getUserBrief(this@PlayActivity).userID
 
         }
     }
@@ -160,7 +159,7 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
                     binding.recipeplayCircularTimerText.text =
                         String.format("%02d:%02d", t / 60, t % 60)
                 }, { throwable: Throwable -> throwable.printStackTrace() }) {
-                    mediaPlayer = MediaPlayer.create(this@RecipePlayActivity, R.raw.ring_complete)
+                    mediaPlayer = MediaPlayer.create(this@PlayActivity, R.raw.ring_complete)
                     mediaPlayer!!.setOnCompletionListener {
                         if (soundCount < 2) {
                             soundCount++
@@ -253,10 +252,10 @@ class RecipePlayActivity : BaseActivity(), SensorEventListener {
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
-                0 -> RecipePlayStartFragment()
-                recipePhases.size - 1 -> RecipePlayEndFragment()
+                0 -> PlayStartFragment()
+                recipePhases.size - 1 -> PlayEndFragment()
                 else -> {
-                    val fragment = RecipePlayItemFragment()
+                    val fragment = PlayItemFragment()
                     fragment.arguments = bundleOf(
                         Pair("position", position)
                     )
