@@ -47,7 +47,6 @@ object ImageLoaderUtil {
             .child(context.getString(R.string.storage_path_post) + filename)
         GlideApp.with(context)
             .load(if (App.isServerAlive) postSrc else Integer.valueOf(filename))
-            .error(R.drawable.ic_error)
             .into(appCompatImageView)
     }
 }

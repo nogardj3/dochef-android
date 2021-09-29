@@ -19,7 +19,16 @@
                 android:paddingStart="5dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="5dp"
+                tools:itemCount="1"
                 tools:listitem="@layout/home_postlist_item" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/timeline_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone"
+                android:text="타임라인이 없습니다."/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>

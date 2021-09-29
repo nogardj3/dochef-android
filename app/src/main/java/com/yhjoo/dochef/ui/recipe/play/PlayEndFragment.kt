@@ -72,17 +72,31 @@ class PlayEndFragment : Fragment() {
                 }
                 recipeplayEndContents.text = recipePhase.contents
 
+            })
+
+            recipePlayViewModel.recipeDetail.observe(viewLifecycleOwner, {item->
                 recipeplayEndReviewOk.setOnClickListener {
                     recipePlayViewModel.createReview(
-                        recipePlayViewModel.recipeDetail.value!!.recipeID,
+                        item.recipeID,
                         recipePlayViewModel.userId.value!!,
                         binding.recipeplayEndReviewEdittext.text.toString(),
                         binding.recipeplayEndRating.rating.toLong(), System.currentTimeMillis()
                     )
                 }
 
+                recipePlayViewModel.likeThisRecipe.value = item.likes.contains(recipePlayViewModel.userId.value!!)
+            })
+
+            recipePlayViewModel.reviewFinished.observe(viewLifecycleOwner, {
+                if(it){
+                    App.showToast("리뷰가 등록되었습니다.")
+                    requireActivity().finish()
+                }
+            })
+
+            recipePlayViewModel.likeThisRecipe.observe(viewLifecycleOwner, {item->
                 recipeplayEndLike.setImageResource(
-                    if (recipePlayViewModel.recipeDetail.value!!.likes.contains(recipePlayViewModel.userId.value!!))
+                    if (item)
                         R.drawable.ic_favorite_red
                     else
                         R.drawable.ic_favorite_black
@@ -90,13 +104,6 @@ class PlayEndFragment : Fragment() {
 
                 recipeplayEndLike.setOnClickListener {
                     recipePlayViewModel.toggleLikeRecipe()
-                }
-            })
-
-            recipePlayViewModel.reviewFinished.observe(viewLifecycleOwner, {
-                if(it){
-                    App.showToast("리뷰가 등록되었습니다.")
-                    requireActivity().finish()
                 }
             })
         }

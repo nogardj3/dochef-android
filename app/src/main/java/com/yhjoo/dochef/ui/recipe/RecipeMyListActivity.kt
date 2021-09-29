@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -92,6 +93,7 @@ class RecipeMyListActivity : BaseActivity() {
 
             recipeListViewModel.allRecipeList.observe(this@RecipeMyListActivity, {
                 recipeListVerticalAdapter.submitList(it) {
+                    recipemylistEmpty.isVisible = it.isEmpty()
                     binding.recipelistRecycler.scrollToPosition(0)
                 }
             })

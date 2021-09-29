@@ -17,16 +17,15 @@ import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.GlideApp
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.RECIPE
-import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
-import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.*
 import com.yhjoo.dochef.databinding.HomeActivityBinding
@@ -36,9 +35,6 @@ import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.utils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import java.util.*
 
 class HomeActivity : BaseActivity() {
@@ -87,6 +83,23 @@ class HomeActivity : BaseActivity() {
     private var targetUserID: String? = null
     private var activeUserID: String? = null
 
+    private lateinit var nicknameDialog: MaterialDialog
+    private val cropimage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            imageUri = result.uriContent
+            OtherUtil.log(imageUri.toString())
+            GlideApp.with(this)
+                .load(imageUri)
+                .circleCrop()
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.homeUserimg)
+        } else {
+            val error = result.error
+            error!!.printStackTrace()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -95,13 +108,14 @@ class HomeActivity : BaseActivity() {
 
         storageReference = FirebaseStorage.getInstance().reference
 
-        targetUserID = DatastoreUtil.getUserBrief(this).userID
-        if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == targetUserID) {
+        OtherUtil.log("HOME ONCREATETETETE")
+        activeUserID = DatastoreUtil.getUserBrief(this).userID
+        if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == activeUserID) {
             currentMode = UIMODE.OWNER
-            activeUserID = targetUserID
+            targetUserID = activeUserID
         } else {
             currentMode = UIMODE.OTHERS
-            activeUserID = intent.getStringExtra("userID")
+            targetUserID = intent.getStringExtra("userID")
         }
 
         binding.apply {
@@ -167,20 +181,22 @@ class HomeActivity : BaseActivity() {
             })
 
             homeViewModel.allRecipes.observe(this@HomeActivity, {
+                homeRecipeEmpty.isVisible = it.isEmpty()
                 recipeListAdapter.submitList(it) {}
             })
 
             homeViewModel.allPosts.observe(this@HomeActivity, {
+                homePostEmpty.isVisible = it.isEmpty()
                 postListAdapter.submitList(it) {}
             })
 
-            homeViewModel.updateComplete.observe(this@HomeActivity, { result->
+            homeViewModel.updateComplete.observe(this@HomeActivity, { result ->
                 if (result) {
                     App.showToast("업데이트 되었습니다.")
                     currentOperation = OPERATION.VIEW
                     reviseMenu.isVisible = true
                     okMenu.isVisible = false
-                    binding.homeRevisegroup.isVisible = true
+                    binding.homeRevisegroup.isVisible = false
                     imageUri = null
                     progressOFF()
 
@@ -188,10 +204,15 @@ class HomeActivity : BaseActivity() {
                 }
             })
 
-            homeViewModel.nicknameValid.observe(this@HomeActivity, { result->
+            homeViewModel.nicknameValid.observe(this@HomeActivity, { result ->
                 if (result.first) {
+                    App.showToast("사용 가능한 아이디입니다.")
                     binding.homeNickname.text = result.second
-                } else App.showToast("이미 존재합니다.")
+                    nicknameDialog.dismiss()
+                } else {
+                    if(result.second != "")
+                        App.showToast("이미 존재합니다.")
+                }
             })
         }
     }
@@ -209,6 +230,7 @@ class HomeActivity : BaseActivity() {
     override fun onBackPressed() {
         if (currentOperation == OPERATION.REVISE) {
             MaterialDialog(this).show {
+                message(text = "변경을 취소하시겠습니까?")
                 positiveButton(text = "확인") {
                     currentOperation = OPERATION.VIEW
                     reviseMenu.isVisible = true
@@ -224,7 +246,9 @@ class HomeActivity : BaseActivity() {
                         homeProfiletext.text = originUserInfo.profileText
                     }
                 }
-                negativeButton(text = "취소")
+                negativeButton(text = "취소", click = {
+                    it.dismiss()
+                })
             }
         } else super.onBackPressed()
     }
@@ -246,27 +270,6 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == RESULT_OK) {
-                imageUri = result!!.originalUri
-                OtherUtil.log(imageUri.toString())
-                GlideApp.with(this)
-                    .load(imageUri)
-                    .circleCrop()
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.homeUserimg)
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result!!.error
-                error!!.printStackTrace()
-            }
-        }
-    }
-
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<String>,
@@ -278,14 +281,17 @@ class HomeActivity : BaseActivity() {
                 App.showToast("권한 거부")
                 return
             }
-            CropImage.activity(imageUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
-                .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
-                .setOutputUri(imageUri)
-                .start(this)
+
+            cropimage.launch(
+                options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                    setAspectRatio(1, 1)
+                    setOutputUri(imageUri)
+                    setCropShape(CropImageView.CropShape.OVAL)
+                    setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
+                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                }
+            )
         }
     }
 
@@ -332,23 +338,25 @@ class HomeActivity : BaseActivity() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         if (OtherUtil.checkPermission(this, permissions)) {
-            CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setOutputUri(imageUri)
-                .setCropShape(CropImageView.CropShape.OVAL)
-                .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
-                .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
-                .start(this)
+            cropimage.launch(
+                options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                    setAspectRatio(1, 1)
+                    setOutputUri(imageUri)
+                    setCropShape(CropImageView.CropShape.OVAL)
+                    setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
+                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                }
+            )
         } else ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION)
     }
 
     private fun clickReviseNickname() {
-        MaterialDialog(this).show {
-            noAutoDismiss()
-            title(text = "닉네임 변경")
-            input(hint = "닉네임", prefill = binding.homeNickname.text.toString())
-            positiveButton(text = "확인", click = {
+        nicknameDialog = MaterialDialog(this)
+            .noAutoDismiss()
+            .title(text = "닉네임 변경")
+            .input(hint = "닉네임", prefill = binding.homeNickname.text.toString())
+            .positiveButton(text = "확인", click = {
                 when {
                     it.getInputField().text == null ->
                         App.showToast("닉네임을 입력 해 주세요.")
@@ -358,8 +366,10 @@ class HomeActivity : BaseActivity() {
                         homeViewModel.checkNickname(it.getInputField().text.toString())
                 }
             })
-            negativeButton(text = "취소")
-        }
+            .negativeButton(text = "취소", click = {
+                it.dismiss()
+            })
+        nicknameDialog.show()
     }
 
     private fun clickReviseContents() {
@@ -385,7 +395,9 @@ class HomeActivity : BaseActivity() {
                     }
                 }
             })
-            negativeButton(text = "취소")
+            negativeButton(text = "취소", click = {
+                it.dismiss()
+            })
         }
     }
 

@@ -51,9 +51,7 @@ class ResultTagFragment : Fragment() {
 
             recipeViewModel.queriedRecipeByTag.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
-                resultRecycler.isVisible = it.isNotEmpty()
                 resultEmpty.isVisible = it.isEmpty()
-
                 recipeAdapter.submitList(it)
             })
         }

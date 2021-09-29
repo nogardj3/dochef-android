@@ -27,14 +27,14 @@ class FollowListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowListViewHolder {
         context = parent.context
 
-        val binding = DataBindingUtil.inflate<FollowlistItemBinding>(
-            LayoutInflater.from(parent.context),
-            R.layout.followlist_item,
-            parent,
-            false
+        return FollowListViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.followlist_item,
+                parent,
+                false
+            )
         )
-
-        return FollowListViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: FollowListViewHolder, position: Int) {

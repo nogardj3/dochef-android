@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.RecipePhase
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -18,6 +17,7 @@ class RecipePlayViewModel(
 ) : ViewModel() {
     val userId = MutableLiveData<String>()
     val reviewFinished = MutableLiveData(false)
+    val likeThisRecipe = MutableLiveData(false)
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val recipePhases = MutableLiveData<ArrayList<RecipePhase>>()
 
@@ -37,18 +37,18 @@ class RecipePlayViewModel(
 
     fun toggleLikeRecipe() {
         viewModelScope.launch {
-            val like = if (recipeDetail.value!!.likes.contains(userId.value!!))
+            val like = if (likeThisRecipe.value!!)
                 1
             else
                 -1
 
             if (like == 1)
                 recipeRepository.dislikeRecipe(recipeDetail.value!!.recipeID, userId.value!!).collect {
-                    recipeDetail.value!!.likes.remove(userId .value!!)
+                    likeThisRecipe.value = false
                 }
             else
                 recipeRepository.likeRecipe(recipeDetail.value!!.recipeID, userId.value!!).collect {
-                    recipeDetail.value!!.likes.add(userId .value!!)
+                    likeThisRecipe.value = true
                 }
         }
     }

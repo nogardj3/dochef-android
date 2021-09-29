@@ -15,5 +15,13 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/expandable_item" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/faq_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="FAQ가 없습니다"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

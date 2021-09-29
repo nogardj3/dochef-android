@@ -3,6 +3,7 @@ package com.yhjoo.dochef.ui.notification
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.App
@@ -32,12 +33,6 @@ class NotificationActivity : BaseActivity() {
         setSupportActionBar(binding.notificationToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        notificationViewModel.allnotifications
-            .observe(this, {
-                notificationListAdapter.submitList(it) {
-                    binding.notificationRecycler.scrollToPosition(0)
-                }
-            })
 
         binding.apply {
             lifecycleOwner = this@NotificationActivity
@@ -50,6 +45,14 @@ class NotificationActivity : BaseActivity() {
                 layoutManager = LinearLayoutManager(this@NotificationActivity)
                 adapter = notificationListAdapter
             }
+
+            notificationViewModel.allnotifications
+                .observe(this@NotificationActivity, {
+                    notificationEmpty.isVisible = it.isEmpty()
+                    notificationListAdapter.submitList(it) {
+                        binding.notificationRecycler.scrollToPosition(0)
+                    }
+                })
         }
     }
 

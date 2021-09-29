@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
@@ -118,20 +119,37 @@ class PostDetailActivity : BaseActivity() {
             })
 
             postDetailViewModel.userId.value = userID
+            postDetailViewModel.postId.value = postID
 
-            postDetailViewModel.userId.observe(this@PostDetailActivity, {
+            postDetailViewModel.postId.observe(this@PostDetailActivity, {
                 postDetailViewModel.requestPostDetail()
             })
 
             postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
+                postDetailViewModel.likeThisPost.value = it.likes.contains(postDetailViewModel.userId.value!!)
                 setTopView(it)
                 postDetailViewModel.requestComments()
             })
 
-            postDetailViewModel.allComments.observe(this@PostDetailActivity, {
-                commentListAdapter.submitList(it) {}
+            postDetailViewModel.likeThisPost.observe(this@PostDetailActivity, {
+                postLike.setImageResource(
+                    if (postDetailViewModel.likeThisPost.value!!)
+                        R.drawable.ic_favorite_red
+                    else
+                        R.drawable.ic_favorite_black
+                )
+
+                postLike.setOnClickListener {
+                    postDetailViewModel.toggleLikePost()
+                }
             })
 
+            postDetailViewModel.allComments.observe(this@PostDetailActivity, {
+                postCommentEmpty.isVisible = it.isEmpty()
+                commentListAdapter.submitList(it) {
+                    postCommentRecycler.scrollToPosition(0)
+                }
+            })
 
             postDetailViewModel.isDeleted.observe(this@PostDetailActivity, {
                 if(it){
@@ -210,16 +228,6 @@ class PostDetailActivity : BaseActivity() {
                     .putExtra("userID", postInfo.userID).apply {
                         startActivity(this)
                     }
-            }
-
-            postLike.setImageResource(
-                if (postInfo.likes.contains(userID))
-                    R.drawable.ic_favorite_red
-                else
-                    R.drawable.ic_favorite_black
-            )
-            postLike.setOnClickListener {
-                postDetailViewModel.toggleLikePost()
             }
 
             postTags.removeAllViews()

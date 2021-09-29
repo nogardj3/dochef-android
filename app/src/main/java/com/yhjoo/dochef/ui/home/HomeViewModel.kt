@@ -12,6 +12,7 @@ import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -75,7 +76,10 @@ class HomeViewModel(
     fun checkNickname(nickname: String) {
         viewModelScope.launch {
             accountRepository.checkNickname(nickname).collect {
-                nicknameValid.value = Pair(it.isSuccessful, nickname)
+                if(it.isSuccessful){
+                    OtherUtil.log(it.body().toString())
+                    nicknameValid.value = Pair(it.isSuccessful, nickname)
+                }
             }
         }
     }

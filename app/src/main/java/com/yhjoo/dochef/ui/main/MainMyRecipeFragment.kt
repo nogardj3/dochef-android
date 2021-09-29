@@ -3,6 +3,7 @@ package com.yhjoo.dochef.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -84,6 +85,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
             })
 
             mainViewModel.allMyrecipeList.observe(viewLifecycleOwner, {
+                myrecipeEmpty.isVisible = it.isEmpty()
                 recipeListVerticalAdapter.submitList(it) {
                     binding.myrecipeRecycler.scrollToPosition(0)
                 }

@@ -31,5 +31,15 @@
             app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
             tools:listitem="@layout/recipetheme_item" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/recipetheme_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="레시피가 없습니다."/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

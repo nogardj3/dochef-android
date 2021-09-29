@@ -51,9 +51,7 @@ class ResultUserFragment : Fragment() {
 
             userViewModel.queriedUsers.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
-                resultRecycler.isVisible = it.isNotEmpty()
                 resultEmpty.isVisible = it.isEmpty()
-
                 userListAdapter.submitList(it)
             })
         }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.text.parseAsHtml
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -75,7 +76,7 @@ class MainInitFragment : Fragment() {
                     }
             }
 
-            mainInitRecommendRecyclerview.apply {
+            mainInitRecommendRecycler.apply {
                 layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 adapter = recipeListHorizontalAdapter
@@ -83,6 +84,7 @@ class MainInitFragment : Fragment() {
 
             mainViewModel.requestRecommendList()
             mainViewModel.allRecommendList.observe(viewLifecycleOwner, {
+                recipesEmpty.isVisible = it.isEmpty()
                 recipeListHorizontalAdapter.submitList(it) {}
             })
         }

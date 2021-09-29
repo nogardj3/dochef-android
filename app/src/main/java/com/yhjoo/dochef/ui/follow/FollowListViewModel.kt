@@ -7,17 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.UserRepository
+import com.yhjoo.dochef.ui.follow.FollowListActivity.UIMODE.FOLLOWER
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class FollowListViewModel(
-    private val repository: UserRepository,
-    private val uiMode: Int
+    private val repository: UserRepository
 ) : ViewModel() {
-    companion object {
-        const val FOLLOWER = 0
-        const val FOLLOWING = 1
-    }
+    val activeUserId = MutableLiveData<String>()
+    val currentUserId = MutableLiveData<String>()
 
     val activeUserDetail = MutableLiveData<UserDetail>()
     val allFollowLists = MutableLiveData<List<UserBrief>>()
@@ -30,36 +28,34 @@ class FollowListViewModel(
         }
     }
 
-    fun requestFollowLists(userId: String) {
+    fun requestFollowLists(uiMode: Int) {
         viewModelScope.launch {
             if (uiMode == FOLLOWER)
-                repository.getFollowers(userId).collect {
+                repository.getFollowers(currentUserId.value!!).collect {
                     allFollowLists.value = it.body()
                 }
             else
-                repository.getFollowings(userId).collect {
+                repository.getFollowings(currentUserId.value!!).collect {
                     allFollowLists.value = it.body()
                 }
         }
     }
 
-    fun subscribeUser(userId: String, targetID: String) {
+    fun subscribeUser(activeUserId: String, targetID: String) {
         viewModelScope.launch {
-            repository.subscribeUser(userId, targetID).collect {
+            repository.subscribeUser(activeUserId, targetID).collect {
                 if(it.isSuccessful){
-                    requestActiveUserDetail(userId)
-                    requestFollowLists(userId)
+                    requestActiveUserDetail(activeUserId)
                 }
             }
         }
     }
 
-    fun unsubscribeUser(userId: String, targetID: String) {
+    fun unsubscribeUser(activeUuserId: String, targetID: String) {
         viewModelScope.launch {
-            repository.unsubscribeUser(userId, targetID).collect {
+            repository.unsubscribeUser(activeUuserId, targetID).collect {
                 if(it.isSuccessful){
-                    requestActiveUserDetail(userId)
-                    requestFollowLists(userId)
+                    requestActiveUserDetail(activeUuserId)
                 }
             }
         }
@@ -67,16 +63,12 @@ class FollowListViewModel(
 }
 
 class FollowListViewModelFactory(
-    private val repository: UserRepository,
-    private val uiMode: Int
+    private val repository: UserRepository
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(FollowListViewModel::class.java)) {
-            return FollowListViewModel(
-                repository,
-                uiMode
-            ) as T
+            return FollowListViewModel(repository) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

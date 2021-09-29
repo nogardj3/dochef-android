@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -41,6 +42,7 @@ class NoticeFragment : Fragment() {
             }
 
             settingViewModel.allNotices.observe(viewLifecycleOwner, {
+                noticeEmpty.isVisible = it.isEmpty()
                 expandableListAdapter.submitList(it) {
                     binding.noticeRecycler.scrollToPosition(0)
                 }

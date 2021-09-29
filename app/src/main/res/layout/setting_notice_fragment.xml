@@ -15,5 +15,13 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:listitem="@layout/expandable_item" />
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/notice_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="공지사항 / 이벤트가 없습니다" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

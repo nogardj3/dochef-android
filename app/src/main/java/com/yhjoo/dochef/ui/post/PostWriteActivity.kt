@@ -8,19 +8,25 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.*
+import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
+import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImage
+import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
+import com.canhub.cropper.options
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.GlideApp
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices.PostService
+import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.PostwriteActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.home.HomeActivity
+import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.utils.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,12 +46,15 @@ class PostWriteActivity : BaseActivity() {
     }
 
     private val binding: PostwriteActivityBinding by lazy {
-        PostwriteActivityBinding.inflate(
-            layoutInflater
+        DataBindingUtil.setContentView(this, R.layout.postwrite_activity)
+    }
+    private val postWriteViewModel: PostWriteViewModel by viewModels {
+        PostWriteViewModelFactory(
+            PostRepository(applicationContext)
         )
     }
+
     private lateinit var storageReference: StorageReference
-    private lateinit var postService: PostService
     private lateinit var userID: String
     private var postID = 0
 
@@ -53,18 +62,33 @@ class PostWriteActivity : BaseActivity() {
     private var imageString: String? = null
     private var currentMode = UIMODE.WRITE
 
+    private val cropimage = registerForActivityResult(CropImageContract()) { result ->
+        if (result.isSuccessful) {
+            imageUri = result.uriContent
+            GlideApp.with(this)
+                .load(imageUri)
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.postwritePostimg)
+        } else {
+            val error = result.error
+            error!!.printStackTrace()
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
         storageReference = FirebaseStorage.getInstance().reference
-        postService = RetrofitBuilder.create(this, PostService::class.java)
         userID = DatastoreUtil.getUserBrief(this).userID
         currentMode = intent.getIntExtra("MODE", UIMODE.WRITE)
 
         if (currentMode == UIMODE.REVISE) {
             postID = intent.getIntExtra("postID", -1)
+
             binding.apply {
+
                 postwriteToolbar.title = "수정"
                 postwriteContents.setText(intent.getStringExtra("contents"))
                 if (intent.getStringExtra("postImg") != null) {
@@ -79,6 +103,8 @@ class PostWriteActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.apply {
+            lifecycleOwner = this@PostWriteActivity
+
             postwriteContents.addTextChangedListener(object : TextWatcher {
                 var prevText = ""
 
@@ -102,6 +128,24 @@ class PostWriteActivity : BaseActivity() {
             })
             postwritePostimgAdd.setOnClickListener { addImage() }
             postwriteOk.setOnClickListener { doneClicked() }
+
+
+            postWriteViewModel.postId.value = postID
+            postWriteViewModel.userId.value = userID
+
+            postWriteViewModel.isFinished.observe(this@PostWriteActivity, {
+                if (it) {
+                    App.showToast(
+                        if (currentMode == RecipeMakeActivity.MODE.REVISE)
+                            "업데이트 되었습니다."
+                        else
+                            "글이 등록되었습니다."
+                    )
+
+                    progressOFF()
+                    finish()
+                }
+            })
         }
     }
 
@@ -111,12 +155,7 @@ class PostWriteActivity : BaseActivity() {
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
             val result = CropImage.getActivityResult(data)
             if (resultCode == RESULT_OK) {
-                imageUri = result!!.originalUri
-                GlideApp.with(this)
-                    .load(imageUri)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE)
-                    .skipMemoryCache(true)
-                    .into(binding.postwritePostimg)
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result!!.error
                 error!!.printStackTrace()
@@ -135,24 +174,28 @@ class PostWriteActivity : BaseActivity() {
                 App.showToast("권한 거부")
                 return
             }
-            CropImage.activity(imageUri)
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
-                .setOutputUri(imageUri)
-                .start(this)
+            cropimage.launch(
+                options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                    setAspectRatio(1, 1)
+                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    setOutputUri(imageUri)
+                }
+            )
         }
     }
 
     private fun addImage() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         if (OtherUtil.checkPermission(this, permissions)) {
-            CropImage.activity()
-                .setGuidelines(CropImageView.Guidelines.ON)
-                .setAspectRatio(1, 1)
-                .setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
-                .setOutputUri(imageUri)
-                .start(this)
+            cropimage.launch(
+                options {
+                    setGuidelines(CropImageView.Guidelines.ON)
+                    setAspectRatio(1, 1)
+                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    setOutputUri(imageUri)
+                }
+            )
         } else
             ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION)
     }
@@ -182,22 +225,18 @@ class PostWriteActivity : BaseActivity() {
         CoroutineScope(Dispatchers.Main).launch {
             runCatching {
                 if (currentMode == UIMODE.WRITE) {
-                    postService.createPost(
-                        userID, imageString!!,
+                    postWriteViewModel.createPost(
+                        imageString!!,
                         binding.postwriteContents.text.toString(),
-                        System.currentTimeMillis(), tags
+                        tags
                     )
-                    App.showToast("글이 등록되었습니다.")
-                } else
-                    postService.updatePost(
-                        postID, imageString!!,
-                        binding.postwriteContents.text.toString(),
-                        System.currentTimeMillis(), tags
-                    )
-                App.showToast("업데이트 되었습니다.")
 
-                progressOFF()
-                finish()
+                } else
+                    postWriteViewModel.updatePost(
+                        imageString!!,
+                        binding.postwriteContents.text.toString(),
+                        tags
+                    )
             }
                 .onSuccess { }
                 .onFailure {

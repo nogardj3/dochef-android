@@ -17,9 +17,8 @@
         android:usesCleartextTraffic="true"
         android:theme="@style/BaseTheme">
 
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/Base.Theme.AppCompat"/>
+        <activity android:name="com.canhub.cropper.CropImageActivity"
+            android:theme="@style/Theme.MaterialComponents.DayNight.DarkActionBar"/>
 
         <activity
             android:name="com.yhjoo.dochef.ui.follow.FollowListActivity"

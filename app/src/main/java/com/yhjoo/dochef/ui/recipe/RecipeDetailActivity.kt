@@ -79,6 +79,7 @@ class RecipeDetailActivity : BaseActivity() {
                 setTopView(it)
             })
             recipeDetailViewModel.allReviews.observe(this@RecipeDetailActivity, {
+                recipedetailReviewEmpty.isVisible = it.isEmpty()
                 reviewListAdapter.submitList(it) {}
             })
             recipeDetailViewModel.isDeleted.observe(this@RecipeDetailActivity, {
@@ -132,10 +133,10 @@ class RecipeDetailActivity : BaseActivity() {
                 )
             }
             recipedetailUserWrapper.setOnClickListener {
-                startActivity(
-                    Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                        .putExtra("userID", recipeDetail.userID)
-                )
+                Intent(this@RecipeDetailActivity, HomeActivity::class.java)
+                    .putExtra("userID", recipeDetail.userID).apply{
+                        startActivity(this)
+                    }
             }
 
             recipedetailTags.removeAllViews()

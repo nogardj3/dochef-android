@@ -3,17 +3,14 @@ package com.yhjoo.dochef.ui.common.adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.databinding.HomeRecipelistItemBinding
 import com.yhjoo.dochef.databinding.RecipeHorizontalItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.ValidateUtil
 
 class RecipeListHorizontalAdapter(
     private val layoutType: Int,

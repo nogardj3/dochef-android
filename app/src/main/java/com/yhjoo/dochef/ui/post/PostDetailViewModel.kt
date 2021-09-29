@@ -16,13 +16,15 @@ class PostDetailViewModel(
     private val commentRepository: CommentRepository
 ) : ViewModel() {
     val userId = MutableLiveData<String>()
+    val postId = MutableLiveData<Int>()
     val isDeleted = MutableLiveData(false)
+    val likeThisPost = MutableLiveData(false)
     val postDetail = MutableLiveData<Post>()
     val allComments = MutableLiveData<List<Comment>>()
 
     fun requestPostDetail() {
         viewModelScope.launch {
-            postRepository.getPostDetail(postDetail.value!!.postID).collect {
+            postRepository.getPostDetail(postId.value!!).collect {
                 postDetail.value = it.body()
             }
         }
@@ -30,18 +32,18 @@ class PostDetailViewModel(
 
     fun toggleLikePost() {
         viewModelScope.launch {
-            val like = if (postDetail.value!!.likes.contains(userId.value!!))
+            val like = if (likeThisPost.value!!)
                 1
             else
                 -1
 
             if (like == 1)
                 postRepository.dislikePost(userId.value!!,postDetail.value!!.postID).collect {
-                    postDetail.value!!.likes.remove(userId.value!!)
+                    likeThisPost.value = false
                 }
             else
                 postRepository.likePost(userId.value!!,postDetail.value!!.postID).collect {
-                    postDetail.value!!.likes.add(userId.value!!)
+                    likeThisPost.value = true
                 }
         }
     }
@@ -58,7 +60,7 @@ class PostDetailViewModel(
 
     fun requestComments() {
         viewModelScope.launch {
-            commentRepository.getComments(postDetail.value!!.postID).collect {
+            commentRepository.getComments(postId.value!!).collect {
                 allComments.value = it.body()
             }
         }
@@ -67,7 +69,7 @@ class PostDetailViewModel(
     fun createComment(contents: String) {
         viewModelScope.launch {
             commentRepository.createComment(
-                postDetail.value!!.postID,
+                postId.value!!,
                 userId.value!!,
                 contents,
                 System.currentTimeMillis()

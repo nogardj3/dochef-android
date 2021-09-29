@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
         <variable
@@ -166,11 +167,24 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:overScrollMode="never"
                     app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                     app:layout_constraintRight_toRightOf="@id/post_time"
                     app:layout_constraintTop_toBottomOf="@+id/post_like"
                     tools:itemCount="2"
                     tools:listitem="@layout/comment_item" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/post_comment_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="댓글이 없습니다."
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
+                    app:layout_constraintRight_toRightOf="@id/post_time"
+                    app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/post_comment_edittext"
@@ -187,7 +201,7 @@
                     android:theme="@style/BaseTheme.EditTextStyle"
                     app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                     app:layout_constraintRight_toLeftOf="@+id/post_comment_ok"
-                    app:layout_constraintTop_toBottomOf="@+id/post_comment_recycler" />
+                    app:layout_constraintTop_toBottomOf="@+id/post_comment_empty" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/post_comment_ok"

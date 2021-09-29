@@ -7,13 +7,11 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Comment
-import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
-import retrofit2.http.Field
 import java.util.*
 
 class CommentRepository(
