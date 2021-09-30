@@ -1,9 +1,8 @@
 package com.yhjoo.dochef.ui.home
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import android.content.Intent
+import androidx.lifecycle.*
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
@@ -12,29 +11,57 @@ import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class HomeViewModel(
+    private val application: Application,
+    intent: Intent,
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val postRepository: PostRepository,
     private val accountRepository: AccountRepository
 ) : ViewModel() {
-    val targetUserId = MutableLiveData<String>()
-    val activeUserId = MutableLiveData<String>()
-    val userDetail = MutableLiveData<UserDetail>()
-    val allRecipes = MutableLiveData<List<Recipe>>()
-    val allPosts = MutableLiveData<List<Post>>()
+    private val activeUserId: String by lazy {
+        DatastoreUtil.getUserBrief(application.applicationContext).userID
+    }
+    private var targetUserId: String =
+        if (intent.getStringExtra("userID") == null
+            || intent.getStringExtra("userID") == activeUserId
+        )
+            activeUserId
+        else
+            intent.getStringExtra("userID")!!
 
-    val updateComplete = MutableLiveData<Boolean>()
-    val nicknameValid = MutableLiveData<Pair<Boolean, String>>()
+    private var _userDetail = MutableLiveData<UserDetail>()
+    private var _allRecipes = MutableLiveData<List<Recipe>>()
+    private var _allPosts = MutableLiveData<List<Post>>()
+    private var _updateComplete = MutableLiveData<Boolean>()
+    private var _nicknameValid = MutableLiveData<Pair<Boolean, String>>()
+
+    val userDetail : LiveData<UserDetail>
+        get() = _userDetail
+    val allRecipes : LiveData<List<Recipe>>
+        get() = _allRecipes
+    val allPosts : LiveData<List<Post>>
+        get() = _allPosts
+    val updateComplete : LiveData<Boolean>
+        get() = _updateComplete
+    val nicknameValid : LiveData<Pair<Boolean, String>>
+        get() = _nicknameValid
+
+    init{
+        requestActiveUserDetail()
+        requestRecipeList()
+        requestPostListById()
+    }
 
     fun requestActiveUserDetail() {
         viewModelScope.launch {
-            userRepository.getUserDetail(targetUserId.value!!).collect {
-                userDetail.value = it.body()
+            userRepository.getUserDetail(targetUserId).collect {
+                _userDetail.value = it.body()
             }
         }
     }
@@ -44,17 +71,17 @@ class HomeViewModel(
             recipeRepository.getRecipeList(
                 Constants.RECIPE.SEARCHBY.USERID,
                 Constants.RECIPE.SORT.LATEST,
-                targetUserId.value!!
+                targetUserId
             ).collect {
-                allRecipes.value = it.body()
+                _allRecipes.value = it.body()
             }
         }
     }
 
     fun requestPostListById() {
         viewModelScope.launch {
-            postRepository.getPostListByUserId(targetUserId.value!!).collect {
-                allPosts.value = it.body()
+            postRepository.getPostListByUserId(targetUserId).collect {
+                _allPosts.value = it.body()
             }
         }
     }
@@ -62,13 +89,13 @@ class HomeViewModel(
     fun updateUser(userImg: String, nickname: String, bio: String) {
         viewModelScope.launch {
             accountRepository.updateUser(
-                targetUserId.value!!,
+                targetUserId,
                 userImg,
                 nickname,
                 bio
             )
                 .collect {
-                    updateComplete.value = true
+                    _updateComplete.value = true
                 }
         }
     }
@@ -76,16 +103,16 @@ class HomeViewModel(
     fun checkNickname(nickname: String) {
         viewModelScope.launch {
             accountRepository.checkNickname(nickname).collect {
-                if (it.isSuccessful) {
-                    OtherUtil.log(it.body().toString())
-                    nicknameValid.value = Pair(it.isSuccessful, nickname)
-                }
+                OtherUtil.log(it.body().toString())
+                _nicknameValid.value = Pair(it.isSuccessful, nickname)
             }
         }
     }
 }
 
 class HomeViewModelFactory(
+    private val application: Application,
+    private val intent: Intent,
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val postRepository: PostRepository,
@@ -95,6 +122,8 @@ class HomeViewModelFactory(
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
             return HomeViewModel(
+                application,
+                intent,
                 userRepository,
                 recipeRepository,
                 postRepository,

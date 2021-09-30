@@ -15,12 +15,12 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.MAIN_MYRECIPE
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LayoutType.MAIN_MYRECIPE
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
-class MainMyRecipeFragment : Fragment(), OnRefreshListener {
+class MyRecipeFragment : Fragment(), OnRefreshListener {
     /* TODO
     1. ad + item + recommend
      */
@@ -28,6 +28,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
     private lateinit var binding: MainMyrecipeFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
+            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
@@ -44,13 +45,12 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.main_myrecipe_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
             myrecipeSwipe.apply {
-                setOnRefreshListener(this@MainMyRecipeFragment)
+                setOnRefreshListener(this@MyRecipeFragment)
                 setColorSchemeColors(
                     resources.getColor(
                         R.color.colorPrimary,
@@ -61,12 +61,9 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 MAIN_MYRECIPE,
-                activeUserID = mainViewModel.userId.value,
+                mainViewModel.userId,
                 itemClickListener = { item ->
-                    Intent(
-                        this@MainMyRecipeFragment.requireContext(),
-                        RecipeDetailActivity::class.java
-                    )
+                    Intent(requireContext(), RecipeDetailActivity::class.java)
                         .putExtra("recipeID", item.recipeID).apply {
                             startActivity(this)
                         }
@@ -79,11 +76,6 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
                 adapter = recipeListVerticalAdapter
             }
 
-            mainViewModel.userId.observe(viewLifecycleOwner, {
-                if (it != null)
-                    mainViewModel.refreshMyrecipesList()
-            })
-
             mainViewModel.allMyrecipeList.observe(viewLifecycleOwner, {
                 myrecipeEmpty.isVisible = it.isEmpty()
                 recipeListVerticalAdapter.submitList(it) {
@@ -95,7 +87,7 @@ class MainMyRecipeFragment : Fragment(), OnRefreshListener {
             recommendTags = resources.getStringArray(R.array.recommend_tags)
         }
 
-        return view
+        return binding.root
     }
 
     override fun onRefresh() {

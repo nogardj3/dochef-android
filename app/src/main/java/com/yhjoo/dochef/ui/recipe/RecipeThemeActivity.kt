@@ -13,7 +13,7 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipethemeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.THEME
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LayoutType.THEME
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModel
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModelFactory
 import java.util.*
@@ -29,6 +29,7 @@ class RecipeThemeActivity : BaseActivity() {
     }
     private val recipeListViewModel: RecipeListViewModel by viewModels {
         RecipeListViewModelFactory(
+            application,
             RecipeRepository(applicationContext)
         )
     }

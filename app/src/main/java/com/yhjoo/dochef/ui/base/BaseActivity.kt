@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
 import androidx.appcompat.widget.AppCompatEditText
+import com.google.android.material.snackbar.Snackbar
 import com.yhjoo.dochef.R
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
@@ -18,17 +19,17 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        progressOFF()
+        hideProgress()
         if (!compositeDisposable.isDisposed) compositeDisposable.clear()
     }
 
-    // 홈버튼 = 백버튼
+    // navigation up == backpressed
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
     }
 
-    // Edittext 키보드 내리기
+    // Edittext outside touch hide keyboard
     override fun dispatchTouchEvent(event: MotionEvent): Boolean {
         val view = currentFocus
         val ret = super.dispatchTouchEvent(event)
@@ -48,7 +49,17 @@ open class BaseActivity : AppCompatActivity() {
         return ret
     }
 
-    fun progressON(activity: Activity?) {
+    fun showSnackBar(view: View, text: String) {
+        Snackbar.make(view, text, Snackbar.LENGTH_SHORT).show()
+    }
+
+    fun showSnackBar(view: View, text: String, actionText: String, action: ((View) -> Unit)) {
+        Snackbar.make(view, text, Snackbar.LENGTH_SHORT)
+            .setAction(actionText, action)
+            .show()
+    }
+
+    fun showProgress(activity: Activity?) {
         if (activity == null || activity.isFinishing) {
             return
         }
@@ -65,7 +76,7 @@ open class BaseActivity : AppCompatActivity() {
         }
     }
 
-    fun progressOFF() {
+    fun hideProgress() {
         progressDialog?.dismiss()
     }
 

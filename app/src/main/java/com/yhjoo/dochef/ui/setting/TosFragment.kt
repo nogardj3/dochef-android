@@ -25,7 +25,6 @@ class TosFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.setting_tos_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -37,6 +36,6 @@ class TosFragment : Fragment() {
             settingViewModel.requestTosText()
         }
 
-        return view
+        return binding.root
     }
 }

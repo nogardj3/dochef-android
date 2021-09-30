@@ -14,7 +14,7 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.MYLIST
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LayoutType.MYLIST
 import com.yhjoo.dochef.ui.common.viewmodel.*
 import com.yhjoo.dochef.utils.*
 import java.util.*
@@ -29,6 +29,7 @@ class RecipeMyListActivity : BaseActivity() {
     }
     private val recipeListViewModel: RecipeListViewModel by viewModels {
         RecipeListViewModelFactory(
+            application,
             RecipeRepository(applicationContext)
         )
     }
@@ -79,22 +80,20 @@ class RecipeMyListActivity : BaseActivity() {
                 adapter = recipeListVerticalAdapter
             }
 
+            recipeListViewModel.allRecipeList.observe(this@RecipeMyListActivity, {
+                recipeListVerticalAdapter.submitList(it) {
+                    recipemylistEmpty.isVisible = it.isEmpty()
+                    binding.recipelistRecycler.scrollToPosition(0)
+                }
+            })
+
             recipeListViewModel.listChanged.observe(this@RecipeMyListActivity, {
-                if (recipeListViewModel.listChanged.value!!) {
-                    recipeListViewModel.listChanged.value = false
+                if (it) {
                     recipeListViewModel.requestRecipeList(
                         searchby = Constants.RECIPE.SEARCHBY.USERID,
                         sort = Constants.RECIPE.SORT.LATEST,
                         searchValue = userID
                     )
-                }
-            })
-
-
-            recipeListViewModel.allRecipeList.observe(this@RecipeMyListActivity, {
-                recipeListVerticalAdapter.submitList(it) {
-                    recipemylistEmpty.isVisible = it.isEmpty()
-                    binding.recipelistRecycler.scrollToPosition(0)
                 }
             })
 

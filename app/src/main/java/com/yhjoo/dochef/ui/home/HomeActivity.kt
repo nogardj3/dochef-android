@@ -50,6 +50,8 @@ class HomeActivity : BaseActivity() {
     }
     private val homeViewModel: HomeViewModel by viewModels {
         HomeViewModelFactory(
+            application,
+            intent,
             UserRepository(applicationContext),
             RecipeRepository(applicationContext),
             PostRepository(applicationContext),
@@ -99,7 +101,6 @@ class HomeActivity : BaseActivity() {
 
         storageReference = FirebaseStorage.getInstance().reference
 
-        OtherUtil.log("HOME ONCREATETETETE")
         activeUserID = DatastoreUtil.getUserBrief(this).userID
         if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == activeUserID) {
             currentMode = UIMODE.OWNER
@@ -112,9 +113,7 @@ class HomeActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@HomeActivity
 
-            recipeListAdapter = RecipeListAdapter(
-                activeUserID
-            ) { item ->
+            recipeListAdapter = RecipeListAdapter(activeUserID) { item ->
                 Intent(this@HomeActivity, RecipeDetailActivity::class.java)
                     .putExtra("recipeID", item.recipeID).apply {
                         startActivity(this)
@@ -157,15 +156,6 @@ class HomeActivity : BaseActivity() {
                 adapter = postListAdapter
             }
 
-            homeViewModel.targetUserId.value = targetUserID
-            homeViewModel.activeUserId.value = activeUserID
-
-            homeViewModel.targetUserId.observe(this@HomeActivity, {
-                homeViewModel.requestActiveUserDetail()
-                homeViewModel.requestRecipeList()
-                homeViewModel.requestPostListById()
-            })
-
             homeViewModel.userDetail.observe(this@HomeActivity, { item ->
                 originUserInfo = item
                 setUserInfo(item)
@@ -183,13 +173,13 @@ class HomeActivity : BaseActivity() {
 
             homeViewModel.updateComplete.observe(this@HomeActivity, { result ->
                 if (result) {
-                    App.showToast("업데이트 되었습니다.")
+                    showSnackBar(binding.root, "업데이트 되었습니다.")
                     currentOperation = OPERATION.VIEW
                     reviseMenu.isVisible = true
                     okMenu.isVisible = false
                     binding.homeRevisegroup.isVisible = false
                     imageUri = null
-                    progressOFF()
+                    hideProgress()
 
                     homeViewModel.requestActiveUserDetail()
                 }
@@ -201,8 +191,7 @@ class HomeActivity : BaseActivity() {
                     binding.homeNickname.text = result.second
                     nicknameDialog.dismiss()
                 } else {
-                    if (result.second != "")
-                        App.showToast("이미 존재합니다.")
+                    App.showToast("이미 존재합니다.")
                 }
             })
         }
@@ -269,7 +258,7 @@ class HomeActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.PERMISSION_CODE) {
             for (result in grantResults) if (result == PackageManager.PERMISSION_DENIED) {
-                App.showToast("권한 거부")
+                showSnackBar(binding.root,"권한 거부")
                 return
             }
 
@@ -312,21 +301,24 @@ class HomeActivity : BaseActivity() {
             homeProfiletextRevise.setOnClickListener { clickReviseContents() }
 
             homeRecipewrapper.setOnClickListener {
-                val intent = Intent(this@HomeActivity, RecipeMyListActivity::class.java)
-                    .putExtra("userID", userDetail.userID)
-                startActivity(intent)
+                Intent(this@HomeActivity, RecipeMyListActivity::class.java)
+                    .putExtra("userID", userDetail.userID).apply {
+                        startActivity(this)
+                    }
             }
             homeFollowerwrapper.setOnClickListener {
-                val intent = Intent(this@HomeActivity, FollowListActivity::class.java)
-                    .putExtra("MODE", FollowListActivity.UIMODE.FOLLOWER)
-                    .putExtra("userID", userDetail.userID)
-                startActivity(intent)
+                Intent(this@HomeActivity, FollowListActivity::class.java)
+                    .putExtra("MODE", FollowListActivity.FOLLOWER)
+                    .putExtra("userID", userDetail.userID).apply {
+                        startActivity(this)
+                    }
             }
             homeFollowingwrapper.setOnClickListener {
-                val intent = Intent(this@HomeActivity, FollowListActivity::class.java)
-                    .putExtra("MODE", FollowListActivity.UIMODE.FOLLOWING)
-                    .putExtra("userID", userDetail.userID)
-                startActivity(intent)
+                Intent(this@HomeActivity, FollowListActivity::class.java)
+                    .putExtra("MODE", FollowListActivity.FOLLOWING)
+                    .putExtra("userID", userDetail.userID).apply {
+                        startActivity(this)
+                    }
             }
         }
     }
@@ -362,11 +354,14 @@ class HomeActivity : BaseActivity() {
             .positiveButton(text = "확인", click = {
                 when {
                     it.getInputField().text == null ->
-                        App.showToast("닉네임을 입력 해 주세요.")
+                        showSnackBar(binding.root, "닉네임을 입력 해 주세요.")
                     it.getInputField().text.length > 12 ->
-                        App.showToast("12자 이하 입력 해 주세요.")
-                    else ->
+                        showSnackBar(binding.root, "12자 이하 입력 해 주세요.")
+                    else ->{
+                        hideKeyboard(it.view)
                         homeViewModel.checkNickname(it.getInputField().text.toString())
+                    }
+
                 }
             })
             .negativeButton(text = "취소", click = {
@@ -387,11 +382,11 @@ class HomeActivity : BaseActivity() {
             positiveButton(text = "확인", click = {
                 when {
                     it.getInputField().text == null ->
-                        App.showToast("프로필을 입력 해 주세요.")
+                        showSnackBar(binding.root, "프로필을 입력 해 주세요.")
                     it.getInputField().text.length > 60 ->
-                        App.showToast("60자 이하 입력 해 주세요.")
+                        showSnackBar(binding.root, "60자 이하 입력 해 주세요.")
                     it.getInputField().lineCount > 4 ->
-                        App.showToast("4줄 이하 입력 해 주세요.")
+                        showSnackBar(binding.root, "4줄 이하 입력 해 주세요.")
                     else -> {
                         binding.homeProfiletext.text = it.getInputField().text
                         it.dismiss()
@@ -405,7 +400,7 @@ class HomeActivity : BaseActivity() {
     }
 
     private fun updateProfile() {
-        progressON(this)
+        showProgress(this)
         if (imageUri != null) {
             imageUrl = String.format(
                 getString(R.string.format_upload_file),

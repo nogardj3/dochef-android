@@ -30,7 +30,6 @@ class ResultUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = SearchResultFragmentBinding.inflate(layoutInflater)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -58,6 +57,6 @@ class ResultUserFragment : Fragment() {
             })
         }
 
-        return view
+        return binding.root
     }
 }

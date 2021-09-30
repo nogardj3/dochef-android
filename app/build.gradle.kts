@@ -81,7 +81,6 @@ dependencies {
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
-    implementation("androidx.datastore:datastore:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     kapt("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.navigation:navigation-fragment-ktx:$navigationVersion")

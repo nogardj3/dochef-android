@@ -31,7 +31,6 @@ class ResultIngredientFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = SearchResultFragmentBinding.inflate(layoutInflater)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -60,6 +59,6 @@ class ResultIngredientFragment : Fragment() {
             })
         }
 
-        return view
+        return binding.root
     }
 }

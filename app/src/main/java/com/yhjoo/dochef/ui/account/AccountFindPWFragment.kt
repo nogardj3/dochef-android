@@ -19,6 +19,7 @@ class AccountFindPWFragment : Fragment() {
     private lateinit var binding: AccountFindpwFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
+            requireActivity().application,
             AccountRepository(requireContext().applicationContext)
         )
     }
@@ -30,7 +31,6 @@ class AccountFindPWFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.account_findpw_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -41,24 +41,43 @@ class AccountFindPWFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (ValidateUtil.emailValidate(accountFindpwEdittext.text.toString()) == ValidateUtil.EmailResult.ERR_INVALID) {
-                            accountFindpwEmailLayout.error = "이메일 형식이 올바르지 않습니다."
-                        } else {
+                        val validateResult = ValidateUtil.emailValidate(
+                            accountFindpwEdittext.text.toString()
+                        )
+
+                        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
                             accountFindpwEmailLayout.error = null
                             (requireActivity() as BaseActivity).hideKeyboard(
                                 accountFindpwEmailLayout
                             )
-                            findpw()
-                        }
+                        } else
+                            accountFindpwEmailLayout.error = validateResult.second
                         true
                     } else
                         false
                 }
             }
+
+            accountFindpwOk.setOnClickListener {
+                findPW(accountFindpwEdittext.text.toString())
+            }
         }
 
-        return view
+        return binding.root
     }
 
-    private fun findpw() {}
+    private fun findPW(email: String) {
+        val validateResult = ValidateUtil.emailValidate(email)
+
+        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
+            binding.accountFindpwEmailLayout.error = null
+            (requireActivity() as BaseActivity).hideKeyboard(binding.accountFindpwEmailLayout)
+            (requireActivity() as BaseActivity).showProgress(requireActivity())
+            accountViewModel.sendPasswordResetEmail(email)
+        } else
+            binding.accountFindpwEmailLayout.apply{
+                error = validateResult.second
+                requestFocus()
+            }
+    }
 }

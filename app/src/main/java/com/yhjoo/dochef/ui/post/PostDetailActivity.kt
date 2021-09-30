@@ -35,6 +35,8 @@ class PostDetailActivity : BaseActivity() {
     }
     private val postDetailViewModel: PostDetailViewModel by viewModels {
         PostDetailViewModelFactory(
+            application,
+            intent,
             PostRepository(applicationContext),
             CommentRepository(applicationContext)
         )
@@ -118,17 +120,8 @@ class PostDetailActivity : BaseActivity() {
                 }
             })
 
-            postDetailViewModel.userId.value = userID
-            postDetailViewModel.postId.value = postID
-
-            postDetailViewModel.postId.observe(this@PostDetailActivity, {
-                postDetailViewModel.requestPostDetail()
-            })
-
             postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
-                postDetailViewModel.likeThisPost.value = it.likes.contains(postDetailViewModel.userId.value!!)
                 setTopView(it)
-                postDetailViewModel.requestComments()
             })
 
             postDetailViewModel.likeThisPost.observe(this@PostDetailActivity, {

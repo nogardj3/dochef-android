@@ -26,13 +26,12 @@ class FollowListActivity : BaseActivity() {
     }
     private val followListViewModel: FollowListViewModel by viewModels {
         FollowListViewModelFactory(
-            UserRepository(applicationContext)
+            application,
+            UserRepository(applicationContext),
+            intent
         )
     }
     private lateinit var followListAdapter: FollowListAdapter
-
-    private lateinit var activeUserId: String
-    private lateinit var currentUserId: String
 
     private var currentMode = -1
 
@@ -44,8 +43,7 @@ class FollowListActivity : BaseActivity() {
 
         currentMode = intent.getIntExtra("MODE", FOLLOWER)
 
-        activeUserId = DatastoreUtil.getUserBrief(this).userID
-        currentUserId = intent.getStringExtra("userID").toString()
+        val activeUserId = DatastoreUtil.getUserBrief(this).userID
 
         binding.apply {
             lifecycleOwner = this@FollowListActivity
@@ -54,8 +52,8 @@ class FollowListActivity : BaseActivity() {
 
             followListAdapter = FollowListAdapter(
                 activeUserId,
-                { item -> followListViewModel.subscribeUser(activeUserId, item.userID) },
-                { item -> followListViewModel.unsubscribeUser(activeUserId, item.userID) },
+                { item -> followListViewModel.subscribeUser(item.userID) },
+                { item -> followListViewModel.unsubscribeUser(item.userID) },
                 { item ->
                     Intent(this@FollowListActivity, HomeActivity::class.java)
                         .putExtra("userID", item.userID).apply {
@@ -68,13 +66,6 @@ class FollowListActivity : BaseActivity() {
                 layoutManager = LinearLayoutManager(this@FollowListActivity)
                 adapter = followListAdapter
             }
-
-            followListViewModel.activeUserId.value = activeUserId
-            followListViewModel.currentUserId.value = currentUserId
-
-            followListViewModel.activeUserId.observe(this@FollowListActivity, {
-                followListViewModel.requestActiveUserDetail(it)
-            })
 
             followListViewModel.activeUserDetail.observe(this@FollowListActivity, {
                 followListAdapter.activeUserFollowList = it.follow

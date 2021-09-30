@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.ui.post
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
@@ -12,7 +11,6 @@ import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.canhub.cropper.CropImage
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
@@ -43,6 +41,8 @@ class PostWriteActivity : BaseActivity() {
     }
     private val postWriteViewModel: PostWriteViewModel by viewModels {
         PostWriteViewModelFactory(
+            application,
+            intent,
             PostRepository(applicationContext)
         )
     }
@@ -122,10 +122,6 @@ class PostWriteActivity : BaseActivity() {
             postwritePostimgAdd.setOnClickListener { addImage() }
             postwriteOk.setOnClickListener { doneClicked() }
 
-
-            postWriteViewModel.postId.value = postID
-            postWriteViewModel.userId.value = userID
-
             postWriteViewModel.isFinished.observe(this@PostWriteActivity, {
                 if (it) {
                     App.showToast(
@@ -135,24 +131,10 @@ class PostWriteActivity : BaseActivity() {
                             "글이 등록되었습니다."
                     )
 
-                    progressOFF()
+                    hideProgress()
                     finish()
                 }
             })
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-            val result = CropImage.getActivityResult(data)
-            if (resultCode == RESULT_OK) {
-
-            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                val error = result!!.error
-                error!!.printStackTrace()
-            }
         }
     }
 
@@ -204,9 +186,10 @@ class PostWriteActivity : BaseActivity() {
         if (imageUri != null) {
             imageString = String.format(
                 getString(R.string.format_upload_file),
-                userID, System.currentTimeMillis().toString()
+                userID,
+                System.currentTimeMillis().toString()
             )
-            progressON(this)
+            showProgress(this)
             val ref = storageReference.child(getString(R.string.storage_path_post) + imageString)
             ref.putFile(imageUri!!)
                 .addOnSuccessListener {

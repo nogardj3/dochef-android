@@ -29,7 +29,6 @@ class NoticeFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.setting_notice_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -51,6 +50,6 @@ class NoticeFragment : Fragment() {
             settingViewModel.requestNotices()
         }
 
-        return view
+        return binding.root
     }
 }

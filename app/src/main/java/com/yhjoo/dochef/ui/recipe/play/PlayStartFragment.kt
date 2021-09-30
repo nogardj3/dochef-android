@@ -32,7 +32,6 @@ class PlayStartFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.recipeplay_start_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -111,6 +110,6 @@ class PlayStartFragment : Fragment() {
 //            }
         }
 
-        return view
+        return binding.root
     }
 }

@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
-import com.google.firebase.auth.FirebaseAuth
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSignupFragmentBinding
@@ -21,11 +20,10 @@ class AccountSignUpFragment : Fragment() {
     private lateinit var binding: AccountSignupFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
+            requireActivity().application,
             AccountRepository(requireContext().applicationContext)
         )
     }
-
-    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,9 +32,6 @@ class AccountSignUpFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.account_signup_fragment, container, false)
-        val view: View = binding.root
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -47,12 +42,16 @@ class AccountSignUpFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        if (ValidateUtil.emailValidate(signupEmailEdittext.text.toString()) == ValidateUtil.EmailResult.ERR_INVALID) {
-                            signupEmailLayout.error = "이메일 형식이 올바르지 않습니다."
-                        } else {
+                        val validateResult = ValidateUtil.emailValidate(
+                            signupEmailEdittext.text.toString()
+                        )
+
+                        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
                             signupEmailLayout.error = null
                             (requireActivity() as BaseActivity).hideKeyboard(signupEmailLayout)
-                        }
+                        } else
+                            signupEmailLayout.error = validateResult.second
+
                         true
                     } else
                         false
@@ -65,26 +64,27 @@ class AccountSignUpFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        when {
-                            ValidateUtil.pwValidate(signupPasswordEdittext.text.toString()) == ValidateUtil.PwResult.ERR_LENGTH ->
-                                signupPasswordLayout.error =
-                                    "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
-                            ValidateUtil.pwValidate(signupPasswordEdittext.text.toString()) == ValidateUtil.PwResult.ERR_INVALID ->
-                                signupPasswordLayout.error =
-                                    "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
-                            else -> {
-                                signupPasswordLayout.error = null
-                                (requireActivity() as BaseActivity).hideKeyboard(
-                                    signupPasswordLayout
-                                )
-                            }
-                        }
+                        val validateResult = ValidateUtil.pwValidate(
+                            signupPasswordEdittext.text.toString()
+                        )
+
+                        if (validateResult.first == ValidateUtil.PwResult.VALID) {
+                            signupPasswordLayout.error = null
+                            (requireActivity() as BaseActivity).hideKeyboard(signupPasswordLayout)
+                        } else
+                            signupPasswordLayout.error = validateResult.second
+
                         true
                     } else
                         false
                 }
 
-                signupOk.setOnClickListener { startSignUp() }
+                signupOk.setOnClickListener {
+                    startSignUp(
+                        binding.signupEmailEdittext.text.toString(),
+                        binding.signupPasswordEdittext.text.toString()
+                    )
+                }
             }
 
             accountViewModel.phaseError.observe(viewLifecycleOwner, {
@@ -95,34 +95,31 @@ class AccountSignUpFragment : Fragment() {
             })
         }
 
-        return view
+        return binding.root
     }
 
-    private fun startSignUp() {
-        val email = binding.signupEmailEdittext.text.toString()
-        val pw = binding.signupPasswordEdittext.text.toString()
+    private fun startSignUp(email: String, pw: String) {
+        val emailValidateResult = ValidateUtil.emailValidate(email)
+        val pwValidateResult = ValidateUtil.pwValidate(pw)
 
         when {
-            ValidateUtil.emailValidate(email) == ValidateUtil.EmailResult.ERR_INVALID -> {
+            emailValidateResult.first != ValidateUtil.EmailResult.VALID -> {
                 binding.signupEmailLayout.apply {
-                    error = "이메일 형식이 올바르지 않습니다."
+                    error = emailValidateResult.second
                     requestFocus()
                 }
             }
-            ValidateUtil.pwValidate(pw) == ValidateUtil.PwResult.ERR_LENGTH -> {
+            pwValidateResult.first != ValidateUtil.PwResult.VALID -> {
                 binding.signupPasswordLayout.apply {
-                    error = "비밀번호 길이를 확인 해 주세요. 8자 이상, 16자 이하로 입력 해 주세요."
-                    requestFocus()
-                }
-            }
-            ValidateUtil.pwValidate(pw) == ValidateUtil.PwResult.ERR_INVALID -> {
-                binding.signupPasswordLayout.apply {
-                    error = "비밀번호 형식을 확인 해 주세요. 영문 및 숫자를 포함해야 합니다."
+                    error = pwValidateResult.second
                     requestFocus()
                 }
             }
             else -> {
-                (requireActivity() as BaseActivity).progressON(requireActivity())
+                binding.signupEmailLayout.error = null
+                binding.signupPasswordLayout.error = null
+                (requireActivity() as BaseActivity).hideKeyboard(binding.signupPasswordLayout)
+                (requireActivity() as BaseActivity).showProgress(requireActivity())
                 accountViewModel.signUpWithEmail(email, pw)
             }
         }

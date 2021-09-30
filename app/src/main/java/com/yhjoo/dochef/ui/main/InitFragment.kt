@@ -25,12 +25,13 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
-class MainInitFragment : Fragment() {
+class InitFragment : Fragment() {
     private val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
     private lateinit var binding: MainInitFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
+            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
@@ -44,7 +45,6 @@ class MainInitFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.main_init_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -61,15 +61,13 @@ class MainInitFragment : Fragment() {
             mainInitRecommendText.text =
                 String.format(getString(R.string.format_recommend_title), "Chef").parseAsHtml()
             mainInitRecommendMore.setOnClickListener {
-                startActivity(Intent(context, RecipeThemeActivity::class.java))
+                startActivity(Intent(requireContext(), RecipeThemeActivity::class.java))
             }
 
             recipeListHorizontalAdapter = RecipeListHorizontalAdapter(
-                RecipeListHorizontalAdapter.MAIN_INIT
+                RecipeListHorizontalAdapter.CONSTANTS.LayoutType.MAIN_INIT
             ) { item ->
-                Intent(
-                    requireContext(), RecipeDetailActivity::class.java
-                )
+                Intent(requireContext(), RecipeDetailActivity::class.java)
                     .putExtra("recipeID", item.recipeID).apply {
                         startActivity(this)
                     }
@@ -81,14 +79,13 @@ class MainInitFragment : Fragment() {
                 adapter = recipeListHorizontalAdapter
             }
 
-            mainViewModel.requestRecommendList()
             mainViewModel.allRecommendList.observe(viewLifecycleOwner, {
                 recipesEmpty.isVisible = it.isEmpty()
                 recipeListHorizontalAdapter.submitList(it) {}
             })
         }
 
-        return view
+        return binding.root
     }
 
     class MainAdPagerAdapter(private val img_ids: Array<Int>) :

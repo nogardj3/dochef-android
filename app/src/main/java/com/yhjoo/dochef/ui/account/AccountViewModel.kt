@@ -1,24 +1,29 @@
 package com.yhjoo.dochef.ui.account
 
-import android.app.Activity
+import android.app.Application
+import android.content.Intent
 import android.os.Bundle
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import androidx.core.content.edit
+import androidx.core.os.bundleOf
+import androidx.lifecycle.*
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
-import com.yhjoo.dochef.App
+import com.google.firebase.messaging.FirebaseMessaging
+import com.google.gson.Gson
 import com.yhjoo.dochef.Constants
-import com.yhjoo.dochef.data.model.UserBrief
+import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
+import com.yhjoo.dochef.utils.DatastoreUtil
+import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
+    private val application: Application,
     private val accountRepository: AccountRepository
 ) : ViewModel() {
     companion object CONSTANTS {
@@ -29,25 +34,58 @@ class AccountViewModel(
             const val SIGNUP_NICKNAME = 3
             const val ACQUIRE_TOKEN = 4
             const val CHECK_USERINFO = 5
+            const val FIND_PW = 6
         }
     }
+    val googleSigninIntent: Intent by lazy {
+        GoogleSignIn.getClient(
+            application.applicationContext,
+            GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken("227618773978-c5ptgsjltcrv8hl1dmgci6rnedd8ene9.apps.googleusercontent.com")
+                .requestEmail()
+                .build()
+        ).signInIntent
+    }
 
-    val googleClient = MutableLiveData<GoogleSignInClient>()
-    val firebaseAnalytics = MutableLiveData<FirebaseAnalytics>()
-    val firebaseAuth = MutableLiveData<FirebaseAuth>()
-    val firebaseUserToken = MutableLiveData<String>()
-    val fcmToken = MutableLiveData<String>()
+    private val firebaseAnalytics: FirebaseAnalytics by lazy {
+        FirebaseAnalytics.getInstance(application.applicationContext)
+    }
+    private val firebaseAuth: FirebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
+    private lateinit var fcmToken: String
+    private lateinit var firebaseUserToken: String
 
-    val phaseError = MutableLiveData<Pair<Int, String>>()
-    val phaseAllComplete = MutableLiveData<UserBrief>()
+    private var _phaseError = MutableLiveData<Pair<Int, String>>()
+    private var _phaseFindPWComplete = MutableLiveData<Boolean>()
+    private var _phaseAllComplete = MutableLiveData<Boolean>()
 
-    fun signInWithGoogle(activity: Activity, idToken: String) {
+    val phaseError: LiveData<Pair<Int, String>>
+        get() = _phaseError
+    val phaseFindPWComplete: LiveData<Boolean>
+        get() = _phaseFindPWComplete
+    val phaseAllComplete: LiveData<Boolean>
+        get() = _phaseAllComplete
+
+    init {
+        FirebaseMessaging.getInstance().token
+            .addOnCompleteListener { task: Task<String?> ->
+                if (!task.isSuccessful) {
+                    OtherUtil.log(task.exception.toString())
+                    return@addOnCompleteListener
+                } else
+                    fcmToken = task.result!!
+            }
+    }
+
+    fun signInWithGoogle(idToken: String) {
         viewModelScope.launch {
             val credential = GoogleAuthProvider.getCredential(idToken, null)
 
-            firebaseAuth.value!!
+            firebaseAuth
                 .signInWithCredential(credential)
-                .addOnCompleteListener(activity) { task: Task<AuthResult?> ->
+                .addOnCompleteListener { task: Task<AuthResult?> ->
                     if (task.isSuccessful) {
                         getFirebaseUserToken()
                     } else {
@@ -55,7 +93,7 @@ class AccountViewModel(
 
                         val message = "알 수 없는 오류 발생. 다시 시도해 주세요."
 
-                        phaseError.value = Pair(
+                        _phaseError.value = Pair(
                             PHASE.SIGNIN_GOOGLE,
                             message
                         )
@@ -66,7 +104,7 @@ class AccountViewModel(
 
     fun signInWithEmail(email: String, pw: String) {
         viewModelScope.launch {
-            firebaseAuth.value!!
+            firebaseAuth
                 .signInWithEmailAndPassword(email, pw)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful)
@@ -88,7 +126,7 @@ class AccountViewModel(
                             }
                         } else "알 수 없는 오류 발생. 다시 시도해 주세요."
 
-                        phaseError.value = Pair(
+                        _phaseError.value = Pair(
                             PHASE.SIGNIN_EMAIL,
                             message
                         )
@@ -99,7 +137,8 @@ class AccountViewModel(
 
     fun signUpWithEmail(email: String, pw: String) {
         viewModelScope.launch {
-            firebaseAuth.value!!.createUserWithEmailAndPassword(email, pw)
+            firebaseAuth
+                .createUserWithEmailAndPassword(email, pw)
                 .addOnCompleteListener { task: Task<AuthResult> ->
                     if (task.isSuccessful) {
                         getFirebaseUserToken()
@@ -121,7 +160,7 @@ class AccountViewModel(
                                 "알 수 없는 오류가 발생. 다시 시도해 주세요"
                         }
 
-                        phaseError.value = Pair(
+                        _phaseError.value = Pair(
                             PHASE.SIGNUP_EMAIL,
                             message
                         )
@@ -133,45 +172,61 @@ class AccountViewModel(
     fun signUpWithNickname(nickname: String) {
         viewModelScope.launch {
             accountRepository.createUser(
-                firebaseUserToken.value!!,
-                fcmToken.value!!,
-                firebaseAuth.value!!.uid!!,
+                firebaseUserToken,
+                fcmToken,
+                firebaseAuth.uid!!,
                 nickname
             ).collect {
                 if (it.code() == 403) {
-                    phaseError.value = Pair(
+                    _phaseError.value = Pair(
                         PHASE.SIGNUP_NICKNAME,
                         "이미 존재하는 닉네임입니다."
                     )
                 } else {
-                    val bundle = Bundle().apply {
-                        putString(
+                    val bundle = bundleOf(
+                        Pair(
                             FirebaseAnalytics.Param.ITEM_ID,
                             Constants.ANALYTICS.ID.SIGNUP
-                        )
-                        putString(
+                        ),
+                        Pair(
                             FirebaseAnalytics.Param.ITEM_NAME,
                             Constants.ANALYTICS.NAME.SIGNUP
                         )
+                    )
+                    analyticsLogEvent(FirebaseAnalytics.Event.SIGN_UP, bundle)
+
+                    val userInfo = it.body()!!
+                    OtherUtil.log(userInfo.toString())
+                    DatastoreUtil.getSharedPreferences(application.applicationContext).edit {
+                        putBoolean(
+                            application.applicationContext.getString(R.string.SP_ACTIVATEDDEVICE),
+                            true
+                        )
+                        putString(
+                            application.applicationContext.getString(R.string.SP_USERINFO),
+                            Gson().toJson(userInfo)
+                        )
+                        apply()
                     }
-                    firebaseAnalytics.value!!.logEvent(FirebaseAnalytics.Event.SIGN_UP, bundle)
-                    phaseAllComplete.value = it.body()!!
+
+                    _phaseAllComplete.value = true
                 }
             }
         }
     }
 
     fun getFirebaseUserToken() {
-        firebaseAuth.value!!.currentUser!!.getIdToken(true)
+        firebaseAuth.currentUser!!
+            .getIdToken(true)
             .addOnCompleteListener { task: Task<GetTokenResult> ->
                 if (task.isSuccessful) {
-                    firebaseUserToken.value = task.result!!.token!!
+                    firebaseUserToken = task.result!!.token!!
                     checkUserInfo()
                 } else {
                     task.exception?.printStackTrace()
 
                     val message = "토큰을 얻어오는데 실패했습니다."
-                    phaseError.value = Pair(
+                    _phaseError.value = Pair(
                         PHASE.ACQUIRE_TOKEN,
                         message
                     )
@@ -182,32 +237,69 @@ class AccountViewModel(
     fun checkUserInfo() {
         viewModelScope.launch {
             accountRepository.checkUser(
-                firebaseUserToken.value!!,
-                firebaseAuth.value!!.uid!!,
-                fcmToken.value!!
+                firebaseUserToken,
+                firebaseAuth.uid!!,
+                fcmToken
             ).collect {
                 if (it.code() == 409) {
-                    App.showToast("닉네임을 입력해주세요.")
-
                     val message = "닉네임을 입력해주세요."
-                    phaseError.value = Pair(
+                    _phaseError.value = Pair(
                         PHASE.CHECK_USERINFO,
                         message
                     )
-                } else
-                    phaseAllComplete.value = it.body()!!
+                } else {
+                    val userInfo = it.body()!!
+                    OtherUtil.log(userInfo.toString())
+                    DatastoreUtil.getSharedPreferences(application.applicationContext).edit {
+                        putBoolean(
+                            application.applicationContext.getString(R.string.SP_ACTIVATEDDEVICE),
+                            true
+                        )
+                        putString(
+                            application.applicationContext.getString(R.string.SP_USERINFO),
+                            Gson().toJson(userInfo)
+                        )
+                        apply()
+                    }
+
+                    _phaseAllComplete.value = true
+                }
             }
         }
+    }
+
+    fun sendPasswordResetEmail(email: String) {
+        firebaseAuth
+            .sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _phaseFindPWComplete.value = true
+                } else {
+                    task.exception?.printStackTrace()
+
+                    val message = "비밀번호 재설정에 실패했습니다."
+                    _phaseError.value = Pair(
+                        PHASE.FIND_PW,
+                        message
+                    )
+                }
+            }
+    }
+
+    fun analyticsLogEvent(event: String, bundle: Bundle) {
+        firebaseAnalytics.logEvent(event, bundle)
     }
 }
 
 class AccountViewModelFactory(
+    private val application: Application,
     private val accountRepository: AccountRepository
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AccountViewModel::class.java)) {
             return AccountViewModel(
+                application,
                 accountRepository
             ) as T
         }

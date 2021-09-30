@@ -21,10 +21,11 @@ import com.yhjoo.dochef.ui.setting.SettingActivity
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 
-class MainUserFragment : Fragment() {
+class UserFragment : Fragment() {
     private lateinit var binding: MainUserFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
+            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
@@ -38,7 +39,6 @@ class MainUserFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.main_user_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -56,27 +56,24 @@ class MainUserFragment : Fragment() {
                 )
                 binding.mainUserNickname.text = it.nickname
             })
-            mainViewModel.userId.observe(viewLifecycleOwner, {
-                if (it != null)
-                    mainViewModel.requestActiveUserDetail()
-            })
         }
-        return view
+
+        return binding.root
     }
 
     private fun goHome() {
-        startActivity(Intent(context, HomeActivity::class.java))
+        startActivity(Intent(requireContext(), HomeActivity::class.java))
     }
 
     private fun goMyRecipe() {
-        Intent(context, RecipeMyListActivity::class.java)
-            .putExtra("userID", mainViewModel.userId.value).apply {
+        Intent(requireContext(), RecipeMyListActivity::class.java)
+            .putExtra("userID", mainViewModel.userId).apply {
                 startActivity(this)
             }
     }
 
     private fun goSetting() {
-        startActivity(Intent(context, SettingActivity::class.java))
+        startActivity(Intent(requireContext(), SettingActivity::class.java))
     }
 
     private fun goReview() {

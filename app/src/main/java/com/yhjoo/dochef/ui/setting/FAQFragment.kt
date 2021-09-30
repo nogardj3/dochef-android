@@ -29,7 +29,6 @@ class FAQFragment : Fragment() {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.setting_faq_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -53,6 +52,6 @@ class FAQFragment : Fragment() {
             settingViewModel.requestFAQs()
         }
 
-        return view
+        return binding.root
     }
 }

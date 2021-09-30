@@ -76,7 +76,6 @@ class PostListAdapter(
                     homePostTags.addView(tagcontainer)
                 }
 
-
                 if (post.comments.size != 0) {
                     homePostCommentGroup.isVisible = true
 

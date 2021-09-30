@@ -15,7 +15,7 @@ import com.yhjoo.dochef.utils.ImageLoaderUtil
 import java.util.*
 
 class FollowListAdapter(
-    var activeUserID: String,
+    private val activeUserID: String,
     private val subscribeListener: (UserBrief) -> Unit,
     private val unsubscribeListener: (UserBrief) -> Unit,
     private val itemClickListener: (UserBrief) -> Unit

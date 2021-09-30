@@ -18,7 +18,9 @@ class RecipeListHorizontalAdapter(
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
     companion object CONSTANTS {
-        const val MAIN_INIT = 0
+        object LayoutType {
+            const val MAIN_INIT = 0
+        }
     }
 
     lateinit var context: Context
@@ -27,7 +29,7 @@ class RecipeListHorizontalAdapter(
         context = parent.context
 
         return when (layoutType) {
-            MAIN_INIT -> RecipeHorizontalViewHolder(
+            LayoutType.MAIN_INIT -> RecipeHorizontalViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(context),
                     R.layout.recipe_horizontal_item,

@@ -33,7 +33,6 @@ class NotificationActivity : BaseActivity() {
         setSupportActionBar(binding.notificationToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-
         binding.apply {
             lifecycleOwner = this@NotificationActivity
 

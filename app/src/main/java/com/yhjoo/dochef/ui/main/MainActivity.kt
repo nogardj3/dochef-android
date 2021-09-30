@@ -37,11 +37,11 @@ import com.yhjoo.dochef.utils.DatastoreUtil
 
 class MainActivity : BaseActivity() {
     private val mainTabs = arrayOf(
-        Pair(R.drawable.ic_home_white, MainInitFragment()),
-        Pair(R.drawable.ic_hot_white, MainRecipesFragment()),
-        Pair(R.drawable.ic_favorite_white, MainMyRecipeFragment()),
+        Pair(R.drawable.ic_home_white, InitFragment()),
+        Pair(R.drawable.ic_hot_white, RecipesFragment()),
+        Pair(R.drawable.ic_favorite_white, MyRecipeFragment()),
         Pair(R.drawable.ic_article_white, TimelineFragment()),
-        Pair(R.drawable.ic_person_white, MainUserFragment())
+        Pair(R.drawable.ic_person_white, UserFragment())
     )
 
     private val binding: MainActivityBinding by lazy {
@@ -49,15 +49,10 @@ class MainActivity : BaseActivity() {
     }
     private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(
-            UserRepository(
-                applicationContext
-            ),
-            RecipeRepository(
-                applicationContext
-            ),
-            PostRepository(
-                applicationContext
-            )
+            application,
+            UserRepository(applicationContext),
+            RecipeRepository(applicationContext),
+            PostRepository(applicationContext)
         )
     }
     private lateinit var firebaseAnalytics: FirebaseAnalytics
@@ -90,8 +85,6 @@ class MainActivity : BaseActivity() {
 
         binding.apply {
             lifecycleOwner = this@MainActivity
-
-            mainViewModel.userId.postValue(userID)
 
             mainViewpager.apply {
                 offscreenPageLimit = 5

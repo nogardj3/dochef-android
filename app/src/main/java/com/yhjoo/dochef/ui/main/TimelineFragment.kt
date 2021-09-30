@@ -28,6 +28,7 @@ class TimelineFragment : Fragment(), OnRefreshListener {
     private lateinit var binding: MainTimelineFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
+            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
@@ -42,7 +43,6 @@ class TimelineFragment : Fragment(), OnRefreshListener {
     ): View {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.main_timeline_fragment, container, false)
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -78,7 +78,7 @@ class TimelineFragment : Fragment(), OnRefreshListener {
             mainViewModel.requestPostList()
         }
 
-        return view
+        return binding.root
     }
 
     override fun onRefresh() {
@@ -87,14 +87,14 @@ class TimelineFragment : Fragment(), OnRefreshListener {
     }
 
     private fun userClick(post: Post) {
-        Intent(context, HomeActivity::class.java)
+        Intent(requireContext(), HomeActivity::class.java)
             .putExtra("userID", post.userID).apply {
                 startActivity(this)
             }
     }
 
     private fun itemClick(post: Post) {
-        Intent(this@TimelineFragment.context, PostDetailActivity::class.java)
+        Intent(requireContext(), PostDetailActivity::class.java)
             .putExtra("postID", post.postID).apply {
                 startActivity(this)
             }

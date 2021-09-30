@@ -1,31 +1,51 @@
 package com.yhjoo.dochef.ui.post
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import android.content.Intent
+import androidx.lifecycle.*
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.CommentRepository
 import com.yhjoo.dochef.data.repository.PostRepository
+import com.yhjoo.dochef.utils.DatastoreUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class PostDetailViewModel(
+    private val application: Application,
+    intent: Intent,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository
 ) : ViewModel() {
-    val userId = MutableLiveData<String>()
-    val postId = MutableLiveData<Int>()
-    val isDeleted = MutableLiveData<Boolean>()
-    val likeThisPost = MutableLiveData<Boolean>()
-    val postDetail = MutableLiveData<Post>()
-    val allComments = MutableLiveData<List<Comment>>()
+    val userId by lazy {
+        DatastoreUtil.getUserBrief(application.applicationContext).userID
+    }
+    val postId: Int = intent.getIntExtra("postID", -1)
+
+    private val _isDeleted = MutableLiveData<Boolean>()
+    private val _likeThisPost = MutableLiveData<Boolean>()
+    private val _postDetail = MutableLiveData<Post>()
+    private val _allComments = MutableLiveData<List<Comment>>()
+
+    val isDeleted: LiveData<Boolean>
+        get() = _isDeleted
+    val likeThisPost: LiveData<Boolean>
+        get() = _likeThisPost
+    val postDetail: LiveData<Post>
+        get() = _postDetail
+    val allComments: LiveData<List<Comment>>
+        get() = _allComments
+
+    init {
+        requestPostDetail()
+        requestComments()
+    }
 
     fun requestPostDetail() {
         viewModelScope.launch {
-            postRepository.getPostDetail(postId.value!!).collect {
-                postDetail.value = it.body()
+            postRepository.getPostDetail(postId).collect {
+                _postDetail.value = it.body()
+                _likeThisPost.value = it.body()!!.likes.contains(userId)
             }
         }
     }
@@ -38,12 +58,12 @@ class PostDetailViewModel(
                 -1
 
             if (like == 1)
-                postRepository.dislikePost(userId.value!!,postDetail.value!!.postID).collect {
-                    likeThisPost.value = false
+                postRepository.dislikePost(userId, postDetail.value!!.postID).collect {
+                    _likeThisPost.value = false
                 }
             else
-                postRepository.likePost(userId.value!!,postDetail.value!!.postID).collect {
-                    likeThisPost.value = true
+                postRepository.likePost(userId, postDetail.value!!.postID).collect {
+                    _likeThisPost.value = true
                 }
         }
     }
@@ -53,15 +73,15 @@ class PostDetailViewModel(
             postRepository.deletePost(
                 postDetail.value!!.postID
             ).collect {
-                isDeleted.value = true
+                _isDeleted.value = true
             }
         }
     }
 
     fun requestComments() {
         viewModelScope.launch {
-            commentRepository.getComments(postId.value!!).collect {
-                allComments.value = it.body()
+            commentRepository.getComments(postId).collect {
+                _allComments.value = it.body()
             }
         }
     }
@@ -69,8 +89,8 @@ class PostDetailViewModel(
     fun createComment(contents: String) {
         viewModelScope.launch {
             commentRepository.createComment(
-                postId.value!!,
-                userId.value!!,
+                postId,
+                userId,
                 contents,
                 System.currentTimeMillis()
             ).collect {
@@ -91,13 +111,15 @@ class PostDetailViewModel(
 }
 
 class PostDetailViewModelFactory(
+    private val application: Application,
+    private val intent: Intent,
     private val postRepository: PostRepository,
     private val commentRepository: CommentRepository
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostDetailViewModel::class.java)) {
-            return PostDetailViewModel(postRepository, commentRepository) as T
+            return PostDetailViewModel(application, intent, postRepository, commentRepository) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

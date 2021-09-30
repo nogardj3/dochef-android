@@ -41,7 +41,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.setting_fragment, container, false)
-        val view: View = binding.root
 
         sharedPreferences = DatastoreUtil.getSharedPreferences(requireContext())
         notiSettingArray = resources.getStringArray(R.array.sp_noti)
@@ -75,7 +74,7 @@ class MainFragment : Fragment() {
 
         setNotificiationSettings()
 
-        return view
+        return binding.root
     }
 
     private fun startNotice() {

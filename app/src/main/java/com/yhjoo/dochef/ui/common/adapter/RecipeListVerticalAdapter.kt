@@ -25,8 +25,8 @@ class RecipeListVerticalAdapter(
     private val childClickListener: ((Recipe) -> Unit)?
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
-    companion object CONSTANTS{
-        object LAYOUT_TYPE {
+    companion object CONSTANTS {
+        object LayoutType {
             const val MAIN_RECIPES = 0
             const val MAIN_MYRECIPE = 1
             const val MYLIST = 2
@@ -40,7 +40,7 @@ class RecipeListVerticalAdapter(
         context = parent.context
 
         return when (layoutType) {
-            LAYOUT_TYPE.MAIN_RECIPES -> MainRecipesViewHolder(
+            LayoutType.MAIN_RECIPES -> MainRecipesViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(context),
                     R.layout.main_recipes_item,
@@ -48,7 +48,7 @@ class RecipeListVerticalAdapter(
                     false
                 )
             )
-            LAYOUT_TYPE.MAIN_MYRECIPE -> MainMyRecipeViewHolder(
+            LayoutType.MAIN_MYRECIPE -> MainMyRecipeViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(context),
                     R.layout.main_myrecipe_item,
@@ -56,7 +56,7 @@ class RecipeListVerticalAdapter(
                     false
                 )
             )
-            LAYOUT_TYPE.MYLIST -> RecipeMyListViewHolder(
+            LayoutType.MYLIST -> RecipeMyListViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(context),
                     R.layout.recipemylist_item,

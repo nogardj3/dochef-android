@@ -22,8 +22,9 @@ class RetrofitServices {
     }
 
     interface AccountService {
+        @FormUrlEncoded
         @POST("user/check/nickname")
-        suspend fun checkNickname(@Query("nickname") nickname: String): Response<JsonObject>
+        suspend fun checkNickname(@Field("nickname") nickname: String): Response<JsonObject>
 
         @FormUrlEncoded
         @POST("user/check/")
@@ -123,6 +124,7 @@ class RetrofitServices {
             @Field("like") like: Int
         ): Response<JsonObject>
 
+        @FormUrlEncoded
         @POST("recipe/create")
         suspend fun createRecipe(
             @Body recipeDetail: RecipeDetail //                @Field("user_id") String userID,
@@ -136,6 +138,7 @@ class RetrofitServices {
             //                                                  @Field("phase") ArrayList<RecipePhase> phases
         ): Response<JsonObject>
 
+        @FormUrlEncoded
         @POST("recipe/delete")
         suspend fun deleteRecipe(
             @Field("recipe_id") recipeId: Int,
@@ -159,7 +162,7 @@ class RetrofitServices {
 
         @FormUrlEncoded
         @POST("review/delete")
-        suspend fun deleteReview(@Query("recipe_id") recipeId: Int): Response<JsonObject>
+        suspend fun deleteReview(@Field("recipe_id") recipeId: Int): Response<JsonObject>
     }
 
     interface PostService {

@@ -19,6 +19,7 @@ class AccountSignUpNickFragment : Fragment() {
     private lateinit var binding: AccountSignupnickFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
+            requireActivity().application,
             AccountRepository(requireContext().applicationContext)
         )
     }
@@ -34,7 +35,6 @@ class AccountSignUpNickFragment : Fragment() {
             container,
             false
         )
-        val view: View = binding.root
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
@@ -45,50 +45,42 @@ class AccountSignUpNickFragment : Fragment() {
                 }
                 setOnEditorActionListener { _, actionId, _ ->
                     if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        when {
-                            ValidateUtil.pwValidate(signupnickNicknameEdittext.text.toString()) == ValidateUtil.PwResult.ERR_LENGTH ->
-                                signupnickNicknameLayout.error =
-                                    "닉네임 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요."
-                            ValidateUtil.pwValidate(signupnickNicknameEdittext.text.toString()) == ValidateUtil.PwResult.ERR_INVALID ->
-                                signupnickNicknameLayout.error =
-                                    "닉네임 형식을 확인 해 주세요. 숫자, 알파벳 대소문자, 한글만 사용가능합니다."
-                            else -> {
-                                signupnickNicknameLayout.error = null
-                                (requireActivity() as BaseActivity).hideKeyboard(
-                                    signupnickNicknameLayout
-                                )
-                            }
-                        }
+                        val validateResult = ValidateUtil.nicknameValidate(
+                            signupnickNicknameEdittext.text.toString()
+                        )
+
+                        if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
+                            signupnickNicknameLayout.error = null
+                            (requireActivity() as BaseActivity).hideKeyboard(
+                                signupnickNicknameLayout
+                            )
+                        } else
+                            signupnickNicknameLayout.error = validateResult.second
+
                         true
                     } else
                         false
                 }
             }
 
-            signupnickOk.setOnClickListener { signUpWithEmail() }
+            signupnickOk.setOnClickListener { signUpWithEmail(signupnickNicknameEdittext.text.toString()) }
         }
 
-        return view
+        return binding.root
     }
 
-    private fun signUpWithEmail() {
-        val nickname = binding.signupnickNicknameEdittext.text.toString()
+    private fun signUpWithEmail(nickname: String) {
+        val validateResult = ValidateUtil.nicknameValidate(nickname)
 
-        when {
-            ValidateUtil.nicknameValidate(nickname) == ValidateUtil.PwResult.ERR_LENGTH ->
-                binding.signupnickNicknameLayout.apply {
-                    error = "닉네임 길이를 확인 해 주세요. 6자 이상, 10자 이하로 입력해주세요."
-                    requestFocus()
-                }
-            ValidateUtil.nicknameValidate(nickname) == ValidateUtil.PwResult.ERR_INVALID ->
-                binding.signupnickNicknameLayout.apply {
-                    error = "닉네임 형식을 확인 해 주세요. 숫자, 알파벳 대소문자, 한글만 사용가능합니다."
-                    requestFocus()
-                }
-            else -> {
-                (requireActivity() as BaseActivity).progressON(requireActivity())
-                accountViewModel.signUpWithNickname(nickname)
+        if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
+            binding.signupnickNicknameLayout.error = null
+            (requireActivity() as BaseActivity).hideKeyboard(binding.signupnickNicknameLayout)
+            (requireActivity() as BaseActivity).showProgress(requireActivity())
+            accountViewModel.signUpWithNickname(nickname)
+        } else
+            binding.signupnickNicknameLayout.apply {
+                error = validateResult.second
+                requestFocus()
             }
-        }
     }
 }
