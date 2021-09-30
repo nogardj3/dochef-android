@@ -14,7 +14,7 @@ class PostWriteViewModel(
 ) : ViewModel() {
     val userId = MutableLiveData<String>()
     val postId = MutableLiveData<Int>()
-    val isFinished = MutableLiveData(false)
+    val isFinished = MutableLiveData<Boolean>()
 
     fun createPost(
         postImgs: String,

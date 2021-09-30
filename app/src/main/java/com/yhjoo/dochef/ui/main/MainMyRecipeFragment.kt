@@ -15,7 +15,7 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MAIN_MYRECIPE
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.MAIN_MYRECIPE
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*

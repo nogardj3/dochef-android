@@ -6,6 +6,7 @@ import com.github.florent37.viewanimator.ViewAnimator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.BasicService
@@ -35,9 +36,8 @@ class SplashActivity : BaseActivity() {
 
         firebaseAnalytics = FirebaseAnalytics.getInstance(this).apply {
             logEvent(FirebaseAnalytics.Event.APP_OPEN) {
-                param(FirebaseAnalytics.Param.ITEM_ID, getString(R.string.analytics_id_start))
-                param(FirebaseAnalytics.Param.ITEM_NAME, getString(R.string.analytics_name_start))
-                param(FirebaseAnalytics.Param.CONTENT_TYPE, getString(R.string.analytics_type_text))
+                param(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.START)
+                param(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.START)
             }
         }
 

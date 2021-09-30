@@ -18,9 +18,7 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.yhjoo.dochef.App
-import com.yhjoo.dochef.GlideApp
-import com.yhjoo.dochef.R
+import com.yhjoo.dochef.*
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.PostwriteActivityBinding
@@ -33,11 +31,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class PostWriteActivity : BaseActivity() {
-    companion object VALUES {
-        const val CODE_PERMISSION = 22
-        const val IMG_WIDTH = 1080
-        const val IMG_HEIGHT = 1080
-
+    companion object CONSTANTS {
         object UIMODE {
             const val WRITE = 0
             const val REVISE = 1
@@ -168,7 +162,7 @@ class PostWriteActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CODE_PERMISSION) {
+        if (requestCode == Constants.PERMISSION_CODE) {
             for (result in grantResults) if (result == PackageManager.PERMISSION_DENIED) {
                 App.showToast("권한 거부")
                 return
@@ -177,7 +171,10 @@ class PostWriteActivity : BaseActivity() {
                 options {
                     setGuidelines(CropImageView.Guidelines.ON)
                     setAspectRatio(1, 1)
-                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    setMaxCropResultSize(
+                        Constants.IMAGE.SIZE.POST.IMG_WIDTH,
+                        Constants.IMAGE.SIZE.POST.IMG_HEIGHT
+                    )
                     setOutputUri(imageUri)
                 }
             )
@@ -191,12 +188,15 @@ class PostWriteActivity : BaseActivity() {
                 options {
                     setGuidelines(CropImageView.Guidelines.ON)
                     setAspectRatio(1, 1)
-                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    setMaxCropResultSize(
+                        Constants.IMAGE.SIZE.POST.IMG_WIDTH,
+                        Constants.IMAGE.SIZE.POST.IMG_HEIGHT
+                    )
                     setOutputUri(imageUri)
                 }
             )
         } else
-            ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION)
+            ActivityCompat.requestPermissions(this, permissions, Constants.PERMISSION_CODE)
     }
 
     private fun doneClicked() {

@@ -15,7 +15,7 @@ class RecipeDetailViewModel(
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
-    val isDeleted = MutableLiveData(false)
+    val isDeleted = MutableLiveData<Boolean>()
 
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val allReviews = MutableLiveData<List<Review>>()

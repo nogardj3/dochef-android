@@ -21,8 +21,8 @@ class RecipeAdapter(
     private val itemClickListener: (Recipe) -> Unit
 ) :
     ListAdapter<Recipe, RecipeAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
-    companion object {
-        object LayoutType {
+    companion object CONSTANTS {
+        object LAYOUT_TYPE {
             const val NAME = 0
             const val INGREDIENT = 1
             const val TAG = 2
@@ -67,10 +67,10 @@ class RecipeAdapter(
                 )
 
                 when (layoutType) {
-                    LayoutType.NAME -> {
+                    LAYOUT_TYPE.NAME -> {
                         resultrecipeTitle.setTypeface(null, Typeface.BOLD)
                     }
-                    LayoutType.INGREDIENT -> {
+                    LAYOUT_TYPE.INGREDIENT -> {
                         resultrecipeIngredients.isVisible = true
                         resultrecipeIngredients.removeAllViews()
 
@@ -86,7 +86,7 @@ class RecipeAdapter(
                             resultrecipeIngredients.addView(tagcontainer)
                         }
                     }
-                    LayoutType.TAG -> {
+                    LAYOUT_TYPE.TAG -> {
                         resultrecipeTags.isVisible = true
                         resultrecipeTags.removeAllViews()
 

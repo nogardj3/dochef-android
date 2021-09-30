@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.yhjoo.dochef.RECIPE
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
@@ -28,8 +28,8 @@ class HomeViewModel(
     val allRecipes = MutableLiveData<List<Recipe>>()
     val allPosts = MutableLiveData<List<Post>>()
 
-    val updateComplete = MutableLiveData(false)
-    val nicknameValid = MutableLiveData(Pair(false, ""))
+    val updateComplete = MutableLiveData<Boolean>()
+    val nicknameValid = MutableLiveData<Pair<Boolean, String>>()
 
     fun requestActiveUserDetail() {
         viewModelScope.launch {
@@ -42,8 +42,8 @@ class HomeViewModel(
     fun requestRecipeList() {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RECIPE.SEARCHBY.USERID,
-                RECIPE.SORT.LATEST,
+                Constants.RECIPE.SEARCHBY.USERID,
+                Constants.RECIPE.SORT.LATEST,
                 targetUserId.value!!
             ).collect {
                 allRecipes.value = it.body()
@@ -76,7 +76,7 @@ class HomeViewModel(
     fun checkNickname(nickname: String) {
         viewModelScope.launch {
             accountRepository.checkNickname(nickname).collect {
-                if(it.isSuccessful){
+                if (it.isSuccessful) {
                     OtherUtil.log(it.body().toString())
                     nicknameValid.value = Pair(it.isSuccessful, nickname)
                 }

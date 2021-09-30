@@ -33,6 +33,8 @@ class ResultUserFragment : Fragment() {
         val view: View = binding.root
 
         binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+
             userListAdapter = UserListAdapter { item ->
                 Intent(context, HomeActivity::class.java)
                     .putExtra("userID", item.userID).apply {

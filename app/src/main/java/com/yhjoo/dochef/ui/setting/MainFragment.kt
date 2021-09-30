@@ -47,6 +47,8 @@ class MainFragment : Fragment() {
         notiSettingArray = resources.getStringArray(R.array.sp_noti)
 
         binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+
             settingNotice.setOnClickListener { startNotice() }
             settingVersion.text = BuildConfig.VERSION_NAME
             settingFaq.setOnClickListener { startFAQ() }

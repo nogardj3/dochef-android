@@ -16,8 +16,8 @@ class RecipePlayViewModel(
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
     val userId = MutableLiveData<String>()
-    val reviewFinished = MutableLiveData(false)
-    val likeThisRecipe = MutableLiveData(false)
+    val reviewFinished = MutableLiveData<Boolean>()
+    val likeThisRecipe = MutableLiveData<Boolean>()
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val recipePhases = MutableLiveData<ArrayList<RecipePhase>>()
 

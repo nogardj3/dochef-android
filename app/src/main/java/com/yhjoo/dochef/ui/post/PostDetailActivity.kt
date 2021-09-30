@@ -177,7 +177,7 @@ class PostDetailActivity : BaseActivity() {
             R.id.menu_post_owner_revise -> {
                 val postInfo = postDetailViewModel.postDetail.value!!
                 Intent(this@PostDetailActivity, PostWriteActivity::class.java)
-                    .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.REVISE)
+                    .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.REVISE)
                     .putExtra("postID", postInfo.postID)
                     .putExtra("postImg", postInfo.postImg)
                     .putExtra("contents", postInfo.contents)

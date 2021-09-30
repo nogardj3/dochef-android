@@ -17,8 +17,7 @@ object ImageLoaderUtil {
             .child(context.getString(R.string.storage_path_profile) + filename)
         GlideApp.with(context)
             .load(if (App.isServerAlive) profileSrc else Integer.valueOf(filename))
-            .error(R.drawable.ic_error)
-            .fallback(R.drawable.ic_person_white)
+            .error(R.drawable.ic_profile_black)
             .circleCrop()
             .into(appCompatImageView)
     }
@@ -34,7 +33,6 @@ object ImageLoaderUtil {
         GlideApp.with(context)
             .load(if (App.isServerAlive) recipeSrc else Integer.valueOf(filename))
             .error(R.drawable.ic_error)
-            .fallback(R.drawable.ic_error)
             .into(appCompatImageView)
     }
 
@@ -45,6 +43,7 @@ object ImageLoaderUtil {
     ) {
         val postSrc = FirebaseStorage.getInstance().reference
             .child(context.getString(R.string.storage_path_post) + filename)
+
         GlideApp.with(context)
             .load(if (App.isServerAlive) postSrc else Integer.valueOf(filename))
             .into(appCompatImageView)

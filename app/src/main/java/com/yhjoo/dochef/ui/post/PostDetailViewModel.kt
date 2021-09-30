@@ -17,8 +17,8 @@ class PostDetailViewModel(
 ) : ViewModel() {
     val userId = MutableLiveData<String>()
     val postId = MutableLiveData<Int>()
-    val isDeleted = MutableLiveData(false)
-    val likeThisPost = MutableLiveData(false)
+    val isDeleted = MutableLiveData<Boolean>()
+    val likeThisPost = MutableLiveData<Boolean>()
     val postDetail = MutableLiveData<Post>()
     val allComments = MutableLiveData<List<Comment>>()
 

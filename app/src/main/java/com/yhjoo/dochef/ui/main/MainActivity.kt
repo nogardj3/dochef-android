@@ -21,8 +21,8 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
@@ -149,9 +149,9 @@ class MainActivity : BaseActivity() {
             .setBackgroundAlpha(0f)
             .setOnMenuItemClickListener { position, _ ->
                 val mode = when (position) {
-                    0 -> RECIPE.SORT.LATEST
-                    1 -> RECIPE.SORT.POPULAR
-                    2 -> RECIPE.SORT.RATING
+                    0 -> Constants.RECIPE.SORT.LATEST
+                    1 -> Constants.RECIPE.SORT.POPULAR
+                    2 -> Constants.RECIPE.SORT.RATING
                     else -> ""
                 }
                 mainViewModel.changeRecipesSort(mode)
@@ -165,26 +165,6 @@ class MainActivity : BaseActivity() {
         MaterialDialog(this).show {
             message(text = "종료하시겠습니까?")
             positiveButton(text = "확인") {
-                val bundle = Bundle()
-                bundle.apply {
-                    putString(
-                        FirebaseAnalytics.Param.ITEM_ID,
-                        getString(R.string.analytics_id_terminated)
-                    )
-                    putString(
-                        FirebaseAnalytics.Param.ITEM_NAME,
-                        getString(R.string.analytics_name_terminated)
-                    )
-                    putString(
-                        FirebaseAnalytics.Param.CONTENT_TYPE,
-                        getString(R.string.analytics_type_text)
-                    )
-                }
-
-                firebaseAnalytics.logEvent(
-                    getString(R.string.analytics_event_terminated),
-                    bundle
-                )
                 finish()
             }
             negativeButton(text = "취소")
@@ -236,7 +216,7 @@ class MainActivity : BaseActivity() {
             }
             R.id.main_menu_write_post -> {
                 val intent = Intent(this, PostWriteActivity::class.java)
-                    .putExtra("MODE", PostWriteActivity.VALUES.UIMODE.WRITE)
+                    .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.WRITE)
                 startActivity(intent)
                 true
             }

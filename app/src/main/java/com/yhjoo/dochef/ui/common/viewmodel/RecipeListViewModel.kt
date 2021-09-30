@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 class RecipeListViewModel(
     private val repository: RecipeRepository
 ) : ViewModel() {
-    val listChanged = MutableLiveData(false)
+    val listChanged = MutableLiveData<Boolean>()
     val allRecipeList = MutableLiveData<List<Recipe>>()
 
     fun requestRecipeList(searchby: Int, sort: String, searchValue: String?) {

@@ -21,9 +21,7 @@ import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.yhjoo.dochef.App
-import com.yhjoo.dochef.GlideApp
-import com.yhjoo.dochef.R
+import com.yhjoo.dochef.*
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.network.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.*
@@ -37,12 +35,6 @@ import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class HomeActivity : BaseActivity() {
-    companion object {
-        const val CODE_PERMISSION = 22
-        const val IMG_WIDTH = 360
-        const val IMG_HEIGHT = 360
-    }
-
     object UIMODE {
         const val OWNER = 0
         const val OTHERS = 1
@@ -209,7 +201,7 @@ class HomeActivity : BaseActivity() {
                     binding.homeNickname.text = result.second
                     nicknameDialog.dismiss()
                 } else {
-                    if(result.second != "")
+                    if (result.second != "")
                         App.showToast("이미 존재합니다.")
                 }
             })
@@ -275,7 +267,7 @@ class HomeActivity : BaseActivity() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == CODE_PERMISSION) {
+        if (requestCode == Constants.PERMISSION_CODE) {
             for (result in grantResults) if (result == PackageManager.PERMISSION_DENIED) {
                 App.showToast("권한 거부")
                 return
@@ -287,8 +279,14 @@ class HomeActivity : BaseActivity() {
                     setAspectRatio(1, 1)
                     setOutputUri(imageUri)
                     setCropShape(CropImageView.CropShape.OVAL)
-                    setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
-                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    setRequestedSize(
+                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
+                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
+                    )
+                    setMaxCropResultSize(
+                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
+                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
+                    )
                 }
             )
         }
@@ -343,11 +341,17 @@ class HomeActivity : BaseActivity() {
                     setAspectRatio(1, 1)
                     setOutputUri(imageUri)
                     setCropShape(CropImageView.CropShape.OVAL)
-                    setRequestedSize(IMG_WIDTH, IMG_HEIGHT)
-                    setMaxCropResultSize(IMG_WIDTH, IMG_HEIGHT)
+                    setRequestedSize(
+                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
+                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
+                    )
+                    setMaxCropResultSize(
+                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
+                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
+                    )
                 }
             )
-        } else ActivityCompat.requestPermissions(this, permissions, CODE_PERMISSION)
+        } else ActivityCompat.requestPermissions(this, permissions, Constants.PERMISSION_CODE)
     }
 
     private fun clickReviseNickname() {

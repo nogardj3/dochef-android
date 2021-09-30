@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.annotation.WorkerThread
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.RecipeDetail
@@ -48,25 +48,25 @@ class RecipeRepository(
         return flow {
             if (App.isServerAlive) {
                 when (searchby) {
-                    RECIPE.SEARCHBY.USERID -> emit(
+                    Constants.RECIPE.SEARCHBY.USERID -> emit(
                         recipeClient.getRecipeByUserID(
                             searchValue!!,
                             sort
                         )
                     )
-                    RECIPE.SEARCHBY.INGREDIENT -> emit(
+                    Constants.RECIPE.SEARCHBY.INGREDIENT -> emit(
                         recipeClient.getRecipeByIngredient(
                             searchValue!!,
                             sort
                         )
                     )
-                    RECIPE.SEARCHBY.RECIPENAME -> emit(
+                    Constants.RECIPE.SEARCHBY.RECIPENAME -> emit(
                         recipeClient.getRecipeByName(
                             searchValue!!,
                             sort
                         )
                     )
-                    RECIPE.SEARCHBY.TAG -> emit(recipeClient.getRecipeByTag(searchValue!!, sort))
+                    Constants.RECIPE.SEARCHBY.TAG -> emit(recipeClient.getRecipeByTag(searchValue!!, sort))
                     else -> emit(recipeClient.getRecipes(sort))
                 }
             } else

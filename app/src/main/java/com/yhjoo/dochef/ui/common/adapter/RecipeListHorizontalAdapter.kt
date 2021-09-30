@@ -17,7 +17,7 @@ class RecipeListHorizontalAdapter(
     private val itemClickListener: ((Recipe) -> Unit)?
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
-    companion object {
+    companion object CONSTANTS {
         const val MAIN_INIT = 0
     }
 

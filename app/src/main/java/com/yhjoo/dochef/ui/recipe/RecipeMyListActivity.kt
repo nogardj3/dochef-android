@@ -8,13 +8,13 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MYLIST
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.MYLIST
 import com.yhjoo.dochef.ui.common.viewmodel.*
 import com.yhjoo.dochef.utils.*
 import java.util.*
@@ -64,8 +64,8 @@ class RecipeMyListActivity : BaseActivity() {
                             recipeListViewModel.disLikeRecipe(item.recipeID, userID)
 
                             recipeListViewModel.requestRecipeList(
-                                searchby = RECIPE.SEARCHBY.USERID,
-                                sort = RECIPE.SORT.LATEST,
+                                searchby = Constants.RECIPE.SEARCHBY.USERID,
+                                sort = Constants.RECIPE.SORT.LATEST,
                                 searchValue = userID
                             )
                         }
@@ -83,8 +83,8 @@ class RecipeMyListActivity : BaseActivity() {
                 if (recipeListViewModel.listChanged.value!!) {
                     recipeListViewModel.listChanged.value = false
                     recipeListViewModel.requestRecipeList(
-                        searchby = RECIPE.SEARCHBY.USERID,
-                        sort = RECIPE.SORT.LATEST,
+                        searchby = Constants.RECIPE.SEARCHBY.USERID,
+                        sort = Constants.RECIPE.SORT.LATEST,
                         searchValue = userID
                     )
                 }
@@ -99,8 +99,8 @@ class RecipeMyListActivity : BaseActivity() {
             })
 
             recipeListViewModel.requestRecipeList(
-                searchby = RECIPE.SEARCHBY.USERID,
-                sort = RECIPE.SORT.LATEST,
+                searchby = Constants.RECIPE.SEARCHBY.USERID,
+                sort = Constants.RECIPE.SORT.LATEST,
                 searchValue = userID
             )
         }

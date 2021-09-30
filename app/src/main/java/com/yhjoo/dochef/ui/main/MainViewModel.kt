@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.yhjoo.dochef.RECIPE
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
@@ -22,7 +22,7 @@ class MainViewModel(
     val userId = MutableLiveData<String>()
     val userDetail = MutableLiveData<UserDetail>()
 
-    private val recipesSort = MutableLiveData(RECIPE.SORT.LATEST)
+    private val recipesSort = MutableLiveData<String>(Constants.RECIPE.SORT.LATEST)
 
     val allRecipesList = MutableLiveData<List<Recipe>>()
     val allMyrecipeList = MutableLiveData<List<Recipe>>()
@@ -45,7 +45,7 @@ class MainViewModel(
     fun refreshRecipesList() {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RECIPE.SEARCHBY.ALL,
+                Constants.RECIPE.SEARCHBY.ALL,
                 recipesSort.value!!, null
             ).collect {
                 allRecipesList.value = it.body()
@@ -56,7 +56,7 @@ class MainViewModel(
     fun refreshMyrecipesList() {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RECIPE.SEARCHBY.USERID,
+                Constants.RECIPE.SEARCHBY.USERID,
                 recipesSort.value!!, userId.value
             ).collect {
                 allMyrecipeList.value = it.body()
@@ -67,8 +67,8 @@ class MainViewModel(
     fun requestRecommendList() {
         viewModelScope.launch {
             recipeRepository.getRecipeList(
-                RECIPE.SEARCHBY.ALL,
-                RECIPE.SORT.POPULAR, null
+                Constants.RECIPE.SEARCHBY.ALL,
+                Constants.RECIPE.SORT.POPULAR, null
             ).collect {
                 allRecommendList.value = it.body()
             }

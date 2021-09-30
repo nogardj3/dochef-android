@@ -5,24 +5,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
+import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountFindpwFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.ValidateUtil
 
 class AccountFindPWFragment : Fragment() {
     private lateinit var binding: AccountFindpwFragmentBinding
+    private val accountViewModel: AccountViewModel by activityViewModels {
+        AccountViewModelFactory(
+            AccountRepository(requireContext().applicationContext)
+        )
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = AccountFindpwFragmentBinding.inflate(inflater, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.account_findpw_fragment, container, false)
         val view: View = binding.root
 
         binding.apply {
+            lifecycleOwner = viewLifecycleOwner
+
             accountFindpwEdittext.apply {
                 textChanged {
                     accountFindpwEmailLayout.error = null

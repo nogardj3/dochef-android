@@ -15,7 +15,6 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainRecipesFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MAIN_RECIPES
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import java.util.*
 
@@ -59,7 +58,7 @@ class MainRecipesFragment : Fragment(), OnRefreshListener {
             }
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                MAIN_RECIPES,
+                RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.MAIN_RECIPES,
                 activeUserID = mainViewModel.userId.value,
                 itemClickListener = { item ->
                     Intent(

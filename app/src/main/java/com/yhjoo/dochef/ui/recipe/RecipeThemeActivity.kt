@@ -7,13 +7,13 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.RECIPE
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipethemeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.THEME
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LAYOUT_TYPE.THEME
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModel
 import com.yhjoo.dochef.ui.common.viewmodel.RecipeListViewModelFactory
 import java.util.*
@@ -44,9 +44,9 @@ class RecipeThemeActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         if (intent.getStringExtra("tag") == null)
-            currentMode = RECIPE.THEME.POPULAR
+            currentMode = Constants.RECIPE.THEME.POPULAR
         else {
-            currentMode = RECIPE.THEME.TAG
+            currentMode = Constants.RECIPE.THEME.TAG
             tagName = intent.getStringExtra("tag")!!
         }
 
@@ -77,16 +77,16 @@ class RecipeThemeActivity : BaseActivity() {
                 }
             })
 
-            if (currentMode == RECIPE.THEME.POPULAR) {
+            if (currentMode == Constants.RECIPE.THEME.POPULAR) {
                 recipeListViewModel.requestRecipeList(
-                    searchby = RECIPE.SEARCHBY.ALL,
-                    sort = RECIPE.SORT.POPULAR,
+                    searchby = Constants.RECIPE.SEARCHBY.ALL,
+                    sort = Constants.RECIPE.SORT.POPULAR,
                     searchValue = null
                 )
             } else {
                 recipeListViewModel.requestRecipeList(
-                    searchby = RECIPE.SEARCHBY.TAG,
-                    sort = RECIPE.SORT.POPULAR,
+                    searchby = Constants.RECIPE.SEARCHBY.TAG,
+                    sort = Constants.RECIPE.SORT.POPULAR,
                     searchValue = tagName
                 )
             }

@@ -26,14 +26,15 @@
                 android:paddingTop="10dp"
                 tools:listitem="@layout/main_myrecipe_item" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/myrecipe_empty"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:visibility="gone"
-                android:text="레시피가 없습니다."/>
 
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/myrecipe_empty"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:visibility="gone"
+            android:text="레시피가 없습니다."/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

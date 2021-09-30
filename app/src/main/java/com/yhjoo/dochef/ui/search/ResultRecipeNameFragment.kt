@@ -33,7 +33,9 @@ class ResultRecipeNameFragment : Fragment() {
         val view: View = binding.root
 
         binding.apply {
-            recipeAdapter = RecipeAdapter(RecipeAdapter.Companion.LayoutType.NAME) { item ->
+            lifecycleOwner = viewLifecycleOwner
+
+            recipeAdapter = RecipeAdapter(RecipeAdapter.CONSTANTS.LAYOUT_TYPE.NAME) { item ->
                 Intent(context, RecipeDetailActivity::class.java)
                     .putExtra("recipeID", item.recipeID).apply {
                         startActivity(this)
