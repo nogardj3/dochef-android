@@ -13,9 +13,6 @@ import com.yhjoo.dochef.data.entity.NotificationEntity
 import com.yhjoo.dochef.ui.notification.NotificationActivity
 import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ChefMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
@@ -26,20 +23,19 @@ class ChefMessagingService : FirebaseMessagingService() {
                 "Message Notification Body: " + remoteMessage.notification!!.body
             )
 
+
             val type = remoteMessage.data["type"]
             if (type != "0") addDB(remoteMessage.data)
-            else {
-                val mSharedPreferences = DatastoreUtil.getSharedPreferences(this)
-                val settingEnable = mSharedPreferences.getBoolean(
-                    resources.getStringArray(R.array.sp_noti)[type!!.toInt()], true
+
+            val mSharedPreferences = DatastoreUtil.getSharedPreferences(this)
+            val settingEnable = mSharedPreferences.getBoolean(
+                resources.getStringArray(R.array.sp_noti)[type!!.toInt()], true
+            )
+
+            if (settingEnable)
+                sendNotification(
+                    remoteMessage.notification!!.title, remoteMessage.notification!!.body
                 )
-
-                if (settingEnable)
-                    sendNotification(
-                        remoteMessage.notification!!.title, remoteMessage.notification!!.body
-                    )
-            }
-
         }
     }
 
@@ -61,6 +57,7 @@ class ChefMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
+        OtherUtil.log("nonononononononononononop")
         val intent = Intent(this, NotificationActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
         val pendingIntent = PendingIntent.getActivity(

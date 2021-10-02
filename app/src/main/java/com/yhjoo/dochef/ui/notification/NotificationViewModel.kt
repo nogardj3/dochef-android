@@ -3,7 +3,6 @@ package com.yhjoo.dochef.ui.notification
 import androidx.lifecycle.*
 import com.yhjoo.dochef.data.entity.NotificationEntity
 import com.yhjoo.dochef.data.repository.NotificationRepository
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class NotificationViewModel(private val notificationRepository: NotificationRepository) : ViewModel() {

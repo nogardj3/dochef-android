@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.ui.recipe
 
 import android.app.Application
-import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Recipe

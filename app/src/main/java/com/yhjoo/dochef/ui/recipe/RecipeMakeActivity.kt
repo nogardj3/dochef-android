@@ -5,8 +5,6 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.ReviewRepository
-import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.databinding.RecipemakeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 
