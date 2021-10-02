@@ -8,6 +8,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.FollowlistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
@@ -33,7 +34,7 @@ class FollowListActivity : BaseActivity() {
     }
     private lateinit var followListAdapter: FollowListAdapter
 
-    private var currentMode = -1
+    private var currentUiMode = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,25 +42,18 @@ class FollowListActivity : BaseActivity() {
         setSupportActionBar(binding.followlistToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        currentMode = intent.getIntExtra("MODE", FOLLOWER)
-
-        val activeUserId = DatastoreUtil.getUserBrief(this).userID
+        currentUiMode = intent.getIntExtra("MODE", FOLLOWER)
 
         binding.apply {
             lifecycleOwner = this@FollowListActivity
 
-            followlistToolbar.title = if (currentMode == FOLLOWER) "팔로워" else "팔로잉"
+            followlistToolbar.title = if (currentUiMode == FOLLOWER) "팔로워" else "팔로잉"
 
             followListAdapter = FollowListAdapter(
-                activeUserId,
-                { item -> followListViewModel.subscribeUser(item.userID) },
-                { item -> followListViewModel.unsubscribeUser(item.userID) },
-                { item ->
-                    Intent(this@FollowListActivity, HomeActivity::class.java)
-                        .putExtra("userID", item.userID).apply {
-                            startActivity(this)
-                        }
-                }
+                followListViewModel.activeUserId,
+                { followListViewModel.subscribeUser(it.userID) },
+                { followListViewModel.unsubscribeUser(it.userID) },
+                { goHome(it) }
             )
 
             followlistRecycler.apply {
@@ -69,12 +63,19 @@ class FollowListActivity : BaseActivity() {
 
             followListViewModel.activeUserDetail.observe(this@FollowListActivity, {
                 followListAdapter.activeUserFollowList = it.follow
-                followListViewModel.requestFollowLists(currentMode)
+                followListViewModel.requestFollowLists(currentUiMode)
             })
             followListViewModel.allFollowLists.observe(this@FollowListActivity, {
                 followlistEmpty.isVisible = it.isEmpty()
                 followListAdapter.submitList(it) {}
             })
         }
+    }
+
+    private fun goHome(item: UserBrief) {
+        startActivity(
+            Intent(this@FollowListActivity, HomeActivity::class.java)
+                .putExtra("userID", item.userID)
+        )
     }
 }

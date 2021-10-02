@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -45,41 +46,13 @@ class AccountSignInFragment : Fragment() {
                 textChanged {
                     signinEmailLayout.error = null
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val validateResult = ValidateUtil.emailValidate(
-                            signinEmailEdittext.text.toString()
-                        )
-
-                        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
-                            signinEmailLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(signinEmailLayout)
-                        } else
-                            signinEmailLayout.error = validateResult.second
-                        true
-                    } else
-                        false
-                }
+                setOnEditorActionListener(emailListener)
             }
             signinPasswordEdittext.apply {
                 textChanged {
                     signinPasswordEdittext.error = null
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val validateResult = ValidateUtil.pwValidate(
-                            signinPasswordEdittext.text.toString()
-                        )
-
-                        if (validateResult.first == ValidateUtil.PwResult.VALID) {
-                            signinPasswordLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(signinPasswordLayout)
-                        } else
-                            signinPasswordLayout.error = validateResult.second
-                        true
-                    } else
-                        false
-                }
+                setOnEditorActionListener (pwListener)
             }
 
             signinOk.setOnClickListener { signInWithEmail() }
@@ -124,6 +97,40 @@ class AccountSignInFragment : Fragment() {
             }
         }
     }
+
+    private val emailListener: TextView.OnEditorActionListener =
+        TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val validateResult = ValidateUtil.emailValidate(
+                    binding.signinEmailEdittext.text.toString()
+                )
+
+                if (validateResult.first == ValidateUtil.EmailResult.VALID) {
+                    binding.signinEmailLayout.error = null
+                    (requireActivity() as BaseActivity).hideKeyboard(binding.signinEmailLayout)
+                } else
+                    binding.signinEmailLayout.error = validateResult.second
+                true
+            } else
+                false
+        }
+
+    private val pwListener: TextView.OnEditorActionListener =
+        TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val validateResult = ValidateUtil.pwValidate(
+                    binding.signinPasswordEdittext.text.toString()
+                )
+
+                if (validateResult.first == ValidateUtil.PwResult.VALID) {
+                    binding.signinPasswordLayout.error = null
+                    (requireActivity() as BaseActivity).hideKeyboard(binding.signinPasswordLayout)
+                } else
+                    binding.signinPasswordLayout.error = validateResult.second
+                true
+            } else
+                false
+        }
 
     private fun signInWithEmail() {
         val signinEmail = binding.signinEmailEdittext.text.toString()

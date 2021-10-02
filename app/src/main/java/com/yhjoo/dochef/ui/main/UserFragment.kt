@@ -66,10 +66,10 @@ class UserFragment : Fragment() {
     }
 
     private fun goMyRecipe() {
-        Intent(requireContext(), RecipeMyListActivity::class.java)
-            .putExtra("userID", mainViewModel.userId).apply {
-                startActivity(this)
-            }
+        startActivity(
+            Intent(requireContext(), RecipeMyListActivity::class.java)
+                .putExtra("userID", mainViewModel.userId)
+        )
     }
 
     private fun goSetting() {
@@ -78,15 +78,15 @@ class UserFragment : Fragment() {
 
     private fun goReview() {
         try {
-            Intent(Intent.ACTION_VIEW)
-                .setData(
-                    Uri.parse(
-                        "https://play.google.com/store/apps/details?id=com.yhjoo.dochef"
+            startActivity(
+                Intent(Intent.ACTION_VIEW)
+                    .setData(
+                        Uri.parse(
+                            "https://play.google.com/store/apps/details?id=com.yhjoo.dochef"
+                        )
                     )
-                )
-                .setPackage("com.android.vending").apply {
-                    startActivity(this)
-                }
+                    .setPackage("com.android.vending")
+            )
         } catch (e: Exception) {
             OtherUtil.log(e.toString())
             App.showToast("스토어 열기 실패")

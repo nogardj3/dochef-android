@@ -22,10 +22,6 @@ import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
 
 class MainFragment : Fragment() {
-    /* TODO
-    1. SharedPreferences -> Datastore
-     */
-
     private lateinit var binding: SettingFragmentBinding
     private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(

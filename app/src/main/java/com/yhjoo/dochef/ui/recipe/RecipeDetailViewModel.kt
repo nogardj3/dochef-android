@@ -1,5 +1,7 @@
 package com.yhjoo.dochef.ui.recipe
 
+import android.app.Application
+import android.content.Intent
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -8,25 +10,33 @@ import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
+import com.yhjoo.dochef.utils.DatastoreUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecipeDetailViewModel(
+    private val application: Application,
+    intent: Intent,
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository
 ) : ViewModel() {
+    val activeUserId: String by lazy {
+        DatastoreUtil.getUserBrief(application.applicationContext).userID
+    }
+    private val recipeId: Int = intent.getIntExtra("recipeID", -1)
+
     val isDeleted = MutableLiveData<Boolean>()
 
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val allReviews = MutableLiveData<List<Review>>()
 
-    fun addCount(recipeId: Int) {
-        viewModelScope.launch {
-            recipeRepository.addCount(recipeId).collect {}
-        }
+    init{
+        requestRecipeDetail()
+        requestReviews()
+        addCount()
     }
 
-    fun requestRecipeDetail(recipeId: Int) {
+    private fun requestRecipeDetail() {
         viewModelScope.launch {
             recipeRepository.getRecipeDetail(recipeId).collect {
                 recipeDetail.value = it.body()
@@ -34,7 +44,7 @@ class RecipeDetailViewModel(
         }
     }
 
-    fun requestReviews(recipeId: Int) {
+    private fun requestReviews() {
         viewModelScope.launch {
             reviewRepository.getReviews(recipeId).collect {
                 allReviews.value = it.body()
@@ -42,22 +52,28 @@ class RecipeDetailViewModel(
         }
     }
 
-    fun toggleLikeRecipe(recipeId: Int, userId: String, like: Int) {
+    private fun addCount() {
+        viewModelScope.launch {
+            recipeRepository.addCount(recipeId).collect {}
+        }
+    }
+
+    fun toggleLikeRecipe(like: Int) {
         viewModelScope.launch {
             if (like == 1)
-                recipeRepository.likeRecipe(recipeId, userId).collect {
-                    requestRecipeDetail(recipeId)
+                recipeRepository.likeRecipe(recipeId, activeUserId).collect {
+                    requestRecipeDetail()
                 }
             else
-                recipeRepository.dislikeRecipe(recipeId, userId).collect {
-                    requestRecipeDetail(recipeId)
+                recipeRepository.dislikeRecipe(recipeId, activeUserId).collect {
+                    requestRecipeDetail()
                 }
         }
     }
 
-    fun deleteRecipe(recipeId: Int, userId: String) {
+    fun deleteRecipe() {
         viewModelScope.launch {
-            recipeRepository.deleteRecipe(recipeId, userId).collect {
+            recipeRepository.deleteRecipe(recipeId, activeUserId).collect {
                 if (it.isSuccessful)
                     isDeleted.value = true
             }
@@ -66,13 +82,20 @@ class RecipeDetailViewModel(
 }
 
 class RecipeDetailViewModelFactory(
+    private val application: Application,
+    private val intent: Intent,
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecipeDetailViewModel::class.java)) {
-            return RecipeDetailViewModel(recipeRepository, reviewRepository) as T
+            return RecipeDetailViewModel(
+                application,
+                intent,
+                recipeRepository,
+                reviewRepository
+            ) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -43,24 +44,7 @@ class AccountSignUpNickFragment : Fragment() {
                 textChanged {
                     signupnickNicknameLayout.error = null
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val validateResult = ValidateUtil.nicknameValidate(
-                            signupnickNicknameEdittext.text.toString()
-                        )
-
-                        if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
-                            signupnickNicknameLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(
-                                signupnickNicknameLayout
-                            )
-                        } else
-                            signupnickNicknameLayout.error = validateResult.second
-
-                        true
-                    } else
-                        false
-                }
+                setOnEditorActionListener(nicknameListener)
             }
 
             signupnickOk.setOnClickListener { signUpWithEmail(signupnickNicknameEdittext.text.toString()) }
@@ -68,6 +52,27 @@ class AccountSignUpNickFragment : Fragment() {
 
         return binding.root
     }
+
+
+    private val nicknameListener: TextView.OnEditorActionListener =
+        TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val validateResult = ValidateUtil.nicknameValidate(
+                    binding.signupnickNicknameEdittext.text.toString()
+                )
+
+                if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
+                    binding.signupnickNicknameLayout.error = null
+                    (requireActivity() as BaseActivity).hideKeyboard(
+                        binding.signupnickNicknameLayout
+                    )
+                } else
+                    binding.signupnickNicknameLayout.error = validateResult.second
+
+                true
+            } else
+                false
+        }
 
     private fun signUpWithEmail(nickname: String) {
         val validateResult = ValidateUtil.nicknameValidate(nickname)

@@ -17,7 +17,6 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
@@ -33,7 +32,6 @@ import com.yhjoo.dochef.ui.post.PostWriteActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.ui.search.SearchActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
-import com.yhjoo.dochef.utils.DatastoreUtil
 
 class MainActivity : BaseActivity() {
     private val mainTabs = arrayOf(
@@ -55,7 +53,6 @@ class MainActivity : BaseActivity() {
             PostRepository(applicationContext)
         )
     }
-    private lateinit var firebaseAnalytics: FirebaseAnalytics
     private lateinit var mainFragmentAdapter: FragmentStateAdapter
 
     private lateinit var powerMenu: PowerMenu
@@ -65,7 +62,6 @@ class MainActivity : BaseActivity() {
     lateinit var menuWriteRecipe: MenuItem
     lateinit var menuWritePost: MenuItem
     lateinit var menuSetting: MenuItem
-    lateinit var userID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,9 +73,6 @@ class MainActivity : BaseActivity() {
         }
 
         MobileAds.initialize(this)
-        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
-
-        userID = DatastoreUtil.getUserBrief(this).userID
 
         mainFragmentAdapter = MainFragmentAdapter(this)
 
@@ -200,17 +193,15 @@ class MainActivity : BaseActivity() {
             }
             R.id.main_menu_write_recipe -> {
                 startActivity(
-                    Intent(
-                        this,
-                        RecipeMakeActivity::class.java
-                    )
+                    Intent(this, RecipeMakeActivity::class.java)
                 )
                 true
             }
             R.id.main_menu_write_post -> {
-                val intent = Intent(this, PostWriteActivity::class.java)
-                    .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.WRITE)
-                startActivity(intent)
+                startActivity(
+                    Intent(this, PostWriteActivity::class.java)
+                        .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.WRITE)
+                )
                 true
             }
             R.id.main_menu_search -> {

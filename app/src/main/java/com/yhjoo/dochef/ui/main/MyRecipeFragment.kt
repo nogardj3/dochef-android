@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
@@ -62,12 +63,7 @@ class MyRecipeFragment : Fragment(), OnRefreshListener {
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 MAIN_MYRECIPE,
                 mainViewModel.userId,
-                itemClickListener = { item ->
-                    Intent(requireContext(), RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", item.recipeID).apply {
-                            startActivity(this)
-                        }
-                },
+                { goRecipeDetail(it) },
                 null
             )
 
@@ -93,5 +89,12 @@ class MyRecipeFragment : Fragment(), OnRefreshListener {
     override fun onRefresh() {
         binding.myrecipeSwipe.isRefreshing = true
         mainViewModel.refreshMyrecipesList()
+    }
+
+    private fun goRecipeDetail(item: Recipe) {
+        startActivity(
+            Intent(requireContext(), RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID)
+        )
     }
 }

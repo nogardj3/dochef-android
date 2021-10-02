@@ -2,12 +2,14 @@ package com.yhjoo.dochef.ui.post
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.utils.DatastoreUtil
 import kotlinx.coroutines.flow.collect
@@ -19,30 +21,74 @@ class PostWriteViewModel(
     intent: Intent,
     private val postRepository: PostRepository,
 ) : ViewModel() {
-    val userId: String by lazy {
+    val activeUserId: String by lazy {
         DatastoreUtil.getUserBrief(application.applicationContext).userID
     }
-    val postId: Int = intent.getIntExtra("postID", -1)
-    private val currentMode: Int =
-        intent.getIntExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.WRITE)
+
+    private val postId: Int = intent.getIntExtra("postID", -1)
+    private val postImage: String? = intent.getStringExtra("postImg")
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference
     }
 
     val isFinished = MutableLiveData<Boolean>()
 
-    init{
-
+    fun uploadPost(
+        currentMode: Int,
+        imageUri: Uri?,
+        contents: String,
+        tags: ArrayList<String>
+    ) {
+        if (imageUri != null) {
+            val imageString = String.format(
+                application.applicationContext.getString(R.string.format_upload_file),
+                activeUserId,
+                System.currentTimeMillis().toString()
+            )
+            val ref =
+                storageReference.child(application.applicationContext.getString(R.string.storage_path_post) + imageString)
+            ref.putFile(imageUri)
+                .addOnSuccessListener {
+                    if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.WRITE) {
+                        createPost(
+                            imageString,
+                            contents,
+                            tags
+                        )
+                    } else if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.REVISE) {
+                        updatePost(
+                            imageString,
+                            contents,
+                            tags
+                        )
+                    }
+                }
+        } else {
+            val imageString = postImage
+            if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.WRITE) {
+                createPost(
+                    imageString!!,
+                    contents,
+                    tags
+                )
+            } else if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.REVISE) {
+                updatePost(
+                    imageString!!,
+                    contents,
+                    tags
+                )
+            }
+        }
     }
 
-    fun createPost(
+    private fun createPost(
         postImgs: String,
         contents: String,
         tags: ArrayList<String>
     ) {
         viewModelScope.launch {
             postRepository.createPost(
-                userId,
+                activeUserId,
                 postImgs,
                 contents,
                 System.currentTimeMillis(),
@@ -53,7 +99,7 @@ class PostWriteViewModel(
         }
     }
 
-    fun updatePost(
+    private fun updatePost(
         postImgs: String,
         contents: String,
         tags: ArrayList<String>
@@ -71,9 +117,6 @@ class PostWriteViewModel(
         }
     }
 
-    fun uploadPost() {
-
-    }
 }
 
 class PostWriteViewModelFactory(

@@ -13,7 +13,7 @@ interface NotificationDao {
     fun getRecentList(dateTime: Long): Flow<List<NotificationEntity>>
 
     @Query("UPDATE notification_table SET is_read = 1 WHERE id = :id")
-    fun setRead(id: Long)
+    fun setRead(id: Long) : Boolean
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(notification: NotificationEntity): Long

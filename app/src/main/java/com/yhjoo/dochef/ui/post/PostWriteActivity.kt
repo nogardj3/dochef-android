@@ -47,12 +47,7 @@ class PostWriteActivity : BaseActivity() {
         )
     }
 
-    private lateinit var storageReference: StorageReference
-    private lateinit var userID: String
-    private var postID = 0
-
     private var imageUri: Uri? = null
-    private var imageString: String? = null
     private var currentMode = UIMODE.WRITE
 
     private val cropimage = registerForActivityResult(CropImageContract()) { result ->
@@ -73,15 +68,10 @@ class PostWriteActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        storageReference = FirebaseStorage.getInstance().reference
-        userID = DatastoreUtil.getUserBrief(this).userID
         currentMode = intent.getIntExtra("MODE", UIMODE.WRITE)
 
         if (currentMode == UIMODE.REVISE) {
-            postID = intent.getIntExtra("postID", -1)
-
             binding.apply {
-
                 postwriteToolbar.title = "수정"
                 postwriteContents.setText(intent.getStringExtra("contents"))
                 if (intent.getStringExtra("postImg") != null) {
@@ -98,27 +88,7 @@ class PostWriteActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@PostWriteActivity
 
-            postwriteContents.addTextChangedListener(object : TextWatcher {
-                var prevText = ""
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    prevText = s.toString()
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (binding.postwriteContents.lineCount > 3 || s.toString().length >= 120) {
-                        binding.postwriteContents.setText(prevText)
-                        binding.postwriteContents.setSelection(prevText.length - 1)
-                    }
-                }
-            })
+            postwriteContents.addTextChangedListener(contentsTextWatcher)
             postwritePostimgAdd.setOnClickListener { addImage() }
             postwriteOk.setOnClickListener { doneClicked() }
 
@@ -182,47 +152,37 @@ class PostWriteActivity : BaseActivity() {
     }
 
     private fun doneClicked() {
+        showProgress(this)
+
         val tags = ArrayList(binding.postwriteTags.tags)
-        if (imageUri != null) {
-            imageString = String.format(
-                getString(R.string.format_upload_file),
-                userID,
-                System.currentTimeMillis().toString()
-            )
-            showProgress(this)
-            val ref = storageReference.child(getString(R.string.storage_path_post) + imageString)
-            ref.putFile(imageUri!!)
-                .addOnSuccessListener {
-                    createORupdatePost(tags)
-                }
-        } else {
-            imageString =
-                if (intent.getStringExtra("postImg") != null) intent.getStringExtra("postImg")
-                else ""
-            createORupdatePost(tags)
-        }
+
+        postWriteViewModel.uploadPost(
+            currentMode,
+            imageUri,
+            binding.postwriteContents.text.toString(),
+            tags
+        )
     }
 
-    private fun createORupdatePost(tags: ArrayList<String>) =
-        CoroutineScope(Dispatchers.Main).launch {
-            runCatching {
-                if (currentMode == UIMODE.WRITE) {
-                    postWriteViewModel.createPost(
-                        imageString!!,
-                        binding.postwriteContents.text.toString(),
-                        tags
-                    )
+    private val contentsTextWatcher: TextWatcher = object : TextWatcher {
+        var prevText = ""
 
-                } else
-                    postWriteViewModel.updatePost(
-                        imageString!!,
-                        binding.postwriteContents.text.toString(),
-                        tags
-                    )
-            }
-                .onSuccess { }
-                .onFailure {
-                    RetrofitBuilder.defaultErrorHandler(it)
-                }
+        override fun beforeTextChanged(
+            s: CharSequence?,
+            start: Int,
+            count: Int,
+            after: Int
+        ) {
+            prevText = s.toString()
         }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            if (binding.postwriteContents.lineCount > 3 || s.toString().length >= 120) {
+                binding.postwriteContents.setText(prevText)
+                binding.postwriteContents.setSelection(prevText.length - 1)
+            }
+        }
+    }
 }

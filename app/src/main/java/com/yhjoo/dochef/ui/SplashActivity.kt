@@ -7,7 +7,6 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
-import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.BasicService
 import com.yhjoo.dochef.databinding.SplashActivityBinding

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -39,23 +40,7 @@ class AccountFindPWFragment : Fragment() {
                 textChanged {
                     accountFindpwEmailLayout.error = null
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val validateResult = ValidateUtil.emailValidate(
-                            accountFindpwEdittext.text.toString()
-                        )
-
-                        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
-                            accountFindpwEmailLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(
-                                accountFindpwEmailLayout
-                            )
-                        } else
-                            accountFindpwEmailLayout.error = validateResult.second
-                        true
-                    } else
-                        false
-                }
+                setOnEditorActionListener(emailListener)
             }
 
             accountFindpwOk.setOnClickListener {
@@ -66,6 +51,25 @@ class AccountFindPWFragment : Fragment() {
         return binding.root
     }
 
+    private val emailListener: TextView.OnEditorActionListener =
+        TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val validateResult = ValidateUtil.emailValidate(
+                    binding.accountFindpwEdittext.text.toString()
+                )
+
+                if (validateResult.first == ValidateUtil.EmailResult.VALID) {
+                    binding.accountFindpwEmailLayout.error = null
+                    (requireActivity() as BaseActivity).hideKeyboard(
+                        binding.accountFindpwEmailLayout
+                    )
+                } else
+                    binding.accountFindpwEmailLayout.error = validateResult.second
+                true
+            } else
+                false
+        }
+
     private fun findPW(email: String) {
         val validateResult = ValidateUtil.emailValidate(email)
 
@@ -75,7 +79,7 @@ class AccountFindPWFragment : Fragment() {
             (requireActivity() as BaseActivity).showProgress(requireActivity())
             accountViewModel.sendPasswordResetEmail(email)
         } else
-            binding.accountFindpwEmailLayout.apply{
+            binding.accountFindpwEmailLayout.apply {
                 error = validateResult.second
                 requestFocus()
             }

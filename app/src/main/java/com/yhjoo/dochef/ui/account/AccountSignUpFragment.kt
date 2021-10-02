@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -40,45 +41,14 @@ class AccountSignUpFragment : Fragment() {
                 textChanged {
                     signupEmailLayout.error = null
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val validateResult = ValidateUtil.emailValidate(
-                            signupEmailEdittext.text.toString()
-                        )
-
-                        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
-                            signupEmailLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(signupEmailLayout)
-                        } else
-                            signupEmailLayout.error = validateResult.second
-
-                        true
-                    } else
-                        false
-                }
+                setOnEditorActionListener(emailListener)
             }
 
             signupPasswordEdittext.apply {
                 textChanged {
                     signupPasswordLayout.error = null
                 }
-                setOnEditorActionListener { _, actionId, _ ->
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        val validateResult = ValidateUtil.pwValidate(
-                            signupPasswordEdittext.text.toString()
-                        )
-
-                        if (validateResult.first == ValidateUtil.PwResult.VALID) {
-                            signupPasswordLayout.error = null
-                            (requireActivity() as BaseActivity).hideKeyboard(signupPasswordLayout)
-                        } else
-                            signupPasswordLayout.error = validateResult.second
-
-                        true
-                    } else
-                        false
-                }
-
+                setOnEditorActionListener(pwListener)
                 signupOk.setOnClickListener {
                     startSignUp(
                         binding.signupEmailEdittext.text.toString(),
@@ -97,6 +67,43 @@ class AccountSignUpFragment : Fragment() {
 
         return binding.root
     }
+
+
+    private val emailListener: TextView.OnEditorActionListener =
+        TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val validateResult = ValidateUtil.emailValidate(
+                    binding.signupEmailEdittext.text.toString()
+                )
+
+                if (validateResult.first == ValidateUtil.EmailResult.VALID) {
+                    binding.signupEmailLayout.error = null
+                    (requireActivity() as BaseActivity).hideKeyboard(binding.signupEmailLayout)
+                } else
+                    binding.signupEmailLayout.error = validateResult.second
+
+                true
+            } else
+                false
+        }
+
+    private val pwListener: TextView.OnEditorActionListener =
+        TextView.OnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                val validateResult = ValidateUtil.pwValidate(
+                    binding.signupPasswordEdittext.text.toString()
+                )
+
+                if (validateResult.first == ValidateUtil.PwResult.VALID) {
+                    binding.signupPasswordLayout.error = null
+                    (requireActivity() as BaseActivity).hideKeyboard(binding.signupPasswordLayout)
+                } else
+                    binding.signupPasswordLayout.error = validateResult.second
+
+                true
+            } else
+                false
+        }
 
     private fun startSignUp(email: String, pw: String) {
         val emailValidateResult = ValidateUtil.emailValidate(email)

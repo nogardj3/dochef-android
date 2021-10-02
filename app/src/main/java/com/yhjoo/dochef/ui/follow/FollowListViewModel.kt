@@ -16,7 +16,7 @@ class FollowListViewModel(
     private val repository: UserRepository,
     intent: Intent,
 ) : ViewModel() {
-    private val activeUserId: String by lazy {
+    val activeUserId: String by lazy {
         DatastoreUtil.getUserBrief(application.applicationContext).userID
     }
     private var currentUserId: String = intent.getStringExtra("userID").toString()

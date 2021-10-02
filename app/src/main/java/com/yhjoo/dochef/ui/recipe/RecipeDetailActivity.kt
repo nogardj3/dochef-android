@@ -17,6 +17,7 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.RecipeDetail
+import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
@@ -32,6 +33,8 @@ class RecipeDetailActivity : BaseActivity() {
     }
     private val recipeDetailViewModel: RecipeDetailViewModel by viewModels {
         RecipeDetailViewModelFactory(
+            application,
+            intent,
             RecipeRepository(applicationContext),
             ReviewRepository(applicationContext)
         )
@@ -41,24 +44,16 @@ class RecipeDetailActivity : BaseActivity() {
     private var powerMenu: PowerMenu? = null
 
     private var userID: String? = null
-    private var recipeID = 0
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        userID = DatastoreUtil.getUserBrief(this).userID
-        recipeID = intent.getIntExtra("recipeID", recipeID)
-
         binding.apply {
             lifecycleOwner = this@RecipeDetailActivity
 
-            reviewListAdapter = ReviewListAdapter { item ->
-                Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                    .putExtra("userID", item.userID).apply {
-                        startActivity(this)
-                    }
+            reviewListAdapter = ReviewListAdapter {
+                goHome(it.userID)
             }
 
             recipedetailReviewRecycler.apply {
@@ -86,10 +81,6 @@ class RecipeDetailActivity : BaseActivity() {
                 if (it)
                     finish()
             })
-
-            recipeDetailViewModel.addCount(recipeID)
-            recipeDetailViewModel.requestRecipeDetail(recipeID)
-            recipeDetailViewModel.requestReviews(recipeID)
         }
     }
 
@@ -123,20 +114,14 @@ class RecipeDetailActivity : BaseActivity() {
             recipedetailLike.setOnClickListener {
                 if (recipeDetail.userID != userID) {
                     val like = if (recipeDetail.likes.contains(userID)) -1 else 1
-                    recipeDetailViewModel.toggleLikeRecipe(recipeID, userID!!, like)
+                    recipeDetailViewModel.toggleLikeRecipe(like)
                 }
             }
             recipedetailStartrecipe.setOnClickListener {
-                startActivity(
-                    Intent(this@RecipeDetailActivity, PlayActivity::class.java)
-                        .putExtra("recipe", recipeDetail)
-                )
+                goRecipePlay(recipeDetail)
             }
             recipedetailUserWrapper.setOnClickListener {
-                Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                    .putExtra("userID", recipeDetail.userID).apply{
-                        startActivity(this)
-                    }
+                goHome(recipeDetail.userID)
             }
 
             recipedetailTags.removeAllViews()
@@ -188,14 +173,8 @@ class RecipeDetailActivity : BaseActivity() {
                     .setBackgroundAlpha(0.2f)
                     .setOnMenuItemClickListener { position, _ ->
                         when (position) {
-                            0 -> {
-                                Intent(this@RecipeDetailActivity, RecipeMakeActivity::class.java)
-                                    .putExtra("recipeId", recipeDetail.recipeID)
-                                    .putExtra("mode", RecipeMakeActivity.MODE.REVISE).apply {
-                                        startActivity(this)
-                                    }
-                            }
-                            1 -> recipeDetailViewModel.deleteRecipe(recipeDetail.recipeID, userID!!)
+                            0 -> goRecipeMake(recipeDetail)
+                            1 -> recipeDetailViewModel.deleteRecipe()
                         }
                         powerMenu!!.dismiss()
                     }
@@ -203,5 +182,27 @@ class RecipeDetailActivity : BaseActivity() {
                 powerMenu!!.showAsAnchorRightTop(recipedetailOwnermenu)
             }
         }
+    }
+
+    private fun goHome(userId: String) {
+        startActivity(
+            Intent(this@RecipeDetailActivity, HomeActivity::class.java)
+                .putExtra("userID", userId)
+        )
+    }
+
+    private fun goRecipePlay(item: RecipeDetail) {
+        startActivity(
+            Intent(this@RecipeDetailActivity, PlayActivity::class.java)
+                .putExtra("recipe", item)
+        )
+    }
+
+    private fun goRecipeMake(item: RecipeDetail) {
+        startActivity(
+            Intent(this@RecipeDetailActivity, RecipeMakeActivity::class.java)
+                .putExtra("recipeId", item.recipeID)
+                .putExtra("mode", RecipeMakeActivity.MODE.REVISE)
+        )
     }
 }

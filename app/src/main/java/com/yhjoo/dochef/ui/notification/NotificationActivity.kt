@@ -18,6 +18,8 @@ import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.*
 
 class NotificationActivity : BaseActivity() {
+    // TODO
+    // 1. setRead Flow
     private val binding: NotificationActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.notification_activity)
     }
@@ -36,8 +38,8 @@ class NotificationActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@NotificationActivity
 
-            notificationListAdapter = NotificationListAdapter { notificationItem ->
-                itemClicked(notificationItem)
+            notificationListAdapter = NotificationListAdapter {
+                itemClicked(it)
             }
 
             notificationRecycler.apply {
@@ -58,8 +60,9 @@ class NotificationActivity : BaseActivity() {
     private fun itemClicked(notificationItem: NotificationEntity) {
         CoroutineScope(Dispatchers.IO).launch {
             OtherUtil.log(notificationItem.toString())
+
             if (App.isServerAlive) {
-                (application as App).notificationRepository.setRead(notificationItem.id!!)
+                notificationViewModel.setRead(notificationItem.id!!)
                 val intent = when (notificationItem.type) {
                     resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
                     resources.getInteger(R.integer.NOTIFICATION_TYPE_2) -> {

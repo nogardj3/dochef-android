@@ -22,8 +22,8 @@ import java.util.*
 
 class TimelineFragment : Fragment(), OnRefreshListener {
     /* TODO
-    1. myfriend
-    2. AD
+    1. ad + item
+    2.
      */
     private lateinit var binding: MainTimelineFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
@@ -58,8 +58,8 @@ class TimelineFragment : Fragment(), OnRefreshListener {
             }
 
             timelineListAdapter = TimelineListAdapter(
-                { item -> userClick(item) },
-                { item -> itemClick(item) }
+                { goHome(it) },
+                { goPostDetail(it) }
             )
 
             timelineRecycler.apply {
@@ -86,17 +86,17 @@ class TimelineFragment : Fragment(), OnRefreshListener {
         mainViewModel.requestPostList()
     }
 
-    private fun userClick(post: Post) {
-        Intent(requireContext(), HomeActivity::class.java)
-            .putExtra("userID", post.userID).apply {
-                startActivity(this)
-            }
+    private fun goHome(post: Post) {
+        startActivity(
+            Intent(requireContext(), HomeActivity::class.java)
+                .putExtra("userID", post.userID)
+        )
     }
 
-    private fun itemClick(post: Post) {
-        Intent(requireContext(), PostDetailActivity::class.java)
-            .putExtra("postID", post.postID).apply {
-                startActivity(this)
-            }
+    private fun goPostDetail(post: Post) {
+        startActivity(
+            Intent(requireContext(), PostDetailActivity::class.java)
+                .putExtra("postID", post.postID)
+        )
     }
 }

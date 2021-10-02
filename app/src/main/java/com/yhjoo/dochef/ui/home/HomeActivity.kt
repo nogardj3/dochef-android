@@ -19,9 +19,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.*
+import com.yhjoo.dochef.data.model.Post
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.network.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.*
@@ -61,22 +61,12 @@ class HomeActivity : BaseActivity() {
     private lateinit var recipeListAdapter: RecipeListAdapter
     private lateinit var postListAdapter: PostListAdapter
 
-    private lateinit var storageReference: StorageReference
-
     private lateinit var reviseMenu: MenuItem
     private lateinit var okMenu: MenuItem
 
-    private var currentMode: Int? = null
-    private var currentOperation: Int? = null
-
     private lateinit var originUserInfo: UserDetail
-
-    private var imageUri: Uri? = null
-    private var imageUrl: String? = null
-    private var targetUserID: String? = null
-    private var activeUserID: String? = null
-
     private lateinit var nicknameDialog: MaterialDialog
+    private var imageUri: Uri? = null
     private val cropimage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
             imageUri = result.uriContent
@@ -93,47 +83,32 @@ class HomeActivity : BaseActivity() {
         }
     }
 
+    private var currentMode: Int? = null
+    private var currentOperation: Int? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.homeToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        storageReference = FirebaseStorage.getInstance().reference
-
-        activeUserID = DatastoreUtil.getUserBrief(this).userID
-        if (intent.getStringExtra("userID") == null || intent.getStringExtra("userID") == activeUserID) {
-            currentMode = UIMODE.OWNER
-            targetUserID = activeUserID
-        } else {
-            currentMode = UIMODE.OTHERS
-            targetUserID = intent.getStringExtra("userID")
-        }
+        currentMode =
+            if (intent.getStringExtra("userID") == null
+                || intent.getStringExtra("userID") == homeViewModel.activeUserId
+            )
+                UIMODE.OWNER
+            else
+                UIMODE.OTHERS
 
         binding.apply {
             lifecycleOwner = this@HomeActivity
 
-            recipeListAdapter = RecipeListAdapter(activeUserID) { item ->
-                Intent(this@HomeActivity, RecipeDetailActivity::class.java)
-                    .putExtra("recipeID", item.recipeID).apply {
-                        startActivity(this)
-                    }
-            }
+            recipeListAdapter = RecipeListAdapter(homeViewModel.activeUserId)
+            { goRecipeDetail(it) }
 
             postListAdapter = PostListAdapter(
-                { // 다른 사람 HomeActivity로 가기
-//                        item ->
-//                    Intent(this@HomeActivity, HomeActivity::class.java)
-//                        .putExtra("postID", item.postID).apply {
-//                            startActivity(intent)
-//                        }
-                },
-                { item ->
-                    Intent(this@HomeActivity, PostDetailActivity::class.java)
-                        .putExtra("postID", item.postID).apply {
-                            startActivity(intent)
-                        }
-                }
+                { goHome(it) },
+                { goPostDetail(it) }
             )
 
             homeRecipeRecycler.apply {
@@ -156,9 +131,9 @@ class HomeActivity : BaseActivity() {
                 adapter = postListAdapter
             }
 
-            homeViewModel.userDetail.observe(this@HomeActivity, { item ->
-                originUserInfo = item
-                setUserInfo(item)
+            homeViewModel.userDetail.observe(this@HomeActivity, {
+                originUserInfo = it
+                setUserInfo(it)
             })
 
             homeViewModel.allRecipes.observe(this@HomeActivity, {
@@ -172,17 +147,8 @@ class HomeActivity : BaseActivity() {
             })
 
             homeViewModel.updateComplete.observe(this@HomeActivity, { result ->
-                if (result) {
-                    showSnackBar(binding.root, "업데이트 되었습니다.")
-                    currentOperation = OPERATION.VIEW
-                    reviseMenu.isVisible = true
-                    okMenu.isVisible = false
-                    binding.homeRevisegroup.isVisible = false
-                    imageUri = null
-                    hideProgress()
-
-                    homeViewModel.requestActiveUserDetail()
-                }
+                if (result)
+                    updateComplete()
             })
 
             homeViewModel.nicknameValid.observe(this@HomeActivity, { result ->
@@ -258,26 +224,11 @@ class HomeActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == Constants.PERMISSION_CODE) {
             for (result in grantResults) if (result == PackageManager.PERMISSION_DENIED) {
-                showSnackBar(binding.root,"권한 거부")
+                showSnackBar(binding.root, "권한 거부")
                 return
             }
 
-            cropimage.launch(
-                options {
-                    setGuidelines(CropImageView.Guidelines.ON)
-                    setAspectRatio(1, 1)
-                    setOutputUri(imageUri)
-                    setCropShape(CropImageView.CropShape.OVAL)
-                    setRequestedSize(
-                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
-                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
-                    )
-                    setMaxCropResultSize(
-                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
-                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
-                    )
-                }
-            )
+            launchCrop()
         }
     }
 
@@ -300,50 +251,90 @@ class HomeActivity : BaseActivity() {
             homeNicknameRevise.setOnClickListener { clickReviseNickname() }
             homeProfiletextRevise.setOnClickListener { clickReviseContents() }
 
-            homeRecipewrapper.setOnClickListener {
-                Intent(this@HomeActivity, RecipeMyListActivity::class.java)
-                    .putExtra("userID", userDetail.userID).apply {
-                        startActivity(this)
-                    }
-            }
-            homeFollowerwrapper.setOnClickListener {
-                Intent(this@HomeActivity, FollowListActivity::class.java)
-                    .putExtra("MODE", FollowListActivity.FOLLOWER)
-                    .putExtra("userID", userDetail.userID).apply {
-                        startActivity(this)
-                    }
-            }
-            homeFollowingwrapper.setOnClickListener {
-                Intent(this@HomeActivity, FollowListActivity::class.java)
-                    .putExtra("MODE", FollowListActivity.FOLLOWING)
-                    .putExtra("userID", userDetail.userID).apply {
-                        startActivity(this)
-                    }
-            }
+            homeRecipewrapper.setOnClickListener { goMyRecipe(userDetail) }
+            homeFollowerwrapper.setOnClickListener { goFollowerList(userDetail) }
+            homeFollowingwrapper.setOnClickListener { goFollowingList(userDetail) }
         }
     }
+
+    private fun goRecipeDetail(item: Recipe) {
+        startActivity(
+            Intent(this@HomeActivity, RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID)
+        )
+    }
+
+    private fun goHome(item: Post) {
+//  TODO
+//  다른 사람 HomeActivity로 가기, 클릭 겹침
+//        Intent(this@HomeActivity, HomeActivity::class.java)
+//            .putExtra("postID", item.postID).apply {
+//                startActivity(intent)
+//            }
+    }
+
+    private fun goPostDetail(item: Post) {
+        startActivity(
+            Intent(this@HomeActivity, PostDetailActivity::class.java)
+                .putExtra("postID", item.postID)
+        )
+    }
+
+
+    private fun goMyRecipe(item: UserDetail) {
+        startActivity(
+            Intent(this@HomeActivity, RecipeMyListActivity::class.java)
+                .putExtra("userID", item.userID)
+        )
+    }
+
+    private fun goFollowerList(item: UserDetail) {
+        startActivity(
+            Intent(this@HomeActivity, FollowListActivity::class.java)
+                .putExtra("MODE", FollowListActivity.FOLLOWER)
+                .putExtra("userID", item.userID)
+        )
+    }
+
+    private fun goFollowingList(item: UserDetail) {
+        startActivity(
+            Intent(this@HomeActivity, FollowListActivity::class.java)
+                .putExtra("MODE", FollowListActivity.FOLLOWING)
+                .putExtra("userID", item.userID)
+        )
+    }
+
 
     private fun reviseProfileImage() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        if (OtherUtil.checkPermission(this, permissions)) {
-            cropimage.launch(
-                options {
-                    setGuidelines(CropImageView.Guidelines.ON)
-                    setAspectRatio(1, 1)
-                    setOutputUri(imageUri)
-                    setCropShape(CropImageView.CropShape.OVAL)
-                    setRequestedSize(
-                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
-                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
-                    )
-                    setMaxCropResultSize(
-                        Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
-                        Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
-                    )
-                }
+        if (OtherUtil.checkPermission(this, permissions))
+            launchCrop()
+        else
+            ActivityCompat.requestPermissions(
+                this,
+                permissions,
+                Constants.PERMISSION_CODE
             )
-        } else ActivityCompat.requestPermissions(this, permissions, Constants.PERMISSION_CODE)
+    }
+
+    private fun launchCrop() {
+        cropimage.launch(
+            options {
+                setGuidelines(CropImageView.Guidelines.ON)
+                setAspectRatio(1, 1)
+                setOutputUri(imageUri)
+                setCropShape(CropImageView.CropShape.OVAL)
+                setRequestedSize(
+                    Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
+                    Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
+                )
+                setMaxCropResultSize(
+                    Constants.IMAGE.SIZE.PROFILE.IMG_WIDTH,
+                    Constants.IMAGE.SIZE.PROFILE.IMG_HEIGHT
+                )
+            }
+        )
     }
 
     private fun clickReviseNickname() {
@@ -357,7 +348,7 @@ class HomeActivity : BaseActivity() {
                         showSnackBar(binding.root, "닉네임을 입력 해 주세요.")
                     it.getInputField().text.length > 12 ->
                         showSnackBar(binding.root, "12자 이하 입력 해 주세요.")
-                    else ->{
+                    else -> {
                         hideKeyboard(it.view)
                         homeViewModel.checkNickname(it.getInputField().text.toString())
                     }
@@ -401,25 +392,23 @@ class HomeActivity : BaseActivity() {
 
     private fun updateProfile() {
         showProgress(this)
-        if (imageUri != null) {
-            imageUrl = String.format(
-                getString(R.string.format_upload_file),
-                activeUserID, System.currentTimeMillis().toString()
-            )
-            val ref = storageReference.child(getString(R.string.storage_path_profile) + imageUrl)
-            ref.putFile(imageUri!!)
-                .addOnSuccessListener { updateToServer() }
-        } else {
-            imageUrl = originUserInfo.userImg
-            updateToServer()
-        }
-    }
 
-    private fun updateToServer() {
-        homeViewModel.updateUser(
-            imageUrl!!,
+        homeViewModel.updateProfile(
+            imageUri,
             binding.homeNickname.text.toString(),
             binding.homeProfiletext.text.toString()
         )
+    }
+
+    private fun updateComplete() {
+        showSnackBar(binding.root, "업데이트 되었습니다.")
+        currentOperation = OPERATION.VIEW
+        reviseMenu.isVisible = true
+        okMenu.isVisible = false
+        binding.homeRevisegroup.isVisible = false
+        imageUri = null
+        hideProgress()
+
+        homeViewModel.requestActiveUserDetail()
     }
 }

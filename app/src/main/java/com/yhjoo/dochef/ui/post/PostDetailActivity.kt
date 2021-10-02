@@ -98,27 +98,7 @@ class PostDetailActivity : BaseActivity() {
                 layoutManager = LinearLayoutManager(this@PostDetailActivity)
                 adapter = commentListAdapter
             }
-            postCommentEdittext.addTextChangedListener(object : TextWatcher {
-                var prevText = ""
-
-                override fun beforeTextChanged(
-                    s: CharSequence?,
-                    start: Int,
-                    count: Int,
-                    after: Int
-                ) {
-                    prevText = s.toString()
-                }
-
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-                override fun afterTextChanged(s: Editable?) {
-                    if (binding.postCommentEdittext.lineCount > 3 || s.toString().length >= 120) {
-                        binding.postCommentEdittext.setText(prevText)
-                        binding.postCommentEdittext.setSelection(prevText.length - 1)
-                    }
-                }
-            })
+            postCommentEdittext.addTextChangedListener(commentEdittextWatcher)
 
             postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
                 setTopView(it)
@@ -145,7 +125,7 @@ class PostDetailActivity : BaseActivity() {
             })
 
             postDetailViewModel.isDeleted.observe(this@PostDetailActivity, {
-                if(it){
+                if (it) {
                     App.showToast("삭제되었습니다.")
                     finish()
                 }
@@ -169,14 +149,14 @@ class PostDetailActivity : BaseActivity() {
         return when (item.itemId) {
             R.id.menu_post_owner_revise -> {
                 val postInfo = postDetailViewModel.postDetail.value!!
-                Intent(this@PostDetailActivity, PostWriteActivity::class.java)
-                    .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.REVISE)
-                    .putExtra("postID", postInfo.postID)
-                    .putExtra("postImg", postInfo.postImg)
-                    .putExtra("contents", postInfo.contents)
-                    .putExtra("tags", postInfo.tags.toTypedArray()).apply {
-                        startActivity(this)
-                    }
+                startActivity(
+                    Intent(this@PostDetailActivity, PostWriteActivity::class.java)
+                        .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.REVISE)
+                        .putExtra("postID", postInfo.postID)
+                        .putExtra("postImg", postInfo.postImg)
+                        .putExtra("contents", postInfo.contents)
+                        .putExtra("tags", postInfo.tags.toTypedArray())
+                )
                 true
             }
             R.id.menu_post_owner_delete -> {
@@ -217,10 +197,7 @@ class PostDetailActivity : BaseActivity() {
             postCommentcount.text = postInfo.comments.size.toString()
 
             postUserWrapper.setOnClickListener {
-                Intent(this@PostDetailActivity, HomeActivity::class.java)
-                    .putExtra("userID", postInfo.userID).apply {
-                        startActivity(this)
-                    }
+                goHome(postInfo)
             }
 
             postTags.removeAllViews()
@@ -239,5 +216,35 @@ class PostDetailActivity : BaseActivity() {
                 }
             }
         }
+    }
+
+
+    private val commentEdittextWatcher: TextWatcher = object : TextWatcher {
+        var prevText = ""
+
+        override fun beforeTextChanged(
+            s: CharSequence?,
+            start: Int,
+            count: Int,
+            after: Int
+        ) {
+            prevText = s.toString()
+        }
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+        override fun afterTextChanged(s: Editable?) {
+            if (binding.postCommentEdittext.lineCount > 3 || s.toString().length >= 120) {
+                binding.postCommentEdittext.setText(prevText)
+                binding.postCommentEdittext.setSelection(prevText.length - 1)
+            }
+        }
+    }
+
+    private fun goHome(item: Post) {
+        startActivity(
+            Intent(this@PostDetailActivity, HomeActivity::class.java)
+                .putExtra("userID", item.userID)
+        )
     }
 }

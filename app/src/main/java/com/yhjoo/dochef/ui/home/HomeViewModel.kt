@@ -2,8 +2,12 @@ package com.yhjoo.dochef.ui.home
 
 import android.app.Application
 import android.content.Intent
+import android.net.Uri
 import androidx.lifecycle.*
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.yhjoo.dochef.Constants
+import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
@@ -24,7 +28,7 @@ class HomeViewModel(
     private val postRepository: PostRepository,
     private val accountRepository: AccountRepository
 ) : ViewModel() {
-    private val activeUserId: String by lazy {
+    val activeUserId: String by lazy {
         DatastoreUtil.getUserBrief(application.applicationContext).userID
     }
     private var targetUserId: String =
@@ -35,24 +39,28 @@ class HomeViewModel(
         else
             intent.getStringExtra("userID")!!
 
+    private val storageReference: StorageReference by lazy {
+        FirebaseStorage.getInstance().reference
+    }
+
     private var _userDetail = MutableLiveData<UserDetail>()
     private var _allRecipes = MutableLiveData<List<Recipe>>()
     private var _allPosts = MutableLiveData<List<Post>>()
     private var _updateComplete = MutableLiveData<Boolean>()
     private var _nicknameValid = MutableLiveData<Pair<Boolean, String>>()
 
-    val userDetail : LiveData<UserDetail>
+    val userDetail: LiveData<UserDetail>
         get() = _userDetail
-    val allRecipes : LiveData<List<Recipe>>
+    val allRecipes: LiveData<List<Recipe>>
         get() = _allRecipes
-    val allPosts : LiveData<List<Post>>
+    val allPosts: LiveData<List<Post>>
         get() = _allPosts
-    val updateComplete : LiveData<Boolean>
+    val updateComplete: LiveData<Boolean>
         get() = _updateComplete
-    val nicknameValid : LiveData<Pair<Boolean, String>>
+    val nicknameValid: LiveData<Pair<Boolean, String>>
         get() = _nicknameValid
 
-    init{
+    init {
         requestActiveUserDetail()
         requestRecipeList()
         requestPostListById()
@@ -106,6 +114,32 @@ class HomeViewModel(
                 OtherUtil.log(it.body().toString())
                 _nicknameValid.value = Pair(it.isSuccessful, nickname)
             }
+        }
+    }
+
+    fun updateProfile(imageUri: Uri?, nickname: String, profileText: String) {
+        if (imageUri != null) {
+            val imageUrl = String.format(
+                application.applicationContext.getString(R.string.format_upload_file),
+                activeUserId, System.currentTimeMillis().toString()
+            )
+            val ref =
+                storageReference.child(application.applicationContext.getString(R.string.storage_path_profile) + imageUrl)
+            ref.putFile(imageUri)
+                .addOnSuccessListener {
+                    updateUser(
+                        imageUrl,
+                        nickname,
+                        profileText
+                    )
+                }
+        } else {
+            val imageUrl = _userDetail.value!!.userImg
+            updateUser(
+                imageUrl,
+                nickname,
+                profileText
+            )
         }
     }
 }

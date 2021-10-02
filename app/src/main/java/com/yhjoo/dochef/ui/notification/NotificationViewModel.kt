@@ -1,14 +1,18 @@
 package com.yhjoo.dochef.ui.notification
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.*
 import com.yhjoo.dochef.data.entity.NotificationEntity
 import com.yhjoo.dochef.data.repository.NotificationRepository
+import kotlinx.coroutines.launch
 
-class NotificationViewModel(repository: NotificationRepository) : ViewModel() {
-    val allnotifications: LiveData<List<NotificationEntity>> = repository.notifications.asLiveData()
+class NotificationViewModel(private val notificationRepository: NotificationRepository) : ViewModel() {
+    val allnotifications: LiveData<List<NotificationEntity>> = notificationRepository.notifications.asLiveData()
+
+    fun setRead(notificationId: Long){
+        viewModelScope.launch {
+            notificationRepository.setRead(notificationId)
+        }
+    }
 }
 
 class NotificationViewModelFactory(private val repository: NotificationRepository) :

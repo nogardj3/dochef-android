@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
@@ -66,12 +67,7 @@ class InitFragment : Fragment() {
 
             recipeListHorizontalAdapter = RecipeListHorizontalAdapter(
                 RecipeListHorizontalAdapter.CONSTANTS.LayoutType.MAIN_INIT
-            ) { item ->
-                Intent(requireContext(), RecipeDetailActivity::class.java)
-                    .putExtra("recipeID", item.recipeID).apply {
-                        startActivity(this)
-                    }
-            }
+            ) { goRecipeDetail(it) }
 
             mainInitRecommendRecycler.apply {
                 layoutManager =
@@ -86,6 +82,13 @@ class InitFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun goRecipeDetail(item: Recipe) {
+        startActivity(
+            Intent(requireContext(), RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID)
+        )
     }
 
     class MainAdPagerAdapter(private val img_ids: Array<Int>) :
