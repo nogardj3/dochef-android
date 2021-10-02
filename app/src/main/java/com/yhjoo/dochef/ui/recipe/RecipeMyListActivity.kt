@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
@@ -27,8 +28,8 @@ class RecipeMyListActivity : BaseActivity() {
     private val binding: RecipemylistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipemylist_activity)
     }
-    private val recipeListViewModel: RecipeListViewModel by viewModels {
-        RecipeListViewModelFactory(
+    private val recipeListViewModel: RecipeMyListViewModel by viewModels {
+        RecipeMyListViewModelFactory(
             application,
             RecipeRepository(applicationContext)
         )
@@ -36,7 +37,6 @@ class RecipeMyListActivity : BaseActivity() {
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var addMenu: MenuItem
-    private lateinit var userID: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,31 +44,18 @@ class RecipeMyListActivity : BaseActivity() {
         setSupportActionBar(binding.recipelistToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        userID = DatastoreUtil.getUserBrief(this).userID
-
         binding.apply {
             lifecycleOwner = this@RecipeMyListActivity
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 MYLIST,
-                activeUserID = userID,
+                recipeListViewModel.activeUserId,
+                { goDetail(it) },
                 { item ->
-                    Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
-                        .putExtra("recipeID", item.recipeID).apply {
-                            startActivity(this)
-                        }
-                },
-                childClickListener = { item ->
                     MaterialDialog(this@RecipeMyListActivity).show {
                         message(text = "즐겨찾기를 해제 하시겠습니까?")
                         positiveButton(text = "확인") {
-                            recipeListViewModel.disLikeRecipe(item.recipeID, userID)
-
-                            recipeListViewModel.requestRecipeList(
-                                searchby = Constants.RECIPE.SEARCHBY.USERID,
-                                sort = Constants.RECIPE.SORT.LATEST,
-                                searchValue = userID
-                            )
+                            recipeListViewModel.disLikeRecipe(item.recipeID, recipeListViewModel.activeUserId)
                         }
                         negativeButton(text = "취소")
                     }
@@ -86,22 +73,6 @@ class RecipeMyListActivity : BaseActivity() {
                     binding.recipelistRecycler.scrollToPosition(0)
                 }
             })
-
-            recipeListViewModel.listChanged.observe(this@RecipeMyListActivity, {
-                if (it) {
-                    recipeListViewModel.requestRecipeList(
-                        searchby = Constants.RECIPE.SEARCHBY.USERID,
-                        sort = Constants.RECIPE.SORT.LATEST,
-                        searchValue = userID
-                    )
-                }
-            })
-
-            recipeListViewModel.requestRecipeList(
-                searchby = Constants.RECIPE.SEARCHBY.USERID,
-                sort = Constants.RECIPE.SORT.LATEST,
-                searchValue = userID
-            )
         }
     }
 
@@ -117,5 +88,12 @@ class RecipeMyListActivity : BaseActivity() {
             true
         } else
             super.onOptionsItemSelected(item)
+    }
+
+    private fun goDetail(item: Recipe) {
+        startActivity(
+            Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID)
+        )
     }
 }

@@ -15,7 +15,7 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/recipetheme_toolbar"
+            android:id="@+id/reciperecommend_toolbar"
             style="@style/BaseTheme.Toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
@@ -24,19 +24,19 @@
             app:title="추천" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recipetheme_recycler"
+            android:id="@+id/reciperecommend_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
-            tools:listitem="@layout/recipetheme_item" />
+            app:layout_constraintTop_toBottomOf="@+id/reciperecommend_toolbar"
+            tools:listitem="@layout/reciperecommend_item" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/recipetheme_empty"
+            android:id="@+id/reciperecommend_empty"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipetheme_toolbar"
+            app:layout_constraintTop_toBottomOf="@+id/reciperecommend_toolbar"
             android:gravity="center"
             android:visibility="gone"
             android:text="레시피가 없습니다."/>

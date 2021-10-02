@@ -16,11 +16,6 @@ object Constants {
             const val POPULAR = "popular"
             const val RATING = "rating"
         }
-
-        object THEME {
-            const val POPULAR = 0
-            const val TAG = 1
-        }
     }
 
     object IMAGE{

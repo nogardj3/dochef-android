@@ -15,7 +15,7 @@
             android:layout_height="match_parent">
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/recipetheme_img"
+                android:id="@+id/reciperecommend_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -30,19 +30,19 @@
 
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/recipetheme_title"
+                android:id="@+id/reciperecommend_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                app:layout_constraintBottom_toTopOf="@+id/recipetheme_nickname"
+                app:layout_constraintBottom_toTopOf="@+id/reciperecommend_nickname"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 tools:text="레시피" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/recipetheme_nickname"
+                android:id="@+id/reciperecommend_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
@@ -54,7 +54,7 @@
                 tools:text="닉네임" />
 
             <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/recipetheme_rating_img"
+                android:id="@+id/reciperecommend_rating_img"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="4dp"
@@ -63,20 +63,20 @@
                 app:layout_constraintHorizontal_bias="0.97"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/recipetheme_rating"
+                app:layout_constraintRight_toLeftOf="@+id/reciperecommend_rating"
                 app:srcCompat="@drawable/ic_star_white" />
 
             <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/recipetheme_rating"
+                android:id="@+id/reciperecommend_rating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
                 android:textColor="@color/black"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/recipetheme_rating_img"
-                app:layout_constraintLeft_toRightOf="@+id/recipetheme_rating_img"
+                app:layout_constraintBottom_toBottomOf="@+id/reciperecommend_rating_img"
+                app:layout_constraintLeft_toRightOf="@+id/reciperecommend_rating_img"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recipetheme_rating_img"
+                app:layout_constraintTop_toTopOf="@+id/reciperecommend_rating_img"
                 tools:text="4.5" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

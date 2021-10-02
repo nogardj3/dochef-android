@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
@@ -18,6 +19,7 @@ class ResultRecipeNameFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
     private val recipeViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
+            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)
         )
@@ -34,21 +36,14 @@ class ResultRecipeNameFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            recipeAdapter = RecipeAdapter(RecipeAdapter.CONSTANTS.LAYOUT_TYPE.NAME) { item ->
-                Intent(context, RecipeDetailActivity::class.java)
-                    .putExtra("recipeID", item.recipeID).apply {
-                        startActivity(this)
-                    }
+            recipeAdapter = RecipeAdapter(RecipeAdapter.CONSTANTS.LAYOUT_TYPE.NAME) {
+                goDetail(it)
             }
 
             resultRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = recipeAdapter
             }
-
-            recipeViewModel.keyword.observe(viewLifecycleOwner, {
-                recipeViewModel.requestRecipeByName(it!!)
-            })
 
             recipeViewModel.queriedRecipeByName.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
@@ -58,5 +53,11 @@ class ResultRecipeNameFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun goDetail(item : Recipe){
+        startActivity(
+            Intent(context, RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID))
     }
 }

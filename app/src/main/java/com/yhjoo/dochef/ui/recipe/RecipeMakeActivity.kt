@@ -1,13 +1,18 @@
 package com.yhjoo.dochef.ui.recipe
 
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
+import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.repository.RecipeRepository
+import com.yhjoo.dochef.data.repository.ReviewRepository
+import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.databinding.RecipemakeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
-    /* TODO
-    ALL, REVISE 포함
-     */
+    // Todo
+    // 1. 구현
 
     object MODE {
         const val WRITE = 0
@@ -15,8 +20,13 @@ class RecipeMakeActivity : BaseActivity() {
     }
 
     private val binding: RecipemakeActivityBinding by lazy {
-        RecipemakeActivityBinding.inflate(
-            layoutInflater
+        DataBindingUtil.setContentView(this, R.layout.recipemake_activity)
+    }
+    private val recipeMakeViewModel: RecipeMakeViewModel by viewModels {
+        RecipeMakeViewModelFactory(
+            application,
+            intent,
+            RecipeRepository(applicationContext)
         )
     }
 
@@ -25,5 +35,7 @@ class RecipeMakeActivity : BaseActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.recipemakeToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+
     }
 }

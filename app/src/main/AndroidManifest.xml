@@ -103,7 +103,7 @@
         </activity>
 
         <activity
-            android:name="com.yhjoo.dochef.ui.recipe.RecipeThemeActivity"
+            android:name="com.yhjoo.dochef.ui.recipe.RecipeRecommendActivity"
             android:screenOrientation="portrait"
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />

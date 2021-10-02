@@ -28,15 +28,18 @@ class ChefMessagingService : FirebaseMessagingService() {
 
             val type = remoteMessage.data["type"]
             if (type != "0") addDB(remoteMessage.data)
+            else {
+                val mSharedPreferences = DatastoreUtil.getSharedPreferences(this)
+                val settingEnable = mSharedPreferences.getBoolean(
+                    resources.getStringArray(R.array.sp_noti)[type!!.toInt()], true
+                )
 
-            val mSharedPreferences = DatastoreUtil.getSharedPreferences(this)
-            val settingEnable = mSharedPreferences.getBoolean(
-                resources.getStringArray(R.array.sp_noti)[type!!.toInt()], true
-            )
+                if (settingEnable)
+                    sendNotification(
+                        remoteMessage.notification!!.title, remoteMessage.notification!!.body
+                    )
+            }
 
-            if (settingEnable) sendNotification(
-                remoteMessage.notification!!.title, remoteMessage.notification!!.body
-            )
         }
     }
 
@@ -52,16 +55,14 @@ class ChefMessagingService : FirebaseMessagingService() {
             0
         )
 
-        CoroutineScope(Dispatchers.IO).launch {
-            (application as App)
-                .notificationRepository
-                .insert(notiData)
-        }
+        (application as App).notificationRepository.insert(
+            notiData
+        )
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
         val intent = Intent(this, NotificationActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
+            .addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
         val pendingIntent = PendingIntent.getActivity(
             this, 0, intent,
             PendingIntent.FLAG_ONE_SHOT

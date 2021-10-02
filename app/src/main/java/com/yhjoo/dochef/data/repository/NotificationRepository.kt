@@ -50,3 +50,42 @@ class NotificationRepository(
             }
     }
 }
+
+//class NotificationRepository(
+//    private val context: Context,
+//    private val notificationDao: NotificationDao
+//) {
+//    @WorkerThread
+//    fun insert(notificationEntity: NotificationEntity): Long {
+//        return notificationDao.insert(notificationEntity)
+//    }
+//
+//    @WorkerThread
+//    fun update(notificationEntity: NotificationEntity): Int {
+//        return notificationDao.update(notificationEntity)
+//    }
+//
+//    @WorkerThread
+//    fun delete(notificationEntity: NotificationEntity): Int {
+//        return notificationDao.delete(notificationEntity)
+//    }
+//
+//    @WorkerThread
+//    fun setRead(id: Long) {
+//        notificationDao.setRead(id)
+//    }
+//
+//    fun getData(): Flow<List<NotificationEntity>> {
+//        return flow {
+//            if (App.isServerAlive)
+//                notificationDao.getRecentList(System.currentTimeMillis() - 1000 * 60 * 60 * 24 * 3)
+//            else
+//                emit(
+//                    DataGenerator.make(
+//                        context.resources,
+//                        context.resources.getInteger(R.integer.DATA_TYPE_NOTIFICATION)
+//                    ) as List<NotificationEntity>
+//                )
+//        }
+//    }
+//}

@@ -9,6 +9,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
@@ -18,6 +19,7 @@ class ResultUserFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
     private val userViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
+            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)
         )
@@ -34,21 +36,14 @@ class ResultUserFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            userListAdapter = UserListAdapter { item ->
-                Intent(context, HomeActivity::class.java)
-                    .putExtra("userID", item.userID).apply {
-                        startActivity(this)
-                    }
+            userListAdapter = UserListAdapter {
+                goHome(it)
             }
 
             resultRecycler.apply {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = userListAdapter
             }
-
-            userViewModel.keyword.observe(viewLifecycleOwner, {
-                userViewModel.requestUser(it!!)
-            })
 
             userViewModel.queriedUsers.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
@@ -58,5 +53,12 @@ class ResultUserFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun goHome(item: UserBrief) {
+        startActivity(
+            Intent(context, HomeActivity::class.java)
+                .putExtra("userID", item.userID)
+        )
     }
 }

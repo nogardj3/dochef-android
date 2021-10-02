@@ -28,6 +28,7 @@ class SearchActivity : BaseActivity() {
     }
     private val searchViewModel: SearchViewModel by viewModels {
         SearchViewModelFactory(
+            application,
             UserRepository(applicationContext),
             RecipeRepository(applicationContext)
         )
@@ -47,6 +48,7 @@ class SearchActivity : BaseActivity() {
                 offscreenPageLimit = 4
                 adapter = viewPagerAdapter
             }
+
             TabLayoutMediator(searchTablayout, searchViewpager) { tab, position ->
                 tab.text = searchTabs[position].first
             }.attach()
@@ -59,7 +61,7 @@ class SearchActivity : BaseActivity() {
                     }
 
                     override fun onQueryTextSubmit(query: String?): Boolean {
-                        searchViewModel.keyword.postValue(query)
+                        searchViewModel.searchStart(query ?: "")
                         hideKeyboard(searchSearchview)
                         return true
                     }

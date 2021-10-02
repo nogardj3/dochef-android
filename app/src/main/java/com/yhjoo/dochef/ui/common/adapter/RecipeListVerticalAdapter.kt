@@ -13,7 +13,7 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.MainMyrecipeItemBinding
 import com.yhjoo.dochef.databinding.MainRecipesItemBinding
 import com.yhjoo.dochef.databinding.RecipemylistItemBinding
-import com.yhjoo.dochef.databinding.RecipethemeItemBinding
+import com.yhjoo.dochef.databinding.ReciperecommendItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
@@ -30,7 +30,7 @@ class RecipeListVerticalAdapter(
             const val MAIN_RECIPES = 0
             const val MAIN_MYRECIPE = 1
             const val MYLIST = 2
-            const val THEME = 3
+            const val RECOMMEND = 3
         }
     }
 
@@ -67,7 +67,7 @@ class RecipeListVerticalAdapter(
             else -> RecipeThemeViewHolder(
                 DataBindingUtil.inflate(
                     LayoutInflater.from(context),
-                    R.layout.recipetheme_item,
+                    R.layout.reciperecommend_item,
                     parent,
                     false
                 )
@@ -171,7 +171,7 @@ class RecipeListVerticalAdapter(
         }
     }
 
-    inner class RecipeThemeViewHolder(val binding: RecipethemeItemBinding) :
+    inner class RecipeThemeViewHolder(val binding: ReciperecommendItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(recipe: Recipe) {
             binding.apply {
@@ -180,14 +180,14 @@ class RecipeListVerticalAdapter(
                 }
 
                 ImageLoaderUtil.loadRecipeImage(
-                    context, recipe.recipeImg, recipethemeImg
+                    context, recipe.recipeImg, reciperecommendImg
                 )
-                recipethemeTitle.text = recipe.recipeName
-                recipethemeNickname.text = String.format(
+                reciperecommendTitle.text = recipe.recipeName
+                reciperecommendNickname.text = String.format(
                     context.resources.getString(R.string.format_usernickname),
                     recipe.nickname
                 )
-                recipethemeRating.text = String.format("%.1f", recipe.rating)
+                reciperecommendRating.text = String.format("%.1f", recipe.rating)
             }
         }
     }

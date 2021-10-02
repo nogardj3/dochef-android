@@ -21,7 +21,7 @@ import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainInitFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListHorizontalAdapter
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
-import com.yhjoo.dochef.ui.recipe.RecipeThemeActivity
+import com.yhjoo.dochef.ui.recipe.RecipeRecommendActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
@@ -62,7 +62,7 @@ class InitFragment : Fragment() {
             mainInitRecommendText.text =
                 String.format(getString(R.string.format_recommend_title), "Chef").parseAsHtml()
             mainInitRecommendMore.setOnClickListener {
-                startActivity(Intent(requireContext(), RecipeThemeActivity::class.java))
+                startActivity(Intent(requireContext(), RecipeRecommendActivity::class.java))
             }
 
             recipeListHorizontalAdapter = RecipeListHorizontalAdapter(
