@@ -47,7 +47,7 @@ class SplashActivity : BaseActivity() {
     override fun onStart() {
         super.onStart()
 
-        ViewAnimator.animate(binding.splashLogo)
+        ViewAnimator.animate()
             .alpha(0.0f, 1.0f)
             .accelerate()
             .duration(500)
