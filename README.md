@@ -1,14 +1,14 @@
 # Chef
 
-17.4 - 17.6 진행한 요리 + SNS 어플리케이션 최신화
+17.4 - 17.6 요리 + SNS 어플리케이션 리빌딩
 
 ## About this Project
 
 ### Introduction
 
--   당시 유행했던 요리 앱, 인스타그램의 SNS를 하나로
+-   요리, SNS 기능을 하나의 앱으로
 -   SNS 로그인 및 간편한 회원가입으로 유저 데이터 동기화
--   레시피를 재생하면서 근접센서와 음성인식을 활용한 '스마트폰 손 안대고 요리하기' 구현
+-   레시피를 재생하면서 근접센서와 음성인식을 활용한 요리 재생 기능
 
 ### Function
 
@@ -23,7 +23,7 @@
    ![recipe1.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/recipe1.gif?raw=true)
    ![recipe2.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/recipe2.gif?raw=true)
     1. 레시피 및 리뷰를 생성, 관리, 재생하는 기능
-    2. 근접센서 감지 -> 음성인식 기능
+    2. 근접센서 감지, 음성인식 기능
 4. POST  
    ![post1.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/post1.gif?raw=true)
    ![post2.gif](https://github.com/nogardj3/dochef_android/blob/main/screenshots/post2.gif?raw=true)
@@ -69,7 +69,12 @@
 
 ## Tech stack & Open-source libraries
 
--   [RxJava2 / RxAndriod](http://reactivex.io/)
+-   [Kotlin(Coroutine, Flow)](https://developer.android.com/kotlin/coroutines?hl=ko)
+-   [AAC(Databinding, Lifecycle, Livedata, Viewmodel, Room, Navigation)](https://developer.android.com/topic/libraries/architecture?hl=ko)
+-   [RxJava3 / RxAndriod](http://reactivex.io/)
 -   [Retrofit2](https://square.github.io/retrofit/)
 -   [Glide](https://github.com/bumptech/glide)
 -   [Firebase(Auth, Admob, Analytics, Crashlytics, Cloud Messaging, Storage)](https://firebase.google.com/docs?hl=ko)
+-   ~~[Hilt](https://developer.android.com/training/dependency-injection/hilt-android?hl=ko)~~
+-   ~~[Mockito](https://developer.android.com/training/testing/unit-testing/local-unit-tests?hl=ko)~~
+-   ~~[Espresso](https://developer.android.com/training/testing/espresso?hl=ko)~~

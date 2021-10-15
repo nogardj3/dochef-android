@@ -1,11 +1,11 @@
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 
 plugins {
-    id ("com.android.application")
-    id ("com.google.gms.google-services")
-    id ("com.google.firebase.crashlytics")
-    id ("kotlin-android")
-    id ("kotlin-kapt")
+    id("com.android.application")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+    id("kotlin-android")
+    id("kotlin-kapt")
 //    id("androidx.navigation.safeargs.kotlin")
 }
 
@@ -17,13 +17,13 @@ android {
 
     defaultConfig {
         applicationId = "com.yhjoo.dochef"
-        minSdk=24
+        minSdk = 24
         targetSdk = 30
         versionCode = 1
         versionName = "1.0.0"
 
-        resValue( "string", "admobAppId", admobAppId)
-        resValue( "string", "admobBannerId", admobBannerId)
+        resValue("string", "admobAppId", admobAppId)
+        resValue("string", "admobBannerId", admobBannerId)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -31,7 +31,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"),"proguard-rules.pro")
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
         }
     }
 
@@ -105,7 +105,7 @@ dependencies {
 
     // others
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
-    implementation( "io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
