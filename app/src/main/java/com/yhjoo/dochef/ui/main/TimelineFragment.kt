@@ -21,12 +21,8 @@ import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class TimelineFragment : Fragment(), OnRefreshListener {
-    /* TODO
-    1. ad + item
-    2.
-     */
     private lateinit var binding: MainTimelineFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
+    private val mainViewModel: MainViewModel by activityViewModels (){
         MainViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
@@ -34,6 +30,7 @@ class TimelineFragment : Fragment(), OnRefreshListener {
             PostRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var timelineListAdapter: TimelineListAdapter
 
     override fun onCreateView(

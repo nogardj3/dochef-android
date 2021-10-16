@@ -28,6 +28,7 @@ class MainFragment : Fragment() {
             BasicRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var notiSettingArray: Array<String>
 
@@ -111,7 +112,6 @@ class MainFragment : Fragment() {
                 sharedPreferences.getBoolean(notiSettingArray[4], true)
         }
     }
-
 
     private fun toggleAllnotification() {
         toggleNotification(0, binding.settingNotificationAllCheck.isChecked)

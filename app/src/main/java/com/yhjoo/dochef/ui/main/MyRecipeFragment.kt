@@ -16,18 +16,14 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LayoutType.MAIN_MYRECIPE
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MAIN_MYRECIPE
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class MyRecipeFragment : Fragment(), OnRefreshListener {
-    /* TODO
-    1. ad + item + recommend
-     */
-
     private lateinit var binding: MainMyrecipeFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
+    private val mainViewModel: MainViewModel by activityViewModels(){
         MainViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
@@ -35,6 +31,7 @@ class MyRecipeFragment : Fragment(), OnRefreshListener {
             PostRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var recommendTags: Array<String>

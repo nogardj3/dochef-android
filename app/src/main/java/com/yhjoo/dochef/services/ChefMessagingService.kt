@@ -19,11 +19,6 @@ class ChefMessagingService : FirebaseMessagingService() {
         OtherUtil.log("Message : " + remoteMessage.data.toString())
 
         if (remoteMessage.notification != null) {
-            OtherUtil.log(
-                "Message Notification Body: " + remoteMessage.notification!!.body
-            )
-
-
             val type = remoteMessage.data["type"]
             if (type != "0") addDB(remoteMessage.data)
 
@@ -39,6 +34,10 @@ class ChefMessagingService : FirebaseMessagingService() {
         }
     }
 
+    override fun onNewToken(p0: String) {
+        super.onNewToken(p0)
+    }
+
     private fun addDB(data: Map<String, String>) {
         val notiData = NotificationEntity(
             null,
@@ -51,13 +50,10 @@ class ChefMessagingService : FirebaseMessagingService() {
             0
         )
 
-        (application as App).notificationRepository.insert(
-            notiData
-        )
+        (application as App).notificationRepository.insert(notiData)
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {
-        OtherUtil.log("nonononononononononononop")
         val intent = Intent(this, NotificationActivity::class.java)
             .addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT)
         val pendingIntent = PendingIntent.getActivity(
@@ -65,6 +61,7 @@ class ChefMessagingService : FirebaseMessagingService() {
             PendingIntent.FLAG_ONE_SHOT
         )
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+
         val notificationBuilder = NotificationCompat.Builder(
             this,
             applicationContext.getString(R.string.notification_channel_id)
@@ -75,11 +72,9 @@ class ChefMessagingService : FirebaseMessagingService() {
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
+
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(0, notificationBuilder.build())
     }
 
-    override fun onNewToken(p0: String) {
-        super.onNewToken(p0)
-    }
 }

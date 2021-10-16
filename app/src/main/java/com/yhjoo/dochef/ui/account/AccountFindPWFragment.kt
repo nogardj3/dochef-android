@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountFindpwFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
+import kotlinx.coroutines.flow.collect
 
-class AccountFindPWFragment : Fragment() {
+class AccountFindPWFragment : BaseFragment() {
     private lateinit var binding: AccountFindpwFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
@@ -35,6 +36,7 @@ class AccountFindPWFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = accountViewModel
 
             accountFindpwEdittext.apply {
                 textChanged {
@@ -42,9 +44,27 @@ class AccountFindPWFragment : Fragment() {
                 }
                 setOnEditorActionListener(emailListener)
             }
+        }
 
-            accountFindpwOk.setOnClickListener {
-                findPW(accountFindpwEdittext.text.toString())
+        eventOnLifecycle {
+            accountViewModel.eventResult.collect {
+                when (it.first) {
+                    AccountViewModel.Events.FindPW.ERROR_EMAIL -> {
+                        binding.accountFindpwEmailLayout.apply {
+                            error = it.second
+                            requestFocus()
+                        }
+                    }
+                    AccountViewModel.Events.FindPW.WAIT -> {
+                        binding.accountFindpwEmailLayout.error = null
+                        hideKeyboard(requireContext(), binding.accountFindpwEmailLayout)
+                        showProgress(requireActivity())
+                    }
+                    AccountViewModel.Events.FindPW.COMPLETE -> {
+                        hideProgress()
+                        showSnackBar(binding.root, "메일을 전송했습니다. 메일을 확인 해 주세요.")
+                    }
+                }
             }
         }
 
@@ -66,22 +86,6 @@ class AccountFindPWFragment : Fragment() {
                 } else
                     binding.accountFindpwEmailLayout.error = validateResult.second
                 true
-            } else
-                false
+            } else false
         }
-
-    private fun findPW(email: String) {
-        val validateResult = ValidateUtil.emailValidate(email)
-
-        if (validateResult.first == ValidateUtil.EmailResult.VALID) {
-            binding.accountFindpwEmailLayout.error = null
-            (requireActivity() as BaseActivity).hideKeyboard(binding.accountFindpwEmailLayout)
-            (requireActivity() as BaseActivity).showProgress(requireActivity())
-            accountViewModel.sendPasswordResetEmail(email)
-        } else
-            binding.accountFindpwEmailLayout.apply {
-                error = validateResult.second
-                requestFocus()
-            }
-    }
 }

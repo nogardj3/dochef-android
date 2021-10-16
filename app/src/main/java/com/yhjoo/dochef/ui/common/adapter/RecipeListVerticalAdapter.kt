@@ -25,15 +25,6 @@ class RecipeListVerticalAdapter(
     private val childClickListener: ((Recipe) -> Unit)?
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
-    companion object CONSTANTS {
-        object LayoutType {
-            const val MAIN_RECIPES = 0
-            const val MAIN_MYRECIPE = 1
-            const val MYLIST = 2
-            const val RECOMMEND = 3
-        }
-    }
-
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -84,6 +75,15 @@ class RecipeListVerticalAdapter(
         }
     }
 
+    companion object {
+        object LayoutType {
+            const val MAIN_RECIPES = 0
+            const val MAIN_MYRECIPE = 1
+            const val MYLIST = 2
+            const val RECOMMEND = 3
+        }
+    }
+    
     inner class MainRecipesViewHolder(val binding: MainRecipesItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(recipe: Recipe) {

@@ -23,13 +23,6 @@ import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class PostWriteActivity : BaseActivity() {
-    companion object CONSTANTS {
-        object UIMODE {
-            const val WRITE = 0
-            const val REVISE = 1
-        }
-    }
-
     private val binding: PostwriteActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.postwrite_activity)
     }
@@ -177,6 +170,13 @@ class PostWriteActivity : BaseActivity() {
                 binding.postwriteContents.setText(prevText)
                 binding.postwriteContents.setSelection(prevText.length - 1)
             }
+        }
+    }
+
+    companion object {
+        object UIMODE {
+            const val WRITE = 0
+            const val REVISE = 1
         }
     }
 }

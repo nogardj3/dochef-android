@@ -49,13 +49,13 @@ class PostWriteViewModel(
                 storageReference.child(application.applicationContext.getString(R.string.storage_path_post) + imageString)
             ref.putFile(imageUri)
                 .addOnSuccessListener {
-                    if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.WRITE) {
+                    if (currentMode == PostWriteActivity.Companion.UIMODE.WRITE) {
                         createPost(
                             imageString,
                             contents,
                             tags
                         )
-                    } else if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.REVISE) {
+                    } else if (currentMode == PostWriteActivity.Companion.UIMODE.REVISE) {
                         updatePost(
                             imageString,
                             contents,
@@ -65,13 +65,13 @@ class PostWriteViewModel(
                 }
         } else {
             val imageString = postImage
-            if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.WRITE) {
+            if (currentMode == PostWriteActivity.Companion.UIMODE.WRITE) {
                 createPost(
                     imageString!!,
                     contents,
                     tags
                 )
-            } else if (currentMode == PostWriteActivity.CONSTANTS.UIMODE.REVISE) {
+            } else if (currentMode == PostWriteActivity.Companion.UIMODE.REVISE) {
                 updatePost(
                     imageString!!,
                     contents,

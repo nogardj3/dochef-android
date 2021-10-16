@@ -35,16 +35,6 @@ import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class HomeActivity : BaseActivity() {
-    object UIMODE {
-        const val OWNER = 0
-        const val OTHERS = 1
-    }
-
-    object OPERATION {
-        const val VIEW = 0
-        const val REVISE = 1
-    }
-
     private val binding: HomeActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.home_activity)
     }
@@ -97,8 +87,7 @@ class HomeActivity : BaseActivity() {
                 || intent.getStringExtra("userID") == homeViewModel.activeUserId
             )
                 UIMODE.OWNER
-            else
-                UIMODE.OTHERS
+            else UIMODE.OTHERS
 
         binding.apply {
             lifecycleOwner = this@HomeActivity
@@ -138,17 +127,16 @@ class HomeActivity : BaseActivity() {
 
             homeViewModel.allRecipes.observe(this@HomeActivity, {
                 homeRecipeEmpty.isVisible = it.isEmpty()
-                recipeListAdapter.submitList(it) {}
+                recipeListAdapter.submitList(it)
             })
 
             homeViewModel.allPosts.observe(this@HomeActivity, {
                 homePostEmpty.isVisible = it.isEmpty()
-                postListAdapter.submitList(it) {}
+                postListAdapter.submitList(it)
             })
 
             homeViewModel.updateComplete.observe(this@HomeActivity, { result ->
-                if (result)
-                    updateComplete()
+                if (result) updateComplete()
             })
 
             homeViewModel.nicknameValid.observe(this@HomeActivity, { result ->
@@ -308,14 +296,14 @@ class HomeActivity : BaseActivity() {
     private fun reviseProfileImage() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
-        if (OtherUtil.checkPermission(this, permissions))
-            launchCrop()
-        else
+        if (OtherUtil.checkPermission(this, permissions)) launchCrop()
+        else {
             ActivityCompat.requestPermissions(
                 this,
                 permissions,
                 Constants.PERMISSION_CODE
             )
+        }
     }
 
     private fun launchCrop() {
@@ -410,5 +398,15 @@ class HomeActivity : BaseActivity() {
         hideProgress()
 
         homeViewModel.requestActiveUserDetail()
+    }
+
+    object UIMODE {
+        const val OWNER = 0
+        const val OTHERS = 1
+    }
+
+    object OPERATION {
+        const val VIEW = 0
+        const val REVISE = 1
     }
 }

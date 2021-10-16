@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.common.adapter
+package com.yhjoo.dochef.ui.main
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -12,17 +12,11 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.RecipeHorizontalItemBinding
 import com.yhjoo.dochef.utils.ImageLoaderUtil
 
-class RecipeListHorizontalAdapter(
+class InitRecipeListAdapter(
     private val layoutType: Int,
     private val itemClickListener: ((Recipe) -> Unit)?
 ) :
     ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
-    companion object CONSTANTS {
-        object LayoutType {
-            const val MAIN_INIT = 0
-        }
-    }
-
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -52,6 +46,12 @@ class RecipeListHorizontalAdapter(
         when (holder) {
             is RecipeHorizontalViewHolder -> holder.bind(getItem(position))
 //            is RecipeHorizontalViewHolder -> holder.bind(getItem(position))
+        }
+    }
+
+    companion object {
+        object LayoutType {
+            const val MAIN_INIT = 0
         }
     }
 

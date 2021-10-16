@@ -20,12 +20,8 @@ import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import java.util.*
 
 class RecipesFragment : Fragment(), OnRefreshListener {
-    /* TODO
-    1. ad + item + recommend
-     */
-
     private lateinit var binding: MainRecipesFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
+    private val mainViewModel: MainViewModel by activityViewModels (){
         MainViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
@@ -33,6 +29,7 @@ class RecipesFragment : Fragment(), OnRefreshListener {
             PostRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
 
     private lateinit var recommendTags: Array<String>
@@ -59,7 +56,7 @@ class RecipesFragment : Fragment(), OnRefreshListener {
             }
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.CONSTANTS.LayoutType.MAIN_RECIPES,
+                RecipeListVerticalAdapter.Companion.LayoutType.MAIN_RECIPES,
                 mainViewModel.userId,
                 { goRecipeDetail(it) },
                 null

@@ -17,13 +17,14 @@ import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 
 class ResultTagFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
-    private val recipeViewModel: SearchViewModel by activityViewModels {
+    private val searchViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var recipeAdapter: RecipeAdapter
 
     override fun onCreateView(
@@ -36,7 +37,7 @@ class ResultTagFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            recipeAdapter = RecipeAdapter(RecipeAdapter.CONSTANTS.LAYOUT_TYPE.TAG) {
+            recipeAdapter = RecipeAdapter(RecipeAdapter.Companion.LAYOUT_TYPE.TAG) {
                 goDetail(it)
             }
 
@@ -45,7 +46,7 @@ class ResultTagFragment : Fragment() {
                 adapter = recipeAdapter
             }
 
-            recipeViewModel.queriedRecipeByTag.observe(viewLifecycleOwner, {
+            searchViewModel.queriedRecipeByTag.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
                 resultEmpty.isVisible = it.isEmpty()
                 recipeAdapter.submitList(it)
@@ -55,9 +56,10 @@ class ResultTagFragment : Fragment() {
         return binding.root
     }
 
-    private fun goDetail(item : Recipe){
+    private fun goDetail(item: Recipe) {
         startActivity(
             Intent(context, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID))
+                .putExtra("recipeID", item.recipeID)
+        )
     }
 }

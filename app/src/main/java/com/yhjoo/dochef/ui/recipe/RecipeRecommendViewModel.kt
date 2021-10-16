@@ -24,7 +24,7 @@ class RecipeRecommendViewModel(
     val allRecipeList: LiveData<List<Recipe>>
         get() = _allRecipeList
 
-    init{
+    init {
         requestRecipeList(
             Constants.RECIPE.SEARCHBY.TAG,
             Constants.RECIPE.SORT.POPULAR,

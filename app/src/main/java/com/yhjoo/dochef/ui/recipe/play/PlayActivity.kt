@@ -38,11 +38,6 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class PlayActivity : BaseActivity(), SensorEventListener {
-    /* TODO
-    1. 센서근접 -> 음성인식 -> 인식결과에 따라 행동
-    2. 시작/다음/이전/타이머 시작/타이머 정지
-    */
-
     private val binding: RecipeplayActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipeplay_activity)
     }
@@ -134,6 +129,7 @@ class PlayActivity : BaseActivity(), SensorEventListener {
     }
 
     override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+
     override fun onSensorChanged(event: SensorEvent) {
         val dbDistance = event.values[0]
         if (dbDistance <= 2) startListening()

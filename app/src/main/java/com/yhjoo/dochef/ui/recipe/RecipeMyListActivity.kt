@@ -14,16 +14,10 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LayoutType.MYLIST
-import com.yhjoo.dochef.ui.common.viewmodel.*
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class RecipeMyListActivity : BaseActivity() {
-    /* TODO
-    1. ad + item + recommend
-     */
-
     private val binding: RecipemylistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipemylist_activity)
     }
@@ -47,14 +41,17 @@ class RecipeMyListActivity : BaseActivity() {
             lifecycleOwner = this@RecipeMyListActivity
 
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                MYLIST,
+                RecipeListVerticalAdapter.Companion.LayoutType.MYLIST,
                 recipeListViewModel.activeUserId,
                 { goDetail(it) },
                 { item ->
                     MaterialDialog(this@RecipeMyListActivity).show {
                         message(text = "즐겨찾기를 해제 하시겠습니까?")
                         positiveButton(text = "확인") {
-                            recipeListViewModel.disLikeRecipe(item.recipeID, recipeListViewModel.activeUserId)
+                            recipeListViewModel.disLikeRecipe(
+                                item.recipeID,
+                                recipeListViewModel.activeUserId
+                            )
                         }
                         negativeButton(text = "취소")
                     }

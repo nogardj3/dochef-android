@@ -22,12 +22,9 @@ class AccountRepository(
     @WorkerThread
     suspend fun checkNickname(nickname: String): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(accountClient.checkNickname(nickname))
-            else {
-                val jsonObject = JsonObject()
-                emit(Response.success(jsonObject))
-            }
+            if (App.isServerAlive) emit(accountClient.checkNickname(nickname))
+            else emit(Response.success(JsonObject()))
+
         }
     }
 
@@ -41,7 +38,7 @@ class AccountRepository(
         return flow {
             if (App.isServerAlive)
                 emit(accountClient.createUser(token, fcmtoken, uid, nickname))
-            else {
+            else
                 emit(
                     Response.success(
                         DataGenerator.make(
@@ -50,7 +47,6 @@ class AccountRepository(
                         )
                     )
                 )
-            }
         }
     }
 
@@ -64,10 +60,8 @@ class AccountRepository(
         return flow {
             if (App.isServerAlive)
                 emit(accountClient.updateUser(userID, userImg, nickname, bio))
-            else {
-                val jsonObject = JsonObject()
-                emit(Response.success(jsonObject))
-            }
+            else
+                emit(Response.success(JsonObject()))
         }
     }
 
@@ -80,7 +74,7 @@ class AccountRepository(
         return flow {
             if (App.isServerAlive)
                 emit(accountClient.checkUser(token, uid, fcmtoken))
-            else {
+            else
                 emit(
                     Response.success(
                         DataGenerator.make(
@@ -89,7 +83,6 @@ class AccountRepository(
                         )
                     )
                 )
-            }
         }
     }
 }

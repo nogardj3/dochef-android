@@ -19,7 +19,6 @@ import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainInitFragmentBinding
-import com.yhjoo.dochef.ui.common.adapter.RecipeListHorizontalAdapter
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeRecommendActivity
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -30,7 +29,7 @@ class InitFragment : Fragment() {
     private val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
     private lateinit var binding: MainInitFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
+    private val mainViewModel: MainViewModel by activityViewModels(){
         MainViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
@@ -38,7 +37,8 @@ class InitFragment : Fragment() {
             PostRepository(requireContext().applicationContext)
         )
     }
-    private lateinit var recipeListHorizontalAdapter: RecipeListHorizontalAdapter
+
+    private lateinit var initRecipeListAdapter: InitRecipeListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,19 +65,19 @@ class InitFragment : Fragment() {
                 startActivity(Intent(requireContext(), RecipeRecommendActivity::class.java))
             }
 
-            recipeListHorizontalAdapter = RecipeListHorizontalAdapter(
-                RecipeListHorizontalAdapter.CONSTANTS.LayoutType.MAIN_INIT
+            initRecipeListAdapter = InitRecipeListAdapter(
+                InitRecipeListAdapter.Companion.LayoutType.MAIN_INIT
             ) { goRecipeDetail(it) }
 
             mainInitRecommendRecycler.apply {
                 layoutManager =
                     LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = recipeListHorizontalAdapter
+                adapter = initRecipeListAdapter
             }
 
             mainViewModel.allRecommendList.observe(viewLifecycleOwner, {
                 recipesEmpty.isVisible = it.isEmpty()
-                recipeListHorizontalAdapter.submitList(it) {}
+                initRecipeListAdapter.submitList(it) {}
             })
         }
 

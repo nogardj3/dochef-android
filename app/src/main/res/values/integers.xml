@@ -9,10 +9,11 @@
     <integer name="DATA_TYPE_NOTICE">1</integer>
     <integer name="DATA_TYPE_NOTIFICATION">2</integer>
     <integer name="DATA_TYPE_USER_BRIEF">3</integer>
-    <integer name="DATA_TYPE_USER_DETAIL">4</integer>
-    <integer name="DATA_TYPE_POST">5</integer>
-    <integer name="DATA_TYPE_COMMENTS">6</integer>
-    <integer name="DATE_TYPE_RECIPE">7</integer>
-    <integer name="DATA_TYPE_RECIPE_DETAIL">8</integer>
-    <integer name="DATA_TYPE_REVIEW">9</integer>
+    <integer name="DATA_TYPE_USER_BRIEF_LIST">4</integer>
+    <integer name="DATA_TYPE_USER_DETAIL">5</integer>
+    <integer name="DATA_TYPE_POST">6</integer>
+    <integer name="DATA_TYPE_COMMENTS">7</integer>
+    <integer name="DATE_TYPE_RECIPE">8</integer>
+    <integer name="DATA_TYPE_RECIPE_DETAIL">9</integer>
+    <integer name="DATA_TYPE_REVIEW">10</integer>
 </resources>

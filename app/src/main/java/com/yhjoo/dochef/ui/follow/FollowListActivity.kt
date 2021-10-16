@@ -17,11 +17,6 @@ import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class FollowListActivity : BaseActivity() {
-    companion object UIMODE {
-        const val FOLLOWER = 0
-        const val FOLLOWING = 1
-    }
-
     private val binding: FollowlistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.followlist_activity)
     }
@@ -77,5 +72,10 @@ class FollowListActivity : BaseActivity() {
             Intent(this@FollowListActivity, HomeActivity::class.java)
                 .putExtra("userID", item.userID)
         )
+    }
+
+    companion object {
+        const val FOLLOWER = 0
+        const val FOLLOWING = 1
     }
 }

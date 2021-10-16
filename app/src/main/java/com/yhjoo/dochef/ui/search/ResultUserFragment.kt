@@ -17,13 +17,14 @@ import com.yhjoo.dochef.ui.home.HomeActivity
 
 class ResultUserFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
-    private val userViewModel: SearchViewModel by activityViewModels {
+    private val searchViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var userListAdapter: UserListAdapter
 
     override fun onCreateView(
@@ -45,7 +46,7 @@ class ResultUserFragment : Fragment() {
                 adapter = userListAdapter
             }
 
-            userViewModel.queriedUsers.observe(viewLifecycleOwner, {
+            searchViewModel.queriedUsers.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
                 resultEmpty.isVisible = it.isEmpty()
                 userListAdapter.submitList(it)

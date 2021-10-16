@@ -13,15 +13,10 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.ReciperecommendActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.CONSTANTS.LayoutType.RECOMMEND
+import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.RECOMMEND
 import java.util.*
 
 class RecipeRecommendActivity : BaseActivity() {
-    /* TODO
-    1. ad + item
-    태그 검색 추천 뷰로 활용
-     */
-
     private val binding: ReciperecommendActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.reciperecommend_activity)
     }
@@ -46,7 +41,7 @@ class RecipeRecommendActivity : BaseActivity() {
             recipeListVerticalAdapter = RecipeListVerticalAdapter(
                 RECOMMEND,
                 null,
-                { goDetail(it)},
+                { goDetail(it) },
                 null
             )
 

@@ -17,7 +17,7 @@ import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 
 class ResultIngredientFragment : Fragment() {
     private lateinit var binding: SearchResultFragmentBinding
-    private val recipeViewModel: SearchViewModel by activityViewModels {
+    private val searchViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),
@@ -38,7 +38,7 @@ class ResultIngredientFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
 
             recipeAdapter =
-                RecipeAdapter(RecipeAdapter.CONSTANTS.LAYOUT_TYPE.INGREDIENT) {
+                RecipeAdapter(RecipeAdapter.Companion.LAYOUT_TYPE.INGREDIENT) {
                     goDetail(it)
                 }
 
@@ -47,7 +47,7 @@ class ResultIngredientFragment : Fragment() {
                 adapter = recipeAdapter
             }
 
-            recipeViewModel.queriedRecipeByIngredient.observe(viewLifecycleOwner, {
+            searchViewModel.queriedRecipeByIngredient.observe(viewLifecycleOwner, {
                 resultinitGroup.isVisible = false
                 resultEmpty.isVisible = it.isEmpty()
                 recipeAdapter.submitList(it)
@@ -57,9 +57,10 @@ class ResultIngredientFragment : Fragment() {
         return binding.root
     }
 
-    private fun goDetail(item : Recipe){
+    private fun goDetail(item: Recipe) {
         startActivity(
             Intent(context, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID))
+                .putExtra("recipeID", item.recipeID)
+        )
     }
 }

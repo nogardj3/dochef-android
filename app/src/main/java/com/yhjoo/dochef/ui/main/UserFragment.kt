@@ -23,7 +23,7 @@ import com.yhjoo.dochef.utils.OtherUtil
 
 class UserFragment : Fragment() {
     private lateinit var binding: MainUserFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
+    private val mainViewModel: MainViewModel by activityViewModels(){
         MainViewModelFactory(
             requireActivity().application,
             UserRepository(requireContext().applicationContext),

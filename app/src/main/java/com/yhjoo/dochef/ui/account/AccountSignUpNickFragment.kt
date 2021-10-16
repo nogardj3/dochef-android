@@ -7,16 +7,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSignupnickFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
+import kotlinx.coroutines.flow.collect
 
-class AccountSignUpNickFragment : Fragment() {
+class AccountSignUpNickFragment : BaseFragment() {
     private lateinit var binding: AccountSignupnickFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
@@ -39,6 +40,7 @@ class AccountSignUpNickFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = accountViewModel
 
             signupnickNicknameEdittext.apply {
                 textChanged {
@@ -46,13 +48,28 @@ class AccountSignUpNickFragment : Fragment() {
                 }
                 setOnEditorActionListener(nicknameListener)
             }
+        }
 
-            signupnickOk.setOnClickListener { signUpWithEmail(signupnickNicknameEdittext.text.toString()) }
+        eventOnLifecycle {
+            accountViewModel.eventResult.collect {
+                when (it.first) {
+                    AccountViewModel.Events.SignUpNickname.ERROR -> {
+                        binding.signupnickNicknameLayout.apply {
+                            error = it.second
+                            requestFocus()
+                        }
+                    }
+                    AccountViewModel.Events.SignUpNickname.WAIT -> {
+                        binding.signupnickNicknameLayout.error = null
+                        hideKeyboard(requireContext(), binding.signupnickNicknameLayout)
+                        showProgress(requireActivity())
+                    }
+                }
+            }
         }
 
         return binding.root
     }
-
 
     private val nicknameListener: TextView.OnEditorActionListener =
         TextView.OnEditorActionListener { _, actionId, _ ->
@@ -66,26 +83,11 @@ class AccountSignUpNickFragment : Fragment() {
                     (requireActivity() as BaseActivity).hideKeyboard(
                         binding.signupnickNicknameLayout
                     )
-                } else
+                } else {
                     binding.signupnickNicknameLayout.error = validateResult.second
+                }
 
                 true
-            } else
-                false
+            } else false
         }
-
-    private fun signUpWithEmail(nickname: String) {
-        val validateResult = ValidateUtil.nicknameValidate(nickname)
-
-        if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
-            binding.signupnickNicknameLayout.error = null
-            (requireActivity() as BaseActivity).hideKeyboard(binding.signupnickNicknameLayout)
-            (requireActivity() as BaseActivity).showProgress(requireActivity())
-            accountViewModel.signUpWithNickname(nickname)
-        } else
-            binding.signupnickNicknameLayout.apply {
-                error = validateResult.second
-                requestFocus()
-            }
-    }
 }

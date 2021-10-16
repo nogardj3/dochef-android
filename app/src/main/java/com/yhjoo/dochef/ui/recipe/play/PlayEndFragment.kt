@@ -18,7 +18,7 @@ import com.yhjoo.dochef.utils.ImageLoaderUtil
 
 class PlayEndFragment : Fragment() {
     private lateinit var binding: RecipeplayEndFragmentBinding
-    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels {
+    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels{
         RecipePlayViewModelFactory(
             RecipeRepository(requireContext().applicationContext),
             ReviewRepository(requireContext().applicationContext)
@@ -73,7 +73,7 @@ class PlayEndFragment : Fragment() {
 
             })
 
-            recipePlayViewModel.recipeDetail.observe(viewLifecycleOwner, {item->
+            recipePlayViewModel.recipeDetail.observe(viewLifecycleOwner, { item ->
                 recipeplayEndReviewOk.setOnClickListener {
                     recipePlayViewModel.createReview(
                         item.recipeID,
@@ -83,17 +83,18 @@ class PlayEndFragment : Fragment() {
                     )
                 }
 
-                recipePlayViewModel.likeThisRecipe.value = item.likes.contains(recipePlayViewModel.userId.value!!)
+                recipePlayViewModel.likeThisRecipe.value =
+                    item.likes.contains(recipePlayViewModel.userId.value!!)
             })
 
             recipePlayViewModel.reviewFinished.observe(viewLifecycleOwner, {
-                if(it){
+                if (it) {
                     App.showToast("리뷰가 등록되었습니다.")
                     requireActivity().finish()
                 }
             })
 
-            recipePlayViewModel.likeThisRecipe.observe(viewLifecycleOwner, {item->
+            recipePlayViewModel.likeThisRecipe.observe(viewLifecycleOwner, { item ->
                 recipeplayEndLike.setImageResource(
                     if (item)
                         R.drawable.ic_favorite_red

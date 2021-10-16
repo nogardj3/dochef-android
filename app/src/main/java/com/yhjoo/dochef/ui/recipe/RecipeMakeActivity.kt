@@ -9,9 +9,6 @@ import com.yhjoo.dochef.databinding.RecipemakeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
-    // Todo
-    // 1. 구현
-
     object MODE {
         const val WRITE = 0
         const val REVISE = 1
@@ -33,7 +30,5 @@ class RecipeMakeActivity : BaseActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.recipemakeToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-
     }
 }

@@ -20,6 +20,7 @@ class FAQFragment : Fragment() {
             BasicRepository(requireContext().applicationContext)
         )
     }
+
     private lateinit var expandableListAdapter: ExpandableListAdapter
 
     override fun onCreateView(

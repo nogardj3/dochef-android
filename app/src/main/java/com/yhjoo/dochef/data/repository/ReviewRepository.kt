@@ -23,8 +23,7 @@ class ReviewRepository(
     @WorkerThread
     suspend fun getReviews(recipeId: Int): Flow<Response<ArrayList<Review>>> {
         return flow {
-            if (App.isServerAlive)
-                emit(reviewClient.getReview(recipeId))
+            if (App.isServerAlive) emit(reviewClient.getReview(recipeId))
             else
                 emit(
                     Response.success(
@@ -46,8 +45,7 @@ class ReviewRepository(
         dateTime: Long
     ): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(reviewClient.createReview(recipeID, userID, contents, rating, dateTime))
+            if (App.isServerAlive) emit(reviewClient.createReview(recipeID, userID, contents, rating, dateTime))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -58,8 +56,7 @@ class ReviewRepository(
     @WorkerThread
     suspend fun deleteReview(recipeID: Int): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(reviewClient.deleteReview(recipeID))
+            if (App.isServerAlive) emit(reviewClient.deleteReview(recipeID))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

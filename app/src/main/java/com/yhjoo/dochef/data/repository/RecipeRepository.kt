@@ -25,8 +25,7 @@ class RecipeRepository(
     @WorkerThread
     suspend fun getRecipeDetail(recipeId: Int): Flow<Response<RecipeDetail>> {
         return flow {
-            if (App.isServerAlive)
-                emit(recipeClient.getRecipeDetail(recipeId))
+            if (App.isServerAlive) emit(recipeClient.getRecipeDetail(recipeId))
             else
                 emit(
                     Response.success(
@@ -48,25 +47,29 @@ class RecipeRepository(
         return flow {
             if (App.isServerAlive) {
                 when (searchby) {
-                    Constants.RECIPE.SEARCHBY.USERID -> emit(
-                        recipeClient.getRecipeByUserID(
-                            searchValue!!,
-                            sort
+                    Constants.RECIPE.SEARCHBY.USERID ->
+                        emit(
+                            recipeClient.getRecipeByUserID(
+                                searchValue!!,
+                                sort
+                            )
                         )
-                    )
-                    Constants.RECIPE.SEARCHBY.INGREDIENT -> emit(
-                        recipeClient.getRecipeByIngredient(
-                            searchValue!!,
-                            sort
+                    Constants.RECIPE.SEARCHBY.INGREDIENT ->
+                        emit(
+                            recipeClient.getRecipeByIngredient(
+                                searchValue!!,
+                                sort
+                            )
                         )
-                    )
-                    Constants.RECIPE.SEARCHBY.RECIPENAME -> emit(
-                        recipeClient.getRecipeByName(
-                            searchValue!!,
-                            sort
+                    Constants.RECIPE.SEARCHBY.RECIPENAME ->
+                        emit(
+                            recipeClient.getRecipeByName(
+                                searchValue!!,
+                                sort
+                            )
                         )
-                    )
-                    Constants.RECIPE.SEARCHBY.TAG -> emit(recipeClient.getRecipeByTag(searchValue!!, sort))
+                    Constants.RECIPE.SEARCHBY.TAG ->
+                        emit(recipeClient.getRecipeByTag(searchValue!!, sort))
                     else -> emit(recipeClient.getRecipes(sort))
                 }
             } else
@@ -120,8 +123,7 @@ class RecipeRepository(
     @WorkerThread
     suspend fun addCount(recipeId: Int): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(recipeClient.addCount(recipeId))
+            if (App.isServerAlive) emit(recipeClient.addCount(recipeId))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

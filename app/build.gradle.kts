@@ -13,7 +13,7 @@ val admobAppId: String = gradleLocalProperties(rootDir).getProperty("admobAppId"
 val admobBannerId: String = gradleLocalProperties(rootDir).getProperty("admobBannerId")
 
 android {
-    compileSdk = 30
+    compileSdk = 31
 
     defaultConfig {
         applicationId = "com.yhjoo.dochef"
@@ -71,6 +71,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:$appcompatVersion")
     implementation("androidx.activity:activity-ktx:$activityVersion")
     implementation("androidx.fragment:fragment-ktx:$fragmentVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.4.0-rc01")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     kapt("androidx.lifecycle:lifecycle-compiler:$lifecycleVersion")

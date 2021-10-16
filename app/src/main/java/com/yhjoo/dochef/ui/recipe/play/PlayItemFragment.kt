@@ -17,7 +17,7 @@ import com.yhjoo.dochef.utils.ImageLoaderUtil
 
 class PlayItemFragment : Fragment() {
     private lateinit var binding: RecipeplayItemFragmentBinding
-    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels {
+    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels{
         RecipePlayViewModelFactory(
             RecipeRepository(requireContext().applicationContext),
             ReviewRepository(requireContext().applicationContext)

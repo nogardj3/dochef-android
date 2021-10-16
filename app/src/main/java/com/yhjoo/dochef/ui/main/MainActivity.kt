@@ -45,7 +45,7 @@ class MainActivity : BaseActivity() {
     private val binding: MainActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.main_activity)
     }
-    private val mainViewModel: MainViewModel by viewModels {
+    private val mainViewModel: MainViewModel by viewModels{
         MainViewModelFactory(
             application,
             UserRepository(applicationContext),
@@ -200,7 +200,7 @@ class MainActivity : BaseActivity() {
             R.id.main_menu_write_post -> {
                 startActivity(
                     Intent(this, PostWriteActivity::class.java)
-                        .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.WRITE)
+                        .putExtra("MODE", PostWriteActivity.Companion.UIMODE.WRITE)
                 )
                 true
             }

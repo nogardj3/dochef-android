@@ -23,8 +23,7 @@ class PostRepository(
     @WorkerThread
     suspend fun getPostDetail(postId: Int): Flow<Response<Post>> {
         return flow {
-            if (App.isServerAlive)
-                emit(postClient.getPost(postId))
+            if (App.isServerAlive) emit(postClient.getPost(postId))
             else
                 emit(
                     Response.success(
@@ -40,8 +39,7 @@ class PostRepository(
     @WorkerThread
     suspend fun getPostList(): Flow<Response<ArrayList<Post>>> {
         return flow {
-            if (App.isServerAlive)
-                emit(postClient.getPostList())
+            if (App.isServerAlive) emit(postClient.getPostList())
             else
                 emit(
                     Response.success(
@@ -57,8 +55,7 @@ class PostRepository(
     @WorkerThread
     suspend fun getPostListByUserId(userId: String): Flow<Response<ArrayList<Post>>> {
         return flow {
-            if (App.isServerAlive)
-                emit(postClient.getPostListByUserID(userId))
+            if (App.isServerAlive) emit(postClient.getPostListByUserID(userId))
             else
                 emit(
                     Response.success(
@@ -74,8 +71,7 @@ class PostRepository(
     @WorkerThread
     suspend fun likePost(userID: String, postID: Int): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(postClient.setLikePost(userID, postID, 1))
+            if (App.isServerAlive) emit(postClient.setLikePost(userID, postID, 1))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -86,8 +82,7 @@ class PostRepository(
     @WorkerThread
     suspend fun dislikePost(userID: String, postID: Int): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(postClient.setLikePost(userID, postID, -1))
+            if (App.isServerAlive) emit(postClient.setLikePost(userID, postID, -1))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -135,8 +130,7 @@ class PostRepository(
     @WorkerThread
     suspend fun deletePost(postID: Int): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(postClient.deletePost(postID))
+            if (App.isServerAlive) emit(postClient.deletePost(postID))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

@@ -2,6 +2,14 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.ui.account.AccountViewModel" />
+    </data>
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -55,6 +63,7 @@
             android:text="비밀번호 찾기"
             android:textColor="@color/white"
             android:textSize="16sp"
+            android:onClick="@{() -> viewModel.clickFindPw(accountFindpwEdittext.text.toString())"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintDimensionRatio="w,1:4.15"
             app:layout_constraintLeft_toLeftOf="@+id/account_findpw_email_layout"

@@ -6,9 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotificationDao {
-    @Query("SELECT * FROM notification_table")
-    fun getAllNotifications(): Flow<List<NotificationEntity>>
-
     @Query("SELECT * from notification_table WHERE date_time > :dateTime ORDER BY date_time DESC")
     fun getRecentList(dateTime: Long): Flow<List<NotificationEntity>>
 

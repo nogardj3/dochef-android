@@ -43,9 +43,10 @@ class RecipePlayViewModel(
                 -1
 
             if (like == 1)
-                recipeRepository.dislikeRecipe(recipeDetail.value!!.recipeID, userId.value!!).collect {
-                    likeThisRecipe.value = false
-                }
+                recipeRepository.dislikeRecipe(recipeDetail.value!!.recipeID, userId.value!!)
+                    .collect {
+                        likeThisRecipe.value = false
+                    }
             else
                 recipeRepository.likeRecipe(recipeDetail.value!!.recipeID, userId.value!!).collect {
                     likeThisRecipe.value = true

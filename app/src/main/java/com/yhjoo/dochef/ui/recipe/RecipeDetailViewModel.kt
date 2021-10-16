@@ -30,7 +30,7 @@ class RecipeDetailViewModel(
     val recipeDetail = MutableLiveData<RecipeDetail>()
     val allReviews = MutableLiveData<List<Review>>()
 
-    init{
+    init {
         requestRecipeDetail()
         requestReviews()
         addCount()

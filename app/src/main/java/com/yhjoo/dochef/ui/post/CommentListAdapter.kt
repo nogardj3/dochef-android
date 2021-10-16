@@ -17,7 +17,7 @@ import com.yhjoo.dochef.utils.OtherUtil
 
 class CommentListAdapter(
     private val userId: String,
-    private val otherClickListener: (View,Comment) -> Unit
+    private val otherClickListener: (View, Comment) -> Unit
 ) :
     ListAdapter<Comment, CommentListAdapter.CommentListViewHolder>(CommentListComparator()) {
     lateinit var context: Context
@@ -54,7 +54,7 @@ class CommentListAdapter(
                 commentDate.text = OtherUtil.millisToText(comment.dateTime)
                 commentOther.isVisible = comment.userID == userId
                 commentOther.setOnClickListener {
-                    otherClickListener(it,comment)
+                    otherClickListener(it, comment)
                 }
             }
         }

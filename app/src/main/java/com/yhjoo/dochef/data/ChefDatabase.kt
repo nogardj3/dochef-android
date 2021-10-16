@@ -26,7 +26,6 @@ abstract class NotificationDatabase : RoomDatabase() {
                 )
                     .build()
                 INSTANCE = instance
-                // return instance
                 instance
             }
         }

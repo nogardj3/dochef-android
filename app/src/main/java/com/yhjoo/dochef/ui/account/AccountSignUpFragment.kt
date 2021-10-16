@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.afollestad.materialdialogs.utils.MDUtil.textChanged
@@ -15,9 +14,11 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSignupFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
+import kotlinx.coroutines.flow.collect
 
-class AccountSignUpFragment : Fragment() {
+class AccountSignUpFragment : BaseFragment() {
     private lateinit var binding: AccountSignupFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
@@ -36,6 +37,7 @@ class AccountSignUpFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = accountViewModel
 
             signupEmailEdittext.apply {
                 textChanged {
@@ -49,25 +51,47 @@ class AccountSignUpFragment : Fragment() {
                     signupPasswordLayout.error = null
                 }
                 setOnEditorActionListener(pwListener)
-                signupOk.setOnClickListener {
-                    startSignUp(
-                        binding.signupEmailEdittext.text.toString(),
-                        binding.signupPasswordEdittext.text.toString()
-                    )
+            }
+        }
+
+        eventOnLifecycle {
+            accountViewModel.eventResult.collect {
+                when (it.first) {
+                    AccountViewModel.Events.SignUpEmail.ERROR_EMAIL -> {
+                        binding.signupEmailLayout.run {
+                            error = it.second
+                            requestFocus()
+                        }
+                    }
+                    AccountViewModel.Events.SignUpEmail.ERROR_PW -> {
+                        binding.signupPasswordLayout.run {
+                            error = it.second
+                            requestFocus()
+                        }
+                    }
+                    AccountViewModel.Events.SignUpEmail.WAIT -> {
+                        binding.signupEmailLayout.error = null
+                        binding.signupPasswordLayout.error = null
+                        hideKeyboard(requireContext(), binding.signupPasswordLayout)
+                        showProgress(requireActivity())
+                    }
+                    AccountViewModel.Events.SignUpEmail.ERROR_AUTH,
+                    AccountViewModel.Events.Error.ERROR_REQUIRE_TOKEN -> {
+                        hideProgress()
+                        showSnackBar(binding.root, it.second!!)
+                    }
+                    AccountViewModel.Events.Error.ERROR_REQUIRE_SIGNUP -> {
+                        hideProgress()
+                        findNavController().navigate(
+                            R.id.action_accountSignUpFragment_to_accountSignUpNickFragment
+                        )
+                    }
                 }
             }
-
-            accountViewModel.phaseError.observe(viewLifecycleOwner, {
-                if (it.first == AccountViewModel.CONSTANTS.PHASE.CHECK_USERINFO)
-                    findNavController().navigate(
-                        R.id.action_accountSignUpFragment_to_accountSignUpNickFragment
-                    )
-            })
         }
 
         return binding.root
     }
-
 
     private val emailListener: TextView.OnEditorActionListener =
         TextView.OnEditorActionListener { _, actionId, _ ->
@@ -79,8 +103,9 @@ class AccountSignUpFragment : Fragment() {
                 if (validateResult.first == ValidateUtil.EmailResult.VALID) {
                     binding.signupEmailLayout.error = null
                     (requireActivity() as BaseActivity).hideKeyboard(binding.signupEmailLayout)
-                } else
+                } else {
                     binding.signupEmailLayout.error = validateResult.second
+                }
 
                 true
             } else
@@ -97,38 +122,12 @@ class AccountSignUpFragment : Fragment() {
                 if (validateResult.first == ValidateUtil.PwResult.VALID) {
                     binding.signupPasswordLayout.error = null
                     (requireActivity() as BaseActivity).hideKeyboard(binding.signupPasswordLayout)
-                } else
+                } else {
                     binding.signupPasswordLayout.error = validateResult.second
+                }
 
                 true
             } else
                 false
         }
-
-    private fun startSignUp(email: String, pw: String) {
-        val emailValidateResult = ValidateUtil.emailValidate(email)
-        val pwValidateResult = ValidateUtil.pwValidate(pw)
-
-        when {
-            emailValidateResult.first != ValidateUtil.EmailResult.VALID -> {
-                binding.signupEmailLayout.apply {
-                    error = emailValidateResult.second
-                    requestFocus()
-                }
-            }
-            pwValidateResult.first != ValidateUtil.PwResult.VALID -> {
-                binding.signupPasswordLayout.apply {
-                    error = pwValidateResult.second
-                    requestFocus()
-                }
-            }
-            else -> {
-                binding.signupEmailLayout.error = null
-                binding.signupPasswordLayout.error = null
-                (requireActivity() as BaseActivity).hideKeyboard(binding.signupPasswordLayout)
-                (requireActivity() as BaseActivity).showProgress(requireActivity())
-                accountViewModel.signUpWithEmail(email, pw)
-            }
-        }
-    }
 }

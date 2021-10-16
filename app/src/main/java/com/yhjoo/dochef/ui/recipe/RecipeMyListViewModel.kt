@@ -22,7 +22,7 @@ class RecipeMyListViewModel(
     val allRecipeList: LiveData<List<Recipe>>
         get() = _allRecipeList
 
-    init{
+    init {
         requestRecipeList(
             Constants.RECIPE.SEARCHBY.USERID,
             Constants.RECIPE.SORT.LATEST,

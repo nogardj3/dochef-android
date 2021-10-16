@@ -26,6 +26,7 @@ object RetrofitBuilder {
             .create(service)
     }
 
+    // TODO
     fun defaultErrorHandler(throwable: Throwable) {
         throwable.printStackTrace()
         if (throwable is HttpException) {

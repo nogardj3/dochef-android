@@ -4,19 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.*
 import androidx.activity.viewModels
-import androidx.core.os.bundleOf
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
-import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.main.MainActivity
 import com.yhjoo.dochef.utils.*
+import kotlinx.coroutines.flow.collect
 
 class AccountActivity : BaseActivity() {
     private val binding: AccountActivityBinding by lazy {
@@ -41,33 +39,17 @@ class AccountActivity : BaseActivity() {
 
         binding.apply {
             lifecycleOwner = this@AccountActivity
-
-            accountViewModel.phaseError.observe(this@AccountActivity, {
-                OtherUtil.log(it.toString())
-                hideProgress()
-                showSnackBar(binding.root,it.second)
-            })
-            accountViewModel.phaseFindPWComplete.observe(this@AccountActivity, {
-                if (it)
-                    startMain()
-            })
-            accountViewModel.phaseAllComplete.observe(this@AccountActivity, {
-                hideProgress()
-                showSnackBar(binding.root,"메일을 전송했습니다. 메일을 확인 해 주세요.")
-            })
+            viewModel = accountViewModel
         }
-    }
 
-    private fun startMain() {
-        val bundle = bundleOf(
-            Pair(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.SIGNIN),
-            Pair(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.SIGNIN)
-        )
-
-        accountViewModel.analyticsLogEvent(FirebaseAnalytics.Event.LOGIN, bundle)
-
-        hideProgress()
-        startActivity(Intent(this, MainActivity::class.java))
-        finish()
+        eventOnLifecycle {
+            accountViewModel.eventResult.collect {
+                if (it.first == AccountViewModel.Events.Complete.COMPLETE) {
+                    hideProgress()
+                    startActivity(Intent(this@AccountActivity, MainActivity::class.java))
+                    finish()
+                }
+            }
+        }
     }
 }

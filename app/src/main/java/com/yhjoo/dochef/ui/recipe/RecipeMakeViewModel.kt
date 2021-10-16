@@ -24,7 +24,7 @@ class RecipeMakeViewModel(
 
     val recipeDetail = MutableLiveData<RecipeDetail>()
 
-    init{
+    init {
         requestRecipeDetail()
     }
 

@@ -18,8 +18,6 @@ import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.*
 
 class NotificationActivity : BaseActivity() {
-    // TODO
-    // 1. setRead Flow
     private val binding: NotificationActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.notification_activity)
     }

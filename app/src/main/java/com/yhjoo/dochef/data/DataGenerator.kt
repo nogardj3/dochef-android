@@ -101,6 +101,15 @@ object DataGenerator {
                 arrayList as T
             }
             resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF) -> {
+                val userbrief = UserBrief(
+                    "userID",
+                    profileImgs[0].toString(),
+                    "nickname",
+                    ArrayList<String>(), 1
+                )
+                userbrief as T
+            }
+            resources.getInteger(R.integer.DATA_TYPE_USER_BRIEF_LIST) -> {
                 val arrayList = ArrayList<UserBrief>()
                 for (i in 0..9) {
                     val r = Random()

@@ -21,14 +21,6 @@ class RecipeAdapter(
     private val itemClickListener: (Recipe) -> Unit
 ) :
     ListAdapter<Recipe, RecipeAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
-    companion object CONSTANTS {
-        object LAYOUT_TYPE {
-            const val NAME = 0
-            const val INGREDIENT = 1
-            const val TAG = 2
-        }
-    }
-
     lateinit var context: Context
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultRecipeViewHolder {
@@ -46,6 +38,14 @@ class RecipeAdapter(
 
     override fun onBindViewHolder(holder: ResultRecipeViewHolder, position: Int) {
         holder.bind(getItem(position))
+    }
+
+    companion object {
+        object LAYOUT_TYPE {
+            const val NAME = 0
+            const val INGREDIENT = 1
+            const val TAG = 2
+        }
     }
 
     inner class ResultRecipeViewHolder(val binding: SearchResultRecipeItemBinding) :

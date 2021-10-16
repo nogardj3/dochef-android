@@ -43,8 +43,8 @@ class PostDetailActivity : BaseActivity() {
     }
     private lateinit var commentListAdapter: CommentListAdapter
 
-    private lateinit var reviseMenu: MenuItem
-    private lateinit var deleteMenu: MenuItem
+    private var reviseMenu: MenuItem? = null
+    private var deleteMenu: MenuItem? = null
 
     private lateinit var userID: String
     private var postID = 0
@@ -151,7 +151,7 @@ class PostDetailActivity : BaseActivity() {
                 val postInfo = postDetailViewModel.postDetail.value!!
                 startActivity(
                     Intent(this@PostDetailActivity, PostWriteActivity::class.java)
-                        .putExtra("MODE", PostWriteActivity.CONSTANTS.UIMODE.REVISE)
+                        .putExtra("MODE", PostWriteActivity.Companion.UIMODE.REVISE)
                         .putExtra("postID", postInfo.postID)
                         .putExtra("postImg", postInfo.postImg)
                         .putExtra("contents", postInfo.contents)
@@ -176,8 +176,8 @@ class PostDetailActivity : BaseActivity() {
     private fun setTopView(postInfo: Post) {
         binding.apply {
             if (postInfo.userID == userID) {
-                reviseMenu.isVisible = true
-                deleteMenu.isVisible = true
+                reviseMenu?.isVisible = true
+                deleteMenu?.isVisible = true
             }
 
             ImageLoaderUtil.loadPostImage(
@@ -217,7 +217,6 @@ class PostDetailActivity : BaseActivity() {
             }
         }
     }
-
 
     private val commentEdittextWatcher: TextWatcher = object : TextWatcher {
         var prevText = ""

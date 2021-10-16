@@ -100,5 +100,4 @@ class SplashActivity : BaseActivity() {
     private fun startMain() {
         startActivity(Intent(this, MainActivity::class.java))
     }
-
 }

@@ -6,7 +6,7 @@ import androidx.lifecycle.*
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.UserRepository
-import com.yhjoo.dochef.ui.follow.FollowListActivity.UIMODE.FOLLOWER
+import com.yhjoo.dochef.ui.follow.FollowListActivity.Companion.FOLLOWER
 import com.yhjoo.dochef.utils.DatastoreUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -29,7 +29,7 @@ class FollowListViewModel(
     val allFollowLists: LiveData<List<UserBrief>>
         get() = _allFollowLists
 
-    init{
+    init {
         requestActiveUserDetail()
     }
 

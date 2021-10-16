@@ -23,8 +23,7 @@ class CommentRepository(
     @WorkerThread
     suspend fun getComments(postId: Int): Flow<Response<ArrayList<Comment>>> {
         return flow {
-            if (App.isServerAlive)
-                emit(commentClient.getComment(postId))
+            if (App.isServerAlive) emit(commentClient.getComment(postId))
             else
                 emit(
                     Response.success(
@@ -45,8 +44,7 @@ class CommentRepository(
         dateTime: Long
     ): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(commentClient.createComment(postID, userID, contents, dateTime))
+            if (App.isServerAlive) emit(commentClient.createComment(postID, userID, contents, dateTime))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -57,8 +55,7 @@ class CommentRepository(
     @WorkerThread
     suspend fun deleteComment(commentId: Int): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(commentClient.deleteComment(commentId))
+            if (App.isServerAlive) emit(commentClient.deleteComment(commentId))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

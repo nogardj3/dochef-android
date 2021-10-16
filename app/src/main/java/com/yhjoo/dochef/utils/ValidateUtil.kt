@@ -72,7 +72,7 @@ object ValidateUtil {
         }
     }
 
-    fun nicknameValidate(nickname: String):  Pair<Int, String?> {
+    fun nicknameValidate(nickname: String): Pair<Int, String?> {
         val regex = "[0-9|a-z|A-Z|ㄱ-ㅎ|ㅏ-ㅣ|가-힝]*"
 
         return when {
