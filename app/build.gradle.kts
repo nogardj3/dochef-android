@@ -11,6 +11,7 @@ plugins {
 
 val admobAppId: String = gradleLocalProperties(rootDir).getProperty("admobAppId")
 val admobBannerId: String = gradleLocalProperties(rootDir).getProperty("admobBannerId")
+val tempGoogleIdToken: String = gradleLocalProperties(rootDir).getProperty("tempGoogleIdToken")
 
 android {
     compileSdk = 31
@@ -24,6 +25,7 @@ android {
 
         resValue("string", "admobAppId", admobAppId)
         resValue("string", "admobBannerId", admobBannerId)
+        resValue("string", "tempGoogleIdToken", tempGoogleIdToken)
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

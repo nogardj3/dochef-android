@@ -33,8 +33,7 @@ class AccountViewModel(
         GoogleSignIn.getClient(
             application.applicationContext,
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestIdToken("227618773978-c5ptgsjltcrv8hl1dmgci6rnedd8ene9.apps.googleusercontent.com")
+                .requestIdToken(application.getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         ).signInIntent
