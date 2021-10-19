@@ -1,68 +1,75 @@
 package com.yhjoo.dochef.ui.recipe.play
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import android.content.Intent
+import androidx.lifecycle.*
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.model.RecipePhase
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecipePlayViewModel(
     private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    intent: Intent?
 ) : ViewModel() {
-    val userId = MutableLiveData<String>()
-    val reviewFinished = MutableLiveData<Boolean>()
-    val likeThisRecipe = MutableLiveData<Boolean>()
-    val recipeDetail = MutableLiveData<RecipeDetail>()
-    val recipePhases = MutableLiveData<ArrayList<RecipePhase>>()
+    val recipeDetail = (intent!!.getSerializableExtra("recipe") as RecipeDetail)
+    val recipePhase = recipeDetail.phases
+    val endPhase = recipePhase.last()
+
+    val activeUserId = App.activeUserId
+
+    private val _likeThisRecipe = MutableLiveData<Boolean>()
+    val likeThisRecipe: LiveData<Boolean>
+        get() = _likeThisRecipe
+
+    private var _eventResult = MutableSharedFlow<Pair<Any, String?>>()
+    val eventResult = _eventResult.asSharedFlow()
 
     fun createReview(
-        recipeID: Int,
-        userID: String,
         contents: String,
         rating: Long,
-        dateTime: Long
-    ) {
-        viewModelScope.launch {
-            reviewRepository.createReview(recipeID, userID, contents, rating, dateTime).collect {
-                reviewFinished.value = true
-            }
+    ) = viewModelScope.launch {
+        reviewRepository.createReview(
+            recipeDetail.recipeID,
+            activeUserId,
+            contents,
+            rating,
+            System.currentTimeMillis()
+        ).collect {
+            _eventResult.emit(Pair(Events.REVIEW_CREATED, null))
         }
     }
 
-    fun toggleLikeRecipe() {
-        viewModelScope.launch {
-            val like = if (likeThisRecipe.value!!)
-                1
-            else
-                -1
-
-            if (like == 1)
-                recipeRepository.dislikeRecipe(recipeDetail.value!!.recipeID, userId.value!!)
-                    .collect {
-                        likeThisRecipe.value = false
-                    }
-            else
-                recipeRepository.likeRecipe(recipeDetail.value!!.recipeID, userId.value!!).collect {
-                    likeThisRecipe.value = true
+    fun toggleLikeRecipe() = viewModelScope.launch {
+        if (likeThisRecipe.value!!)
+            recipeRepository.dislikeRecipe(recipeDetail.recipeID, activeUserId)
+                .collect {
+                    _likeThisRecipe.value = false
                 }
-        }
+        else
+            recipeRepository.likeRecipe(recipeDetail.recipeID, activeUserId).collect {
+                _likeThisRecipe.value = true
+            }
+    }
+
+    enum class Events {
+        REVIEW_CREATED,
     }
 }
 
 class RecipePlayViewModelFactory(
     private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val intent: Intent?
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecipePlayViewModel::class.java)) {
-            return RecipePlayViewModel(recipeRepository, reviewRepository) as T
+            return RecipePlayViewModel(recipeRepository, reviewRepository, intent) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

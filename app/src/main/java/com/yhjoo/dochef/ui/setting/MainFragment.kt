@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatCheckBox
 import androidx.core.content.edit
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.yhjoo.dochef.App
@@ -18,10 +17,11 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingFragmentBinding
 import com.yhjoo.dochef.ui.account.AccountActivity
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
 
-class MainFragment : Fragment() {
+class MainFragment : BaseFragment() {
     private lateinit var binding: SettingFragmentBinding
     private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(

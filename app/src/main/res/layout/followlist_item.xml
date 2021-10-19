@@ -3,10 +3,30 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="adapter"
+            type="com.yhjoo.dochef.ui.follow.FollowListAdapter" />
+
+        <variable
+            name="activity"
+            type="com.yhjoo.dochef.ui.follow.FollowListActivity" />
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.ui.follow.FollowListViewModel" />
+
+        <variable
+            name="userBrief"
+            type="com.yhjoo.dochef.data.model.UserBrief" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> activity.goHome(userBrief)}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/followlist_img"
@@ -17,13 +37,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_profile_black" />
+            app:srcCompat="@drawable/ic_profile_black"
+            app:userimage="@{userBrief.userImg}" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/followlist_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
+            android:text="@{userBrief.nickname}"
             android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/followlist_img"
             app:layout_constraintTop_toTopOf="@+id/followlist_img"
@@ -33,6 +55,7 @@
             android:id="@+id/followlist_follower_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@{String.format(@string/format_follower,userBrief.follower_count)}"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@+id/followlist_nickname"
             app:layout_constraintTop_toBottomOf="@+id/followlist_nickname"
@@ -43,10 +66,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:onClick="@{()->viewModel.subscribeUser(userBrief.userID)}"
             android:text="팔로우"
             android:textColor="@color/white"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="@{adapter.followBtnVisible(userBrief.userID)}"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -58,10 +82,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
+            android:onClick="@{()->viewModel.unsubscribeUser(userBrief.userID)}"
             android:text="언팔로우"
             android:textColor="@color/grey_text"
             android:textStyle="bold"
-            android:visibility="gone"
+            android:visibility="@{adapter.followCancelBtnVisible(userBrief.userID)}"
             app:backgroundTint="@color/grey"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"

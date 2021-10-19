@@ -6,12 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatImageView
-import androidx.core.text.parseAsHtml
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
@@ -19,19 +16,24 @@ import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainInitFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeRecommendActivity
+import com.yhjoo.dochef.utils.OtherUtil
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
-class InitFragment : Fragment() {
+class InitFragment : BaseFragment() {
+    // TODO
+    // RecyclerView listitem Databinding
+    // Recommend Tag
+
     private val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
     private lateinit var binding: MainInitFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels(){
+    private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
@@ -49,42 +51,40 @@ class InitFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
+            viewModel = mainViewModel
+            fragment = this@InitFragment
 
             mainInitAdviewpager.adapter = MainAdPagerAdapter(imgs)
             mainInitAdviewpagerIndicator.setViewPager2(mainInitAdviewpager)
-            Observable.interval(5, TimeUnit.SECONDS)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe { count: Long ->
-                    binding.mainInitAdviewpager.currentItem = count.toInt() % 2
-                }
 
-            mainInitRecommendText.text =
-                String.format(getString(R.string.format_recommend_title), "Chef").parseAsHtml()
-            mainInitRecommendMore.setOnClickListener {
-                startActivity(Intent(requireContext(), RecipeRecommendActivity::class.java))
-            }
-
-            initRecipeListAdapter = InitRecipeListAdapter(
-                InitRecipeListAdapter.Companion.LayoutType.MAIN_INIT
-            ) { goRecipeDetail(it) }
-
-            mainInitRecommendRecycler.apply {
-                layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = initRecipeListAdapter
-            }
-
-            mainViewModel.allRecommendList.observe(viewLifecycleOwner, {
-                recipesEmpty.isVisible = it.isEmpty()
-                initRecipeListAdapter.submitList(it) {}
-            })
+            initRecipeListAdapter = InitRecipeListAdapter(this@InitFragment)
+            mainInitRecommendRecycler.adapter = initRecipeListAdapter
         }
+
+        Observable.interval(5, TimeUnit.SECONDS)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe { count: Long ->
+                binding.mainInitAdviewpager.currentItem = count.toInt() % imgs.size
+            }
+
+        mainViewModel.allRecommendList.observe(viewLifecycleOwner, {
+            binding.recipesEmpty.isVisible = it.isEmpty()
+            initRecipeListAdapter.submitList(it) {}
+        })
 
         return binding.root
     }
 
-    private fun goRecipeDetail(item: Recipe) {
+    fun goRecommend() {
+        startActivity(
+            Intent(requireContext(), RecipeRecommendActivity::class.java)
+                .putExtra("tag", "백종원")
+        )
+    }
+
+    fun goRecipeDetail(item: Recipe) {
+        OtherUtil.log("ajsdfijiasdfji")
         startActivity(
             Intent(requireContext(), RecipeDetailActivity::class.java)
                 .putExtra("recipeID", item.recipeID)

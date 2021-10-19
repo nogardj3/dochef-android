@@ -1,11 +1,9 @@
 package com.yhjoo.dochef.ui.main
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -13,19 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.MainTimelineItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
+import com.yhjoo.dochef.utils.BindUtil
 import com.yhjoo.dochef.utils.OtherUtil
 
 class TimelineListAdapter(
-    private val userClickListener: (Post) -> Unit,
-    private val itemClickListener: (Post) -> Unit
+    private val containerFragment: TimelineFragment
 ) :
     ListAdapter<Post, TimelineListAdapter.TimelineViewHolder>(TimelineListComparator()) {
-    lateinit var context: Context
+    // TODO
+    // databinding tag, comment
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
-        context = parent.context
-
         return TimelineViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -42,51 +38,28 @@ class TimelineListAdapter(
 
     inner class TimelineViewHolder(val binding: MainTimelineItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(post: Post) {
+        fun bind(item: Post) {
             binding.apply {
-                root.setOnClickListener {
-                    itemClickListener(post)
-                }
-                mainTimelineUserImg.setOnClickListener {
-                    userClickListener(post)
-                }
-                mainTimelineUserNickname.setOnClickListener {
-                    userClickListener(post)
-                }
-
-                ImageLoaderUtil.loadPostImage(
-                    context, post.postImg, mainTimelinePostImg
-                )
-                ImageLoaderUtil.loadUserImage(
-                    context, post.userImg, mainTimelineUserImg
-                )
-                mainTimelineUserNickname.text = post.nickname
-                mainTimelineLikeCount.text = post.likes.size.toString()
-                mainTimelineCommentCount.text = post.comments.size.toString()
-                mainTimelineContents.text = " " + post.contents
-                mainTimelineTime.text = OtherUtil.millisToText(post.dateTime)
+                fragment = containerFragment
+                post = item
 
                 mainTimelineTags.removeAllViews()
-                for (tag in post.tags) {
-                    val tagcontainer = LayoutInflater.from(context)
+                for (tag in item.tags) {
+                    val tagcontainer = LayoutInflater.from(mainTimelineTags.context)
                         .inflate(R.layout.view_tag_post, null) as LinearLayout
                     val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_post_text)
                     tagview.text = "#$tag"
                     mainTimelineTags.addView(tagcontainer)
                 }
 
-                if (post.comments.size != 0) {
-                    mainTimelineCommentGroup.isVisible = true
+                if (item.comments.size != 0) {
+                    BindUtil.loadUserImage(item.comments[0]!!.userImg, mainTimelineCommentUserImg)
 
-                    ImageLoaderUtil.loadUserImage(
-                        context, post.comments[0]!!.userImg, mainTimelineCommentUserImg
-                    )
-
-                    mainTimelineCommentUserNickname.text = post.comments[0]!!.nickName
-                    mainTimelineCommentContents.text = post.comments[0]!!.contents
+                    mainTimelineCommentUserNickname.text = item.comments[0]!!.nickName
+                    mainTimelineCommentContents.text = item.comments[0]!!.contents
                     mainTimelineCommentDate.text =
-                        OtherUtil.millisToText(post.comments[0]!!.dateTime)
-                } else mainTimelineCommentGroup.isVisible = false
+                        OtherUtil.millisToText(item.comments[0]!!.dateTime)
+                }
             }
         }
     }

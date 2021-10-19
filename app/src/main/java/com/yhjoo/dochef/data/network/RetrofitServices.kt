@@ -127,15 +127,7 @@ class RetrofitServices {
         @FormUrlEncoded
         @POST("recipe/create")
         suspend fun createRecipe(
-            @Body recipeDetail: RecipeDetail //                @Field("user_id") String userID,
-            //                                                  @Field("recipe_name") String recipeName,
-            //                                                  @Field("recipe_img") String recipeImg,
-            //                                                  @Field("contents") String contents,
-            //                                                  @Field("datetime") long datetime,
-            //                                                  @Field("amount_time") String amountTime,
-            //                                                  @Field("ingredients") ArrayList<Ingredient> ingredients,
-            //                                                  @Field("tags") ArrayList<String> tags,
-            //                                                  @Field("phase") ArrayList<RecipePhase> phases
+            @Body recipeDetail: RecipeDetail
         ): Response<JsonObject>
 
         @FormUrlEncoded
@@ -171,9 +163,6 @@ class RetrofitServices {
 
         @GET("post/")
         suspend fun getPostListByUserID(@Query("user_id") userID: String): Response<ArrayList<Post>>
-
-        @GET("post/")
-        suspend fun getPostListByNickname(@Query("nickname") nickname: String): Response<ArrayList<Post>>
 
         @GET("post/detail")
         suspend fun getPost(@Query("post_id") postID: Int): Response<Post>

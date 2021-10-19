@@ -18,24 +18,27 @@ import com.yhjoo.dochef.*
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.PostwriteActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.utils.*
+import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class PostWriteActivity : BaseActivity() {
+    // TODO
+    // textwatcher databinding
+    // permission, onactivity databinding
+
     private val binding: PostwriteActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.postwrite_activity)
     }
     private val postWriteViewModel: PostWriteViewModel by viewModels {
         PostWriteViewModelFactory(
+            PostRepository(applicationContext),
             application,
-            intent,
-            PostRepository(applicationContext)
+            intent
         )
     }
 
     private var imageUri: Uri? = null
-    private var currentMode = UIMODE.WRITE
 
     private val cropimage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -54,44 +57,36 @@ class PostWriteActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        currentMode = intent.getIntExtra("MODE", UIMODE.WRITE)
-
-        if (currentMode == UIMODE.REVISE) {
-            binding.apply {
-                postwriteToolbar.title = "수정"
-                postwriteContents.setText(intent.getStringExtra("contents"))
-                if (intent.getStringExtra("postImg") != null) {
-                    ImageLoaderUtil.loadPostImage(
-                        this@PostWriteActivity, intent.getStringExtra("postImg")!!, postwritePostimg
-                    )
-                }
-                postwriteTags.setTags(intent.getStringArrayExtra("tags"))
-            }
-        }
         setSupportActionBar(binding.postwriteToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         binding.apply {
             lifecycleOwner = this@PostWriteActivity
+            viewModel = postWriteViewModel
+            activity = this@PostWriteActivity
+
+            if (postWriteViewModel.currentMode == UIMODE.REVISE) {
+                binding.apply {
+                    postwriteToolbar.title = "수정"
+                    postwriteTags.setTags(postWriteViewModel.postInfo.tags.toTypedArray())
+                }
+            }
 
             postwriteContents.addTextChangedListener(contentsTextWatcher)
-            postwritePostimgAdd.setOnClickListener { addImage() }
-            postwriteOk.setOnClickListener { doneClicked() }
+        }
 
-            postWriteViewModel.isFinished.observe(this@PostWriteActivity, {
-                if (it) {
-                    App.showToast(
-                        if (currentMode == RecipeMakeActivity.MODE.REVISE)
-                            "업데이트 되었습니다."
-                        else
-                            "글이 등록되었습니다."
-                    )
-
-                    hideProgress()
-                    finish()
+        subscribeEventOnLifecycle {
+            postWriteViewModel.eventResult.collect {
+                when (it.first) {
+                    PostWriteViewModel.Events.CREATE_COMPLETE ->
+                        App.showToast("글이 등록되었습니다.")
+                    PostWriteViewModel.Events.UPDATE_COMPLETE ->
+                        App.showToast("업데이트 되었습니다.")
                 }
-            })
+
+                hideProgress()
+                finish()
+            }
         }
     }
 
@@ -120,7 +115,7 @@ class PostWriteActivity : BaseActivity() {
         }
     }
 
-    private fun addImage() {
+    fun addImage() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         if (OtherUtil.checkPermission(this, permissions)) {
             cropimage.launch(
@@ -138,13 +133,12 @@ class PostWriteActivity : BaseActivity() {
             ActivityCompat.requestPermissions(this, permissions, Constants.PERMISSION_CODE)
     }
 
-    private fun doneClicked() {
+    fun doneClicked() {
         showProgress(this)
 
         val tags = ArrayList(binding.postwriteTags.tags)
 
         postWriteViewModel.uploadPost(
-            currentMode,
             imageUri,
             binding.postwriteContents.text.toString(),
             tags

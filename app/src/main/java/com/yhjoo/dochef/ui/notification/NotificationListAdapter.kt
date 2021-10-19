@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.notification
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -10,16 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.entity.NotificationEntity
 import com.yhjoo.dochef.databinding.NotificationItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
-class NotificationListAdapter(private val clickListener: (NotificationEntity) -> Unit) :
+class NotificationListAdapter(private val containerViewModel: NotificationViewModel) :
     ListAdapter<NotificationEntity, NotificationListAdapter.NoticeViewHolder>(NotificationComparator()) {
-    lateinit var context: Context
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NoticeViewHolder {
-        context = parent.context
-
         val binding = DataBindingUtil.inflate<NotificationItemBinding>(
             LayoutInflater.from(parent.context),
             R.layout.notification_item,
@@ -36,24 +29,10 @@ class NotificationListAdapter(private val clickListener: (NotificationEntity) ->
 
     inner class NoticeViewHolder(val binding: NotificationItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(notification: NotificationEntity) {
+        fun bind(item: NotificationEntity) {
             binding.apply {
-                root.setBackgroundColor(
-                    if (notification.isRead == 0) context.getColor(R.color.white)
-                    else context.getColor(R.color.grey)
-                )
-                root.setOnClickListener {
-                    clickListener(notification)
-                }
-
-                ImageLoaderUtil.loadUserImage(
-                    context,
-                    notification.img,
-                    notificationUserimg
-                )
-
-                notificationContents.text = notification.contents
-                notificationDate.text = OtherUtil.millisToText(notification.dateTime)
+                viewModel = containerViewModel
+                notification = item
             }
         }
     }

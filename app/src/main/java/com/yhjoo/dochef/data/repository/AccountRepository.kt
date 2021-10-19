@@ -24,7 +24,6 @@ class AccountRepository(
         return flow {
             if (App.isServerAlive) emit(accountClient.checkNickname(nickname))
             else emit(Response.success(JsonObject()))
-
         }
     }
 

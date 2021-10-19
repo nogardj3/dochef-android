@@ -1,30 +1,21 @@
 package com.yhjoo.dochef.ui.post
 
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.databinding.CommentItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class CommentListAdapter(
-    private val userId: String,
-    private val otherClickListener: (View, Comment) -> Unit
+    private val containerActivity: PostDetailActivity
 ) :
     ListAdapter<Comment, CommentListAdapter.CommentListViewHolder>(CommentListComparator()) {
-    lateinit var context: Context
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommentListViewHolder {
-        context = parent.context
-
         return CommentListViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -41,21 +32,11 @@ class CommentListAdapter(
 
     inner class CommentListViewHolder(val binding: CommentItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(comment: Comment) {
+        fun bind(item: Comment) {
             binding.apply {
-                ImageLoaderUtil.loadUserImage(
-                    context,
-                    comment.userImg,
-                    commentUserimg
-                )
-
-                commentNickname.text = comment.nickName
-                commentContents.text = comment.contents
-                commentDate.text = OtherUtil.millisToText(comment.dateTime)
-                commentOther.isVisible = comment.userID == userId
-                commentOther.setOnClickListener {
-                    otherClickListener(it, comment)
-                }
+                comment = item
+                activity = containerActivity
+                activeUserId = App.activeUserId
             }
         }
     }

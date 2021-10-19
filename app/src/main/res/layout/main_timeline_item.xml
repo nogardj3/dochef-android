@@ -3,11 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="fragment"
+            type="com.yhjoo.dochef.ui.main.TimelineFragment" />
+
+        <variable
+            name="post"
+            type="com.yhjoo.dochef.data.model.Post" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> fragment.goPostDetail(post)}"
         app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +30,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_timeline_post_img"
+                postimage="@{post.postImg}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
@@ -26,10 +41,12 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_timeline_user_img"
+                userimage="@{post.userImg}"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/bg_round"
+                android:onClick="@{()-> fragment.goHome(post)}"
                 android:scaleType="fitXY"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_timeline_post_img"
@@ -40,6 +57,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
+                android:onClick="@{()-> fragment.goHome(post)}"
+                android:text="@{post.nickname}"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_user_img"
@@ -55,6 +74,7 @@
                 android:layout_marginRight="10dp"
                 android:layout_marginBottom="5dp"
                 android:maxLines="1"
+                android:text="@{post.dateTime}"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_user_img"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/main_timeline_user_img"
@@ -67,6 +87,7 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
                 android:maxLines="4"
+                android:text="@{` ` + post.contents}"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_timeline_user_img"
@@ -98,6 +119,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
+                android:text="@{``+post.likes.size()}"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_like_text"
                 app:layout_constraintLeft_toRightOf="@+id/main_timeline_like_text"
                 app:layout_constraintTop_toTopOf="@+id/main_timeline_like_text"
@@ -118,6 +140,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
+                android:text="@{``+post.comments.size()}"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_like_text"
                 app:layout_constraintLeft_toRightOf="@+id/main_timeline_comment_text"
                 app:layout_constraintTop_toTopOf="@+id/main_timeline_like_text"
@@ -127,7 +150,7 @@
                 android:id="@+id/main_timeline_comment_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="@{post.comments.size() != 0}"
                 app:constraint_referenced_ids="main_timeline_comment_user_img,
             main_timeline_comment_user_nickname,main_timeline_comment_contents,main_timeline_comment_date"
                 tools:visibility="visible" />

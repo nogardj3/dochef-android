@@ -3,6 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="activeUserId"
+            type="String" />
+
+        <variable
+            name="fragment"
+            type="com.yhjoo.dochef.ui.main.MyRecipeFragment" />
+
+        <variable
+            name="recipe"
+            type="com.yhjoo.dochef.data.model.Recipe" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="240dp"
@@ -10,6 +25,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> fragment.goRecipeDetail(recipe)}"
         app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,6 +34,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_myrecipe_recipeimg"
+                recipeimage="@{recipe.recipeImg}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
@@ -28,10 +45,10 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginTop="2dp"
-                android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_new"
+                app:visibleNew="@{recipe.datetime}"
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -40,8 +57,8 @@
                 android:layout_height="24dp"
                 android:layout_marginLeft="4dp"
                 android:layout_marginTop="4dp"
-                android:visibility="gone"
-                app:layout_constraintLeft_toLeftOf="parent"
+                android:visibility="@{activeUserId != recipe.userID}"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_favorite_red" />
 
@@ -58,6 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:paddingTop="12dp"
+                android:text="@{recipe.recipeName}"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
@@ -71,6 +89,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="6dp"
+                android:text="@{String.format(@string/format_usernickname,recipe.nickname)}"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -84,6 +103,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="8dp"
                 android:layout_marginBottom="4dp"
+                android:text="@{recipe.datetime}"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -103,6 +123,7 @@
                 android:id="@+id/main_myrecipe_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{``+recipe.viewCount}"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/main_myrecipe_viewimg"
                 app:layout_constraintRight_toRightOf="@+id/main_myrecipe_date"
@@ -125,6 +146,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
+                android:text="@{String.format(`%.1f`,recipe.rating)}"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/main_myrecipe_viewimg"
                 app:layout_constraintRight_toLeftOf="@+id/main_myrecipe_viewimg"

@@ -8,7 +8,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSignupnickFragmentBinding
@@ -18,11 +17,14 @@ import com.yhjoo.dochef.utils.ValidateUtil
 import kotlinx.coroutines.flow.collect
 
 class AccountSignUpNickFragment : BaseFragment() {
+    // TODO
+    // BindingAdapter onEditorActionListener
+
     private lateinit var binding: AccountSignupnickFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
-            requireActivity().application,
-            AccountRepository(requireContext().applicationContext)
+            AccountRepository(requireContext().applicationContext),
+            requireActivity().application
         )
     }
 
@@ -42,15 +44,10 @@ class AccountSignUpNickFragment : BaseFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = accountViewModel
 
-            signupnickNicknameEdittext.apply {
-                textChanged {
-                    signupnickNicknameLayout.error = null
-                }
-                setOnEditorActionListener(nicknameListener)
-            }
+            signupnickNicknameEdittext.setOnEditorActionListener(nicknameListener)
         }
 
-        eventOnLifecycle {
+        subscribeEventOnLifecycle {
             accountViewModel.eventResult.collect {
                 when (it.first) {
                     AccountViewModel.Events.SignUpNickname.ERROR -> {

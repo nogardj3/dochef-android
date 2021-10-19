@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.main
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,68 +8,31 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.databinding.RecipeHorizontalItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
+import com.yhjoo.dochef.databinding.MainInitItemBinding
 
-class InitRecipeListAdapter(
-    private val layoutType: Int,
-    private val itemClickListener: ((Recipe) -> Unit)?
-) :
-    ListAdapter<Recipe, RecyclerView.ViewHolder>(RecipeListComparator()) {
-    lateinit var context: Context
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        context = parent.context
-
-        return when (layoutType) {
-            LayoutType.MAIN_INIT -> RecipeHorizontalViewHolder(
-                DataBindingUtil.inflate(
-                    LayoutInflater.from(context),
-                    R.layout.recipe_horizontal_item,
-                    parent,
-                    false
-                )
+class InitRecipeListAdapter(private val containerFragment: InitFragment) :
+    ListAdapter<Recipe, InitRecipeListAdapter.InitRecipeViewHolder>(RecipeListComparator()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InitRecipeViewHolder {
+        return InitRecipeViewHolder(
+            DataBindingUtil.inflate(
+                LayoutInflater.from(parent.context),
+                R.layout.main_init_item,
+                parent,
+                false
             )
-            else -> RecipeHorizontalViewHolder(
-                DataBindingUtil.inflate(
-                    LayoutInflater.from(context),
-                    R.layout.recipe_horizontal_item,
-                    parent,
-                    false
-                )
-            )
-        }
+        )
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder) {
-            is RecipeHorizontalViewHolder -> holder.bind(getItem(position))
-//            is RecipeHorizontalViewHolder -> holder.bind(getItem(position))
-        }
+    override fun onBindViewHolder(holder: InitRecipeViewHolder, position: Int) {
+        holder.bind(getItem(position))
     }
 
-    companion object {
-        object LayoutType {
-            const val MAIN_INIT = 0
-        }
-    }
-
-    inner class RecipeHorizontalViewHolder(val binding: RecipeHorizontalItemBinding) :
+    inner class InitRecipeViewHolder(val binding: MainInitItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(recipe: Recipe) {
+        fun bind(item: Recipe) {
             binding.apply {
-                root.setOnClickListener {
-                    itemClickListener!!(recipe)
-                }
-
-                ImageLoaderUtil.loadRecipeImage(
-                    context,
-                    recipe.recipeImg,
-                    recipehorizontalRecipeimg
-                )
-                recipehorizontalTitle.text = recipe.recipeName
-                recipehorizontalRating.text = String.format("%.1f", recipe.rating)
-                recipehorizontalView.text = recipe.viewCount.toString()
+                fragment = containerFragment
+                recipe = item
             }
         }
     }

@@ -6,20 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.home.HomeActivity
 
-class ResultUserFragment : Fragment() {
+class ResultUserFragment : BaseFragment() {
     private lateinit var binding: SearchResultFragmentBinding
     private val searchViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
-            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)
         )
@@ -37,26 +35,20 @@ class ResultUserFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            userListAdapter = UserListAdapter {
-                goHome(it)
-            }
-
-            resultRecycler.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = userListAdapter
-            }
-
-            searchViewModel.queriedUsers.observe(viewLifecycleOwner, {
-                resultinitGroup.isVisible = false
-                resultEmpty.isVisible = it.isEmpty()
-                userListAdapter.submitList(it)
-            })
+            userListAdapter = UserListAdapter(this@ResultUserFragment)
+            resultRecycler.adapter = userListAdapter
         }
+
+        searchViewModel.queriedUsers.observe(viewLifecycleOwner, {
+            binding.resultinitGroup.isVisible = false
+            binding.resultEmpty.isVisible = it.isEmpty()
+            userListAdapter.submitList(it)
+        })
 
         return binding.root
     }
 
-    private fun goHome(item: UserBrief) {
+    fun goHome(item: UserBrief) {
         startActivity(
             Intent(context, HomeActivity::class.java)
                 .putExtra("userID", item.userID)

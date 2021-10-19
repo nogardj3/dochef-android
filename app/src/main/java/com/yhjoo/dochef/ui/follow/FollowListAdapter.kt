@@ -1,35 +1,29 @@
 package com.yhjoo.dochef.ui.follow
 
-import android.content.Context
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.FollowlistItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
 import java.util.*
 
 class FollowListAdapter(
-    private val activeUserID: String,
-    private val subscribeListener: (UserBrief) -> Unit,
-    private val unsubscribeListener: (UserBrief) -> Unit,
-    private val itemClickListener: (UserBrief) -> Unit
+    val containerActivity: FollowListActivity,
+    val viewModel: FollowListViewModel
 ) :
     ListAdapter<UserBrief, FollowListAdapter.FollowListViewHolder>(FollowListComparator()) {
-    lateinit var context: Context
     var activeUserFollowList = ArrayList<String>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FollowListViewHolder {
-        context = parent.context
-
         return FollowListViewHolder(
             DataBindingUtil.inflate(
-                LayoutInflater.from(context),
+                LayoutInflater.from(parent.context),
                 R.layout.followlist_item,
                 parent,
                 false
@@ -43,31 +37,32 @@ class FollowListAdapter(
 
     inner class FollowListViewHolder(val binding: FollowlistItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(userBrief: UserBrief) {
+        fun bind(item: UserBrief) {
             binding.apply {
-                root.setOnClickListener {
-                    itemClickListener(userBrief)
-                }
-
-                followlistFollowBtn.isVisible =
-                    !activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID
-                followlistFollowcancelBtn.isVisible =
-                    activeUserFollowList.contains(userBrief.userID) && userBrief.userID != activeUserID
-
-                followlistFollowBtn.setOnClickListener {
-                    subscribeListener(userBrief)
-                }
-                followlistFollowcancelBtn.setOnClickListener {
-                    unsubscribeListener(userBrief)
-                }
-
-                ImageLoaderUtil.loadUserImage(context, userBrief.userImg, followlistImg)
-                followlistNickname.text = userBrief.nickname
-                followlistFollowerCount.text = String.format(
-                    context.getString(R.string.format_follower), userBrief.follower_count
-                )
+                adapter = this@FollowListAdapter
+                activity = containerActivity
+                viewModel = viewModel
+                userBrief = item
             }
         }
+    }
+
+    fun followBtnVisible(userId: String): Int {
+        return if (!activeUserFollowList.contains(userId)
+            && userId != App.activeUserId
+        )
+            View.VISIBLE
+        else
+            View.GONE
+    }
+
+    fun followCancelBtnVisible(userId: String): Int {
+        return if (activeUserFollowList.contains(userId)
+            && userId != App.activeUserId
+        )
+            View.VISIBLE
+        else
+            View.GONE
     }
 
     class FollowListComparator : DiffUtil.ItemCallback<UserBrief>() {

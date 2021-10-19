@@ -3,7 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+        <import type="com.yhjoo.dochef.ui.account.AccountSignInFragment.Navigate"/>
 
+        <variable
+            name="fragment"
+            type="com.yhjoo.dochef.ui.account.AccountSignInFragment" />
         <variable
             name="viewModel"
             type="com.yhjoo.dochef.ui.account.AccountViewModel" />
@@ -47,7 +51,8 @@
                 android:hint="Email"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress|textNoSuggestions"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:onTextChanged="@{(text, start, before, count)-> signinEmailLayout.setError(``)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +80,8 @@
                 android:hint="Password"
                 android:imeOptions="actionDone"
                 android:inputType="textPassword|textNoSuggestions"
-                android:maxLines="1" />
+                android:maxLines="1"
+                android:onTextChanged="@{(text, start, before, count)-> signinPasswordLayout.setError(``)}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -84,11 +90,11 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="16dp"
+            android:onClickListener="@{()-> viewModel.clickSignInWithEmail(signinEmailEdittext,signinPasswordEdittext)}"
             android:text="로그인"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:backgroundTint="@color/colorPrimary"
-            android:onClickListener="@{()-> viewModel.clickSignInWithEmail(signinEmailEdittext.getText().toString(),signinPasswordEdittext.getText().toString())}"
             app:layout_constraintDimensionRatio="w,1:4.15"
             app:layout_constraintLeft_toLeftOf="@+id/signin_email_layout"
             app:layout_constraintRight_toRightOf="@+id/signin_email_layout"
@@ -103,6 +109,7 @@
             app:layout_constraintLeft_toLeftOf="@+id/signin_email_layout"
             app:layout_constraintRight_toRightOf="@+id/signin_email_layout"
             app:layout_constraintTop_toBottomOf="@+id/signin_ok"
+            android:onClick="@{()-> fragment.startGoogleSignIn()}"
             app:srcCompat="@drawable/selector_btn_google" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -113,6 +120,7 @@
             android:background="?attr/selectableItemBackground"
             android:gravity="center"
             android:text="회원가입"
+            android:onClick="@{()-> fragment.navigateFragment(Navigate.SIGNUP)}"
             app:layout_constraintLeft_toLeftOf="@+id/signin_google"
             app:layout_constraintRight_toLeftOf="@+id/signin_findpw_btn"
             app:layout_constraintTop_toBottomOf="@+id/signin_google" />
@@ -126,6 +134,7 @@
             android:gravity="center"
             android:text="비밀번호 찾기"
             app:layout_constraintLeft_toRightOf="@+id/signin_signup_btn"
+            android:onClick="@{()-> fragment.navigateFragment(Navigate.FINDPW)}"
             app:layout_constraintRight_toRightOf="@+id/signin_google"
             app:layout_constraintTop_toBottomOf="@+id/signin_google" />
 

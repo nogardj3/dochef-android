@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.data.model
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 data class Comment(
     @SerializedName("comment_id") val commentID: Int,
@@ -10,4 +11,4 @@ data class Comment(
     @SerializedName("user_profile_img") val userImg: String,
     @SerializedName("contents") val contents: String,
     @SerializedName("datetime") val dateTime: Long
-)
+) :Serializable

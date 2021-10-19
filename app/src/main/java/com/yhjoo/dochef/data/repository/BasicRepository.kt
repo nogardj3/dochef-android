@@ -23,8 +23,7 @@ class BasicRepository(
     @WorkerThread
     suspend fun getFAQs(): Flow<Response<ArrayList<ExpandableItem>>> {
         return flow {
-            if (App.isServerAlive)
-                emit(basicClient.getFAQ())
+            if (App.isServerAlive) emit(basicClient.getFAQ())
             else {
                 emit(
                     Response.success(
@@ -41,8 +40,7 @@ class BasicRepository(
     @WorkerThread
     suspend fun getNotices(): Flow<Response<ArrayList<ExpandableItem>>> {
         return flow {
-            if (App.isServerAlive)
-                emit(basicClient.getNotice())
+            if (App.isServerAlive) emit(basicClient.getNotice())
             else {
                 emit(
                     Response.success(
@@ -59,8 +57,7 @@ class BasicRepository(
     @WorkerThread
     suspend fun getTOS(): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive)
-                emit(basicClient.getTOS())
+            if (App.isServerAlive) emit(basicClient.getTOS())
             else {
                 val jsonObject = JsonObject().apply {
                     addProperty("message", "이용약관")

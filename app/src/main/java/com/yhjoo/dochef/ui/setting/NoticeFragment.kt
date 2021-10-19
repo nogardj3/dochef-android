@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingNoticeFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 
-class NoticeFragment : Fragment() {
+class NoticeFragment : BaseFragment() {
     private lateinit var binding: SettingNoticeFragmentBinding
     private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
@@ -35,21 +34,15 @@ class NoticeFragment : Fragment() {
             lifecycleOwner = viewLifecycleOwner
 
             expandableListAdapter = ExpandableListAdapter(true)
-
-            noticeRecycler.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = expandableListAdapter
-            }
-
-            settingViewModel.allNotices.observe(viewLifecycleOwner, {
-                noticeEmpty.isVisible = it.isEmpty()
-                expandableListAdapter.submitList(it) {
-                    binding.noticeRecycler.scrollToPosition(0)
-                }
-            })
-
-            settingViewModel.requestNotices()
+            noticeRecycler.adapter = expandableListAdapter
         }
+
+        settingViewModel.allNotices.observe(viewLifecycleOwner, {
+            binding.noticeEmpty.isVisible = it.isEmpty()
+            expandableListAdapter.submitList(it) {
+                binding.noticeRecycler.scrollToPosition(0)
+            }
+        })
 
         return binding.root
     }

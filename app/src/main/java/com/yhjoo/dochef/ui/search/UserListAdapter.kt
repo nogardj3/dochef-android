@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.search
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -10,17 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.SearchResultUserItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
 
 class UserListAdapter(
-    private val itemClickListener: (UserBrief) -> Unit
+    private val containerFragment: ResultUserFragment,
 ) :
     ListAdapter<UserBrief, UserListAdapter.ResultUserViewHolder>(ResultUserComparator()) {
-    lateinit var context: Context
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultUserViewHolder {
-        context = parent.context
-
         return ResultUserViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -37,21 +31,10 @@ class UserListAdapter(
 
     inner class ResultUserViewHolder(val binding: SearchResultUserItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(userBrief: UserBrief) {
+        fun bind(item: UserBrief) {
             binding.apply {
-                root.setOnClickListener {
-                    itemClickListener(userBrief)
-                }
-                ImageLoaderUtil.loadUserImage(
-                    context,
-                    userBrief.userImg,
-                    resultuserImg
-                )
-                resultuserNickname.text = userBrief.nickname
-                resultuserFollowerCount.text = String.format(
-                    context.getString(R.string.format_follower),
-                    userBrief.follower_count
-                )
+                fragment = containerFragment
+                userBrief = item
             }
         }
     }

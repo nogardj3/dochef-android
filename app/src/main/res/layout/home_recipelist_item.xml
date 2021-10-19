@@ -3,6 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="activeUserId"
+            type="String" />
+
+        <variable
+            name="activity"
+            type="com.yhjoo.dochef.ui.home.HomeActivity" />
+
+        <variable
+            name="recipe"
+            type="com.yhjoo.dochef.data.model.Recipe" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="210dp"
         android:layout_height="wrap_content"
@@ -10,6 +24,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="10dp"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> activity.goRecipeDetail(recipe)}"
         app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +40,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent="1"
+                recipeimage="@{recipe.recipeImg}"
                 tools:src="@raw/dummy_recipe_1" />
 
             <View
@@ -43,6 +59,7 @@
                 android:layout_marginTop="2dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:visibleNew="@{recipe.datetime}"
                 app:srcCompat="@drawable/ic_new" />
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -50,7 +67,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="2dp"
-                android:visibility="gone"
+                android:visibility="@{recipe.userID != activeUserId}"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_favorite_red"
@@ -69,7 +86,7 @@
                 android:textColor="@color/white"
                 android:textSize="12dp"
                 android:textStyle="bold"
-                android:visibility="gone"
+                android:visibility="@{recipe.userID == activeUserId}"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="MY"
@@ -83,6 +100,7 @@
                 android:textColor="@color/white"
                 android:textSize="12dp"
                 android:textStyle="bold"
+                android:text="@{recipe.recipeName}"
                 app:layout_constraintBottom_toBottomOf="@+id/home_recipe_recipeimg"
                 app:layout_constraintLeft_toLeftOf="@+id/home_recipe_recipeimg"
                 app:layout_constraintRight_toRightOf="@+id/home_recipe_recipeimg"

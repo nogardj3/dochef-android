@@ -6,26 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 
-class ResultTagFragment : Fragment() {
+class ResultTagFragment : BaseFragment() {
     private lateinit var binding: SearchResultFragmentBinding
     private val searchViewModel: SearchViewModel by activityViewModels {
         SearchViewModelFactory(
-            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext)
         )
     }
 
-    private lateinit var recipeAdapter: RecipeAdapter
+    private lateinit var recipeListAdapter: RecipeListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,26 +35,21 @@ class ResultTagFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            recipeAdapter = RecipeAdapter(RecipeAdapter.Companion.LAYOUT_TYPE.TAG) {
-                goDetail(it)
-            }
+            recipeListAdapter = RecipeListAdapter(requireActivity() as SearchActivity, RecipeListAdapter.RESULTTYPE.TAG)
 
-            resultRecycler.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = recipeAdapter
-            }
-
-            searchViewModel.queriedRecipeByTag.observe(viewLifecycleOwner, {
-                resultinitGroup.isVisible = false
-                resultEmpty.isVisible = it.isEmpty()
-                recipeAdapter.submitList(it)
-            })
+            resultRecycler.adapter = recipeListAdapter
         }
+
+        searchViewModel.queriedRecipeByTag.observe(viewLifecycleOwner, {
+            binding.resultinitGroup.isVisible = false
+            binding.resultEmpty.isVisible = it.isEmpty()
+            recipeListAdapter.submitList(it)
+        })
 
         return binding.root
     }
 
-    private fun goDetail(item: Recipe) {
+    fun goDetail(item: Recipe) {
         startActivity(
             Intent(context, RecipeDetailActivity::class.java)
                 .putExtra("recipeID", item.recipeID)

@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
@@ -15,17 +14,16 @@ import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainUserFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
-import com.yhjoo.dochef.utils.ImageLoaderUtil
 import com.yhjoo.dochef.utils.OtherUtil
 
-class UserFragment : Fragment() {
+class UserFragment : BaseFragment() {
     private lateinit var binding: MainUserFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels(){
+    private val mainViewModel: MainViewModel by activityViewModels{
         MainViewModelFactory(
-            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
@@ -42,41 +40,29 @@ class UserFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-
-            mainUserHome.setOnClickListener { goHome() }
-            mainUserRecipe.setOnClickListener { goMyRecipe() }
-            mainUserSetting.setOnClickListener { goSetting() }
-            mainUserReview.setOnClickListener { goReview() }
-
-            mainViewModel.userDetail.observe(viewLifecycleOwner, {
-                ImageLoaderUtil.loadUserImage(
-                    requireContext(),
-                    it.userImg,
-                    binding.mainUserImg
-                )
-                binding.mainUserNickname.text = it.nickname
-            })
+            fragment = this@UserFragment
+            viewModel = mainViewModel
         }
 
         return binding.root
     }
 
-    private fun goHome() {
+    fun goHome() {
         startActivity(Intent(requireContext(), HomeActivity::class.java))
     }
 
-    private fun goMyRecipe() {
+    fun goMyRecipe() {
         startActivity(
             Intent(requireContext(), RecipeMyListActivity::class.java)
-                .putExtra("userID", mainViewModel.userId)
+                .putExtra("userID", mainViewModel.activeUserId)
         )
     }
 
-    private fun goSetting() {
+    fun goSetting() {
         startActivity(Intent(requireContext(), SettingActivity::class.java))
     }
 
-    private fun goReview() {
+    fun goReview() {
         try {
             startActivity(
                 Intent(Intent.ACTION_VIEW)

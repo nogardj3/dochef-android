@@ -3,11 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="activity"
+            type="com.yhjoo.dochef.ui.search.SearchActivity" />
+
+        <variable
+            name="recipe"
+            type="com.yhjoo.dochef.data.model.Recipe" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="170dp"
         android:layout_margin="5dp"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()->activity.goDetail(recipe)}"
         app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +28,7 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/resultrecipe_recipeimg"
+                recipeimage="@{recipe.recipeImg}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:foreground="@drawable/bg_translucent"
@@ -28,6 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
+                android:text="@{recipe.recipeName}"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -38,6 +52,7 @@
                 android:id="@+id/resultrecipe_nickname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{String.format(@string/format_usernickname,recipe.nickname)}"
                 android:textColor="@color/white"
                 app:layout_constraintLeft_toLeftOf="@+id/resultrecipe_title"
                 app:layout_constraintTop_toBottomOf="@+id/resultrecipe_title"

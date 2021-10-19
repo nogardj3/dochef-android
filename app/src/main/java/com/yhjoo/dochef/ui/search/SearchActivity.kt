@@ -1,5 +1,6 @@
 package com.yhjoo.dochef.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
@@ -10,10 +11,12 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayoutMediator
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
+import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 
 class SearchActivity : BaseActivity() {
     private val searchTabs = arrayOf(
@@ -28,7 +31,6 @@ class SearchActivity : BaseActivity() {
     }
     private val searchViewModel: SearchViewModel by viewModels {
         SearchViewModelFactory(
-            application,
             UserRepository(applicationContext),
             RecipeRepository(applicationContext)
         )
@@ -68,6 +70,13 @@ class SearchActivity : BaseActivity() {
                 })
             }
         }
+    }
+
+    fun goDetail(item: Recipe) {
+        startActivity(
+            Intent(this, RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID)
+        )
     }
 
     inner class SearchViewPagerAdapter(fragmentActivity: FragmentActivity) :

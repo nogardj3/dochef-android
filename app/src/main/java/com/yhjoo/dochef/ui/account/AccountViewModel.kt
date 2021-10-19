@@ -8,11 +8,13 @@ import androidx.lifecycle.*
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.tasks.Task
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.FirebaseNetworkException
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.gson.Gson
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
@@ -26,9 +28,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class AccountViewModel(
-    private val application: Application,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val application: Application
 ) : ViewModel() {
+    // TODO
+    // merge validation function
+
     val googleSigninIntent: Intent by lazy {
         GoogleSignIn.getClient(
             application.applicationContext,
@@ -60,7 +65,8 @@ class AccountViewModel(
             }
     }
 
-    fun clickFindPw(email: String) = viewModelScope.launch {
+    fun clickFindPw(emailEditText: TextInputEditText) = viewModelScope.launch {
+        val email = emailEditText.text.toString()
         val validateResult = ValidateUtil.emailValidate(email)
 
         if (validateResult.first == ValidateUtil.EmailResult.VALID) {
@@ -85,65 +91,69 @@ class AccountViewModel(
             _eventResult.emit(Pair(Events.FindPW.ERROR_EMAIL, validateResult.second))
     }
 
-    fun clickSignInWithEmail(email: String, pw: String) = viewModelScope.launch {
-        val emailValidateResult = ValidateUtil.emailValidate(email)
-        val pwValidateResult = ValidateUtil.pwValidate(pw)
+    fun clickSignInWithEmail(emailEditText: TextInputEditText, pwEditText: TextInputEditText) =
+        viewModelScope.launch {
+            val email = emailEditText.text.toString()
+            val pw = pwEditText.text.toString()
 
-        when {
-            emailValidateResult.first != ValidateUtil.EmailResult.VALID -> {
-                _eventResult.emit(
-                    Pair(
-                        Events.SignInEmail.ERROR_EMAIL,
-                        emailValidateResult.second
+            val emailValidateResult = ValidateUtil.emailValidate(email)
+            val pwValidateResult = ValidateUtil.pwValidate(pw)
+
+            when {
+                emailValidateResult.first != ValidateUtil.EmailResult.VALID -> {
+                    _eventResult.emit(
+                        Pair(
+                            Events.SignInEmail.ERROR_EMAIL,
+                            emailValidateResult.second
+                        )
                     )
-                )
-            }
-            pwValidateResult.first != ValidateUtil.PwResult.VALID -> {
-                _eventResult.emit(
-                    Pair(
-                        Events.SignInEmail.ERROR_PW,
-                        pwValidateResult.second
+                }
+                pwValidateResult.first != ValidateUtil.PwResult.VALID -> {
+                    _eventResult.emit(
+                        Pair(
+                            Events.SignInEmail.ERROR_PW,
+                            pwValidateResult.second
+                        )
                     )
-                )
-            }
-            else -> {
-                _eventResult.emit(Pair(Events.SignInEmail.WAIT, null))
+                }
+                else -> {
+                    _eventResult.emit(Pair(Events.SignInEmail.WAIT, null))
 
-                firebaseAuth
-                    .signInWithEmailAndPassword(email, pw)
-                    .addOnCompleteListener { task: Task<AuthResult> ->
-                        viewModelScope.launch {
-                            if (task.isSuccessful)
-                                getFirebaseUserToken()
-                            else {
-                                task.exception?.printStackTrace()
+                    firebaseAuth
+                        .signInWithEmailAndPassword(email, pw)
+                        .addOnCompleteListener { task: Task<AuthResult> ->
+                            viewModelScope.launch {
+                                if (task.isSuccessful)
+                                    getFirebaseUserToken()
+                                else {
+                                    task.exception?.printStackTrace()
 
-                                val e = task.exception
-                                val message: String = if (e is FirebaseAuthException) {
-                                    when (e.errorCode) {
-                                        "ERROR_USER_NOT_FOUND" ->
-                                            "존재하지 않는 이메일입니다. 가입 후 사용해 주세요."
-                                        "ERROR_WRONG_PASSWORD" ->
-                                            "비밀번호가 올바르지 않습니다."
-                                        "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" ->
-                                            "해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오."
-                                        else ->
-                                            "계정 인증 오류 발생. 다시 시도해 주세요."
-                                    }
-                                } else "알 수 없는 오류 발생. 다시 시도해 주세요."
+                                    val e = task.exception
+                                    val message: String = if (e is FirebaseAuthException) {
+                                        when (e.errorCode) {
+                                            "ERROR_USER_NOT_FOUND" ->
+                                                "존재하지 않는 이메일입니다. 가입 후 사용해 주세요."
+                                            "ERROR_WRONG_PASSWORD" ->
+                                                "비밀번호가 올바르지 않습니다."
+                                            "ERROR_ACCOUNT_EXISTS_WITH_DIFFERENT_CREDENTIAL" ->
+                                                "해당 이메일주소와 연결된 다른 계정이 이미 존재합니다. 해당 이메일주소와 연결된 다른 계정을 사용하여 로그인하십시오."
+                                            else ->
+                                                "계정 인증 오류 발생. 다시 시도해 주세요."
+                                        }
+                                    } else "알 수 없는 오류 발생. 다시 시도해 주세요."
 
-                                _eventResult.emit(
-                                    Pair(
-                                        Events.SignInEmail.ERROR_AUTH,
-                                        message
+                                    _eventResult.emit(
+                                        Pair(
+                                            Events.SignInEmail.ERROR_AUTH,
+                                            message
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
-                    }
+                }
             }
         }
-    }
 
     fun clickSignInWithGoogle(idToken: String) = viewModelScope.launch {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
@@ -169,68 +179,73 @@ class AccountViewModel(
             }
     }
 
-    fun clickSignUpWithEmail(email: String, pw: String) = viewModelScope.launch {
-        val emailValidateResult = ValidateUtil.emailValidate(email)
-        val pwValidateResult = ValidateUtil.pwValidate(pw)
+    fun clickSignUpWithEmail(emailEditText: TextInputEditText, pwEditText: TextInputEditText) =
+        viewModelScope.launch {
+            val email = emailEditText.text.toString()
+            val pw = pwEditText.text.toString()
 
-        when {
-            emailValidateResult.first != ValidateUtil.EmailResult.VALID -> {
-                _eventResult.emit(
-                    Pair(
-                        Events.SignUpEmail.ERROR_EMAIL,
-                        emailValidateResult.second
+            val emailValidateResult = ValidateUtil.emailValidate(email)
+            val pwValidateResult = ValidateUtil.pwValidate(pw)
+
+            when {
+                emailValidateResult.first != ValidateUtil.EmailResult.VALID -> {
+                    _eventResult.emit(
+                        Pair(
+                            Events.SignUpEmail.ERROR_EMAIL,
+                            emailValidateResult.second
+                        )
                     )
-                )
-            }
-            pwValidateResult.first != ValidateUtil.PwResult.VALID -> {
-                _eventResult.emit(
-                    Pair(
-                        Events.SignUpEmail.ERROR_PW,
-                        pwValidateResult.second
+                }
+                pwValidateResult.first != ValidateUtil.PwResult.VALID -> {
+                    _eventResult.emit(
+                        Pair(
+                            Events.SignUpEmail.ERROR_PW,
+                            pwValidateResult.second
+                        )
                     )
-                )
-            }
-            else -> {
-                _eventResult.emit(Pair(Events.SignUpEmail.WAIT, null))
+                }
+                else -> {
+                    _eventResult.emit(Pair(Events.SignUpEmail.WAIT, null))
 
-                firebaseAuth
-                    .createUserWithEmailAndPassword(email, pw)
-                    .addOnCompleteListener { task: Task<AuthResult> ->
-                        viewModelScope.launch {
-                            if (task.isSuccessful)
-                                getFirebaseUserToken()
-                            else {
-                                task.exception?.printStackTrace()
+                    firebaseAuth
+                        .createUserWithEmailAndPassword(email, pw)
+                        .addOnCompleteListener { task: Task<AuthResult> ->
+                            viewModelScope.launch {
+                                if (task.isSuccessful)
+                                    getFirebaseUserToken()
+                                else {
+                                    task.exception?.printStackTrace()
 
-                                val message: String = when (task.exception) {
-                                    is FirebaseAuthException -> {
-                                        val fbae =
-                                            (task.exception as FirebaseAuthException).errorCode
-                                        if ("ERROR_EMAIL_ALREADY_IN_USE" == fbae)
-                                            "이미 가입되있는 이메일입니다."
-                                        else
-                                            "알 수 없는 오류 발생. 다시 시도해 주세요."
+                                    val message: String = when (task.exception) {
+                                        is FirebaseAuthException -> {
+                                            val fbae =
+                                                (task.exception as FirebaseAuthException).errorCode
+                                            if ("ERROR_EMAIL_ALREADY_IN_USE" == fbae)
+                                                "이미 가입되있는 이메일입니다."
+                                            else
+                                                "알 수 없는 오류 발생. 다시 시도해 주세요."
+                                        }
+                                        is FirebaseNetworkException ->
+                                            "네트워크 상태를 확인해주세요."
+                                        else ->
+                                            "알 수 없는 오류가 발생. 다시 시도해 주세요"
                                     }
-                                    is FirebaseNetworkException ->
-                                        "네트워크 상태를 확인해주세요."
-                                    else ->
-                                        "알 수 없는 오류가 발생. 다시 시도해 주세요"
-                                }
 
-                                _eventResult.emit(
-                                    Pair(
-                                        Events.SignUpEmail.ERROR_AUTH,
-                                        message
+                                    _eventResult.emit(
+                                        Pair(
+                                            Events.SignUpEmail.ERROR_AUTH,
+                                            message
+                                        )
                                     )
-                                )
+                                }
                             }
                         }
-                    }
+                }
             }
         }
-    }
 
-    fun clickSignUpWithNickname(nickname: String) = viewModelScope.launch {
+    fun clickSignUpWithNickname(nicknameEditText: TextInputEditText) = viewModelScope.launch {
+        val nickname = nicknameEditText.text.toString()
         val validateResult = ValidateUtil.nicknameValidate(nickname)
 
         if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
@@ -332,6 +347,9 @@ class AccountViewModel(
             apply()
         }
 
+        OtherUtil.log(userInfo.toString())
+        App.activeUserId = userInfo.userID
+
         firebaseAnalytics.logEvent(
             FirebaseAnalytics.Event.LOGIN,
             bundleOf(
@@ -340,7 +358,7 @@ class AccountViewModel(
             )
         )
 
-        _eventResult.emit(Pair(Events.Complete.COMPLETE,null))
+        _eventResult.emit(Pair(Events.Complete.COMPLETE, null))
     }
 
     sealed class Events {
@@ -368,22 +386,22 @@ class AccountViewModel(
             ERROR_REQUIRE_TOKEN, ERROR_REQUIRE_SIGNUP
         }
 
-        enum class Complete{
+        enum class Complete {
             COMPLETE
         }
     }
 }
 
 class AccountViewModelFactory(
-    private val application: Application,
-    private val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository,
+    private val application: Application
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AccountViewModel::class.java)) {
             return AccountViewModel(
-                application,
-                accountRepository
+                accountRepository,
+                application
             ) as T
         }
         throw IllegalArgumentException("Unknown View Model class")

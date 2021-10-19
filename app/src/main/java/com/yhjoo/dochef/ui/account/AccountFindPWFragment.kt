@@ -8,21 +8,22 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountFindpwFragmentBinding
-import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
 import kotlinx.coroutines.flow.collect
 
 class AccountFindPWFragment : BaseFragment() {
+    // TODO
+    // BindingAdapter onEditorActionListener
+
     private lateinit var binding: AccountFindpwFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
-            requireActivity().application,
-            AccountRepository(requireContext().applicationContext)
+            AccountRepository(requireContext().applicationContext),
+            requireActivity().application
         )
     }
 
@@ -38,15 +39,10 @@ class AccountFindPWFragment : BaseFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = accountViewModel
 
-            accountFindpwEdittext.apply {
-                textChanged {
-                    accountFindpwEmailLayout.error = null
-                }
-                setOnEditorActionListener(emailListener)
-            }
+            accountFindpwEdittext.setOnEditorActionListener(emailListener)
         }
 
-        eventOnLifecycle {
+        subscribeEventOnLifecycle {
             accountViewModel.eventResult.collect {
                 when (it.first) {
                     AccountViewModel.Events.FindPW.ERROR_EMAIL -> {
@@ -80,9 +76,7 @@ class AccountFindPWFragment : BaseFragment() {
 
                 if (validateResult.first == ValidateUtil.EmailResult.VALID) {
                     binding.accountFindpwEmailLayout.error = null
-                    (requireActivity() as BaseActivity).hideKeyboard(
-                        binding.accountFindpwEmailLayout
-                    )
+                    hideKeyboard(requireContext(), binding.accountFindpwEmailLayout)
                 } else
                     binding.accountFindpwEmailLayout.error = validateResult.second
                 true

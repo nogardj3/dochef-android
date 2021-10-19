@@ -25,7 +25,6 @@ import androidx.viewpager2.widget.MarginPageTransformer
 import androidx.viewpager2.widget.ViewPager2
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.RecipePhase
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
@@ -44,14 +43,13 @@ class PlayActivity : BaseActivity(), SensorEventListener {
     private val recipeplayViewModel: RecipePlayViewModel by viewModels {
         RecipePlayViewModelFactory(
             RecipeRepository(applicationContext),
-            ReviewRepository(applicationContext)
+            ReviewRepository(applicationContext),
+            intent
         )
     }
     private lateinit var recipePlayFragmentAdapter: RecipePlayFragmentAdapter
 
     private lateinit var speechRecognizer: SpeechRecognizer
-    private lateinit var recipeDetailInfo: RecipeDetail
-    private var recipePhases = ArrayList<RecipePhase>()
 
     private lateinit var sensorManager: SensorManager
     private var mClssensor: Sensor? = null
@@ -61,12 +59,11 @@ class PlayActivity : BaseActivity(), SensorEventListener {
     private var timerSet = false
     private var soundCount = 0
 
+    private var recipePhases = ArrayList<RecipePhase>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-
-        recipeDetailInfo = (intent.getSerializableExtra("recipe") as RecipeDetail)
-        recipePhases = recipeDetailInfo.phases
 
         val permissions = arrayOf(Manifest.permission.RECORD_AUDIO)
         if (!OtherUtil.checkPermission(this, permissions)) ActivityCompat.requestPermissions(
@@ -77,9 +74,12 @@ class PlayActivity : BaseActivity(), SensorEventListener {
 
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
         mClssensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+
         binding.apply {
-            recipeplayCircularTimer.setOnClickListener { onClickTimer() }
-            recipeplayCircularTimerText.setOnClickListener { onClickTimer() }
+            lifecycleOwner = this@PlayActivity
+            activity = this@PlayActivity
+
+            recipePhases = recipeplayViewModel.recipePhase
 
             recipePlayFragmentAdapter = RecipePlayFragmentAdapter(this@PlayActivity)
             recipeplayViewpager.apply {
@@ -106,12 +106,6 @@ class PlayActivity : BaseActivity(), SensorEventListener {
                 })
             }
             recipeplayPageindicator.setViewPager2(recipeplayViewpager)
-
-            recipeplayViewModel.recipeDetail.value = recipeDetailInfo
-            recipeplayViewModel.recipePhases.value = recipePhases
-            recipeplayViewModel.userId.value =
-                DatastoreUtil.getUserBrief(this@PlayActivity).userID
-
         }
     }
 
@@ -135,11 +129,11 @@ class PlayActivity : BaseActivity(), SensorEventListener {
         if (dbDistance <= 2) startListening()
     }
 
-    private fun onClickTimer() {
+    fun onClickTimer() {
         if (!timerSet) startTimer() else stopTimer()
     }
 
-    private fun startTimer() {
+    fun startTimer() {
         timerSet = true
         binding.recipeplayCircularTimer.max = timerValue
         binding.recipeplayCircularTimerText.text =
@@ -171,7 +165,7 @@ class PlayActivity : BaseActivity(), SensorEventListener {
         )
     }
 
-    private fun setTimer(position: Int) {
+    fun setTimer(position: Int) {
         val restr = recipePhases[position - 1].time_amount.replace("[^0-9]".toRegex(), "")
         timerValue = restr.toInt() * 60
         binding.recipeplayCircularTimer.max = timerValue
@@ -180,7 +174,7 @@ class PlayActivity : BaseActivity(), SensorEventListener {
             String.format("%02d:%02d", timerValue / 60, timerValue % 60)
     }
 
-    private fun stopTimer() {
+    fun stopTimer() {
         timerSet = false
         soundCount = 0
         compositeDisposable.clear()
@@ -207,6 +201,7 @@ class PlayActivity : BaseActivity(), SensorEventListener {
             override fun onEndOfSpeech() {}
             override fun onError(error: Int) {
                 App.showToast("음성 인식 실패")
+                stopListening()
             }
 
             override fun onResults(results: Bundle) {
@@ -224,6 +219,7 @@ class PlayActivity : BaseActivity(), SensorEventListener {
                     "시작" -> if (binding.recipeplayViewpager.currentItem != 0 || binding.recipeplayViewpager.currentItem != recipePhases.size - 1) startTimer()
                     "정지" -> if (binding.recipeplayViewpager.currentItem != 0 || binding.recipeplayViewpager.currentItem != recipePhases.size - 1) stopTimer()
                 }
+                stopListening()
             }
 
             override fun onPartialResults(partialResults: Bundle) {}

@@ -4,7 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="com.yhjoo.dochef.ui.home.HomeActivity.UIMODE"/>
 
+        <variable
+            name="activity"
+            type="com.yhjoo.dochef.ui.home.HomeActivity" />
         <variable
             name="viewModel"
             type="com.yhjoo.dochef.ui.home.HomeViewModel" />
@@ -30,7 +34,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/BaseTheme.Toolbar"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:title="홈" />
+                    app:title="@{viewModel.userDetail.nickname}"/>
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/home_revisegroup"
@@ -56,6 +60,7 @@
                     android:background="@drawable/bg_round"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
+                    app:userimage="@{viewModel.userDetail.userImg}"
                     app:srcCompat="@drawable/ic_profile_black" />
 
                 <androidx.appcompat.widget.AppCompatImageView
@@ -70,6 +75,7 @@
                     app:layout_constraintBottom_toBottomOf="@+id/home_userimg"
                     app:layout_constraintRight_toRightOf="@+id/home_userimg"
                     app:srcCompat="@drawable/ic_build_black"
+                    android:onClick="@{()-> activity.reviseProfileImage()}"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -86,6 +92,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_userimg"
                     app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
                     app:layout_constraintWidth_percent="0.2"
+                    android:text="@{``+viewModel.userDetail.recipeCount}"
                     tools:text="0" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -107,7 +114,9 @@
                     app:layout_constraintBottom_toBottomOf="@+id/home_recipetext"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_recipecount"
-                    app:layout_constraintTop_toTopOf="@+id/home_recipecount" />
+                    app:layout_constraintTop_toTopOf="@+id/home_recipecount"
+                    android:onClick="@{()->activity.goMyRecipe(viewModel.userDetail)}"
+                    />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/home_followercount"
@@ -121,6 +130,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_recipecount"
                     app:layout_constraintTop_toTopOf="@+id/home_recipecount"
                     app:layout_constraintWidth_percent="0.2"
+                    android:text="@{``+viewModel.userDetail.followerCount}"
                     tools:text="0" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -142,7 +152,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/home_followertext"
                     app:layout_constraintLeft_toLeftOf="@+id/home_followercount"
                     app:layout_constraintRight_toRightOf="@+id/home_followercount"
-                    app:layout_constraintTop_toTopOf="@+id/home_followercount" />
+                    app:layout_constraintTop_toTopOf="@+id/home_followercount"
+                    android:onClick="@{()->activity.goFollowerList(viewModel.userDetail)}"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/home_followingcount"
@@ -157,6 +168,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_followercount"
                     app:layout_constraintTop_toTopOf="@+id/home_recipecount"
                     app:layout_constraintWidth_percent="0.2"
+                    android:text="@{``+viewModel.userDetail.followingCount}"
                     tools:text="0" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -178,7 +190,8 @@
                     app:layout_constraintBottom_toBottomOf="@+id/home_followingtext"
                     app:layout_constraintLeft_toLeftOf="@+id/home_followingcount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"
-                    app:layout_constraintTop_toTopOf="@+id/home_followingcount" />
+                    app:layout_constraintTop_toTopOf="@+id/home_followingcount"
+                    android:onClick="@{()->activity.goFollowingList(viewModel.userDetail)}" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/home_follow_btn"
@@ -187,7 +200,7 @@
                     android:layout_marginTop="10dp"
                     android:text="팔로우"
                     android:textColor="@color/white"
-                    android:visibility="gone"
+                    android:visibility="@{viewModel.currentMode == UIMODE.OTHERS}"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"
@@ -211,6 +224,7 @@
                     android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="16sp"
+                    android:text="@{viewModel.userDetail.nickname}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_divider"
                     tools:text="닉네임" />
@@ -228,6 +242,7 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_nickname"
                     app:layout_constraintTop_toTopOf="@+id/home_nickname"
                     app:srcCompat="@drawable/ic_build_black"
+                    android:onClick="@{()-> activity.clickReviseNickname()}"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -240,6 +255,7 @@
                     android:lines="4"
                     android:maxLines="4"
                     android:padding="10dp"
+                    android:text="@{viewModel.userDetail.profileText}"
                     app:layout_constraintTop_toBottomOf="@+id/home_nickname"
                     tools:text="프로필" />
 
@@ -258,6 +274,7 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/home_profiletext"
                     app:srcCompat="@drawable/ic_build_black"
+                    android:onClick="@{()-> activity.clickReviseContents()}"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -276,10 +293,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:orientation="horizontal"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toBottomOf="@+id/home_recipe_text"
-                    tools:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/home_recipelist_item"
-                    tools:orientation="horizontal" />
+                    tools:listitem="@layout/home_recipelist_item" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/home_recipe_empty"

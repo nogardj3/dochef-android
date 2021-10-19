@@ -12,7 +12,6 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
@@ -20,6 +19,7 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.CommentRepository
 import com.yhjoo.dochef.data.repository.PostRepository
@@ -27,18 +27,23 @@ import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.utils.*
+import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class PostDetailActivity : BaseActivity() {
+    // TODO
+    // menu data binding
+    // text change listener
+    // RecyclerView listitem Databinding
+
     private val binding: PostdetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.postdetail_activity)
     }
     private val postDetailViewModel: PostDetailViewModel by viewModels {
         PostDetailViewModelFactory(
-            application,
-            intent,
             PostRepository(applicationContext),
-            CommentRepository(applicationContext)
+            CommentRepository(applicationContext),
+            intent
         )
     }
     private lateinit var commentListAdapter: CommentListAdapter
@@ -46,90 +51,56 @@ class PostDetailActivity : BaseActivity() {
     private var reviseMenu: MenuItem? = null
     private var deleteMenu: MenuItem? = null
 
-    private lateinit var userID: String
-    private var postID = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         setSupportActionBar(binding.postToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        userID = DatastoreUtil.getUserBrief(this).userID
-        postID = intent.getIntExtra("postID", -1)
-
         binding.apply {
             lifecycleOwner = this@PostDetailActivity
+            activity = this@PostDetailActivity
+            viewModel = postDetailViewModel
+            activeUserId = App.activeUserId
 
-            commentListAdapter = CommentListAdapter(userID) { view, item ->
-                val powerMenu = PowerMenu.Builder(this@PostDetailActivity)
-                    .addItem(PowerMenuItem("삭제", false))
-                    .setAnimation(MenuAnimation.SHOW_UP_CENTER)
-                    .setMenuRadius(10f)
-                    .setMenuShadow(5.0f)
-                    .setWidth(200)
-                    .setTextColor(
-                        ContextCompat.getColor(
-                            this@PostDetailActivity,
-                            R.color.colorPrimary
-                        )
-                    )
-                    .setTextGravity(Gravity.CENTER)
-                    .setMenuColor(Color.WHITE)
-                    .setBackgroundAlpha(0f)
-                    .build()
-                powerMenu.onMenuItemClickListener =
-                    OnMenuItemClickListener { pos: Int, _: PowerMenuItem? ->
-                        if (pos == 0) {
-                            MaterialDialog(this@PostDetailActivity).show {
-                                message(text = "삭제 하시겠습니까?")
-                                positiveButton(text = "확인") {
-                                    postDetailViewModel.deleteComment(item.commentID)
-                                }
-                                negativeButton(text = "취소")
-                            }
-                            powerMenu.dismiss()
-                        }
-                    }
-                powerMenu.showAsAnchorCenter(view)
-            }
+            commentListAdapter = CommentListAdapter(this@PostDetailActivity)
+            postCommentRecycler.adapter = commentListAdapter
 
-            postCommentRecycler.apply {
-                layoutManager = LinearLayoutManager(this@PostDetailActivity)
-                adapter = commentListAdapter
-            }
             postCommentEdittext.addTextChangedListener(commentEdittextWatcher)
+        }
 
-            postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
-                setTopView(it)
-            })
+        postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
+            if (it.userID == App.activeUserId) {
+                reviseMenu?.isVisible = true
+                deleteMenu?.isVisible = true
+            }
 
-            postDetailViewModel.likeThisPost.observe(this@PostDetailActivity, {
-                postLike.setImageResource(
-                    if (postDetailViewModel.likeThisPost.value!!)
-                        R.drawable.ic_favorite_red
-                    else
-                        R.drawable.ic_favorite_black
-                )
+            binding.postTags.removeAllViews()
+            for (tag in it.tags) {
+                val tagcontainer =
+                    layoutInflater.inflate(R.layout.view_tag_post, null) as LinearLayout
+                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_post_text)
+                tagview.text = "#$tag"
+                binding.postTags.addView(tagcontainer)
+            }
+        })
 
-                postLike.setOnClickListener {
-                    postDetailViewModel.toggleLikePost()
+        postDetailViewModel.allComments.observe(this@PostDetailActivity, {
+            binding.postCommentEmpty.isVisible = it.isEmpty()
+            commentListAdapter.submitList(it) {
+                binding.postCommentRecycler.scrollToPosition(0)
+            }
+        })
+
+        subscribeEventOnLifecycle {
+            postDetailViewModel.eventResult.collect {
+                when (it.first) {
+                    PostDetailViewModel.Events.IS_DELETED -> {
+                        App.showToast("삭제되었습니다.")
+                        finish()
+                    }
                 }
-            })
-
-            postDetailViewModel.allComments.observe(this@PostDetailActivity, {
-                postCommentEmpty.isVisible = it.isEmpty()
-                commentListAdapter.submitList(it) {
-                    postCommentRecycler.scrollToPosition(0)
-                }
-            })
-
-            postDetailViewModel.isDeleted.observe(this@PostDetailActivity, {
-                if (it) {
-                    App.showToast("삭제되었습니다.")
-                    finish()
-                }
-            })
+            }
         }
     }
 
@@ -152,10 +123,7 @@ class PostDetailActivity : BaseActivity() {
                 startActivity(
                     Intent(this@PostDetailActivity, PostWriteActivity::class.java)
                         .putExtra("MODE", PostWriteActivity.Companion.UIMODE.REVISE)
-                        .putExtra("postID", postInfo.postID)
-                        .putExtra("postImg", postInfo.postImg)
-                        .putExtra("contents", postInfo.contents)
-                        .putExtra("tags", postInfo.tags.toTypedArray())
+                        .putExtra("post", postInfo)
                 )
                 true
             }
@@ -173,52 +141,47 @@ class PostDetailActivity : BaseActivity() {
         }
     }
 
-    private fun setTopView(postInfo: Post) {
-        binding.apply {
-            if (postInfo.userID == userID) {
-                reviseMenu?.isVisible = true
-                deleteMenu?.isVisible = true
-            }
-
-            ImageLoaderUtil.loadPostImage(
-                this@PostDetailActivity,
-                postInfo.postImg,
-                binding.postPostimg
+    fun commentClick(view: View, item: Comment) {
+        val powerMenu = PowerMenu.Builder(this@PostDetailActivity)
+            .addItem(PowerMenuItem("삭제", false))
+            .setAnimation(MenuAnimation.SHOW_UP_CENTER)
+            .setMenuRadius(10f)
+            .setMenuShadow(5.0f)
+            .setWidth(200)
+            .setTextColor(
+                ContextCompat.getColor(
+                    this@PostDetailActivity,
+                    R.color.colorPrimary
+                )
             )
-            ImageLoaderUtil.loadUserImage(
-                this@PostDetailActivity,
-                postInfo.userImg,
-                binding.postUserimg
-            )
-            postNickname.text = postInfo.nickname
-            postContents.text = postInfo.contents
-            postTime.text = OtherUtil.millisToText(postInfo.dateTime)
-            postLikecount.text = postInfo.likes.size.toString()
-            postCommentcount.text = postInfo.comments.size.toString()
-
-            postUserWrapper.setOnClickListener {
-                goHome(postInfo)
-            }
-
-            postTags.removeAllViews()
-            for (tag in postInfo.tags) {
-                val tagcontainer =
-                    layoutInflater.inflate(R.layout.view_tag_post, null) as LinearLayout
-                val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_post_text)
-                tagview.text = "#$tag"
-                binding.postTags.addView(tagcontainer)
-            }
-            binding.postCommentOk.setOnClickListener {
-                if (binding.postCommentEdittext.text.toString() != "") {
-                    postDetailViewModel.createComment(binding.postCommentEdittext.text.toString())
-                    hideKeyboard(binding.postCommentEdittext)
-                    binding.postCommentEdittext.setText("")
+            .setTextGravity(Gravity.CENTER)
+            .setMenuColor(Color.WHITE)
+            .setBackgroundAlpha(0f)
+            .build()
+        powerMenu.onMenuItemClickListener = OnMenuItemClickListener { pos, _ ->
+            if (pos == 0) {
+                MaterialDialog(this@PostDetailActivity).show {
+                    message(text = "삭제 하시겠습니까?")
+                    positiveButton(text = "확인") {
+                        postDetailViewModel.deleteComment(item.commentID)
+                    }
+                    negativeButton(text = "취소")
                 }
+                powerMenu.dismiss()
             }
+        }
+        powerMenu.showAsAnchorCenter(view)
+    }
+
+    fun commentAddOk() {
+        if (binding.postCommentEdittext.text.toString() != "") {
+            postDetailViewModel.createComment(binding.postCommentEdittext.text.toString())
+            hideKeyboard(binding.postCommentEdittext)
+            binding.postCommentEdittext.setText("")
         }
     }
 
-    private val commentEdittextWatcher: TextWatcher = object : TextWatcher {
+    val commentEdittextWatcher: TextWatcher = object : TextWatcher {
         var prevText = ""
 
         override fun beforeTextChanged(
@@ -240,7 +203,7 @@ class PostDetailActivity : BaseActivity() {
         }
     }
 
-    private fun goHome(item: Post) {
+    fun goHome(item: Post) {
         startActivity(
             Intent(this@PostDetailActivity, HomeActivity::class.java)
                 .putExtra("userID", item.userID)

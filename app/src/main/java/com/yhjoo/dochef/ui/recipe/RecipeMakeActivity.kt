@@ -19,9 +19,8 @@ class RecipeMakeActivity : BaseActivity() {
     }
     private val recipeMakeViewModel: RecipeMakeViewModel by viewModels {
         RecipeMakeViewModelFactory(
-            application,
-            intent,
-            RecipeRepository(applicationContext)
+            RecipeRepository(applicationContext),
+            intent
         )
     }
 

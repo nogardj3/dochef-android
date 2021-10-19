@@ -6,14 +6,11 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.GridLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.ReciperecommendActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.RECOMMEND
 import java.util.*
 
 class RecipeRecommendActivity : BaseActivity() {
@@ -22,12 +19,11 @@ class RecipeRecommendActivity : BaseActivity() {
     }
     private val recipeRecommendViewModel: RecipeRecommendViewModel by viewModels {
         RecipeRecommendViewModelFactory(
-            application,
-            intent,
-            RecipeRepository(applicationContext)
+            RecipeRepository(applicationContext),
+            intent
         )
     }
-    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
+    private lateinit var recipeRecommendAdapter: RecipeRecommendAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,28 +34,19 @@ class RecipeRecommendActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@RecipeRecommendActivity
 
-            recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RECOMMEND,
-                null,
-                { goDetail(it) },
-                null
-            )
-
-            reciperecommendRecycler.apply {
-                layoutManager = GridLayoutManager(this@RecipeRecommendActivity, 2)
-                adapter = recipeListVerticalAdapter
-            }
-
-            recipeRecommendViewModel.allRecipeList.observe(this@RecipeRecommendActivity, {
-                reciperecommendEmpty.isVisible = it.isEmpty()
-                recipeListVerticalAdapter.submitList(it) {
-                    binding.reciperecommendRecycler.scrollToPosition(0)
-                }
-            })
+            recipeRecommendAdapter = RecipeRecommendAdapter(this@RecipeRecommendActivity)
+            reciperecommendRecycler.adapter = recipeRecommendAdapter
         }
+
+        recipeRecommendViewModel.allRecipeList.observe(this@RecipeRecommendActivity, {
+            binding.reciperecommendEmpty.isVisible = it.isEmpty()
+            recipeRecommendAdapter.submitList(it) {
+                binding.reciperecommendRecycler.scrollToPosition(0)
+            }
+        })
     }
 
-    private fun goDetail(item: Recipe) {
+    fun goDetail(item: Recipe) {
         startActivity(
             Intent(this@RecipeRecommendActivity, RecipeDetailActivity::class.java)
                 .putExtra("recipeID", item.recipeID)

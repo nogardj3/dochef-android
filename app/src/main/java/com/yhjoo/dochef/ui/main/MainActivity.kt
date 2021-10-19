@@ -45,9 +45,8 @@ class MainActivity : BaseActivity() {
     private val binding: MainActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.main_activity)
     }
-    private val mainViewModel: MainViewModel by viewModels{
+    private val mainViewModel: MainViewModel by viewModels {
         MainViewModelFactory(
-            application,
             UserRepository(applicationContext),
             RecipeRepository(applicationContext),
             PostRepository(applicationContext)

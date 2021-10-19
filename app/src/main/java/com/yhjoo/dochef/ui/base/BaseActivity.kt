@@ -92,7 +92,7 @@ open class BaseActivity : AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun LifecycleOwner.eventOnLifecycle(block: suspend CoroutineScope.() -> Unit) {
+    fun LifecycleOwner.subscribeEventOnLifecycle(block: suspend CoroutineScope.() -> Unit) {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED, block)
         }

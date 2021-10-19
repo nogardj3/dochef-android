@@ -12,17 +12,6 @@ object OtherUtil {
         Logger.d("YHJOO %s", msgs.joinToString())
     }
 
-    fun checkPermission(context: Context, RequirePermissions: Array<String>): Boolean {
-        for (a in RequirePermissions)
-            if (ContextCompat.checkSelfPermission(
-                    context,
-                    a
-                ) != PackageManager.PERMISSION_GRANTED
-            )
-                return false
-        return true
-    }
-
     fun millisToText(millis: Long): String {
         val currentMillis = Date().time
         val secDiff = (currentMillis - millis) / 1000
@@ -38,4 +27,16 @@ object OtherUtil {
             }
         }
     }
+
+    fun checkPermission(context: Context, RequirePermissions: Array<String>): Boolean {
+        for (a in RequirePermissions)
+            if (ContextCompat.checkSelfPermission(
+                    context,
+                    a
+                ) != PackageManager.PERMISSION_GRANTED
+            )
+                return false
+        return true
+    }
+
 }

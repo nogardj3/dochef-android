@@ -31,7 +31,9 @@ class App : Application() {
 
     companion object {
         var isServerAlive = false
+        lateinit var activeUserId : String
         lateinit var toast: Toast
+
         fun showToast(text: String) {
             toast.setText(text)
             toast.show()

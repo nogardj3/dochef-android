@@ -1,38 +1,31 @@
 package com.yhjoo.dochef.ui.recipe
 
-import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.utils.DatastoreUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecipeMakeViewModel(
-    private val application: Application,
-    intent: Intent,
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    intent: Intent
 ) : ViewModel() {
-    val activeUserId: String by lazy {
-        DatastoreUtil.getUserBrief(application.applicationContext).userID
-    }
+    val activeUserId = App.activeUserId
     private val recipeId: Int = intent.getIntExtra("recipeID", -1)
 
-    val recipeDetail = MutableLiveData<RecipeDetail>()
+    private val _recipeDetail = MutableLiveData<RecipeDetail>()
+    val recipeDetail: LiveData<RecipeDetail>
+        get() = _recipeDetail
 
     init {
         requestRecipeDetail()
     }
 
-    private fun requestRecipeDetail() {
-        viewModelScope.launch {
-            recipeRepository.getRecipeDetail(recipeId).collect {
-                recipeDetail.value = it.body()
-            }
+    private fun requestRecipeDetail() = viewModelScope.launch {
+        recipeRepository.getRecipeDetail(recipeId).collect {
+            _recipeDetail.value = it.body()
         }
     }
 
@@ -54,17 +47,15 @@ class RecipeMakeViewModel(
 }
 
 class RecipeMakeViewModelFactory(
-    private val application: Application,
-    private val intent: Intent,
-    private val recipeRepository: RecipeRepository
+    private val recipeRepository: RecipeRepository,
+    private val intent: Intent
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecipeMakeViewModel::class.java)) {
             return RecipeMakeViewModel(
-                application,
-                intent,
-                recipeRepository
+                recipeRepository,
+                intent
             ) as T
         }
         throw IllegalArgumentException("Unknown View Model class")

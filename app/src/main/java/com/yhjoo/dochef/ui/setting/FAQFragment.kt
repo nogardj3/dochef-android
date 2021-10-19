@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingFaqFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 
-class FAQFragment : Fragment() {
+class FAQFragment : BaseFragment() {
     private lateinit var binding: SettingFaqFragmentBinding
     private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
@@ -34,24 +33,16 @@ class FAQFragment : Fragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            expandableListAdapter = ExpandableListAdapter(
-                false
-            )
-
-            faqRecycler.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = expandableListAdapter
-            }
-
-            settingViewModel.allFAQs.observe(viewLifecycleOwner, {
-                faqEmpty.isVisible = it.isEmpty()
-                expandableListAdapter.submitList(it) {
-                    binding.faqRecycler.scrollToPosition(0)
-                }
-            })
-
-            settingViewModel.requestFAQs()
+            expandableListAdapter = ExpandableListAdapter(false)
+            faqRecycler.adapter = expandableListAdapter
         }
+
+        settingViewModel.allFAQs.observe(viewLifecycleOwner, {
+            binding.faqEmpty.isVisible = it.isEmpty()
+            expandableListAdapter.submitList(it) {
+                binding.faqRecycler.scrollToPosition(0)
+            }
+        })
 
         return binding.root
     }

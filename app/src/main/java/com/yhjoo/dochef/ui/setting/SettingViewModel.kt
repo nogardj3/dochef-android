@@ -22,27 +22,27 @@ class SettingViewModel(
     val tosText: LiveData<CharSequence>
         get() = _tosText
 
-    fun requestFAQs() {
-        viewModelScope.launch {
-            repository.getFAQs().collect {
-                _allFAQs.value = it.body()
-            }
+    init {
+        requestFAQs()
+        requestNotices()
+        requestTosText()
+    }
+
+    private fun requestFAQs() = viewModelScope.launch {
+        repository.getFAQs().collect {
+            _allFAQs.value = it.body()
         }
     }
 
-    fun requestNotices() {
-        viewModelScope.launch {
-            repository.getNotices().collect {
-                _allNotices.value = it.body()
-            }
+    private fun requestNotices() = viewModelScope.launch {
+        repository.getNotices().collect {
+            _allNotices.value = it.body()
         }
     }
 
-    fun requestTosText() {
-        viewModelScope.launch {
-            repository.getTOS().collect {
-                _tosText.value = it.body()!!["message"].asString.parseAsHtml()
-            }
+    private fun requestTosText() = viewModelScope.launch {
+        repository.getTOS().collect {
+            _tosText.value = it.body()!!["message"].asString.parseAsHtml()
         }
     }
 }

@@ -6,14 +6,12 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
@@ -23,11 +21,10 @@ class RecipeMyListActivity : BaseActivity() {
     }
     private val recipeListViewModel: RecipeMyListViewModel by viewModels {
         RecipeMyListViewModelFactory(
-            application,
             RecipeRepository(applicationContext)
         )
     }
-    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
+    private lateinit var recipeMyListAdapter: RecipeMyListAdapter
 
     private lateinit var addMenu: MenuItem
 
@@ -40,36 +37,16 @@ class RecipeMyListActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@RecipeMyListActivity
 
-            recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                RecipeListVerticalAdapter.Companion.LayoutType.MYLIST,
-                recipeListViewModel.activeUserId,
-                { goDetail(it) },
-                { item ->
-                    MaterialDialog(this@RecipeMyListActivity).show {
-                        message(text = "즐겨찾기를 해제 하시겠습니까?")
-                        positiveButton(text = "확인") {
-                            recipeListViewModel.disLikeRecipe(
-                                item.recipeID,
-                                recipeListViewModel.activeUserId
-                            )
-                        }
-                        negativeButton(text = "취소")
-                    }
-                }
-            )
-
-            recipelistRecycler.apply {
-                layoutManager = LinearLayoutManager(this@RecipeMyListActivity)
-                adapter = recipeListVerticalAdapter
-            }
-
-            recipeListViewModel.allRecipeList.observe(this@RecipeMyListActivity, {
-                recipeListVerticalAdapter.submitList(it) {
-                    recipemylistEmpty.isVisible = it.isEmpty()
-                    binding.recipelistRecycler.scrollToPosition(0)
-                }
-            })
+            recipeMyListAdapter = RecipeMyListAdapter(this@RecipeMyListActivity)
+            recipelistRecycler.adapter = recipeMyListAdapter
         }
+
+        recipeListViewModel.allRecipeList.observe(this@RecipeMyListActivity, {
+            recipeMyListAdapter.submitList(it) {
+                binding.recipemylistEmpty.isVisible = it.isEmpty()
+                binding.recipelistRecycler.scrollToPosition(0)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -86,7 +63,21 @@ class RecipeMyListActivity : BaseActivity() {
             super.onOptionsItemSelected(item)
     }
 
-    private fun goDetail(item: Recipe) {
+    fun showFavoriteDialog(item: Recipe){
+        OtherUtil.log("asdfasdfasdf")
+        MaterialDialog(this@RecipeMyListActivity).show {
+            message(text = "즐겨찾기를 해제 하시겠습니까?")
+            positiveButton(text = "확인") {
+                recipeListViewModel.disLikeRecipe(
+                    item.recipeID,
+                    recipeListViewModel.activeUserId
+                )
+            }
+            negativeButton(text = "취소")
+        }
+    }
+
+    fun goDetail(item: Recipe) {
         startActivity(
             Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
                 .putExtra("recipeID", item.recipeID)

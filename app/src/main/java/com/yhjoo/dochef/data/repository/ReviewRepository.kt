@@ -45,7 +45,15 @@ class ReviewRepository(
         dateTime: Long
     ): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive) emit(reviewClient.createReview(recipeID, userID, contents, rating, dateTime))
+            if (App.isServerAlive) emit(
+                reviewClient.createReview(
+                    recipeID,
+                    userID,
+                    contents,
+                    rating,
+                    dateTime
+                )
+            )
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

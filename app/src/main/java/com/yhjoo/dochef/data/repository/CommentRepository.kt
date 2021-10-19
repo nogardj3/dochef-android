@@ -44,7 +44,14 @@ class CommentRepository(
         dateTime: Long
     ): Flow<Response<JsonObject>> {
         return flow {
-            if (App.isServerAlive) emit(commentClient.createComment(postID, userID, contents, dateTime))
+            if (App.isServerAlive) emit(
+                commentClient.createComment(
+                    postID,
+                    userID,
+                    contents,
+                    dateTime
+                )
+            )
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

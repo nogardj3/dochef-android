@@ -3,13 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.yhjoo.dochef.ui.notification.NotificationViewModel" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -27,6 +20,8 @@
             android:id="@+id/notification_recycler"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/notification_toolbar"
             tools:listitem="@layout/notification_item" />
@@ -35,11 +30,11 @@
             android:id="@+id/notification_empty"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notification_toolbar"
             android:gravity="center"
+            android:text="알림이 없습니다."
             android:visibility="gone"
-            android:text="알림이 없습니다."/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/notification_toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.search
 
-import android.content.Context
 import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -14,21 +13,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.SearchResultRecipeItemBinding
-import com.yhjoo.dochef.utils.ImageLoaderUtil
 
-class RecipeAdapter(
-    private val layoutType: Int,
-    private val itemClickListener: (Recipe) -> Unit
+class RecipeListAdapter(
+    private val containerActivity: SearchActivity,
+    private val resulttype: RESULTTYPE
 ) :
-    ListAdapter<Recipe, RecipeAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
-    lateinit var context: Context
-
+    ListAdapter<Recipe, RecipeListAdapter.ResultRecipeViewHolder>(ResultRecipeComparator()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResultRecipeViewHolder {
-        context = parent.context
-
         return ResultRecipeViewHolder(
             DataBindingUtil.inflate(
-                LayoutInflater.from(context),
+                LayoutInflater.from(parent.context),
                 R.layout.search_result_recipe_item,
                 parent,
                 false
@@ -40,43 +34,24 @@ class RecipeAdapter(
         holder.bind(getItem(position))
     }
 
-    companion object {
-        object LAYOUT_TYPE {
-            const val NAME = 0
-            const val INGREDIENT = 1
-            const val TAG = 2
-        }
-    }
-
     inner class ResultRecipeViewHolder(val binding: SearchResultRecipeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(recipe: Recipe) {
+        fun bind(item: Recipe) {
             binding.apply {
-                root.setOnClickListener {
-                    itemClickListener(recipe)
-                }
+                activity = containerActivity
+                recipe = item
 
-                ImageLoaderUtil.loadRecipeImage(
-                    context, recipe.recipeImg, resultrecipeRecipeimg
-                )
-
-                resultrecipeTitle.text = recipe.recipeName
-                resultrecipeNickname.text = String.format(
-                    context.resources.getString(R.string.format_usernickname),
-                    recipe.nickname
-                )
-
-                when (layoutType) {
-                    LAYOUT_TYPE.NAME -> {
+                when (resulttype) {
+                    RESULTTYPE.NAME -> {
                         resultrecipeTitle.setTypeface(null, Typeface.BOLD)
                     }
-                    LAYOUT_TYPE.INGREDIENT -> {
+                    RESULTTYPE.INGREDIENT -> {
                         resultrecipeIngredients.isVisible = true
                         resultrecipeIngredients.removeAllViews()
 
-                        for (ingredient in recipe.ingredients) {
+                        for (ingredient in item.ingredients) {
                             val tagcontainer =
-                                LayoutInflater.from(context)
+                                LayoutInflater.from(resultrecipeIngredients.context)
                                     .inflate(R.layout.view_tag_search, null) as LinearLayout
                             val tagview: AppCompatTextView =
                                 tagcontainer.findViewById(R.id.tag_search_text)
@@ -86,13 +61,13 @@ class RecipeAdapter(
                             resultrecipeIngredients.addView(tagcontainer)
                         }
                     }
-                    LAYOUT_TYPE.TAG -> {
+                    RESULTTYPE.TAG -> {
                         resultrecipeTags.isVisible = true
                         resultrecipeTags.removeAllViews()
 
-                        for (tag in recipe.tags) {
+                        for (tag in item.tags) {
                             val tagcontainer =
-                                LayoutInflater.from(context)
+                                LayoutInflater.from(resultrecipeTags.context)
                                     .inflate(R.layout.view_tag_search, null) as LinearLayout
                             val tagview: AppCompatTextView =
                                 tagcontainer.findViewById(R.id.tag_search_text)
@@ -104,6 +79,10 @@ class RecipeAdapter(
                 }
             }
         }
+    }
+
+    enum class RESULTTYPE {
+        NAME, INGREDIENT, TAG
     }
 
     class ResultRecipeComparator : DiffUtil.ItemCallback<Recipe>() {

@@ -3,38 +3,38 @@ package com.yhjoo.dochef.ui.post
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.PostRepository
-import com.yhjoo.dochef.utils.DatastoreUtil
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
 class PostWriteViewModel(
+    private val postRepository: PostRepository,
     private val application: Application,
     intent: Intent,
-    private val postRepository: PostRepository,
 ) : ViewModel() {
-    val activeUserId: String by lazy {
-        DatastoreUtil.getUserBrief(application.applicationContext).userID
-    }
+    val activeUserId = App.activeUserId
+    val currentMode = intent.getIntExtra("MODE", PostWriteActivity.Companion.UIMODE.WRITE)
+    val postInfo = intent.getSerializableExtra("post") as Post
 
-    private val postId: Int = intent.getIntExtra("postID", -1)
-    private val postImage: String? = intent.getStringExtra("postImg")
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference
     }
 
-    val isFinished = MutableLiveData<Boolean>()
+    private var _eventResult = MutableSharedFlow<Pair<Any, String?>>()
+    val eventResult = _eventResult.asSharedFlow()
 
     fun uploadPost(
-        currentMode: Int,
         imageUri: Uri?,
         contents: String,
         tags: ArrayList<String>
@@ -64,16 +64,19 @@ class PostWriteViewModel(
                     }
                 }
         } else {
-            val imageString = postImage
+            val imageString = if (postInfo.postImg.isEmpty())
+                ""
+            else postInfo.postImg
+
             if (currentMode == PostWriteActivity.Companion.UIMODE.WRITE) {
                 createPost(
-                    imageString!!,
+                    imageString,
                     contents,
                     tags
                 )
             } else if (currentMode == PostWriteActivity.Companion.UIMODE.REVISE) {
                 updatePost(
-                    imageString!!,
+                    imageString,
                     contents,
                     tags
                 )
@@ -85,7 +88,7 @@ class PostWriteViewModel(
         postImgs: String,
         contents: String,
         tags: ArrayList<String>
-    ) {
+    ) =
         viewModelScope.launch {
             postRepository.createPost(
                 activeUserId,
@@ -94,40 +97,41 @@ class PostWriteViewModel(
                 System.currentTimeMillis(),
                 tags
             ).collect {
-                isFinished.value = true
+                _eventResult.emit(Pair(Events.CREATE_COMPLETE, ""))
             }
         }
-    }
 
     private fun updatePost(
         postImgs: String,
         contents: String,
         tags: ArrayList<String>
-    ) {
+    ) =
         viewModelScope.launch {
             postRepository.updatePost(
-                postId,
+                postInfo.postID,
                 postImgs,
                 contents,
                 System.currentTimeMillis(),
                 tags
             ).collect {
-                isFinished.value = true
+                _eventResult.emit(Pair(Events.UPDATE_COMPLETE, ""))
             }
         }
-    }
 
+    enum class Events {
+        CREATE_COMPLETE, UPDATE_COMPLETE
+    }
 }
 
 class PostWriteViewModelFactory(
+    private val postRepository: PostRepository,
     private val application: Application,
     private val intent: Intent,
-    private val postRepository: PostRepository
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(PostWriteViewModel::class.java)) {
-            return PostWriteViewModel(application, intent, postRepository) as T
+            return PostWriteViewModel(postRepository, application, intent) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

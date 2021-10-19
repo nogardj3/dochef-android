@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.afollestad.materialdialogs.MaterialDialog
 import com.afollestad.materialdialogs.input.getInputField
 import com.afollestad.materialdialogs.input.input
-import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.signature.ObjectKey
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
@@ -32,20 +32,26 @@ import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.utils.*
+import kotlinx.coroutines.flow.collect
 import java.util.*
 
 class HomeActivity : BaseActivity() {
+    // TODO
+    // menu databinding
+    // permission, onactivity databinding
+    // RecyclerView listitem Databinding
+
     private val binding: HomeActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.home_activity)
     }
     private val homeViewModel: HomeViewModel by viewModels {
         HomeViewModelFactory(
-            application,
-            intent,
             UserRepository(applicationContext),
             RecipeRepository(applicationContext),
             PostRepository(applicationContext),
             AccountRepository(applicationContext),
+            application,
+            intent,
         )
     }
     private lateinit var recipeListAdapter: RecipeListAdapter
@@ -56,6 +62,7 @@ class HomeActivity : BaseActivity() {
 
     private lateinit var originUserInfo: UserDetail
     private lateinit var nicknameDialog: MaterialDialog
+
     private var imageUri: Uri? = null
     private val cropimage = registerForActivityResult(CropImageContract()) { result ->
         if (result.isSuccessful) {
@@ -64,8 +71,7 @@ class HomeActivity : BaseActivity() {
             GlideApp.with(this)
                 .load(imageUri)
                 .circleCrop()
-                .diskCacheStrategy(DiskCacheStrategy.NONE)
-                .skipMemoryCache(true)
+                .signature(ObjectKey(System.currentTimeMillis().toString()))
                 .into(binding.homeUserimg)
         } else {
             val error = result.error
@@ -73,7 +79,6 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    private var currentMode: Int? = null
     private var currentOperation: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,29 +87,15 @@ class HomeActivity : BaseActivity() {
         setSupportActionBar(binding.homeToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        currentMode =
-            if (intent.getStringExtra("userID") == null
-                || intent.getStringExtra("userID") == homeViewModel.activeUserId
-            )
-                UIMODE.OWNER
-            else UIMODE.OTHERS
-
         binding.apply {
             lifecycleOwner = this@HomeActivity
+            activity = this@HomeActivity
+            viewModel = homeViewModel
 
-            recipeListAdapter = RecipeListAdapter(homeViewModel.activeUserId)
-            { goRecipeDetail(it) }
+            recipeListAdapter = RecipeListAdapter(this@HomeActivity)
+            homeRecipeRecycler.adapter = recipeListAdapter
 
-            postListAdapter = PostListAdapter(
-                { goHome(it) },
-                { goPostDetail(it) }
-            )
-
-            homeRecipeRecycler.apply {
-                layoutManager =
-                    LinearLayoutManager(this@HomeActivity, LinearLayoutManager.HORIZONTAL, false)
-                adapter = recipeListAdapter
-            }
+            postListAdapter = PostListAdapter(this@HomeActivity)
 
             homePostRecycler.apply {
                 layoutManager =
@@ -119,40 +110,52 @@ class HomeActivity : BaseActivity() {
                     }
                 adapter = postListAdapter
             }
+        }
 
-            homeViewModel.userDetail.observe(this@HomeActivity, {
-                originUserInfo = it
-                setUserInfo(it)
-            })
+        homeViewModel.userDetail.observe(this@HomeActivity, {
+//            binding.userDetail = it
+//            binding.homeFollowBtn.isVisible = homeViewModel.currentMode == UIMODE.OTHERS
+            originUserInfo = it
 
-            homeViewModel.allRecipes.observe(this@HomeActivity, {
-                homeRecipeEmpty.isVisible = it.isEmpty()
-                recipeListAdapter.submitList(it)
-            })
+        })
 
-            homeViewModel.allPosts.observe(this@HomeActivity, {
-                homePostEmpty.isVisible = it.isEmpty()
-                postListAdapter.submitList(it)
-            })
+        homeViewModel.allRecipes.observe(this@HomeActivity, {
+            binding.homeRecipeEmpty.isVisible = it.isEmpty()
+            recipeListAdapter.submitList(it)
+        })
 
-            homeViewModel.updateComplete.observe(this@HomeActivity, { result ->
-                if (result) updateComplete()
-            })
+        homeViewModel.allPosts.observe(this@HomeActivity, {
+            binding.homePostEmpty.isVisible = it.isEmpty()
+            postListAdapter.submitList(it)
+        })
 
-            homeViewModel.nicknameValid.observe(this@HomeActivity, { result ->
-                if (result.first) {
-                    App.showToast("사용 가능한 아이디입니다.")
-                    binding.homeNickname.text = result.second
-                    nicknameDialog.dismiss()
-                } else {
-                    App.showToast("이미 존재합니다.")
+        subscribeEventOnLifecycle {
+            homeViewModel.eventResult.collect {
+                when (it.first) {
+                    HomeViewModel.Events.UPDATE_COMPLETE -> {
+                        showSnackBar(binding.root, "업데이트 되었습니다.")
+                        currentOperation = OPERATION.VIEW
+                        reviseMenu.isVisible = true
+                        okMenu.isVisible = false
+                        binding.homeRevisegroup.isVisible = false
+                        imageUri = null
+                        hideProgress()
+                    }
+                    HomeViewModel.Events.NICKNAME_VALID -> {
+                        App.showToast("사용 가능한 아이디입니다.")
+                        binding.homeNickname.text = it.second
+                        nicknameDialog.dismiss()
+                    }
+                    HomeViewModel.Events.NICKNAME_INVALID -> {
+                        App.showToast("이미 존재합니다.")
+                    }
                 }
-            })
+            }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if (currentMode == UIMODE.OWNER) {
+        if (homeViewModel.currentMode == UIMODE.OWNER) {
             menuInflater.inflate(R.menu.menu_home_owner, menu)
             reviseMenu = menu.findItem(R.id.menu_home_owner_revise)
             okMenu = menu.findItem(R.id.menu_home_owner_revise_ok)
@@ -171,11 +174,7 @@ class HomeActivity : BaseActivity() {
                     okMenu.isVisible = false
                     binding.apply {
                         homeRevisegroup.isVisible = false
-                        ImageLoaderUtil.loadUserImage(
-                            this@HomeActivity,
-                            originUserInfo.userImg,
-                            homeUserimg
-                        )
+                        BindUtil.loadUserImage(originUserInfo.userImg, homeUserimg)
                         homeNickname.text = originUserInfo.nickname
                         homeProfiletext.text = originUserInfo.profileText
                     }
@@ -197,7 +196,13 @@ class HomeActivity : BaseActivity() {
                 true
             }
             R.id.menu_home_owner_revise_ok -> {
-                updateProfile()
+                showProgress(this)
+
+                homeViewModel.updateProfile(
+                    imageUri,
+                    binding.homeNickname.text.toString(),
+                    binding.homeProfiletext.text.toString()
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -220,80 +225,7 @@ class HomeActivity : BaseActivity() {
         }
     }
 
-    private fun setUserInfo(userDetail: UserDetail) {
-        binding.apply {
-            ImageLoaderUtil.loadUserImage(
-                this@HomeActivity,
-                userDetail.userImg,
-                homeUserimg
-            )
-            homeToolbar.title = userDetail.nickname
-            homeNickname.text = userDetail.nickname
-            homeProfiletext.text = userDetail.profileText
-            homeRecipecount.text = userDetail.recipeCount.toString()
-            homeFollowercount.text = userDetail.followerCount.toString()
-            homeFollowingcount.text = userDetail.followingCount.toString()
-            homeFollowBtn.isVisible = currentMode == UIMODE.OTHERS
-
-            homeUserimgRevise.setOnClickListener { reviseProfileImage() }
-            homeNicknameRevise.setOnClickListener { clickReviseNickname() }
-            homeProfiletextRevise.setOnClickListener { clickReviseContents() }
-
-            homeRecipewrapper.setOnClickListener { goMyRecipe(userDetail) }
-            homeFollowerwrapper.setOnClickListener { goFollowerList(userDetail) }
-            homeFollowingwrapper.setOnClickListener { goFollowingList(userDetail) }
-        }
-    }
-
-    private fun goRecipeDetail(item: Recipe) {
-        startActivity(
-            Intent(this@HomeActivity, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
-        )
-    }
-
-    private fun goHome(item: Post) {
-//  TODO
-//  다른 사람 HomeActivity로 가기, 클릭 겹침
-//        Intent(this@HomeActivity, HomeActivity::class.java)
-//            .putExtra("postID", item.postID).apply {
-//                startActivity(intent)
-//            }
-    }
-
-    private fun goPostDetail(item: Post) {
-        startActivity(
-            Intent(this@HomeActivity, PostDetailActivity::class.java)
-                .putExtra("postID", item.postID)
-        )
-    }
-
-
-    private fun goMyRecipe(item: UserDetail) {
-        startActivity(
-            Intent(this@HomeActivity, RecipeMyListActivity::class.java)
-                .putExtra("userID", item.userID)
-        )
-    }
-
-    private fun goFollowerList(item: UserDetail) {
-        startActivity(
-            Intent(this@HomeActivity, FollowListActivity::class.java)
-                .putExtra("MODE", FollowListActivity.FOLLOWER)
-                .putExtra("userID", item.userID)
-        )
-    }
-
-    private fun goFollowingList(item: UserDetail) {
-        startActivity(
-            Intent(this@HomeActivity, FollowListActivity::class.java)
-                .putExtra("MODE", FollowListActivity.FOLLOWING)
-                .putExtra("userID", item.userID)
-        )
-    }
-
-
-    private fun reviseProfileImage() {
+    fun reviseProfileImage() {
         val permissions = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
 
         if (OtherUtil.checkPermission(this, permissions)) launchCrop()
@@ -325,7 +257,7 @@ class HomeActivity : BaseActivity() {
         )
     }
 
-    private fun clickReviseNickname() {
+    fun clickReviseNickname() {
         nicknameDialog = MaterialDialog(this)
             .noAutoDismiss()
             .title(text = "닉네임 변경")
@@ -349,55 +281,78 @@ class HomeActivity : BaseActivity() {
         nicknameDialog.show()
     }
 
-    private fun clickReviseContents() {
-        MaterialDialog(this).show {
-            noAutoDismiss()
-            title(text = "프로필 변경")
-            input(
+    fun clickReviseContents() {
+        MaterialDialog(this)
+            .noAutoDismiss()
+            .input(
                 hint = "닉네임",
                 inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE,
                 prefill = binding.homeProfiletext.text.toString()
             )
-            positiveButton(text = "확인", click = {
-                when {
-                    it.getInputField().text == null ->
-                        showSnackBar(binding.root, "프로필을 입력 해 주세요.")
-                    it.getInputField().text.length > 60 ->
-                        showSnackBar(binding.root, "60자 이하 입력 해 주세요.")
-                    it.getInputField().lineCount > 4 ->
-                        showSnackBar(binding.root, "4줄 이하 입력 해 주세요.")
-                    else -> {
-                        binding.homeProfiletext.text = it.getInputField().text
-                        it.dismiss()
+            .show {
+                title(text = "프로필 변경")
+                positiveButton(text = "확인", click = {
+                    when {
+                        it.getInputField().text == null ->
+                            showSnackBar(binding.root, "프로필을 입력 해 주세요.")
+                        it.getInputField().text.length > 60 ->
+                            showSnackBar(binding.root, "60자 이하 입력 해 주세요.")
+                        it.getInputField().lineCount > 4 ->
+                            showSnackBar(binding.root, "4줄 이하 입력 해 주세요.")
+                        else -> {
+                            binding.homeProfiletext.text = it.getInputField().text
+                            it.dismiss()
+                        }
                     }
-                }
-            })
-            negativeButton(text = "취소", click = {
-                it.dismiss()
-            })
-        }
+                })
+                negativeButton(text = "취소", click = {
+                    it.dismiss()
+                })
+            }
     }
 
-    private fun updateProfile() {
-        showProgress(this)
-
-        homeViewModel.updateProfile(
-            imageUri,
-            binding.homeNickname.text.toString(),
-            binding.homeProfiletext.text.toString()
+    fun goRecipeDetail(item: Recipe) {
+        startActivity(
+            Intent(this@HomeActivity, RecipeDetailActivity::class.java)
+                .putExtra("recipeID", item.recipeID)
         )
     }
 
-    private fun updateComplete() {
-        showSnackBar(binding.root, "업데이트 되었습니다.")
-        currentOperation = OPERATION.VIEW
-        reviseMenu.isVisible = true
-        okMenu.isVisible = false
-        binding.homeRevisegroup.isVisible = false
-        imageUri = null
-        hideProgress()
+    fun goHome(item: Post) {
+        startActivity(
+            Intent(this@HomeActivity, HomeActivity::class.java)
+                .putExtra("postID", item.postID)
+        )
+    }
 
-        homeViewModel.requestActiveUserDetail()
+    fun goPostDetail(item: Post) {
+        startActivity(
+            Intent(this@HomeActivity, PostDetailActivity::class.java)
+                .putExtra("postID", item.postID)
+        )
+    }
+
+    fun goMyRecipe(item: UserDetail) {
+        startActivity(
+            Intent(this@HomeActivity, RecipeMyListActivity::class.java)
+                .putExtra("userID", item.userID)
+        )
+    }
+
+    fun goFollowerList(item: UserDetail) {
+        startActivity(
+            Intent(this@HomeActivity, FollowListActivity::class.java)
+                .putExtra("MODE", FollowListActivity.FOLLOWER)
+                .putExtra("userID", item.userID)
+        )
+    }
+
+    fun goFollowingList(item: UserDetail) {
+        startActivity(
+            Intent(this@HomeActivity, FollowListActivity::class.java)
+                .putExtra("MODE", FollowListActivity.FOLLOWING)
+                .putExtra("userID", item.userID)
+        )
     }
 
     object UIMODE {

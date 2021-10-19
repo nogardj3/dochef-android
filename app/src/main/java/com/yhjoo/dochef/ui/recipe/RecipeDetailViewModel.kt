@@ -1,34 +1,35 @@
 package com.yhjoo.dochef.ui.recipe
 
-import android.app.Application
 import android.content.Intent
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
-import com.yhjoo.dochef.utils.DatastoreUtil
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class RecipeDetailViewModel(
-    private val application: Application,
-    intent: Intent,
     private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    intent: Intent
 ) : ViewModel() {
-    val activeUserId: String by lazy {
-        DatastoreUtil.getUserBrief(application.applicationContext).userID
-    }
+    val activeUserId = App.activeUserId
     private val recipeId: Int = intent.getIntExtra("recipeID", -1)
 
-    val isDeleted = MutableLiveData<Boolean>()
+    private val _recipeDetail = MutableLiveData<RecipeDetail>()
+    private val _allReviews = MutableLiveData<List<Review>>()
 
-    val recipeDetail = MutableLiveData<RecipeDetail>()
-    val allReviews = MutableLiveData<List<Review>>()
+    val recipeDetail: LiveData<RecipeDetail>
+        get() = _recipeDetail
+    val allReviews: LiveData<List<Review>>
+        get() = _allReviews
+
+    private var _eventResult = MutableSharedFlow<Pair<Any, String?>>()
+    val eventResult = _eventResult.asSharedFlow()
 
     init {
         requestRecipeDetail()
@@ -36,65 +37,57 @@ class RecipeDetailViewModel(
         addCount()
     }
 
-    private fun requestRecipeDetail() {
-        viewModelScope.launch {
-            recipeRepository.getRecipeDetail(recipeId).collect {
-                recipeDetail.value = it.body()
+    private fun requestRecipeDetail() = viewModelScope.launch {
+        recipeRepository.getRecipeDetail(recipeId).collect {
+            _recipeDetail.value = it.body()
+        }
+    }
+
+    private fun requestReviews() = viewModelScope.launch {
+        reviewRepository.getReviews(recipeId).collect {
+            _allReviews.value = it.body()
+        }
+    }
+
+    private fun addCount() = viewModelScope.launch {
+        recipeRepository.addCount(recipeId).collect {}
+    }
+
+    fun toggleLikeRecipe() = viewModelScope.launch {
+        if (_recipeDetail.value!!.likes.contains(activeUserId))
+            recipeRepository.dislikeRecipe(recipeId, activeUserId).collect {
+                requestRecipeDetail()
             }
-        }
-    }
-
-    private fun requestReviews() {
-        viewModelScope.launch {
-            reviewRepository.getReviews(recipeId).collect {
-                allReviews.value = it.body()
+        else
+            recipeRepository.likeRecipe(recipeId, activeUserId).collect {
+                requestRecipeDetail()
             }
+    }
+
+    fun deleteRecipe() = viewModelScope.launch {
+        recipeRepository.deleteRecipe(recipeId, activeUserId).collect {
+            if (it.isSuccessful)
+                _eventResult.emit(Pair(Events.IS_DELETED,""))
         }
     }
 
-    private fun addCount() {
-        viewModelScope.launch {
-            recipeRepository.addCount(recipeId).collect {}
-        }
-    }
-
-    fun toggleLikeRecipe(like: Int) {
-        viewModelScope.launch {
-            if (like == 1)
-                recipeRepository.likeRecipe(recipeId, activeUserId).collect {
-                    requestRecipeDetail()
-                }
-            else
-                recipeRepository.dislikeRecipe(recipeId, activeUserId).collect {
-                    requestRecipeDetail()
-                }
-        }
-    }
-
-    fun deleteRecipe() {
-        viewModelScope.launch {
-            recipeRepository.deleteRecipe(recipeId, activeUserId).collect {
-                if (it.isSuccessful)
-                    isDeleted.value = true
-            }
-        }
+    enum class Events {
+        IS_DELETED,
     }
 }
 
 class RecipeDetailViewModelFactory(
-    private val application: Application,
-    private val intent: Intent,
     private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val intent: Intent
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(RecipeDetailViewModel::class.java)) {
             return RecipeDetailViewModel(
-                application,
-                intent,
                 recipeRepository,
-                reviewRepository
+                reviewRepository,
+                intent
             ) as T
         }
         throw IllegalArgumentException("Unknown View Model class")

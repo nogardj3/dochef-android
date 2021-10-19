@@ -89,7 +89,7 @@ class UserRepository(
     suspend fun subscribeUser(userId: String, targetId: String): Flow<Response<JsonObject>> {
         return flow {
             if (App.isServerAlive) emit(userClient.subscribeUser(userId, targetId))
-            else{
+            else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
             }
@@ -100,7 +100,7 @@ class UserRepository(
     suspend fun unsubscribeUser(userId: String, targetId: String): Flow<Response<JsonObject>> {
         return flow {
             if (App.isServerAlive) emit(userClient.unsubscribeUser(userId, targetId))
-            else{
+            else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
             }

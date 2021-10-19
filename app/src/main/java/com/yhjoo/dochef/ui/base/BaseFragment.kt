@@ -4,13 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDialog
-import androidx.appcompat.widget.AppCompatEditText
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
@@ -18,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
 import com.yhjoo.dochef.R
-import io.reactivex.rxjava3.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -63,7 +58,7 @@ open class BaseFragment : Fragment() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun LifecycleOwner.eventOnLifecycle(block: suspend CoroutineScope.() -> Unit) {
+    fun LifecycleOwner.subscribeEventOnLifecycle(block: suspend CoroutineScope.() -> Unit) {
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED, block)
         }

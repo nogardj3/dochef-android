@@ -2,11 +2,13 @@ package com.yhjoo.dochef.ui
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.databinding.DataBindingUtil
 import com.github.florent37.viewanimator.ViewAnimator
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
+import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices.BasicService
 import com.yhjoo.dochef.databinding.SplashActivityBinding
@@ -14,6 +16,7 @@ import com.yhjoo.dochef.ui.account.AccountActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.main.MainActivity
 import com.yhjoo.dochef.utils.AuthUtil
+import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -21,9 +24,7 @@ import kotlinx.coroutines.launch
 
 class SplashActivity : BaseActivity() {
     private val binding: SplashActivityBinding by lazy {
-        SplashActivityBinding.inflate(
-            layoutInflater
-        )
+        DataBindingUtil.setContentView(this, R.layout.splash_activity)
     }
     private lateinit var firebaseAnalytics: FirebaseAnalytics
     private var serverAlive = false
@@ -61,8 +62,10 @@ class SplashActivity : BaseActivity() {
     private fun goWhere() {
         OtherUtil.log(serverAlive.toString() + "", isLogin.toString() + "")
         if (serverAlive) {
-            if (isLogin)
+            if (isLogin){
                 startMain()
+                App.activeUserId = DatastoreUtil.getUserBrief(this).userID
+            }
             else
                 startAccount()
         } else {

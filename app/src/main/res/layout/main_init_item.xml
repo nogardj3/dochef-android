@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="fragment"
+            type="com.yhjoo.dochef.ui.main.InitFragment" />
+
+        <variable
+            name="recipe"
+            type="com.yhjoo.dochef.data.model.Recipe" />
+    </data>
+
     <androidx.cardview.widget.CardView
         android:layout_width="210dp"
         android:layout_height="wrap_content"
@@ -11,6 +22,7 @@
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="2dp"
         android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> fragment.goRecipeDetail(recipe)}"
         app:cardCornerRadius="5dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -23,6 +35,7 @@
                 android:layout_height="140dp"
                 android:scaleType="fitXY"
                 app:layout_constraintTop_toTopOf="parent"
+                app:recipeimage="@{recipe.recipeImg}"
                 tools:src="@raw/dummy_recipe_1" />
 
             <View
@@ -36,6 +49,7 @@
                 android:id="@+id/recipehorizontal_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="@{recipe.recipeName}"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toTopOf="@+id/recipehorizontal_rating_img"
@@ -60,6 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
+                android:text="@{String.format(`%.1f`,recipe.rating)}"
                 android:textColor="@color/white"
 
                 android:textSize="12sp"
@@ -68,6 +83,7 @@
                 app:layout_constraintRight_toLeftOf="@+id/recipehorizontal_view_img"
                 app:layout_constraintTop_toTopOf="@+id/recipehorizontal_rating_img"
                 tools:text="4.5" />
+
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/recipehorizontal_view_img"
@@ -86,6 +102,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
+                android:text="@{``+recipe.viewCount}"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/recipehorizontal_rating_img"

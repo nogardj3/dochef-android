@@ -3,6 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="activity"
+            type="com.yhjoo.dochef.ui.recipe.RecipeDetailActivity" />
+
+        <variable
+            name="review"
+            type="com.yhjoo.dochef.data.model.Review" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,6 +32,7 @@
             android:background="@drawable/bg_round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            userimage="@{review.userImg}"
             app:srcCompat="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -31,6 +43,7 @@
             android:maxEms="5"
             android:maxLines="1"
             android:textSize="12dp"
+            android:text="@{review.nickname}"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
             app:layout_constraintLeft_toRightOf="@+id/review_userimg"
@@ -41,6 +54,7 @@
             android:id="@+id/review_user_wrapper"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:onClick="@{()-> activity.goHome(review.userID)}"
             android:foreground="?selectableItemBackground"
             app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
@@ -54,6 +68,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:textSize="12dp"
+            android:text="@{review.dateTime}"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1일 전" />
@@ -66,6 +81,7 @@
             android:layout_marginTop="10dp"
             android:isIndicator="true"
             android:numStars="5"
+            android:rating="@{(float)review.rating}"
             android:theme="@style/BaseTheme.RatingBar"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
             app:layout_constraintTop_toBottomOf="@+id/review_userimg" />
@@ -77,6 +93,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="4dp"
             android:textSize="12dp"
+            android:text="@{review.contents}"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
             app:layout_constraintTop_toBottomOf="@+id/review_rating"
             tools:text="내용" />

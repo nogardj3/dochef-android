@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.home
+package com.yhjoo.dochef.ui.main
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,35 +9,31 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.databinding.HomeRecipelistItemBinding
+import com.yhjoo.dochef.databinding.MainRecipesItemBinding
 
-class RecipeListAdapter(private val containerActivity: HomeActivity) :
-    ListAdapter<Recipe, RecipeListAdapter.HomeRecipeViewHolder>(RecipeListComparator()) {
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecipeListAdapter.HomeRecipeViewHolder {
-        return HomeRecipeViewHolder(
+class RecipesListAdapter(private val containerFragment: RecipesFragment) :
+    ListAdapter<Recipe, RecipesListAdapter.RecipesListViewHolder>(RecipeListComparator()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipesListViewHolder {
+        return RecipesListViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.home_recipelist_item,
+                R.layout.main_recipes_item,
                 parent,
                 false
             )
         )
     }
 
-    override fun onBindViewHolder(holder: RecipeListAdapter.HomeRecipeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecipesListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class HomeRecipeViewHolder(val binding: HomeRecipelistItemBinding) :
+    inner class RecipesListViewHolder(val binding: MainRecipesItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe) {
             binding.apply {
                 activeUserId = App.activeUserId
-                activity = containerActivity
-                adapter = this@RecipeListAdapter
+                fragment = containerFragment
                 recipe = item
             }
         }

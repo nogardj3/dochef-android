@@ -3,6 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.ui.recipe.play.RecipePlayViewModel" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,7 +20,8 @@
             android:layout_height="match_parent"
             android:foreground="@drawable/bg_translucent"
             android:scaleType="centerCrop"
-            tools:src="@raw/tempimg_playrecipestart" />
+            recipeimage="@{viewModel.recipeDetail.recipeImg}"
+            tools:src="@raw/playrecipe_start" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipeplay_start_title"
@@ -22,6 +30,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="120dp"
             android:textColor="@color/white"
+            android:text="@{viewModel.recipeDetail.recipeName}"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -45,6 +54,7 @@
             android:layout_marginEnd="8dp"
             android:gravity="left"
             android:maxLines="4"
+            android:text="@{viewModel.recipeDetail.contents}"
             android:textColor="@color/white"
             app:layout_constraintLeft_toLeftOf="@+id/recipeplay_start_title"
             app:layout_constraintRight_toRightOf="parent"

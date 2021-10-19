@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSignupFragmentBinding
@@ -19,11 +18,14 @@ import com.yhjoo.dochef.utils.ValidateUtil
 import kotlinx.coroutines.flow.collect
 
 class AccountSignUpFragment : BaseFragment() {
+    // TODO
+    // BindingAdapter onEditorActionListener
+
     private lateinit var binding: AccountSignupFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
-            requireActivity().application,
-            AccountRepository(requireContext().applicationContext)
+            AccountRepository(requireContext().applicationContext),
+            requireActivity().application
         )
     }
 
@@ -39,22 +41,11 @@ class AccountSignUpFragment : BaseFragment() {
             lifecycleOwner = viewLifecycleOwner
             viewModel = accountViewModel
 
-            signupEmailEdittext.apply {
-                textChanged {
-                    signupEmailLayout.error = null
-                }
-                setOnEditorActionListener(emailListener)
-            }
-
-            signupPasswordEdittext.apply {
-                textChanged {
-                    signupPasswordLayout.error = null
-                }
-                setOnEditorActionListener(pwListener)
-            }
+            signupEmailEdittext.setOnEditorActionListener(emailListener)
+            signupPasswordEdittext.setOnEditorActionListener(pwListener)
         }
 
-        eventOnLifecycle {
+        subscribeEventOnLifecycle {
             accountViewModel.eventResult.collect {
                 when (it.first) {
                     AccountViewModel.Events.SignUpEmail.ERROR_EMAIL -> {

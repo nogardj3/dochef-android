@@ -28,9 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:clipToPadding="false"
+            android:orientation="vertical"
             android:paddingStart="5dp"
             android:paddingTop="10dp"
             android:paddingEnd="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/recipelist_toolbar"
             tools:listitem="@layout/recipemylist_item" />
@@ -39,11 +41,11 @@
             android:id="@+id/recipemylist_empty"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recipelist_toolbar"
             android:gravity="center"
+            android:text="레시피가 없습니다."
             android:visibility="gone"
-            android:text="레시피가 없습니다."/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recipelist_toolbar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

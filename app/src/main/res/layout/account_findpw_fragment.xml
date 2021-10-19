@@ -49,6 +49,7 @@
                 android:layout_height="wrap_content"
                 android:hint="Email"
                 android:imeOptions="actionDone"
+                android:onTextChanged="@{(text, start, before, count)-> accountFindpwEmailLayout.setError(``)}"
                 android:inputType="textEmailAddress|textNoSuggestions"
                 android:maxLines="1" />
 
@@ -63,7 +64,7 @@
             android:text="비밀번호 찾기"
             android:textColor="@color/white"
             android:textSize="16sp"
-            android:onClick="@{() -> viewModel.clickFindPw(accountFindpwEdittext.text.toString())"
+            android:onClick="@{() -> viewModel.clickFindPw(accountFindpwEdittext)"
             app:backgroundTint="@color/colorPrimary"
             app:layout_constraintDimensionRatio="w,1:4.15"
             app:layout_constraintLeft_toLeftOf="@+id/account_findpw_email_layout"

@@ -5,13 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingTosFragmentBinding
+import com.yhjoo.dochef.ui.base.BaseFragment
 
-class TosFragment : Fragment() {
+class TosFragment : BaseFragment() {
     private lateinit var binding: SettingTosFragmentBinding
     private val settingViewModel: SettingViewModel by activityViewModels {
         SettingViewModelFactory(
@@ -28,12 +28,7 @@ class TosFragment : Fragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-
-            settingViewModel.tosText.observe(viewLifecycleOwner, {
-                binding.tosText.text = it
-            })
-
-            settingViewModel.requestTosText()
+            viewModel = settingViewModel
         }
 
         return binding.root

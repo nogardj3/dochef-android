@@ -5,9 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
@@ -15,26 +13,26 @@ import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter
-import com.yhjoo.dochef.ui.common.adapter.RecipeListVerticalAdapter.Companion.LayoutType.MAIN_MYRECIPE
+import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
-class MyRecipeFragment : Fragment(), OnRefreshListener {
+class MyRecipeFragment : BaseFragment(), OnRefreshListener {
+    // TODO
+    // RecyclerView listitem Databinding
+    // swipe refresh
+
     private lateinit var binding: MainMyrecipeFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels(){
+    private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
-            requireActivity().application,
             UserRepository(requireContext().applicationContext),
             RecipeRepository(requireContext().applicationContext),
             PostRepository(requireContext().applicationContext)
         )
     }
 
-    private lateinit var recipeListVerticalAdapter: RecipeListVerticalAdapter
-
-    private lateinit var recommendTags: Array<String>
+    private lateinit var myRecipeListAdapter: MyRecipeListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,28 +55,17 @@ class MyRecipeFragment : Fragment(), OnRefreshListener {
                 )
             }
 
-            recipeListVerticalAdapter = RecipeListVerticalAdapter(
-                MAIN_MYRECIPE,
-                mainViewModel.userId,
-                { goRecipeDetail(it) },
-                null
-            )
-
-            myrecipeRecycler.apply {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = recipeListVerticalAdapter
-            }
-
-            mainViewModel.allMyrecipeList.observe(viewLifecycleOwner, {
-                myrecipeEmpty.isVisible = it.isEmpty()
-                recipeListVerticalAdapter.submitList(it) {
-                    binding.myrecipeRecycler.scrollToPosition(0)
-                }
-                binding.myrecipeSwipe.isRefreshing = false
-            })
-
-            recommendTags = resources.getStringArray(R.array.recommend_tags)
+            myRecipeListAdapter = MyRecipeListAdapter(this@MyRecipeFragment)
+            myrecipeRecycler.adapter = myRecipeListAdapter
         }
+
+        mainViewModel.allMyrecipeList.observe(viewLifecycleOwner, {
+            binding.myrecipeEmpty.isVisible = it.isEmpty()
+            myRecipeListAdapter.submitList(it) {
+                binding.myrecipeRecycler.scrollToPosition(0)
+            }
+            binding.myrecipeSwipe.isRefreshing = false
+        })
 
         return binding.root
     }
@@ -88,7 +75,7 @@ class MyRecipeFragment : Fragment(), OnRefreshListener {
         mainViewModel.refreshMyrecipesList()
     }
 
-    private fun goRecipeDetail(item: Recipe) {
+    fun goRecipeDetail(item: Recipe) {
         startActivity(
             Intent(requireContext(), RecipeDetailActivity::class.java)
                 .putExtra("recipeID", item.recipeID)

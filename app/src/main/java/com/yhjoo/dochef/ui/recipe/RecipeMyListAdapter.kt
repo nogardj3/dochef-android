@@ -1,4 +1,4 @@
-package com.yhjoo.dochef.ui.home
+package com.yhjoo.dochef.ui.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,46 +9,44 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.databinding.HomeRecipelistItemBinding
+import com.yhjoo.dochef.databinding.RecipemylistItemBinding
 
-class RecipeListAdapter(private val containerActivity: HomeActivity) :
-    ListAdapter<Recipe, RecipeListAdapter.HomeRecipeViewHolder>(RecipeListComparator()) {
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): RecipeListAdapter.HomeRecipeViewHolder {
-        return HomeRecipeViewHolder(
+class RecipeMyListAdapter(
+    private val containerActivity: RecipeMyListActivity
+) :
+    ListAdapter<Recipe, RecipeMyListAdapter.RecipeMyListViewHolder>(RecipeMyListComparator()) {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeMyListViewHolder {
+        return RecipeMyListViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
-                R.layout.home_recipelist_item,
+                R.layout.recipemylist_item,
                 parent,
                 false
             )
         )
     }
 
-    override fun onBindViewHolder(holder: RecipeListAdapter.HomeRecipeViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecipeMyListViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
-    inner class HomeRecipeViewHolder(val binding: HomeRecipelistItemBinding) :
+    inner class RecipeMyListViewHolder(val binding: RecipemylistItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Recipe) {
             binding.apply {
-                activeUserId = App.activeUserId
                 activity = containerActivity
-                adapter = this@RecipeListAdapter
                 recipe = item
+                activeUserId = App.activeUserId
             }
         }
     }
 
-    class RecipeListComparator : DiffUtil.ItemCallback<Recipe>() {
+    class RecipeMyListComparator : DiffUtil.ItemCallback<Recipe>() {
         override fun areItemsTheSame(
             oldItem: Recipe,
             newItem: Recipe
         ): Boolean {
-            return oldItem.recipeID == newItem.recipeID
+            return oldItem.userID == newItem.userID
         }
 
         override fun areContentsTheSame(

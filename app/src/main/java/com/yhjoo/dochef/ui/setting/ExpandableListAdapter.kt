@@ -1,9 +1,7 @@
 package com.yhjoo.dochef.ui.setting
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -11,17 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.ExpandableItem
 import com.yhjoo.dochef.databinding.ExpandableItemBinding
-import com.yhjoo.dochef.utils.OtherUtil
 
 class ExpandableListAdapter(
     private val showDate: Boolean
 ) :
     ListAdapter<ExpandableItem, ExpandableListAdapter.ExpandableViewHolder>(ExpandableListComparator()) {
-    lateinit var context: Context
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExpandableViewHolder {
-        context = parent.context
-
         return ExpandableViewHolder(
             DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
@@ -38,19 +31,15 @@ class ExpandableListAdapter(
 
     inner class ExpandableViewHolder(val binding: ExpandableItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(expandableItem: ExpandableItem) {
+        fun bind(item: ExpandableItem) {
             binding.apply {
+                dateShow = showDate
+                expandableItem = item
+
                 root.setOnClickListener {
-                    expandableItem.expanded = !expandableItem.expanded
+                    item.expanded = !item.expanded
                     notifyDataSetChanged()
                 }
-
-                expTitleTitle.text = expandableItem.title
-
-                expandableContents.isVisible = expandableItem.expanded
-                expContentsContents.text = expandableItem.contents
-                expContentsDate.isVisible = showDate
-                expContentsDate.text = OtherUtil.millisToText(expandableItem.dateTime)
             }
         }
     }

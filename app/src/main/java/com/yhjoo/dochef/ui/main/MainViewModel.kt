@@ -1,7 +1,7 @@
 package com.yhjoo.dochef.ui.main
 
-import android.app.Application
 import androidx.lifecycle.*
+import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
@@ -9,19 +9,15 @@ import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
-import com.yhjoo.dochef.utils.DatastoreUtil
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 class MainViewModel(
-    private val application: Application,
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val postRepository: PostRepository
 ) : ViewModel() {
-    val userId by lazy {
-        DatastoreUtil.getUserBrief(application.applicationContext).userID
-    }
+    var activeUserId = App.activeUserId
 
     private var recipesSort = Constants.RECIPE.SORT.LATEST
 
@@ -55,58 +51,49 @@ class MainViewModel(
         refreshRecipesList()
     }
 
-    private fun requestRecommendList() {
-        viewModelScope.launch {
-            recipeRepository.getRecipeList(
-                Constants.RECIPE.SEARCHBY.ALL,
-                Constants.RECIPE.SORT.POPULAR, null
-            ).collect {
-                _allRecommendList.value = it.body()
-            }
+    private fun requestRecommendList() = viewModelScope.launch {
+        recipeRepository.getRecipeList(
+            Constants.RECIPE.SEARCHBY.ALL,
+            Constants.RECIPE.SORT.POPULAR, null
+        ).collect {
+            _allRecommendList.value = it.body()
         }
     }
 
-    fun refreshRecipesList() {
-        viewModelScope.launch {
-            recipeRepository.getRecipeList(
-                Constants.RECIPE.SEARCHBY.ALL,
-                recipesSort, null
-            ).collect {
-                _allRecipesList.value = it.body()
-            }
+
+    fun refreshRecipesList() = viewModelScope.launch {
+        recipeRepository.getRecipeList(
+            Constants.RECIPE.SEARCHBY.ALL,
+            recipesSort, null
+        ).collect {
+            _allRecipesList.value = it.body()
         }
     }
 
-    fun refreshMyrecipesList() {
-        viewModelScope.launch {
-            recipeRepository.getRecipeList(
-                Constants.RECIPE.SEARCHBY.USERID,
-                recipesSort, userId
-            ).collect {
-                _allMyrecipeList.value = it.body()
-            }
+
+    fun refreshMyrecipesList() = viewModelScope.launch {
+        recipeRepository.getRecipeList(
+            Constants.RECIPE.SEARCHBY.USERID,
+            recipesSort, activeUserId
+        ).collect {
+            _allMyrecipeList.value = it.body()
         }
     }
 
-    fun requestPostList() {
-        viewModelScope.launch {
-            postRepository.getPostList().collect {
-                _allTimelines.value = it.body()
-            }
+    fun requestPostList() = viewModelScope.launch {
+        postRepository.getPostList().collect {
+            _allTimelines.value = it.body()
         }
     }
 
-    private fun requestActiveUserDetail() {
-        viewModelScope.launch {
-            userRepository.getUserDetail(userId).collect {
-                _userDetail.value = it.body()
-            }
+    private fun requestActiveUserDetail() = viewModelScope.launch {
+        userRepository.getUserDetail(activeUserId).collect {
+            _userDetail.value = it.body()
         }
     }
 }
 
 class MainViewModelFactory(
-    private val application: Application,
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val postRepository: PostRepository
@@ -114,7 +101,7 @@ class MainViewModelFactory(
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(application, userRepository, recipeRepository, postRepository) as T
+            return MainViewModel(userRepository, recipeRepository, postRepository) as T
         }
         throw IllegalArgumentException("Unknown View Model class")
     }

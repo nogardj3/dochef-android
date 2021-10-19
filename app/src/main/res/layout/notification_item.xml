@@ -3,9 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+        <variable
+            name="viewModel"
+            type="com.yhjoo.dochef.ui.notification.NotificationViewModel" />
+
+        <variable
+            name="notification"
+            type="com.yhjoo.dochef.data.entity.NotificationEntity" />
+    </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:onClick="@{()-> viewModel.setRead(notification)}"
+        android:background="@{notification.isRead == 0 ? @color/white : @color/grey}"
         android:foreground="?attr/selectableItemBackground">
 
         <androidx.appcompat.widget.AppCompatImageView
@@ -16,6 +28,7 @@
             android:background="@drawable/bg_round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            userimage="@{notification.img}"
             app:srcCompat="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -25,6 +38,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:maxLines="2"
+            android:text="@{notification.contents}"
             app:layout_constraintLeft_toRightOf="@+id/notification_userimg"
             app:layout_constraintRight_toLeftOf="@+id/notification_date"
             app:layout_constraintTop_toTopOf="@+id/notification_userimg"
@@ -35,6 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:text="@{notification.dateTime}"
             app:layout_constraintBottom_toBottomOf="@+id/notification_userimg"
             app:layout_constraintLeft_toRightOf="@+id/notification_contents"
             app:layout_constraintRight_toRightOf="parent"

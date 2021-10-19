@@ -10,31 +10,26 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.afollestad.materialdialogs.utils.MDUtil.textChanged
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSigninFragmentBinding
-import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
 import kotlinx.coroutines.flow.collect
 
 class AccountSignInFragment : BaseFragment() {
     // TODO
+    // BindingAdapter onEditorActionListener
     // GoogleSignin + Viewmodel
 
     private lateinit var binding: AccountSigninFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(
-            requireActivity().application,
-            AccountRepository(requireContext().applicationContext)
+            AccountRepository(requireContext().applicationContext),
+            requireActivity().application
         )
-    }
-
-    enum class Navigate {
-        FINDPW, SIGNUP, SIGNUPNICK
     }
 
     override fun onCreateView(
@@ -48,37 +43,13 @@ class AccountSignInFragment : BaseFragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
             viewModel = accountViewModel
+            fragment = this@AccountSignInFragment
 
-            signinEmailEdittext.apply {
-                textChanged {
-                    signinEmailLayout.error = null
-                }
-                setOnEditorActionListener(emailListener)
-            }
-            signinPasswordEdittext.apply {
-                textChanged {
-                    signinPasswordEdittext.error = null
-                }
-                setOnEditorActionListener(pwListener)
-            }
-
-            signinGoogle.setOnClickListener {
-                startActivityForResult(
-                    accountViewModel.googleSigninIntent,
-                    Constants.GOOGLE_SIGNIN_CODE
-                )
-            }
-
-            signinSignupBtn.setOnClickListener {
-                navigateFragment(Navigate.SIGNUP)
-            }
-
-            signinFindpwBtn.setOnClickListener {
-                navigateFragment(Navigate.FINDPW)
-            }
+            signinEmailEdittext.setOnEditorActionListener(emailListener)
+            signinPasswordEdittext.setOnEditorActionListener(pwListener)
         }
 
-        eventOnLifecycle {
+        subscribeEventOnLifecycle {
             accountViewModel.eventResult.collect {
                 when (it.first) {
                     AccountViewModel.Events.SignInEmail.ERROR_EMAIL -> {
@@ -135,7 +106,14 @@ class AccountSignInFragment : BaseFragment() {
         }
     }
 
-    private fun navigateFragment(target: Navigate) {
+    fun startGoogleSignIn(){
+        startActivityForResult(
+            accountViewModel.googleSigninIntent,
+            Constants.GOOGLE_SIGNIN_CODE
+        )
+    }
+
+    fun navigateFragment(target: Navigate) {
         val targetFragment = when (target) {
             Navigate.FINDPW -> R.id.action_accountSignInFragment_to_accountFindPWFragment
             Navigate.SIGNUP -> R.id.action_accountSignInFragment_to_accountSignUpFragment
@@ -143,6 +121,11 @@ class AccountSignInFragment : BaseFragment() {
         }
 
         findNavController().navigate(targetFragment)
+    }
+
+
+    enum class Navigate {
+        FINDPW, SIGNUP, SIGNUPNICK
     }
 
     private val emailListener: TextView.OnEditorActionListener =
@@ -154,7 +137,7 @@ class AccountSignInFragment : BaseFragment() {
 
                 if (validateResult.first == ValidateUtil.EmailResult.VALID) {
                     binding.signinEmailLayout.error = null
-                    (requireActivity() as BaseActivity).hideKeyboard(binding.signinEmailLayout)
+                    hideKeyboard(requireContext(), binding.signinEmailLayout)
                 } else
                     binding.signinEmailLayout.error = validateResult.second
                 true
@@ -170,10 +153,9 @@ class AccountSignInFragment : BaseFragment() {
 
                 if (validateResult.first == ValidateUtil.PwResult.VALID) {
                     binding.signinPasswordLayout.error = null
-                    (requireActivity() as BaseActivity).hideKeyboard(binding.signinPasswordLayout)
-                } else {
+                    hideKeyboard(requireContext(), binding.signinPasswordLayout)
+                } else
                     binding.signinPasswordLayout.error = validateResult.second
-                }
                 true
             } else
                 false
