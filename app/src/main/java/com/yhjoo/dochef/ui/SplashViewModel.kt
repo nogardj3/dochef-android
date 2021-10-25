@@ -11,7 +11,6 @@ import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
-import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

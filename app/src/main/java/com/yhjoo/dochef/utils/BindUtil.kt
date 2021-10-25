@@ -12,7 +12,6 @@ import com.yhjoo.dochef.GlideApp
 import com.yhjoo.dochef.R
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.floor
 
 object BindUtil {
     fun loadUserImage(

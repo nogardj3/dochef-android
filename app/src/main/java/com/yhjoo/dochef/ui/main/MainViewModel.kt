@@ -9,7 +9,6 @@ import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
-import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -57,14 +56,12 @@ class MainViewModel(
             Constants.RECIPE.SEARCHBY.ALL,
             Constants.RECIPE.SORT.POPULAR, null
         ).collect {
-            OtherUtil.log("ejejejje")
             _allRecommendList.postValue(it.body())
         }
     }
 
     private suspend fun requestActiveUserDetail() = withContext(Dispatchers.IO) {
         userRepository.getUserDetail(activeUserId).collect {
-            OtherUtil.log("ejejejje")
             _userDetail.postValue(it.body())
         }
     }
@@ -76,7 +73,6 @@ class MainViewModel(
 
     fun refreshRecipesList() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            OtherUtil.log("ejejejje")
             recipeRepository.getRecipeList(
                 Constants.RECIPE.SEARCHBY.ALL,
                 recipesSort, null
@@ -88,7 +84,6 @@ class MainViewModel(
 
     fun refreshMyrecipesList() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            OtherUtil.log("ejejejje")
             recipeRepository.getRecipeList(
                 Constants.RECIPE.SEARCHBY.USERID,
                 recipesSort, activeUserId
@@ -100,7 +95,6 @@ class MainViewModel(
 
     fun refreshPostList() = viewModelScope.launch {
         withContext(Dispatchers.IO) {
-            OtherUtil.log("ejejejje")
             postRepository.getPostList().collect {
                 _allTimelines.postValue(it.body())
             }

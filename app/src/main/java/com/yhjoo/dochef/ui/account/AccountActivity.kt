@@ -6,7 +6,6 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.NavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import com.google.firebase.auth.*
 import com.yhjoo.dochef.R
@@ -28,8 +27,8 @@ class AccountActivity : BaseActivity() {
         )
     }
 
-    lateinit var  navHostFragment : NavHostFragment
-    lateinit var navController: NavController
+    private lateinit var navHostFragment: NavHostFragment
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

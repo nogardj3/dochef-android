@@ -16,6 +16,7 @@ import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import com.yhjoo.dochef.utils.OtherUtil
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
@@ -98,8 +99,11 @@ class HomeViewModel(
             bio
         )
             .collect {
-                _eventResult.emit(Pair(Events.UPDATE_COMPLETE, null))
-                requestActiveUserDetail()
+                if (it.code() == 200) {
+                    _eventResult.emit(Pair(Events.UPDATE_COMPLETE, null))
+                    requestActiveUserDetail()
+                } else
+                    OtherUtil.log(it.code().toString())
             }
     }
 
@@ -109,8 +113,9 @@ class HomeViewModel(
 
     fun checkNickname(nickname: String) = viewModelScope.launch {
         accountRepository.checkNickname(nickname).collect {
-            val event = if (it.isSuccessful) Events.NICKNAME_VALID else Events.NICKNAME_INVALID
-
+            val event = if (it.code() == 200)
+                Events.NICKNAME_VALID
+            else Events.NICKNAME_INVALID
             _eventResult.emit(Pair(event, nickname))
         }
     }

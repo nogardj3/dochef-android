@@ -19,7 +19,6 @@ import com.yhjoo.dochef.databinding.MainInitFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeRecommendActivity
-import com.yhjoo.dochef.utils.OtherUtil
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit

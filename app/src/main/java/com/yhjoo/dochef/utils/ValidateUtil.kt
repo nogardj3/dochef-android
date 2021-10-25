@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.utils
 
 import android.util.Patterns
-import java.util.*
 import java.util.regex.Pattern
 
 object ValidateUtil {
@@ -97,12 +96,5 @@ object ValidateUtil {
                     null
                 )
         }
-    }
-
-    fun checkNew(millis: Long): Boolean {
-        val currentMillis = Date().time
-        val secDiff = (currentMillis - millis) / 1000
-
-        return secDiff / 60 / 60 / 24 < 3
     }
 }

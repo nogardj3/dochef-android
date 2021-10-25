@@ -9,15 +9,8 @@ import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.ExpandableItem
 import com.yhjoo.dochef.data.network.RetrofitBuilder
 import com.yhjoo.dochef.data.network.RetrofitServices
-import com.yhjoo.dochef.utils.OtherUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
-import okhttp3.ResponseBody
-import okhttp3.ResponseBody.Companion.toResponseBody
 import retrofit2.Response
 import java.util.*
 
@@ -73,12 +66,11 @@ class BasicRepository(
         return flow {
             if (App.isServerAlive) emit(basicClient.getTOS())
             else {
-                val jsonObject = JsonObject().apply {
-                    addProperty("message", "이용약관")
-                }
                 emit(
                     Response.success(
-                        jsonObject
+                        JsonObject().apply {
+                            addProperty("message", "이용약관")
+                        }
                     )
                 )
             }
