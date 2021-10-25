@@ -211,11 +211,10 @@ object DataGenerator {
                         profileImgs[r.nextInt(profileImgs.size)].toString(),
                         recipeImgs[r.nextInt(recipeImgs.size)].toString(),
                         "내용 $i",
-                        System.currentTimeMillis() - 1000 * 1000 * i,
+                        System.currentTimeMillis() - 1000 * 1000 * 20 * i,
                         i.toString() + "분",
                         i,
-                        r.nextInt(6)
-                            .toFloat(),
+                        r.nextInt(51) * 0.1f,
                         ingredients,
                         tags
                     )
@@ -416,7 +415,7 @@ object DataGenerator {
                         Review(
                             i, i, "userID",
                             "유저 $i", profileImgs[r.nextInt(profileImgs.size)].toString(),
-                            "내용 $i", r.nextInt(6).toLong(),
+                            "내용 $i", r.nextInt(51) * 0.1f,
                             System.currentTimeMillis() - 1000 * 1000 * i
                         )
                     )

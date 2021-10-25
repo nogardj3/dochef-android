@@ -23,7 +23,7 @@ class RecipeRepository(
         RetrofitBuilder.create(context, RetrofitServices.RecipeService::class.java)
 
     @WorkerThread
-    suspend fun getRecipeDetail(recipeId: Int): Flow<Response<RecipeDetail>> {
+    suspend fun getRecipeDetail(recipeId: Int): Flow<Response<RecipeDetail?>> {
         return flow {
             if (App.isServerAlive) emit(recipeClient.getRecipeDetail(recipeId))
             else
@@ -43,7 +43,7 @@ class RecipeRepository(
         searchby: Int,
         sort: String,
         searchValue: String?
-    ): Flow<Response<ArrayList<Recipe>>> {
+    ): Flow<Response<ArrayList<Recipe>?>> {
         return flow {
             if (App.isServerAlive) {
                 when (searchby) {
@@ -85,7 +85,7 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun likeRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject>> {
+    suspend fun likeRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
                 emit(recipeClient.setLikeRecipe(recipeId, userId, 1))
@@ -97,7 +97,7 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun dislikeRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject>> {
+    suspend fun dislikeRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
                 emit(recipeClient.setLikeRecipe(recipeId, userId, -1))
@@ -109,7 +109,7 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun deleteRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject>> {
+    suspend fun deleteRecipe(recipeId: Int, userId: String): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
                 emit(recipeClient.deleteRecipe(recipeId, userId))
@@ -121,7 +121,7 @@ class RecipeRepository(
     }
 
     @WorkerThread
-    suspend fun addCount(recipeId: Int): Flow<Response<JsonObject>> {
+    suspend fun addCount(recipeId: Int): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(recipeClient.addCount(recipeId))
             else {

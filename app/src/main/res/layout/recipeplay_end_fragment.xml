@@ -196,7 +196,7 @@
                     android:paddingHorizontal="20dp"
                     android:paddingVertical="5dp"
                     android:text="입력"
-                    android:onClick="@{()-> viewModel.createReview(recipeplayEndReviewEdittext.getText().toString(), (long) recipeplayEndRating.getRating())}"
+                    android:onClick="@{()-> viewModel.createReview(recipeplayEndReviewEdittext.getText().toString(), (float) recipeplayEndRating.getRating())}"
                     android:textColor="@color/white"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_constraintBottom_toBottomOf="@+id/recipeplay_end_review_edittext"

@@ -20,7 +20,7 @@ class AccountRepository(
         RetrofitBuilder.create(context, RetrofitServices.AccountService::class.java)
 
     @WorkerThread
-    suspend fun checkNickname(nickname: String): Flow<Response<JsonObject>> {
+    suspend fun checkNickname(nickname: String): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(accountClient.checkNickname(nickname))
             else emit(Response.success(JsonObject()))
@@ -33,7 +33,7 @@ class AccountRepository(
         fcmtoken: String,
         uid: String,
         nickname: String
-    ): Flow<Response<UserBrief>> {
+    ): Flow<Response<UserBrief?>> {
         return flow {
             if (App.isServerAlive)
                 emit(accountClient.createUser(token, fcmtoken, uid, nickname))
@@ -55,7 +55,7 @@ class AccountRepository(
         userImg: String,
         nickname: String,
         bio: String
-    ): Flow<Response<JsonObject>> {
+    ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
                 emit(accountClient.updateUser(userID, userImg, nickname, bio))
@@ -69,7 +69,7 @@ class AccountRepository(
         token: String,
         uid: String,
         fcmtoken: String
-    ): Flow<Response<UserBrief>> {
+    ): Flow<Response<UserBrief?>> {
         return flow {
             if (App.isServerAlive)
                 emit(accountClient.checkUser(token, uid, fcmtoken))

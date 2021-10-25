@@ -103,6 +103,10 @@ class HomeViewModel(
             }
     }
 
+    fun subscribeUser() = viewModelScope.launch {
+
+    }
+
     fun checkNickname(nickname: String) = viewModelScope.launch {
         accountRepository.checkNickname(nickname).collect {
             val event = if (it.isSuccessful) Events.NICKNAME_VALID else Events.NICKNAME_INVALID

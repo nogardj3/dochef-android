@@ -73,7 +73,7 @@ class TimelineFragment : BaseFragment(), OnRefreshListener {
 
     override fun onRefresh() {
         binding.timelineSwipe.isRefreshing = true
-        mainViewModel.requestPostList()
+        mainViewModel.refreshPostList()
     }
 
     fun goHome(post: Post) {

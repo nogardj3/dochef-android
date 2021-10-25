@@ -133,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                android:text="@{String.format(`%.1f`,recipe.rating)}"
+                floatText="@{recipe.rating}"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/recipemylist_viewimg"
                 app:layout_constraintRight_toLeftOf="@+id/recipemylist_viewimg"

@@ -65,10 +65,12 @@ class PostWriteActivity : BaseActivity() {
             viewModel = postWriteViewModel
             activity = this@PostWriteActivity
 
+            OtherUtil.log(postWriteViewModel.currentMode.toString())
+
             if (postWriteViewModel.currentMode == UIMODE.REVISE) {
                 binding.apply {
                     postwriteToolbar.title = "수정"
-                    postwriteTags.setTags(postWriteViewModel.postInfo.tags.toTypedArray())
+                    postwriteTags.setTags(postWriteViewModel.postInfo!!.tags.toTypedArray())
                 }
             }
 

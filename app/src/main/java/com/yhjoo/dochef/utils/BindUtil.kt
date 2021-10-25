@@ -3,6 +3,7 @@ package com.yhjoo.dochef.utils
 import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.BindingConversion
 import com.google.firebase.storage.FirebaseStorage
@@ -11,21 +12,27 @@ import com.yhjoo.dochef.GlideApp
 import com.yhjoo.dochef.R
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.floor
 
 object BindUtil {
     fun loadUserImage(
         filename: String,
         view: AppCompatImageView
     ) {
-        val profileSrc = FirebaseStorage.getInstance().reference
-            .child(view.context.getString(R.string.storage_path_profile) + filename)
 
-        GlideApp.with(view.context)
-            .load(if (App.isServerAlive) profileSrc else Integer.valueOf(filename))
-            .error(R.drawable.ic_profile_black)
-            .circleCrop()
-            .into(view)
+        if(filename.isNotEmpty()){
+            val profileSrc = FirebaseStorage.getInstance().reference
+                .child(view.context.getString(R.string.storage_path_profile) + filename)
+
+            GlideApp.with(view.context)
+                .load(if (App.isServerAlive) profileSrc else Integer.valueOf(filename))
+                .error(R.drawable.ic_profile_black)
+                .circleCrop()
+                .into(view)
+
+        }
     }
+
 
     @BindingConversion
     @JvmStatic
@@ -51,19 +58,29 @@ object BindUtil {
         return if (visible) View.VISIBLE else View.GONE
     }
 
+    @BindingAdapter("floatText")
+    @JvmStatic
+    fun floatToText(
+        view: AppCompatTextView,
+        float: Float
+    ){
+        view.text = String.format("%.1f",float)
+    }
+
+
     @BindingAdapter("visibleNew")
     @JvmStatic
     fun visibleNew(
         view: View,
         millis: Long,
-    ) : Int {
+    ) {
         val currentMillis = Date().time
         val secDiff = (currentMillis - millis) / 1000
 
         return if(secDiff / 60 / 60 / 24 < 3)
-            View.VISIBLE
+            view.visibility = View.VISIBLE
         else
-            View.GONE
+            view.visibility = View.GONE
     }
 
     @BindingAdapter("srcDrawable")
@@ -82,7 +99,7 @@ object BindUtil {
         view: AppCompatImageView,
         filename: String?,
     ) {
-        if (filename != null) {
+        if (filename != null && filename.isNotEmpty()) {
             val context = view.context
 
             val profileSrc = FirebaseStorage.getInstance().reference
@@ -102,7 +119,7 @@ object BindUtil {
         appCompatImageView: AppCompatImageView,
         filename: String?,
     ) {
-        if (filename != null) {
+        if (filename !=null && filename.isNotEmpty()) {
             val context = appCompatImageView.context
 
             val recipeSrc = FirebaseStorage.getInstance().reference
@@ -121,7 +138,7 @@ object BindUtil {
         appCompatImageView: AppCompatImageView,
         filename: String?,
     ) {
-        if (filename != null) {
+        if (filename != null && filename.isNotEmpty()) {
             val context = appCompatImageView.context
 
             val postSrc = FirebaseStorage.getInstance().reference

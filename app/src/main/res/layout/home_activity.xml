@@ -202,6 +202,7 @@
                     android:textColor="@color/white"
                     android:visibility="@{viewModel.currentMode == UIMODE.OTHERS}"
                     app:backgroundTint="@color/colorPrimary"
+                    android:onClick="@{}"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"
                     app:layout_constraintTop_toBottomOf="@+id/home_followingtext"

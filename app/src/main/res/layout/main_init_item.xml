@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
-                android:text="@{String.format(`%.1f`,recipe.rating)}"
+                floatText="@{recipe.rating}"
                 android:textColor="@color/white"
 
                 android:textSize="12sp"

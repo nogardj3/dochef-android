@@ -9,8 +9,11 @@ import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import com.yhjoo.dochef.utils.OtherUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainViewModel(
     private val userRepository: UserRepository,
@@ -39,11 +42,31 @@ class MainViewModel(
         get() = _allTimelines
 
     init {
-        requestRecommendList()
+        viewModelScope.launch {
+            requestRecommendList()
+            requestActiveUserDetail()
+        }
+
         refreshMyrecipesList()
         refreshRecipesList()
-        requestPostList()
-        requestActiveUserDetail()
+        refreshPostList()
+    }
+
+    private suspend fun requestRecommendList() = withContext(Dispatchers.IO) {
+        recipeRepository.getRecipeList(
+            Constants.RECIPE.SEARCHBY.ALL,
+            Constants.RECIPE.SORT.POPULAR, null
+        ).collect {
+            OtherUtil.log("ejejejje")
+            _allRecommendList.postValue(it.body())
+        }
+    }
+
+    private suspend fun requestActiveUserDetail() = withContext(Dispatchers.IO) {
+        userRepository.getUserDetail(activeUserId).collect {
+            OtherUtil.log("ejejejje")
+            _userDetail.postValue(it.body())
+        }
     }
 
     fun changeRecipesSort(mode: String) {
@@ -51,46 +74,39 @@ class MainViewModel(
         refreshRecipesList()
     }
 
-    private fun requestRecommendList() = viewModelScope.launch {
-        recipeRepository.getRecipeList(
-            Constants.RECIPE.SEARCHBY.ALL,
-            Constants.RECIPE.SORT.POPULAR, null
-        ).collect {
-            _allRecommendList.value = it.body()
-        }
-    }
-
-
     fun refreshRecipesList() = viewModelScope.launch {
-        recipeRepository.getRecipeList(
-            Constants.RECIPE.SEARCHBY.ALL,
-            recipesSort, null
-        ).collect {
-            _allRecipesList.value = it.body()
+        withContext(Dispatchers.IO) {
+            OtherUtil.log("ejejejje")
+            recipeRepository.getRecipeList(
+                Constants.RECIPE.SEARCHBY.ALL,
+                recipesSort, null
+            ).collect {
+                _allRecipesList.postValue(it.body())
+            }
         }
     }
-
 
     fun refreshMyrecipesList() = viewModelScope.launch {
-        recipeRepository.getRecipeList(
-            Constants.RECIPE.SEARCHBY.USERID,
-            recipesSort, activeUserId
-        ).collect {
-            _allMyrecipeList.value = it.body()
+        withContext(Dispatchers.IO) {
+            OtherUtil.log("ejejejje")
+            recipeRepository.getRecipeList(
+                Constants.RECIPE.SEARCHBY.USERID,
+                recipesSort, activeUserId
+            ).collect {
+                _allMyrecipeList.postValue(it.body())
+            }
         }
     }
 
-    fun requestPostList() = viewModelScope.launch {
-        postRepository.getPostList().collect {
-            _allTimelines.value = it.body()
+    fun refreshPostList() = viewModelScope.launch {
+        withContext(Dispatchers.IO) {
+            OtherUtil.log("ejejejje")
+            postRepository.getPostList().collect {
+                _allTimelines.postValue(it.body())
+            }
         }
     }
 
-    private fun requestActiveUserDetail() = viewModelScope.launch {
-        userRepository.getUserDetail(activeUserId).collect {
-            _userDetail.value = it.body()
-        }
-    }
 }
 
 class MainViewModelFactory(

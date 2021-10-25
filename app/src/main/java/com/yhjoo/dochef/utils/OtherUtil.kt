@@ -9,7 +9,7 @@ import java.util.*
 
 object OtherUtil {
     fun log(vararg msgs: String) {
-        Logger.d("YHJOO %s", msgs.joinToString())
+        Logger.d(msgs)
     }
 
     fun millisToText(millis: Long): String {

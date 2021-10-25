@@ -12,6 +12,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.afollestad.materialdialogs.MaterialDialog
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.OnMenuItemClickListener
@@ -27,7 +28,9 @@ import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.utils.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 class PostDetailActivity : BaseActivity() {
@@ -71,8 +74,11 @@ class PostDetailActivity : BaseActivity() {
 
         postDetailViewModel.postDetail.observe(this@PostDetailActivity, {
             if (it.userID == App.activeUserId) {
-                reviseMenu?.isVisible = true
-                deleteMenu?.isVisible = true
+                lifecycleScope.launch {
+                    delay(300)
+                    reviseMenu?.isVisible = true
+                    deleteMenu?.isVisible = true
+                }
             }
 
             binding.postTags.removeAllViews()

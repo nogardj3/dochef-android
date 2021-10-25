@@ -51,6 +51,7 @@ class AccountSignUpNickFragment : BaseFragment() {
             accountViewModel.eventResult.collect {
                 when (it.first) {
                     AccountViewModel.Events.SignUpNickname.ERROR -> {
+                        hideProgress()
                         binding.signupnickNicknameLayout.apply {
                             error = it.second
                             requestFocus()

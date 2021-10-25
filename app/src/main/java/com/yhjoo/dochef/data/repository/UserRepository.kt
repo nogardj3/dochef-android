@@ -22,7 +22,7 @@ class UserRepository(
         RetrofitBuilder.create(context, RetrofitServices.UserService::class.java)
 
     @WorkerThread
-    suspend fun getUserDetail(userId: String): Flow<Response<UserDetail>> {
+    suspend fun getUserDetail(userId: String): Flow<Response<UserDetail?>> {
         return flow {
             if (App.isServerAlive) emit(userClient.getUserDetail(userId))
             else
@@ -38,7 +38,7 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun getUserByNickname(nickname: String): Flow<Response<ArrayList<UserBrief>>> {
+    suspend fun getUserByNickname(nickname: String): Flow<Response<ArrayList<UserBrief>?>> {
         return flow {
             if (App.isServerAlive) emit(userClient.getUserByNickname(nickname))
             else
@@ -54,7 +54,7 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun getFollowers(userId: String): Flow<Response<ArrayList<UserBrief>>> {
+    suspend fun getFollowers(userId: String): Flow<Response<ArrayList<UserBrief>?>> {
         return flow {
             if (App.isServerAlive) emit(userClient.getFollowers(userId))
             else
@@ -70,7 +70,7 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun getFollowings(userId: String): Flow<Response<ArrayList<UserBrief>>> {
+    suspend fun getFollowings(userId: String): Flow<Response<ArrayList<UserBrief>?>> {
         return flow {
             if (App.isServerAlive) emit(userClient.getFollowings(userId))
             else
@@ -86,7 +86,7 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun subscribeUser(userId: String, targetId: String): Flow<Response<JsonObject>> {
+    suspend fun subscribeUser(userId: String, targetId: String): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(userClient.subscribeUser(userId, targetId))
             else {
@@ -97,7 +97,7 @@ class UserRepository(
     }
 
     @WorkerThread
-    suspend fun unsubscribeUser(userId: String, targetId: String): Flow<Response<JsonObject>> {
+    suspend fun unsubscribeUser(userId: String, targetId: String): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(userClient.unsubscribeUser(userId, targetId))
             else {

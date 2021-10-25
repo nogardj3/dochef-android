@@ -21,7 +21,7 @@ class ReviewRepository(
         RetrofitBuilder.create(context, RetrofitServices.ReviewService::class.java)
 
     @WorkerThread
-    suspend fun getReviews(recipeId: Int): Flow<Response<ArrayList<Review>>> {
+    suspend fun getReviews(recipeId: Int): Flow<Response<ArrayList<Review>?>> {
         return flow {
             if (App.isServerAlive) emit(reviewClient.getReview(recipeId))
             else
@@ -41,9 +41,9 @@ class ReviewRepository(
         recipeID: Int,
         userID: String,
         contents: String,
-        rating: Long,
+        rating: Float,
         dateTime: Long
-    ): Flow<Response<JsonObject>> {
+    ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(
                 reviewClient.createReview(
@@ -62,7 +62,7 @@ class ReviewRepository(
     }
 
     @WorkerThread
-    suspend fun deleteReview(recipeID: Int): Flow<Response<JsonObject>> {
+    suspend fun deleteReview(recipeID: Int): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(reviewClient.deleteReview(recipeID))
             else {

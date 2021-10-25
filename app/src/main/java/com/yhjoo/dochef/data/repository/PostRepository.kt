@@ -21,7 +21,7 @@ class PostRepository(
         RetrofitBuilder.create(context, RetrofitServices.PostService::class.java)
 
     @WorkerThread
-    suspend fun getPostDetail(postId: Int): Flow<Response<Post>> {
+    suspend fun getPostDetail(postId: Int): Flow<Response<Post?>> {
         return flow {
             if (App.isServerAlive) emit(postClient.getPost(postId))
             else
@@ -37,7 +37,7 @@ class PostRepository(
     }
 
     @WorkerThread
-    suspend fun getPostList(): Flow<Response<ArrayList<Post>>> {
+    suspend fun getPostList(): Flow<Response<ArrayList<Post>?>> {
         return flow {
             if (App.isServerAlive) emit(postClient.getPostList())
             else
@@ -53,7 +53,7 @@ class PostRepository(
     }
 
     @WorkerThread
-    suspend fun getPostListByUserId(userId: String): Flow<Response<ArrayList<Post>>> {
+    suspend fun getPostListByUserId(userId: String): Flow<Response<ArrayList<Post>?>> {
         return flow {
             if (App.isServerAlive) emit(postClient.getPostListByUserID(userId))
             else
@@ -69,7 +69,7 @@ class PostRepository(
     }
 
     @WorkerThread
-    suspend fun likePost(userID: String, postID: Int): Flow<Response<JsonObject>> {
+    suspend fun likePost(userID: String, postID: Int): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(postClient.setLikePost(userID, postID, 1))
             else {
@@ -80,7 +80,7 @@ class PostRepository(
     }
 
     @WorkerThread
-    suspend fun dislikePost(userID: String, postID: Int): Flow<Response<JsonObject>> {
+    suspend fun dislikePost(userID: String, postID: Int): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(postClient.setLikePost(userID, postID, -1))
             else {
@@ -97,7 +97,7 @@ class PostRepository(
         contents: String,
         datetime: Long,
         tags: ArrayList<String>
-    ): Flow<Response<JsonObject>> {
+    ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
                 emit(postClient.createPost(userID, postImgs, contents, datetime, tags))
@@ -116,7 +116,7 @@ class PostRepository(
         contents: String,
         datetime: Long,
         tags: ArrayList<String>
-    ): Flow<Response<JsonObject>> {
+    ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
                 emit(postClient.updatePost(postID, postImgs, contents, datetime, tags))
@@ -128,7 +128,7 @@ class PostRepository(
     }
 
     @WorkerThread
-    suspend fun deletePost(postID: Int): Flow<Response<JsonObject>> {
+    suspend fun deletePost(postID: Int): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(postClient.deletePost(postID))
             else {

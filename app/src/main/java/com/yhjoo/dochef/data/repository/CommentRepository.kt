@@ -21,7 +21,7 @@ class CommentRepository(
         RetrofitBuilder.create(context, RetrofitServices.CommentService::class.java)
 
     @WorkerThread
-    suspend fun getComments(postId: Int): Flow<Response<ArrayList<Comment>>> {
+    suspend fun getComments(postId: Int): Flow<Response<ArrayList<Comment>?>> {
         return flow {
             if (App.isServerAlive) emit(commentClient.getComment(postId))
             else
@@ -42,7 +42,7 @@ class CommentRepository(
         userID: String,
         contents: String,
         dateTime: Long
-    ): Flow<Response<JsonObject>> {
+    ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(
                 commentClient.createComment(
@@ -60,7 +60,7 @@ class CommentRepository(
     }
 
     @WorkerThread
-    suspend fun deleteComment(commentId: Int): Flow<Response<JsonObject>> {
+    suspend fun deleteComment(commentId: Int): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(commentClient.deleteComment(commentId))
             else {

@@ -25,7 +25,10 @@ class PostWriteViewModel(
 ) : ViewModel() {
     val activeUserId = App.activeUserId
     val currentMode = intent.getIntExtra("MODE", PostWriteActivity.Companion.UIMODE.WRITE)
-    val postInfo = intent.getSerializableExtra("post") as Post
+    val postInfo: Post? = if (intent.getSerializableExtra("post") != null)
+        intent.getSerializableExtra("post") as Post
+    else
+        null
 
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference
@@ -64,7 +67,7 @@ class PostWriteViewModel(
                     }
                 }
         } else {
-            val imageString = if (postInfo.postImg.isEmpty())
+            val imageString = if (postInfo == null || postInfo.postImg.isEmpty())
                 ""
             else postInfo.postImg
 
@@ -108,7 +111,7 @@ class PostWriteViewModel(
     ) =
         viewModelScope.launch {
             postRepository.updatePost(
-                postInfo.postID,
+                postInfo!!.postID,
                 postImgs,
                 contents,
                 System.currentTimeMillis(),

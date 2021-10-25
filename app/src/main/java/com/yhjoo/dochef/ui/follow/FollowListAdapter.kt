@@ -15,7 +15,7 @@ import java.util.*
 
 class FollowListAdapter(
     val containerActivity: FollowListActivity,
-    val viewModel: FollowListViewModel
+    val vm: FollowListViewModel
 ) :
     ListAdapter<UserBrief, FollowListAdapter.FollowListViewHolder>(FollowListComparator()) {
     var activeUserFollowList = ArrayList<String>()
@@ -41,7 +41,7 @@ class FollowListAdapter(
             binding.apply {
                 adapter = this@FollowListAdapter
                 activity = containerActivity
-                viewModel = viewModel
+                viewModel = vm
                 userBrief = item
             }
         }

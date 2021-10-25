@@ -37,6 +37,7 @@ import java.util.*
 
 class HomeActivity : BaseActivity() {
     // TODO
+    // subscribe user
     // menu databinding
     // permission, onactivity databinding
     // RecyclerView listitem Databinding

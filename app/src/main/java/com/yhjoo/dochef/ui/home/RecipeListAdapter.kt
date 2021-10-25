@@ -37,7 +37,6 @@ class RecipeListAdapter(private val containerActivity: HomeActivity) :
             binding.apply {
                 activeUserId = App.activeUserId
                 activity = containerActivity
-                adapter = this@RecipeListAdapter
                 recipe = item
             }
         }

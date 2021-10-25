@@ -109,6 +109,7 @@ dependencies {
     // others
     implementation("io.reactivex.rxjava3:rxkotlin:3.0.1")
     implementation("io.reactivex.rxjava3:rxandroid:3.0.0")
+    implementation("com.squareup.okhttp3:okhttp:4.9.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.github.bumptech.glide:glide:4.12.0")
@@ -118,7 +119,6 @@ dependencies {
     implementation("com.github.skydoves:powermenu:2.2.0")
     implementation("com.afollestad.material-dialogs:core:3.3.0")
     implementation("com.afollestad.material-dialogs:input:3.3.0")
-    implementation("com.github.florent37:viewanimator:1.1.2")
     implementation("com.tbuonomo:dotsindicator:4.2")
     implementation("com.github.mabbas007:TagsEditText:1.0.5")
 

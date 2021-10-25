@@ -31,7 +31,7 @@ class RecipePlayViewModel(
 
     fun createReview(
         contents: String,
-        rating: Long,
+        rating: Float,
     ) = viewModelScope.launch {
         reviewRepository.createReview(
             recipeDetail.recipeID,

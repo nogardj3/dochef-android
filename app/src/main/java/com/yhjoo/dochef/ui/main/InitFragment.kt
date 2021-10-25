@@ -51,7 +51,6 @@ class InitFragment : BaseFragment() {
 
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
-            viewModel = mainViewModel
             fragment = this@InitFragment
 
             mainInitAdviewpager.adapter = MainAdPagerAdapter(imgs)
@@ -84,7 +83,6 @@ class InitFragment : BaseFragment() {
     }
 
     fun goRecipeDetail(item: Recipe) {
-        OtherUtil.log("ajsdfijiasdfji")
         startActivity(
             Intent(requireContext(), RecipeDetailActivity::class.java)
                 .putExtra("recipeID", item.recipeID)

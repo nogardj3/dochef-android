@@ -93,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
                 android:textColor="@color/black"
-                android:text="@{String.format(`%.1f`,recipe.rating)}"
+                floatText="@{recipe.rating}"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/reciperecommend_rating_img"
                 app:layout_constraintLeft_toRightOf="@+id/reciperecommend_rating_img"

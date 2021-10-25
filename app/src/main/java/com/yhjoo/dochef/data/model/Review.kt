@@ -9,6 +9,6 @@ data class Review(
     @SerializedName("nickname") val nickname: String,
     @SerializedName("user_profile_img") val userImg: String,
     @SerializedName("contents") val contents: String,
-    @SerializedName("rating") val rating: Long,
+    @SerializedName("rating") val rating: Float,
     @SerializedName("datetime") val dateTime: Long
 )

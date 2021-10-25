@@ -38,7 +38,6 @@ class PostListAdapter(private val containerActivity: HomeActivity) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Post) {
             binding.apply {
-                adapter = this@PostListAdapter
                 post = item
                 activity = containerActivity
 

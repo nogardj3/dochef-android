@@ -81,7 +81,7 @@
             android:layout_marginTop="10dp"
             android:isIndicator="true"
             android:numStars="5"
-            android:rating="@{(float)review.rating}"
+            android:rating="@{review.rating}"
             android:theme="@style/BaseTheme.RatingBar"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
             app:layout_constraintTop_toBottomOf="@+id/review_userimg" />

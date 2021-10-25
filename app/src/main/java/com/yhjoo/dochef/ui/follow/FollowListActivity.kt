@@ -39,7 +39,6 @@ class FollowListActivity : BaseActivity() {
 
         binding.apply {
             lifecycleOwner = this@FollowListActivity
-            viewModel = followListViewModel
 
             followlistToolbar.title = followListViewModel.title
 
@@ -53,7 +52,6 @@ class FollowListActivity : BaseActivity() {
 
         followListViewModel.activeUserDetail.observe(this@FollowListActivity, {
             followListAdapter.activeUserFollowList = it.follow
-            OtherUtil.log("dfd")
         })
         followListViewModel.allFollowLists.observe(this@FollowListActivity, {
             binding.followlistEmpty.isVisible = it.isEmpty()
