@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.skydoves.powermenu.MenuAnimation
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -29,8 +30,7 @@ import java.util.*
 
 class RecipeDetailActivity : BaseActivity() {
     // TODO
-    // tag, review data binding
-    // recyclerview list databinding
+    // tag, ingredients data binding
 
     private val binding: RecipedetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipedetail_activity)
@@ -149,7 +149,7 @@ class RecipeDetailActivity : BaseActivity() {
     fun goHome(userId: String) {
         startActivity(
             Intent(this@RecipeDetailActivity, HomeActivity::class.java)
-                .putExtra("userID", userId)
+                .putExtra(Constants.INTENTNAME.USER_ID, userId)
         )
     }
 
@@ -163,7 +163,7 @@ class RecipeDetailActivity : BaseActivity() {
     private fun goRecipeMake(item: RecipeDetail) {
         startActivity(
             Intent(this@RecipeDetailActivity, RecipeMakeActivity::class.java)
-                .putExtra("recipeId", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
                 .putExtra("mode", RecipeMakeActivity.MODE.REVISE)
         )
     }

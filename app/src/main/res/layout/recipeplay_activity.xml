@@ -8,9 +8,6 @@
         <variable
             name="activity"
             type="com.yhjoo.dochef.ui.recipe.play.PlayActivity" />
-        <variable
-            name="viewModel"
-            type="com.yhjoo.dochef.ui.recipe.play.RecipePlayViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,9 +34,9 @@
             android:layout_height="50dp"
             android:background="@drawable/bg_round2"
             android:gravity="center"
+            android:onClick="@{()-> activity.onClickTimer()}"
             android:textColor="@color/black"
             android:textStyle="bold"
-            android:onClick="@{()-> activity.onClickTimer()}"
             app:layout_constraintBottom_toBottomOf="@+id/recipeplay_circular_timer"
             app:layout_constraintLeft_toLeftOf="@+id/recipeplay_circular_timer"
             app:layout_constraintRight_toRightOf="@+id/recipeplay_circular_timer"
@@ -53,12 +50,12 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="8dp"
             android:elevation="8dp"
+            android:onClick="@{()-> activity.onClickTimer()}"
             app:indicatorColor="@color/grey"
             app:indicatorDirectionCircular="clockwise"
             app:indicatorSize="60dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:onClick="@{()-> activity.onClickTimer()}"
             app:trackColor="@color/colorSecondary"
             app:trackThickness="8dp" />
 
@@ -83,5 +80,4 @@
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </layout>

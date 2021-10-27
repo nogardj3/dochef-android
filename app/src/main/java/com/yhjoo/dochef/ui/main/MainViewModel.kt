@@ -53,8 +53,8 @@ class MainViewModel(
 
     private suspend fun requestRecommendList() = withContext(Dispatchers.Main) {
         recipeRepository.getRecipeList(
-            Constants.RECIPE.SEARCHBY.ALL,
-            Constants.RECIPE.SORT.POPULAR, null
+            Constants.RECIPE.SEARCHBY.USERID,
+            Constants.RECIPE.SORT.POPULAR, Constants.adminUserId
         ).collect {
             _allRecommendList.value = it.body()
         }

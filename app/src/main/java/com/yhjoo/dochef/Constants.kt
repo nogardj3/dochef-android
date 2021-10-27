@@ -47,6 +47,12 @@ object Constants {
         }
     }
 
+    object INTENTNAME{
+        const val RECIPE_ID = "recipeId"
+        const val USER_ID = "userId"
+        const val POST_ID = "postId"
+    }
+
     val ServerResult = mapOf(
         200 to "Success",
         404 to "Not found",
@@ -56,6 +62,9 @@ object Constants {
 
     const val PERMISSION_CODE = 22
     const val GOOGLE_SIGNIN_CODE = 9001
+
+    // Temp Admin user ID
+    const val adminUserId = "777"
 }
 
 

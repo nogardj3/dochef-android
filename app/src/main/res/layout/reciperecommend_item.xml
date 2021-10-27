@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="android.view.View"/>
-
-        <variable
-            name="activeUserId"
-            type="String" />
 
         <variable
             name="activity"
@@ -33,10 +28,10 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/reciperecommend_img"
+                recipeimage="@{recipe.recipeImg}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                recipeimage="@{recipe.recipeImg}"
                 tools:src="@raw/dummy_recipe_1" />
 
             <View
@@ -46,15 +41,14 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintHeight_percent="0.25" />
 
-
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/reciperecommend_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
+                android:text="@{recipe.recipeName}"
                 android:textColor="@color/black"
                 android:textSize="16dp"
-                android:text="@{recipe.recipeName}"
                 app:layout_constraintBottom_toTopOf="@+id/reciperecommend_nickname"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -65,10 +59,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
+                android:text="@{String.format(@string/format_usernickname,recipe.nickname)}"
                 android:textColor="@color/black"
                 android:textSize="12dp"
-                android:text="@{String.format(@string/format_usernickname,recipe.nickname)}"
-
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
@@ -89,11 +82,11 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/reciperecommend_rating"
+                floatText="@{recipe.rating}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
                 android:textColor="@color/black"
-                floatText="@{recipe.rating}"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="@+id/reciperecommend_rating_img"
                 app:layout_constraintLeft_toRightOf="@+id/reciperecommend_rating_img"

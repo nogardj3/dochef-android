@@ -28,27 +28,27 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/home_post_post_img"
+                postimage="@{post.postImg}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:postimage="@{post.postImg}"
                 tools:src="@raw/dummy_post_0"
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/home_post_user_img"
+                userimage="@{post.userImg}"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_margin="10dp"
                 android:background="@drawable/bg_round"
                 android:onClick="@{()-> activity.goHome(post)}"
-                android:scaleType="fitXY"
-                app:userimage="@{post.userImg}"
+                android:padding="1dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_post_post_img"
-                app:srcCompat="@drawable/ic_profile_black" />
+                tools:src="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/home_post_user_nickname"
@@ -56,9 +56,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:onClick="@{()-> activity.goHome(post)}"
+                android:text="@{post.nickname}"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:text="@{post.nickname}"
                 app:layout_constraintBottom_toBottomOf="@+id/home_post_user_img"
                 app:layout_constraintLeft_toRightOf="@+id/home_post_user_img"
                 app:layout_constraintTop_toTopOf="@+id/home_post_user_img"
@@ -85,8 +85,8 @@
                 android:layout_marginHorizontal="10dp"
                 android:layout_marginVertical="5dp"
                 android:maxLines="4"
-                android:textSize="16sp"
                 android:text="@{` `+ post.contents}"
+                android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/home_post_user_img"
                 tools:text="내용" />
@@ -148,19 +148,21 @@
                 android:id="@+id/home_post_comment_group"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:visibility="gone"
+                android:visibility="@{post.comments.size() != 0}"
                 app:constraint_referenced_ids="home_post_comment_user_img,
             home_post_comment_user_nickname,home_post_comment_contents,home_post_comment_date"
                 tools:visibility="visible" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/home_post_comment_user_img"
+                userimage="@{post.comments.size() != 0 ? post.comments.get(0).userImg : ``}"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
+                android:padding="1dp"
                 app:layout_constraintLeft_toLeftOf="@+id/home_post_user_img"
                 app:layout_constraintTop_toBottomOf="@+id/home_post_like_text"
-                app:srcCompat="@drawable/ic_profile_black" />
+                tools:src="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/home_post_comment_user_nickname"
@@ -169,6 +171,7 @@
                 android:layout_marginStart="4dp"
                 android:maxEms="5"
                 android:maxLines="1"
+                android:text="@{post.comments.size() != 0 ? post.comments.get(0).nickName : ``}"
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/home_post_comment_user_img"
@@ -182,6 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="2"
+                android:text="@{post.comments.size() != 0 ? post.comments.get(0).contents : ``}"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/home_post_comment_user_img"
                 app:layout_constraintLeft_toRightOf="@+id/home_post_comment_user_nickname"
@@ -196,6 +200,7 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
+                android:text="@{post.comments.size() != 0 ? post.comments.get(0).dateTime : (long) 0}"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/home_post_comment_user_nickname"
                 app:layout_constraintRight_toRightOf="@+id/home_post_time"

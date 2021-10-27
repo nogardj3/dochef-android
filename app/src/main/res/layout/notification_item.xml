@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="viewModel"
             type="com.yhjoo.dochef.ui.notification.NotificationViewModel" />
@@ -16,20 +17,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{()-> viewModel.setRead(notification)}"
         android:background="@{notification.isRead == 0 ? @color/white : @color/grey}"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> viewModel.setRead(notification)}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/notification_userimg"
+            userimage="@{notification.img}"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
             android:background="@drawable/bg_round"
+            android:padding="1dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            userimage="@{notification.img}"
-            app:srcCompat="@drawable/ic_profile_black" />
+            tools:src="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/notification_contents"

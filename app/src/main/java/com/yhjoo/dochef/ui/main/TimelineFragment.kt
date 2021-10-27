@@ -6,7 +6,7 @@ import android.view.*
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.PostRepository
@@ -19,9 +19,8 @@ import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
-class TimelineFragment : BaseFragment(), OnRefreshListener {
+class TimelineFragment : BaseFragment() {
     // TODO
-    // RecyclerView listitem Databinding
     // swipe refresh
 
     private lateinit var binding: MainTimelineFragmentBinding
@@ -47,7 +46,9 @@ class TimelineFragment : BaseFragment(), OnRefreshListener {
             lifecycleOwner = viewLifecycleOwner
 
             timelineSwipe.apply {
-                setOnRefreshListener(this@TimelineFragment)
+                setOnRefreshListener {
+                    mainViewModel.refreshPostList()
+                }
                 setColorSchemeColors(
                     resources.getColor(
                         R.color.colorPrimary,
@@ -71,22 +72,17 @@ class TimelineFragment : BaseFragment(), OnRefreshListener {
         return binding.root
     }
 
-    override fun onRefresh() {
-        binding.timelineSwipe.isRefreshing = true
-        mainViewModel.refreshPostList()
-    }
-
     fun goHome(post: Post) {
         startActivity(
             Intent(requireContext(), HomeActivity::class.java)
-                .putExtra("userID", post.userID)
+                .putExtra(Constants.INTENTNAME.USER_ID, post.userID)
         )
     }
 
     fun goPostDetail(post: Post) {
         startActivity(
             Intent(requireContext(), PostDetailActivity::class.java)
-                .putExtra("postID", post.postID)
+                .putExtra(Constants.INTENTNAME.POST_ID, post.postID)
         )
     }
 }

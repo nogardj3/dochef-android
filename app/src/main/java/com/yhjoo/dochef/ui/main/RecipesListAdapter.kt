@@ -33,6 +33,7 @@ class RecipesListAdapter(private val containerFragment: RecipesFragment) :
         fun bind(item: Recipe) {
             binding.apply {
                 activeUserId = App.activeUserId
+
                 fragment = containerFragment
                 recipe = item
             }

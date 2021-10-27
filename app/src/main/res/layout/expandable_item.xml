@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="dateShow"
             type="Boolean" />
+
         <variable
             name="expandableItem"
             type="com.yhjoo.dochef.data.model.ExpandableItem" />
@@ -31,6 +33,7 @@
                 android:layout_margin="8dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                srcDrawable="@{expandableItem.expanded ?  @drawable/ic_arrow_downward : @drawable/ic_arrow_right_grey}"
                 app:srcCompat="@drawable/ic_arrow_right_grey" />
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -38,10 +41,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
+                android:text="@{expandableItem.title}"
                 app:layout_constraintBottom_toBottomOf="@+id/exp_title_icon"
                 app:layout_constraintLeft_toRightOf="@+id/exp_title_icon"
                 app:layout_constraintTop_toTopOf="@+id/exp_title_icon"
-                android:text="@{expandableItem.title}"
                 tools:text="제목" />
 
             <View
@@ -56,8 +59,8 @@
             android:id="@+id/expandable_contents"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="@{expandableItem.expanded}"
             android:paddingTop="16dp"
+            android:visibility="@{expandableItem.expanded}"
             app:layout_constraintTop_toBottomOf="@+id/expandable_header">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -66,8 +69,8 @@
                 android:layout_height="wrap_content"
                 android:background="@color/white"
                 android:minLines="2"
-                android:text="@{expandableItem.contents}"
                 android:paddingLeft="20dp"
+                android:text="@{expandableItem.contents}"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="내용" />
 
@@ -77,9 +80,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:background="@color/white"
-                app:layout_constraintRight_toRightOf="parent"
-                android:visibility="@{dateShow}"
                 android:text="@{expandableItem.dateTime}"
+                android:visibility="@{dateShow}"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 tools:text="1일 전" />
 

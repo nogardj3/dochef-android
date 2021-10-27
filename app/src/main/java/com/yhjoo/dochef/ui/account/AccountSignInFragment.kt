@@ -21,8 +21,7 @@ import kotlinx.coroutines.flow.collect
 
 class AccountSignInFragment : BaseFragment() {
     // TODO
-    // BindingAdapter onEditorActionListener
-    // GoogleSignin + Viewmodel
+    // GoogleSignin onactivityresult
 
     private lateinit var binding: AccountSigninFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {

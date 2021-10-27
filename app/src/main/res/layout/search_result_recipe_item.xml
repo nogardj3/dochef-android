@@ -68,8 +68,7 @@
                 app:flexWrap="wrap"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:visibility="gone" />
+                app:layout_constraintRight_toRightOf="parent" />
 
             <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/resultrecipe_tags"
@@ -81,8 +80,7 @@
                 app:flexWrap="wrap"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                tools:visibility="gone" />
+                app:layout_constraintRight_toRightOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

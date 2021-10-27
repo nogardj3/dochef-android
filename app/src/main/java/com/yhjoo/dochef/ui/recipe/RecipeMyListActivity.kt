@@ -7,6 +7,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.afollestad.materialdialogs.MaterialDialog
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -80,7 +81,7 @@ class RecipeMyListActivity : BaseActivity() {
     fun goDetail(item: Recipe) {
         startActivity(
             Intent(this@RecipeMyListActivity, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
         )
     }
 }

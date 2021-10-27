@@ -39,7 +39,6 @@ class HomeActivity : BaseActivity() {
     // TODO
     // menu databinding
     // permission, onactivity databinding
-    // RecyclerView listitem Databinding
 
     private val binding: HomeActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.home_activity)
@@ -113,10 +112,7 @@ class HomeActivity : BaseActivity() {
         }
 
         homeViewModel.userDetail.observe(this@HomeActivity, {
-//            binding.userDetail = it
-//            binding.homeFollowBtn.isVisible = homeViewModel.currentMode == UIMODE.OTHERS
             originUserInfo = it
-
         })
 
         homeViewModel.allRecipes.observe(this@HomeActivity, {
@@ -314,44 +310,44 @@ class HomeActivity : BaseActivity() {
     fun goRecipeDetail(item: Recipe) {
         startActivity(
             Intent(this@HomeActivity, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
         )
     }
 
     fun goHome(item: Post) {
         startActivity(
             Intent(this@HomeActivity, HomeActivity::class.java)
-                .putExtra("postID", item.postID)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
         )
     }
 
     fun goPostDetail(item: Post) {
         startActivity(
             Intent(this@HomeActivity, PostDetailActivity::class.java)
-                .putExtra("postID", item.postID)
+                .putExtra(Constants.INTENTNAME.POST_ID, item.postID)
         )
     }
 
     fun goMyRecipe(item: UserDetail) {
         startActivity(
             Intent(this@HomeActivity, RecipeMyListActivity::class.java)
-                .putExtra("userID", item.userID)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
         )
     }
 
     fun goFollowerList(item: UserDetail) {
         startActivity(
             Intent(this@HomeActivity, FollowListActivity::class.java)
-                .putExtra("MODE", FollowListActivity.FOLLOWER)
-                .putExtra("userID", item.userID)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
+                .putExtra("mode", FollowListActivity.FOLLOWER)
         )
     }
 
     fun goFollowingList(item: UserDetail) {
         startActivity(
             Intent(this@HomeActivity, FollowListActivity::class.java)
-                .putExtra("MODE", FollowListActivity.FOLLOWING)
-                .putExtra("userID", item.userID)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
+                .putExtra("mode", FollowListActivity.FOLLOWING)
         )
     }
 

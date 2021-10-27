@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.google.android.gms.ads.MobileAds
 import com.google.android.material.tabs.TabLayoutMediator
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -75,7 +76,7 @@ class SearchActivity : BaseActivity() {
     fun goDetail(item: Recipe) {
         startActivity(
             Intent(this, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
         )
     }
 

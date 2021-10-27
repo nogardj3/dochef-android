@@ -38,7 +38,7 @@ class ExpandableListAdapter(
 
                 root.setOnClickListener {
                     item.expanded = !item.expanded
-                    notifyDataSetChanged()
+                    notifyItemChanged(adapterPosition)
                 }
             }
         }

@@ -32,7 +32,6 @@ object BindUtil {
         }
     }
 
-
     @BindingConversion
     @JvmStatic
     fun millisToText(millis: Long): String {
@@ -66,7 +65,6 @@ object BindUtil {
         view.text = String.format("%.1f",float)
     }
 
-
     @BindingAdapter("visibleNew")
     @JvmStatic
     fun visibleNew(
@@ -91,7 +89,6 @@ object BindUtil {
         view.setImageDrawable(drawable)
     }
 
-
     @BindingAdapter("userimage")
     @JvmStatic
     fun loadUserImage(
@@ -110,6 +107,8 @@ object BindUtil {
                 .circleCrop()
                 .into(view)
         }
+        else
+            view.setImageResource(R.drawable.ic_profile_black)
     }
 
     @BindingAdapter("recipeimage")

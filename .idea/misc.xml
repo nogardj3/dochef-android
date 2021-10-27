@@ -137,11 +137,15 @@
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/menu/menu_recipe_add.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/menu/menu_recipe_owner.xml" value="0.1648148148148148" />
         <entry key="..\:/Users/joo/Documents/AndroidStudioProjects/dochef_android/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.3287037037037037" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/bg_round.xml" value="0.262037037037037" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_alarm_white.xml" value="0.20555555555555555" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_arrow_back_white.xml" value="0.29791666666666666" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_arrow_downward.xml" value="0.16203703703703703" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_bookmark_black.xml" value="0.16203703703703703" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_depressed.xml" value="0.16203703703703703" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_more.xml" value="0.29791666666666666" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_more_black.xml" value="0.31875" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_new.xml" value="0.2833333333333333" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/ic_search_primary.xml" value="0.2" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/drawable/selector_btn_google.xml" value="0.20555555555555555" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/a_account.xml" value="0.27239583333333334" />
@@ -164,7 +168,7 @@
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/adview.xml" value="0.26927083333333335" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/comment_item.xml" value="0.3015625" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/comment_item_empty.xml" value="0.3026041666666667" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/expandable_item.xml" value="0.1" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/expandable_item.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_account_findpw.xml" value="0.49128205128205127" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_account_main.xml" value="0.49895833333333334" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_account_signin.xml" value="0.49128205128205127" />
@@ -179,44 +183,45 @@
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_setting_faq.xml" value="0.315625" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_setting_notice.xml" value="0.315625" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/f_setting_tos.xml" value="0.1" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/followlist_activity.xml" value="0.1" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/followlist_item.xml" value="0.1" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/home_activity.xml" value="0.1" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/home_postlist_item.xml" value="0.34791666666666665" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/home_recipelist_item.xml" value="0.34791666666666665" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/followlist_activity.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/followlist_item.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/home_activity.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/home_postlist_item.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/home_recipelist_item.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/li_adview.xml" value="0.11944444444444445" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_activity.xml" value="0.20520833333333333" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_init_adview.xml" value="0.23802083333333332" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_activity.xml" value="0.2" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_init_adview.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_init_fragment.xml" value="0.1" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_init_item.xml" value="0.3015625" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_myrecipe_fragment.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_init_item.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_myrecipe_fragment.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_myrecipe_item.xml" value="0.3015625" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_recipes_fragment.xml" value="0.25833333333333336" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_recipes_item.xml" value="0.3015625" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_timeline_fragment.xml" value="0.25833333333333336" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_timeline_item.xml" value="0.34322916666666664" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_user_fragment.xml" value="0.34322916666666664" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_recipes_item.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_timeline_fragment.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_timeline_item.xml" value="0.32083333333333336" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/main_user_fragment.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/notification_activity.xml" value="0.25833333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/notification_item.xml" value="0.34791666666666665" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/notification_item_empty.xml" value="0.3026041666666667" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/post_item_empty.xml" value="0.3026041666666667" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/postdetail_activity.xml" value="0.2" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/postdetail_activity.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/postwrite_activity.xml" value="0.26605504587155965" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipe_horizontal_item.xml" value="0.3015625" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipe_item_empty.xml" value="0.3026041666666667" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipedetail_activity.xml" value="0.1" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipedetail_activity.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipemake_activity.xml" value="0.28541666666666665" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipemylist_activity.xml" value="0.23854166666666668" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipemylist_item.xml" value="0.5036458333333333" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipemylist_item.xml" value="0.32083333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipeplay_activity.xml" value="0.265625" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipeplay_end_fragment.xml" value="0.1" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipeplay_end_fragment.xml" value="0.2" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipeplay_item_fragment.xml" value="0.2283609576427256" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipeplay_start_fragment.xml" value="0.33513513513513515" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recipeplay_start_fragment.xml" value="0.21944444444444444" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/reciperecommend_activity.xml" value="0.23854166666666668" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/reciperecommend_item.xml" value="0.5036458333333333" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recommend_item.xml" value="0.34322916666666664" />
-        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/review_item.xml" value="0.1" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/reciperecommend_item.xml" value="0.21944444444444444" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/recommend_item.xml" value="0.21944444444444444" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/review_item.xml" value="0.21944444444444444" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/review_item_empty.xml" value="0.3026041666666667" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/search_activity.xml" value="0.21944444444444444" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/search_result_fragment.xml" value="0.25833333333333336" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/search_result_recipe_item.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/layout/search_result_user_item.xml" value="0.26145833333333335" />
@@ -235,6 +240,7 @@
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/menu/menu_comment_owner.xml" value="0.16296296296296298" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/menu/menu_post_owner.xml" value="0.2" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/menu/menu_recipe_owner.xml" value="0.16296296296296298" />
+        <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.29791666666666666" />
         <entry key="..\:/Users/wwwfy/AndroidStudioProjects/DoChef/app/src/main/res/xml/preferences.xml" value="0.27239583333333334" />
       </map>
     </option>

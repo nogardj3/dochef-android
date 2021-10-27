@@ -6,6 +6,7 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -49,7 +50,7 @@ class RecipeRecommendActivity : BaseActivity() {
     fun goDetail(item: Recipe) {
         startActivity(
             Intent(this@RecipeRecommendActivity, RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
         )
     }
 }

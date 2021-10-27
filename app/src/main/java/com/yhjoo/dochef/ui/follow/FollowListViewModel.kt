@@ -3,15 +3,13 @@ package com.yhjoo.dochef.ui.follow
 import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.ui.follow.FollowListActivity.Companion.FOLLOWER
-import com.yhjoo.dochef.utils.OtherUtil
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class FollowListViewModel(
     private val repository: UserRepository,
@@ -19,8 +17,8 @@ class FollowListViewModel(
 ) : ViewModel() {
     val activeUserId = App.activeUserId
 
-    private val currentUiMode = intent.getIntExtra("MODE", FOLLOWER)
-    private val currentUserId = intent.getStringExtra("userID").toString()
+    private val currentUiMode = intent.getIntExtra("mode", FOLLOWER)
+    private val currentUserId = intent.getStringExtra(Constants.INTENTNAME.USER_ID)
     val title = if (currentUiMode == FOLLOWER) "Follower" else "Following"
 
     private var _activeUserDetail = MutableLiveData<UserDetail>()
@@ -44,11 +42,11 @@ class FollowListViewModel(
 
     private fun requestFollowLists() = viewModelScope.launch {
         if (currentUiMode == FOLLOWER)
-            repository.getFollowers(currentUserId).collect {
+            repository.getFollowers(currentUserId!!).collect {
                 _allFollowLists.value = it.body()
             }
         else
-            repository.getFollowings(currentUserId).collect {
+            repository.getFollowings(currentUserId!!).collect {
                 _allFollowLists.value = it.body()
             }
     }

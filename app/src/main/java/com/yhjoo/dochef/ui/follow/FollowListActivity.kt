@@ -6,6 +6,7 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.UserRepository
@@ -16,10 +17,6 @@ import com.yhjoo.dochef.utils.*
 import java.util.*
 
 class FollowListActivity : BaseActivity() {
-    // TODO
-    // RecyclerView listitem Databinding
-    // recyclerview item child click
-
     private val binding: FollowlistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.followlist_activity)
     }
@@ -62,7 +59,7 @@ class FollowListActivity : BaseActivity() {
     fun goHome(item: UserBrief) {
         startActivity(
             Intent(this@FollowListActivity, HomeActivity::class.java)
-                .putExtra("userID", item.userID)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
         )
     }
 

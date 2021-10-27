@@ -199,7 +199,7 @@ class MainActivity : BaseActivity() {
             R.id.main_menu_write_post -> {
                 startActivity(
                     Intent(this, PostWriteActivity::class.java)
-                        .putExtra("MODE", PostWriteActivity.Companion.UIMODE.WRITE)
+                        .putExtra("mode", PostWriteActivity.Companion.UIMODE.WRITE)
                 )
                 true
             }

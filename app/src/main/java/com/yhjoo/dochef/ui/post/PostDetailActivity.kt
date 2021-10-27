@@ -19,6 +19,7 @@ import com.skydoves.powermenu.OnMenuItemClickListener
 import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
@@ -36,8 +37,6 @@ import java.util.*
 class PostDetailActivity : BaseActivity() {
     // TODO
     // menu data binding
-    // text change listener
-    // RecyclerView listitem Databinding
 
     private val binding: PostdetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.postdetail_activity)
@@ -128,7 +127,7 @@ class PostDetailActivity : BaseActivity() {
                 val postInfo = postDetailViewModel.postDetail.value!!
                 startActivity(
                     Intent(this@PostDetailActivity, PostWriteActivity::class.java)
-                        .putExtra("MODE", PostWriteActivity.Companion.UIMODE.REVISE)
+                        .putExtra("mode", PostWriteActivity.Companion.UIMODE.REVISE)
                         .putExtra("post", postInfo)
                 )
                 true
@@ -187,7 +186,14 @@ class PostDetailActivity : BaseActivity() {
         }
     }
 
-    val commentEdittextWatcher: TextWatcher = object : TextWatcher {
+    fun goHome(item: Post) {
+        startActivity(
+            Intent(this@PostDetailActivity, HomeActivity::class.java)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
+        )
+    }
+
+    private val commentEdittextWatcher: TextWatcher = object : TextWatcher {
         var prevText = ""
 
         override fun beforeTextChanged(
@@ -207,12 +213,5 @@ class PostDetailActivity : BaseActivity() {
                 binding.postCommentEdittext.setSelection(prevText.length - 1)
             }
         }
-    }
-
-    fun goHome(item: Post) {
-        startActivity(
-            Intent(this@PostDetailActivity, HomeActivity::class.java)
-                .putExtra("userID", item.userID)
-        )
     }
 }

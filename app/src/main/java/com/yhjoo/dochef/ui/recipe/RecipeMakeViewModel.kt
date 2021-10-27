@@ -3,6 +3,7 @@ package com.yhjoo.dochef.ui.recipe
 import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import kotlinx.coroutines.Dispatchers
@@ -15,7 +16,7 @@ class RecipeMakeViewModel(
     intent: Intent
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    private val recipeId: Int = intent.getIntExtra("recipeID", -1)
+    private val recipeId: Int = intent.getIntExtra(Constants.INTENTNAME.POST_ID, -1)
 
     private val _recipeDetail = MutableLiveData<RecipeDetail>()
     val recipeDetail: LiveData<RecipeDetail>

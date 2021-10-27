@@ -8,9 +8,11 @@
         <variable
             name="activeUserId"
             type="String" />
+
         <variable
             name="activity"
             type="com.yhjoo.dochef.ui.post.PostDetailActivity" />
+
         <variable
             name="viewModel"
             type="com.yhjoo.dochef.ui.post.PostDetailViewModel" />
@@ -45,25 +47,26 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/post_postimg"
+                    postimage="@{viewModel.postDetail.postImg}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:adjustViewBounds="true"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintWidth_percent="1"
-                    postimage="@{viewModel.postDetail.postImg}"
                     tools:src="@raw/dummy_post_0" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/post_userimg"
+                    userimage="@{viewModel.postDetail.userImg}"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_margin="10dp"
                     android:background="@drawable/bg_round"
-                    userimage="@{viewModel.postDetail.userImg}"
+                    android:padding="1dp"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/post_postimg"
-                    app:srcCompat="@drawable/ic_profile_black" />
+                    tools:src="@drawable/ic_profile_black" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/post_nickname"
@@ -71,9 +74,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_toEndOf="@+id/post_userimg"
+                    android:text="@{viewModel.postDetail.nickname}"
                     android:textSize="16sp"
                     android:textStyle="bold"
-                    android:text="@{viewModel.postDetail.nickname}"
                     app:layout_constraintBottom_toBottomOf="@+id/post_userimg"
                     app:layout_constraintLeft_toRightOf="@+id/post_userimg"
                     app:layout_constraintTop_toTopOf="@+id/post_userimg"
@@ -109,8 +112,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:maxLines="4"
-                    android:textSize="16sp"
                     android:text="@{viewModel.postDetail.contents}"
+                    android:textSize="16sp"
                     app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                     app:layout_constraintTop_toBottomOf="@+id/post_userimg"
                     tools:text="내용" />
@@ -169,26 +172,26 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/post_like"
+                    srcDrawable="@{viewModel.postDetail.likes.contains(activeUserId) ? @drawable/ic_favorite_red : @drawable/ic_favorite_black}"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="@{()->viewModel.toggleLikePost()}"
                     app:layout_constraintRight_toRightOf="@+id/post_time"
                     app:layout_constraintTop_toBottomOf="@+id/post_tags"
-                    android:onClick="@{()->viewModel.toggleLikePost()}"
-                    srcDrawable="@{viewModel.postDetail.likes.contains(activeUserId) ? @drawable/ic_favorite_red : @drawable/ic_favorite_black}"
-                    />
+                    tools:src="@drawable/ic_favorite_red" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/post_comment_recycler"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
+                    android:orientation="vertical"
                     android:overScrollMode="never"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                     app:layout_constraintRight_toRightOf="@id/post_time"
                     app:layout_constraintTop_toBottomOf="@+id/post_like"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="vertical"
                     tools:itemCount="2"
                     tools:listitem="@layout/comment_item" />
 
@@ -196,9 +199,9 @@
                     android:id="@+id/post_comment_empty"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="댓글이 없습니다."
-                    android:padding="5dp"
                     android:gravity="center"
+                    android:padding="5dp"
+                    android:text="댓글이 없습니다."
                     android:visibility="gone"
                     app:layout_constraintLeft_toLeftOf="@+id/post_userimg"
                     app:layout_constraintRight_toRightOf="@id/post_time"
@@ -228,8 +231,8 @@
                     android:layout_marginStart="5dp"
                     android:background="@drawable/bg_commentedittextok"
                     android:gravity="center"
-                    android:paddingHorizontal="20dp"
                     android:onClick="@{()-> activity.commentAddOk()}"
+                    android:paddingHorizontal="20dp"
                     android:paddingVertical="5dp"
                     android:text="입력"
                     android:textColor="@color/white"

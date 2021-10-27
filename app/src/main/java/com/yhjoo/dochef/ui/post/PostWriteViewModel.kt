@@ -24,7 +24,7 @@ class PostWriteViewModel(
     intent: Intent,
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    val currentMode = intent.getIntExtra("MODE", PostWriteActivity.Companion.UIMODE.WRITE)
+    val currentMode = intent.getIntExtra("mode", PostWriteActivity.Companion.UIMODE.WRITE)
     val postInfo: Post? = if (intent.getSerializableExtra("post") != null)
         intent.getSerializableExtra("post") as Post
     else

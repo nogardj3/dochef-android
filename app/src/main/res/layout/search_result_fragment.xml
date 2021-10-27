@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            tools:listitem="@layout/followlist_item" />
+            tools:listitem="@layout/search_result_user_item" />
 
         <androidx.constraintlayout.widget.Group
             android:id="@+id/resultinit_group"

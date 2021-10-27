@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.databinding.NotificationActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
@@ -59,15 +60,15 @@ class NotificationActivity : BaseActivity() {
                             resources.getInteger(R.integer.NOTIFICATION_TYPE_1),
                             resources.getInteger(R.integer.NOTIFICATION_TYPE_2) -> {
                                 Intent(this@NotificationActivity, RecipeDetailActivity::class.java)
-                                    .putExtra("recipeID", it.second.intentData.toInt())
+                                    .putExtra(Constants.INTENTNAME.RECIPE_ID, it.second.intentData.toInt())
                             }
                             resources.getInteger(R.integer.NOTIFICATION_TYPE_3) -> {
                                 Intent(this@NotificationActivity, PostDetailActivity::class.java)
-                                    .putExtra("postID", it.second.intentData.toInt())
+                                    .putExtra(Constants.INTENTNAME.POST_ID, it.second.intentData.toInt())
                             }
                             else -> {
                                 Intent(this@NotificationActivity, HomeActivity::class.java)
-                                    .putExtra("postID", it.second.intentData)
+                                    .putExtra(Constants.INTENTNAME.USER_ID, it.second.intentData)
                             }
                         }
                         startActivity(intent)

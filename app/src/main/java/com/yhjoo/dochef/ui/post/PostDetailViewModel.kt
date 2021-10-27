@@ -3,6 +3,7 @@ package com.yhjoo.dochef.ui.post
 import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.CommentRepository
@@ -18,7 +19,7 @@ class PostDetailViewModel(
     intent: Intent
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    val postId = intent.getIntExtra("postID", -1)
+    val postId = intent.getIntExtra(Constants.INTENTNAME.POST_ID, -1)
 
     private val _postDetail = MutableLiveData<Post>()
     private val _allComments = MutableLiveData<List<Comment>>()

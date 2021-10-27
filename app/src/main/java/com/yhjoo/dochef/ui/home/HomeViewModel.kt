@@ -32,19 +32,19 @@ class HomeViewModel(
 ) : ViewModel() {
     val activeUserId = App.activeUserId
 
-    val currentMode = if (intent.getStringExtra("userID") == null
-        || intent.getStringExtra("userID") == activeUserId
+    val currentMode = if (intent.getStringExtra(Constants.INTENTNAME.USER_ID) == null
+        || intent.getStringExtra(Constants.INTENTNAME.USER_ID) == activeUserId
     )
         HomeActivity.UIMODE.OWNER
     else HomeActivity.UIMODE.OTHERS
 
     private var targetUserId: String =
-        if (intent.getStringExtra("userID") == null
-            || intent.getStringExtra("userID") == activeUserId
+        if (intent.getStringExtra(Constants.INTENTNAME.USER_ID) == null
+            || intent.getStringExtra(Constants.INTENTNAME.USER_ID) == activeUserId
         )
             activeUserId
         else
-            intent.getStringExtra("userID")!!
+            intent.getStringExtra(Constants.INTENTNAME.USER_ID)!!
 
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference

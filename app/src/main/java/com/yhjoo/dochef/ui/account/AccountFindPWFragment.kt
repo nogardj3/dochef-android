@@ -16,9 +16,6 @@ import com.yhjoo.dochef.utils.ValidateUtil
 import kotlinx.coroutines.flow.collect
 
 class AccountFindPWFragment : BaseFragment() {
-    // TODO
-    // BindingAdapter onEditorActionListener
-
     private lateinit var binding: AccountFindpwFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(

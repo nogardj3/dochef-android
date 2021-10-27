@@ -5,8 +5,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="fragment"
             type="com.yhjoo.dochef.ui.main.TimelineFragment" />
@@ -47,10 +45,10 @@
                 android:layout_margin="10dp"
                 android:background="@drawable/bg_round"
                 android:onClick="@{()-> fragment.goHome(post)}"
-                android:scaleType="fitXY"
+                android:padding="1dp"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/main_timeline_post_img"
-                app:srcCompat="@drawable/ic_profile_black" />
+                tools:src="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/main_timeline_user_nickname"
@@ -157,12 +155,14 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/main_timeline_comment_user_img"
+                userimage="@{post.comments.size() != 0 ? post.comments.get(0).userImg : ``}"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginTop="8dp"
+                android:padding="1dp"
                 app:layout_constraintLeft_toLeftOf="@+id/main_timeline_user_img"
                 app:layout_constraintTop_toBottomOf="@+id/main_timeline_like_text"
-                app:srcCompat="@drawable/ic_profile_black" />
+                tools:src="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/main_timeline_comment_user_nickname"
@@ -171,6 +171,7 @@
                 android:layout_marginStart="4dp"
                 android:maxEms="5"
                 android:maxLines="1"
+                android:text="@{post.comments.size() != 0 ? post.comments.get(0).nickName : ``}"
                 android:textSize="12dp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_comment_user_img"
@@ -184,6 +185,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:maxLines="2"
+                android:text="@{post.comments.size() != 0 ? post.comments.get(0).contents : ``}"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_comment_user_img"
                 app:layout_constraintLeft_toRightOf="@+id/main_timeline_comment_user_nickname"
@@ -198,11 +200,12 @@
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="5dp"
+                android:text="@{post.comments.size() != 0 ? post.comments.get(0).dateTime : (long) 0}"
                 android:textSize="12dp"
                 app:layout_constraintBottom_toBottomOf="@+id/main_timeline_comment_user_nickname"
                 app:layout_constraintRight_toRightOf="@+id/main_timeline_time"
                 app:layout_constraintTop_toTopOf="@+id/main_timeline_comment_user_nickname"
-                tools:text="날짜" />
+                tools:text="1일 전" />
 
             <View
                 android:layout_width="match_parent"

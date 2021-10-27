@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.App
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
@@ -54,7 +55,7 @@ class UserFragment : BaseFragment() {
     fun goMyRecipe() {
         startActivity(
             Intent(requireContext(), RecipeMyListActivity::class.java)
-                .putExtra("userID", mainViewModel.activeUserId)
+                .putExtra(Constants.INTENTNAME.USER_ID, mainViewModel.activeUserId)
         )
     }
 

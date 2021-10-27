@@ -17,9 +17,6 @@ import com.yhjoo.dochef.utils.ValidateUtil
 import kotlinx.coroutines.flow.collect
 
 class AccountSignUpNickFragment : BaseFragment() {
-    // TODO
-    // BindingAdapter onEditorActionListener
-
     private lateinit var binding: AccountSignupnickFragmentBinding
     private val accountViewModel: AccountViewModel by activityViewModels {
         AccountViewModelFactory(

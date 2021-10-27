@@ -6,7 +6,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.databinding.ReciperecommendItemBinding
@@ -36,7 +35,6 @@ class RecipeRecommendAdapter(
             binding.apply {
                 activity = containerActivity
                 recipe = item
-                activeUserId = App.activeUserId
             }
         }
     }

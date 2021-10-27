@@ -6,7 +6,7 @@ import android.view.*
 import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.PostRepository
@@ -18,11 +18,7 @@ import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
 import java.util.*
 
-class MyRecipeFragment : BaseFragment(), OnRefreshListener {
-    // TODO
-    // RecyclerView listitem Databinding
-    // swipe refresh
-
+class MyRecipeFragment : BaseFragment() {
     private lateinit var binding: MainMyrecipeFragmentBinding
     private val mainViewModel: MainViewModel by activityViewModels {
         MainViewModelFactory(
@@ -46,7 +42,9 @@ class MyRecipeFragment : BaseFragment(), OnRefreshListener {
             lifecycleOwner = viewLifecycleOwner
 
             myrecipeSwipe.apply {
-                setOnRefreshListener(this@MyRecipeFragment)
+                setOnRefreshListener {
+                    mainViewModel.refreshMyrecipesList()
+                }
                 setColorSchemeColors(
                     resources.getColor(
                         R.color.colorPrimary,
@@ -70,15 +68,10 @@ class MyRecipeFragment : BaseFragment(), OnRefreshListener {
         return binding.root
     }
 
-    override fun onRefresh() {
-        binding.myrecipeSwipe.isRefreshing = true
-        mainViewModel.refreshMyrecipesList()
-    }
-
     fun goRecipeDetail(item: Recipe) {
         startActivity(
             Intent(requireContext(), RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
         )
     }
 }

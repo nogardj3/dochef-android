@@ -10,6 +10,7 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.RecyclerView
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.PostRepository
@@ -24,9 +25,7 @@ import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
 class InitFragment : BaseFragment() {
-    // TODO
-    // RecyclerView listitem Databinding
-    // Recommend Tag
+    // 앱 대표계정의 레시피들을 가져옴
 
     private val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
@@ -84,7 +83,7 @@ class InitFragment : BaseFragment() {
     fun goRecipeDetail(item: Recipe) {
         startActivity(
             Intent(requireContext(), RecipeDetailActivity::class.java)
-                .putExtra("recipeID", item.recipeID)
+                .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
         )
     }
 

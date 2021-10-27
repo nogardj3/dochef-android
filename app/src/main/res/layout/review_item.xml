@@ -31,9 +31,10 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="5dp"
             android:background="@drawable/bg_round"
+            android:padding="1dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_profile_black" />
+            tools:src="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/review_nickname"
@@ -86,7 +87,8 @@
             android:stepSize="0.1"
             android:theme="@style/BaseTheme.RatingBar"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
-            app:layout_constraintTop_toBottomOf="@+id/review_userimg" />
+            app:layout_constraintTop_toBottomOf="@+id/review_userimg"
+            tools:rating="3.3" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/review_contents"

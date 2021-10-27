@@ -6,8 +6,6 @@
 
     <data>
 
-        <import type="android.view.View" />
-
         <variable
             name="activity"
             type="com.yhjoo.dochef.ui.recipe.RecipeDetailActivity" />
@@ -63,7 +61,7 @@
                 android:background="@drawable/bg_round"
                 app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
                 app:layout_constraintTop_toBottomOf="@+id/recipedetail_recipetitle"
-                app:srcCompat="@drawable/ic_profile_black" />
+                tools:src="@drawable/ic_profile_black" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/recipedetail_nickname"

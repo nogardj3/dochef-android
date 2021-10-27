@@ -11,16 +11,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.MainTimelineItemBinding
-import com.yhjoo.dochef.utils.BindUtil
-import com.yhjoo.dochef.utils.OtherUtil
 
 class TimelineListAdapter(
     private val containerFragment: TimelineFragment
 ) :
     ListAdapter<Post, TimelineListAdapter.TimelineViewHolder>(TimelineListComparator()) {
-    // TODO
-    // databinding tag, comment
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimelineViewHolder {
         return TimelineViewHolder(
             DataBindingUtil.inflate(
@@ -50,15 +45,6 @@ class TimelineListAdapter(
                     val tagview: AppCompatTextView = tagcontainer.findViewById(R.id.tag_post_text)
                     tagview.text = "#$tag"
                     mainTimelineTags.addView(tagcontainer)
-                }
-
-                if (item.comments.size != 0) {
-                    BindUtil.loadUserImage(item.comments[0]!!.userImg, mainTimelineCommentUserImg)
-
-                    mainTimelineCommentUserNickname.text = item.comments[0]!!.nickName
-                    mainTimelineCommentContents.text = item.comments[0]!!.contents
-                    mainTimelineCommentDate.text =
-                        OtherUtil.millisToText(item.comments[0]!!.dateTime)
                 }
             }
         }

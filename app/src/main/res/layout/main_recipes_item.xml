@@ -48,19 +48,26 @@
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_new"
-                app:visibleNew="@{recipe.datetime}"
+                visibleNew="@{recipe.datetime}"
                 tools:visibility="visible" />
 
-            <androidx.appcompat.widget.AppCompatImageView
+            <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/main_recipes_ismine"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginLeft="4dp"
-                android:layout_marginTop="4dp"
-                android:visibility="@{activeUserId == recipe.userID}"
-                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_tag_post"
+                android:paddingHorizontal="6dp"
+                android:paddingVertical="2dp"
+                android:text="MY"
+                android:textColor="@color/white"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                android:visibility="@{recipe.userID == activeUserId}"
+                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_star_white" />
+                tools:visibility="visible" />
 
             <View
                 android:layout_width="match_parent"
@@ -143,10 +150,10 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/main_recipes_rating"
+                floatText="@{recipe.rating}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="4dp"
-                floatText="@{recipe.rating}"
                 android:textColor="@color/white"
                 app:layout_constraintBottom_toBottomOf="@+id/main_recipes_view_img"
                 app:layout_constraintRight_toLeftOf="@+id/main_recipes_view_img"

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="fragment"
             type="com.yhjoo.dochef.ui.main.UserFragment" />
@@ -19,14 +20,15 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/main_user_img"
+            userimage="@{viewModel.userDetail.userImg}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginTop="24dp"
+            android:padding="1dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            userimage="@{viewModel.userDetail.userImg}"
-            app:srcCompat="@drawable/ic_profile_black" />
+            tools:src="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/main_user_nickname"
@@ -34,8 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:maxLines="1"
-            android:textSize="20dp"
             android:text="@{viewModel.userDetail.nickname}"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
@@ -54,9 +56,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:background="?attr/selectableItemBackground"
+            android:onClick="@{()-> fragment.goHome()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="18dp"
-            android:onClick="@{()-> fragment.goHome()}"
             android:text="홈"
             android:textColor="@color/grey_text"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -84,9 +86,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
+            android:onClick="@{()-> fragment.goMyRecipe()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="18dp"
-            android:onClick="@{()-> fragment.goMyRecipe()}"
             android:text="내 레시피"
             android:textColor="@color/grey_text"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -114,9 +116,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
+            android:onClick="@{()-> fragment.goSetting()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="18dp"
-            android:onClick="@{()-> fragment.goSetting()}"
             android:text="설정"
             android:textColor="@color/grey_text"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -145,9 +147,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
+            android:onClick="@{()-> fragment.goReview()}"
             android:paddingHorizontal="12dp"
             android:paddingVertical="18dp"
-            android:onClick="@{()-> fragment.goReview()}"
             android:text="리뷰 작성"
             android:textColor="@color/grey_text"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -239,17 +239,17 @@ class PlayActivity : BaseActivity(), SensorEventListener {
     inner class RecipePlayFragmentAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
         override fun getItemCount(): Int {
-            return recipePhases.size
+            return recipePhases.size + 1
         }
 
         override fun createFragment(position: Int): Fragment {
             return when (position) {
                 0 -> PlayStartFragment()
-                recipePhases.size - 1 -> PlayEndFragment()
+                recipePhases.size -> PlayEndFragment()
                 else -> {
                     val fragment = PlayItemFragment()
                     fragment.arguments = bundleOf(
-                        Pair("position", position)
+                        Pair("position", position - 1)
                     )
                     fragment
                 }

@@ -31,11 +31,11 @@
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/recipehorizontal_recipeimg"
+                recipeimage="@{recipe.recipeImg}"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:scaleType="fitXY"
                 app:layout_constraintTop_toTopOf="parent"
-                app:recipeimage="@{recipe.recipeImg}"
                 tools:src="@raw/dummy_recipe_1" />
 
             <View
@@ -71,10 +71,10 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/recipehorizontal_rating"
+                floatText="@{recipe.rating}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:shadowRadius="1.5"
-                floatText="@{recipe.rating}"
                 android:textColor="@color/white"
 
                 android:textSize="12sp"

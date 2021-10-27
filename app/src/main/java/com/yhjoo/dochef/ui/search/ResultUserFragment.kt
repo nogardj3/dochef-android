@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
+import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
@@ -51,7 +52,7 @@ class ResultUserFragment : BaseFragment() {
     fun goHome(item: UserBrief) {
         startActivity(
             Intent(context, HomeActivity::class.java)
-                .putExtra("userID", item.userID)
+                .putExtra(Constants.INTENTNAME.USER_ID, item.userID)
         )
     }
 }

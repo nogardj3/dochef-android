@@ -6,7 +6,6 @@ plugins {
     id("com.google.firebase.crashlytics")
     id("kotlin-android")
     id("kotlin-kapt")
-//    id("androidx.navigation.safeargs.kotlin")
 }
 
 val admobAppId: String = gradleLocalProperties(rootDir).getProperty("admobAppId")
@@ -103,7 +102,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.google.android.gms:play-services-auth:19.2.0")
-    implementation("com.google.android.gms:play-services-ads:20.3.0")
+    implementation("com.google.android.gms:play-services-ads:20.4.0")
     implementation("com.firebaseui:firebase-ui-storage:8.0.0")
 
     // others

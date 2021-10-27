@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
 
         <variable
@@ -16,28 +17,29 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:onClick="@{()-> fragment.goHome(userBrief)}"
-        android:foreground="?attr/selectableItemBackground">
+        android:foreground="?attr/selectableItemBackground"
+        android:onClick="@{()-> fragment.goHome(userBrief)}">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/resultuser_img"
+            userimage="@{userBrief.userImg}"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_margin="10dp"
-            userimage="@{userBrief.userImg}"
             android:background="@drawable/bg_round"
+            android:padding="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_profile_black" />
+            tools:src="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/resultuser_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:textStyle="bold"
             android:text="@{userBrief.nickname}"
+            android:textStyle="bold"
             app:layout_constraintLeft_toRightOf="@+id/resultuser_img"
             app:layout_constraintTop_toTopOf="@+id/resultuser_img"
             tools:text="닉네임" />
@@ -46,8 +48,8 @@
             android:id="@+id/resultuser_follower_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textStyle="bold"
             android:text="@{String.format(@string/format_follower,userBrief.follower_count)}"
+            android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@+id/resultuser_nickname"
             app:layout_constraintTop_toBottomOf="@+id/resultuser_nickname"
             tools:text="팔로워 : 1" />

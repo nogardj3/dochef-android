@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -12,12 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.databinding.HomePostlistItemBinding
-import com.yhjoo.dochef.utils.BindUtil
 
 class PostListAdapter(private val containerActivity: HomeActivity) :
     ListAdapter<Post, PostListAdapter.HomePostViewHolder>(PostListComparator()) {
-    // TODO
-    // databinding tag, comment
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HomePostViewHolder {
         return HomePostViewHolder(
@@ -50,17 +46,6 @@ class PostListAdapter(private val containerActivity: HomeActivity) :
                     tagview.text = "#$tag"
                     homePostTags.addView(tagcontainer)
                 }
-
-                if (item.comments.size != 0) {
-                    homePostCommentGroup.isVisible = true
-
-                    BindUtil.loadUserImage(item.comments[0]!!.userImg, homePostCommentUserImg)
-
-                    homePostCommentUserNickname.text = item.comments[0]!!.nickName
-                    homePostCommentContents.text = item.comments[0]!!.contents
-                    homePostCommentDate.text =
-                        BindUtil.millisToText(item.comments[0]!!.dateTime)
-                } else homePostCommentGroup.isVisible = false
             }
         }
     }
