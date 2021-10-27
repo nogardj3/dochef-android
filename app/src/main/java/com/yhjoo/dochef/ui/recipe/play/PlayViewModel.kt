@@ -29,6 +29,10 @@ class RecipePlayViewModel(
     private var _eventResult = MutableSharedFlow<Pair<Any, String?>>()
     val eventResult = _eventResult.asSharedFlow()
 
+    init {
+        _likeThisRecipe.value = recipeDetail.likes.contains(activeUserId)
+    }
+
     fun createReview(
         contents: String,
         rating: Float,

@@ -8,8 +8,10 @@ import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.ui.follow.FollowListActivity.Companion.FOLLOWER
 import com.yhjoo.dochef.utils.OtherUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FollowListViewModel(
     private val repository: UserRepository,
@@ -52,9 +54,7 @@ class FollowListViewModel(
     }
 
     fun subscribeUser(targetID: String) = viewModelScope.launch {
-        OtherUtil.log("asdfasdf")
         repository.subscribeUser(activeUserId, targetID).collect {
-            OtherUtil.log("asdfasdf")
             if (it.isSuccessful) {
                 requestActiveUserDetail()
                 requestFollowLists()
@@ -63,9 +63,7 @@ class FollowListViewModel(
     }
 
     fun unsubscribeUser(targetID: String) = viewModelScope.launch {
-        OtherUtil.log("zzzzz")
         repository.unsubscribeUser(activeUserId, targetID).collect {
-            OtherUtil.log("zzzzz")
             if (it.isSuccessful) {
                 requestActiveUserDetail()
                 requestFollowLists()

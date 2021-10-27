@@ -51,12 +51,12 @@ class MainViewModel(
         refreshPostList()
     }
 
-    private suspend fun requestRecommendList() = withContext(Dispatchers.IO) {
+    private suspend fun requestRecommendList() = withContext(Dispatchers.Main) {
         recipeRepository.getRecipeList(
             Constants.RECIPE.SEARCHBY.ALL,
             Constants.RECIPE.SORT.POPULAR, null
         ).collect {
-            _allRecommendList.postValue(it.body())
+            _allRecommendList.value = it.body()
         }
     }
 
@@ -71,36 +71,29 @@ class MainViewModel(
         refreshRecipesList()
     }
 
-    fun refreshRecipesList() = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            recipeRepository.getRecipeList(
-                Constants.RECIPE.SEARCHBY.ALL,
-                recipesSort, null
-            ).collect {
-                _allRecipesList.postValue(it.body())
-            }
+    fun refreshRecipesList() = viewModelScope.launch(Dispatchers.IO) {
+        recipeRepository.getRecipeList(
+            Constants.RECIPE.SEARCHBY.ALL,
+            recipesSort, null
+        ).collect {
+            _allRecipesList.postValue(it.body())
         }
     }
 
-    fun refreshMyrecipesList() = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            recipeRepository.getRecipeList(
-                Constants.RECIPE.SEARCHBY.USERID,
-                recipesSort, activeUserId
-            ).collect {
-                _allMyrecipeList.postValue(it.body())
-            }
+    fun refreshMyrecipesList() = viewModelScope.launch(Dispatchers.IO) {
+        recipeRepository.getRecipeList(
+            Constants.RECIPE.SEARCHBY.USERID,
+            recipesSort, activeUserId
+        ).collect {
+            _allMyrecipeList.postValue(it.body())
         }
     }
 
-    fun refreshPostList() = viewModelScope.launch {
-        withContext(Dispatchers.IO) {
-            postRepository.getPostList().collect {
-                _allTimelines.postValue(it.body())
-            }
+    fun refreshPostList() = viewModelScope.launch(Dispatchers.IO) {
+        postRepository.getPostList().collect {
+            _allTimelines.postValue(it.body())
         }
     }
-
 }
 
 class MainViewModelFactory(

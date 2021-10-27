@@ -22,10 +22,12 @@ import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AccountViewModel(
     private val accountRepository: AccountRepository,
@@ -56,16 +58,91 @@ class AccountViewModel(
     val eventResult = _eventResult.asSharedFlow()
 
     init {
-        FirebaseMessaging.getInstance().token
-            .addOnCompleteListener { task: Task<String?> ->
-                if (!task.isSuccessful) {
-                    OtherUtil.log(task.exception.toString())
-                    return@addOnCompleteListener
-                } else fcmToken = task.result!!
+        viewModelScope.launch(Dispatchers.IO) {
+            FirebaseMessaging.getInstance().token
+                .addOnCompleteListener { task: Task<String?> ->
+                    if (!task.isSuccessful) {
+                        OtherUtil.log(task.exception.toString())
+                        return@addOnCompleteListener
+                    } else fcmToken = task.result!!
+                }
+        }
+    }
+
+    private suspend fun getFirebaseUserToken() = withContext(Dispatchers.IO) {
+        firebaseAuth.currentUser!!
+            .getIdToken(true)
+            .addOnCompleteListener { task: Task<GetTokenResult> ->
+                viewModelScope.launch {
+                    withContext(Dispatchers.IO) {
+                        if (task.isSuccessful) {
+                            firebaseUserToken = task.result!!.token!!
+                            checkUserInfo()
+                        } else {
+                            task.exception?.printStackTrace()
+
+                            val message = "토큰을 얻어오는데 실패했습니다."
+
+                            _eventResult.emit(
+                                Pair(
+                                    Events.Error.ERROR_REQUIRE_TOKEN,
+                                    message
+                                )
+                            )
+                        }
+                    }
+                }
             }
     }
 
-    fun clickFindPw(emailEditText: TextInputEditText) = viewModelScope.launch {
+    private suspend fun checkUserInfo() = withContext(Dispatchers.IO) {
+        accountRepository.checkUser(
+            firebaseUserToken,
+            firebaseAuth.uid!!,
+            fcmToken
+        ).collect {
+            if (it.code() == 409) {
+                val message = "회원가입을 시작합니다. 닉네임을 입력해주세요."
+
+                _eventResult.emit(
+                    Pair(
+                        Events.Error.ERROR_REQUIRE_SIGNUP,
+                        message
+                    )
+                )
+            } else
+                allComplete(it.body()!!)
+        }
+    }
+
+    private suspend fun allComplete(userInfo: UserBrief) = withContext(Dispatchers.IO) {
+        DatastoreUtil.getSharedPreferences(application.applicationContext).edit {
+            putBoolean(
+                application.applicationContext.getString(R.string.SP_ACTIVATEDDEVICE),
+                true
+            )
+            putString(
+                application.applicationContext.getString(R.string.SP_USERINFO),
+                Gson().toJson(userInfo)
+            )
+            apply()
+        }
+
+        OtherUtil.log(userInfo.toString())
+        App.activeUserId = userInfo.userID
+
+        firebaseAnalytics.logEvent(
+            FirebaseAnalytics.Event.LOGIN,
+            bundleOf(
+                Pair(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.SIGNIN),
+                Pair(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.SIGNIN)
+            )
+        )
+
+        _eventResult.emit(Pair(Events.Complete.COMPLETE, null))
+    }
+
+    fun clickFindPw(emailEditText: TextInputEditText) = viewModelScope.launch(Dispatchers.IO) {
         val email = emailEditText.text.toString()
         val validateResult = ValidateUtil.emailValidate(email)
 
@@ -76,15 +153,16 @@ class AccountViewModel(
                 .sendPasswordResetEmail(email)
                 .addOnCompleteListener { task ->
                     viewModelScope.launch {
-                        if (task.isSuccessful) {
-                            _eventResult.emit(Pair(Events.FindPW.COMPLETE, null))
-                        } else {
-                            task.exception?.printStackTrace()
+                        withContext(Dispatchers.IO) {
+                            if (task.isSuccessful) {
+                                _eventResult.emit(Pair(Events.FindPW.COMPLETE, null))
+                            } else {
+                                task.exception?.printStackTrace()
 
-                            val message = "이메일 전송에 실패했습니다."
-                            _eventResult.emit(Pair(Events.FindPW.ERROR_EMAIL, message))
+                                val message = "이메일 전송에 실패했습니다."
+                                _eventResult.emit(Pair(Events.FindPW.ERROR_EMAIL, message))
+                            }
                         }
-
                     }
                 }
         } else
@@ -92,7 +170,7 @@ class AccountViewModel(
     }
 
     fun clickSignInWithEmail(emailEditText: TextInputEditText, pwEditText: TextInputEditText) =
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val email = emailEditText.text.toString()
             val pw = pwEditText.text.toString()
 
@@ -122,7 +200,7 @@ class AccountViewModel(
                     firebaseAuth
                         .signInWithEmailAndPassword(email, pw)
                         .addOnCompleteListener { task: Task<AuthResult> ->
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 if (task.isSuccessful)
                                     getFirebaseUserToken()
                                 else {
@@ -155,13 +233,13 @@ class AccountViewModel(
             }
         }
 
-    fun clickSignInWithGoogle(idToken: String) = viewModelScope.launch {
+    fun clickSignInWithGoogle(idToken: String) = viewModelScope.launch(Dispatchers.IO) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
 
         firebaseAuth
             .signInWithCredential(credential)
             .addOnCompleteListener { task: Task<AuthResult?> ->
-                viewModelScope.launch {
+                viewModelScope.launch(Dispatchers.IO) {
                     if (task.isSuccessful) getFirebaseUserToken()
                     else {
                         task.exception?.printStackTrace()
@@ -180,7 +258,7 @@ class AccountViewModel(
     }
 
     fun clickSignUpWithEmail(emailEditText: TextInputEditText, pwEditText: TextInputEditText) =
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val email = emailEditText.text.toString()
             val pw = pwEditText.text.toString()
 
@@ -210,7 +288,7 @@ class AccountViewModel(
                     firebaseAuth
                         .createUserWithEmailAndPassword(email, pw)
                         .addOnCompleteListener { task: Task<AuthResult> ->
-                            viewModelScope.launch {
+                            viewModelScope.launch(Dispatchers.IO) {
                                 if (task.isSuccessful)
                                     getFirebaseUserToken()
                                 else {
@@ -244,122 +322,51 @@ class AccountViewModel(
             }
         }
 
-    fun clickSignUpWithNickname(nicknameEditText: TextInputEditText) = viewModelScope.launch {
-        val nickname = nicknameEditText.text.toString()
-        val validateResult = ValidateUtil.nicknameValidate(nickname)
+    fun clickSignUpWithNickname(nicknameEditText: TextInputEditText) =
+        viewModelScope.launch(Dispatchers.IO) {
+            val nickname = nicknameEditText.text.toString()
+            val validateResult = ValidateUtil.nicknameValidate(nickname)
 
-        if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
-            _eventResult.emit(Pair(Events.SignUpNickname.WAIT, null))
+            if (validateResult.first == ValidateUtil.NicknameResult.VALID) {
+                _eventResult.emit(Pair(Events.SignUpNickname.WAIT, null))
 
-            accountRepository.createUser(
-                firebaseUserToken,
-                fcmToken,
-                firebaseAuth.uid!!,
-                nickname
-            ).collect {
-                if (it.code() == 403) {
-                    _eventResult.emit(
-                        Pair(
-                            Events.SignUpNickname.ERROR,
-                            "이미 존재하는 닉네임입니다."
-                        )
-                    )
-                } else {
-                    firebaseAnalytics.logEvent(
-                        FirebaseAnalytics.Event.SIGN_UP, bundleOf(
-                            Pair(
-                                FirebaseAnalytics.Param.ITEM_ID,
-                                Constants.ANALYTICS.ID.SIGNUP
-                            ),
-                            Pair(
-                                FirebaseAnalytics.Param.ITEM_NAME,
-                                Constants.ANALYTICS.NAME.SIGNUP
-                            )
-                        )
-                    )
-                    allComplete(it.body()!!)
-                }
-            }
-        } else
-            _eventResult.emit(
-                Pair(
-                    Events.SignUpNickname.ERROR,
-                    validateResult.second
-                )
-            )
-    }
-
-    private fun getFirebaseUserToken() = viewModelScope.launch {
-        firebaseAuth.currentUser!!
-            .getIdToken(true)
-            .addOnCompleteListener { task: Task<GetTokenResult> ->
-                viewModelScope.launch {
-                    if (task.isSuccessful) {
-                        firebaseUserToken = task.result!!.token!!
-                        checkUserInfo()
-                    } else {
-                        task.exception?.printStackTrace()
-
-                        val message = "토큰을 얻어오는데 실패했습니다."
-
+                accountRepository.createUser(
+                    firebaseUserToken,
+                    fcmToken,
+                    firebaseAuth.uid!!,
+                    nickname
+                ).collect {
+                    if (it.code() == 403) {
                         _eventResult.emit(
                             Pair(
-                                Events.Error.ERROR_REQUIRE_TOKEN,
-                                message
+                                Events.SignUpNickname.ERROR,
+                                "이미 존재하는 닉네임입니다."
                             )
                         )
+                    } else {
+                        firebaseAnalytics.logEvent(
+                            FirebaseAnalytics.Event.SIGN_UP, bundleOf(
+                                Pair(
+                                    FirebaseAnalytics.Param.ITEM_ID,
+                                    Constants.ANALYTICS.ID.SIGNUP
+                                ),
+                                Pair(
+                                    FirebaseAnalytics.Param.ITEM_NAME,
+                                    Constants.ANALYTICS.NAME.SIGNUP
+                                )
+                            )
+                        )
+                        allComplete(it.body()!!)
                     }
                 }
-            }
-    }
-
-    private fun checkUserInfo() = viewModelScope.launch {
-        accountRepository.checkUser(
-            firebaseUserToken,
-            firebaseAuth.uid!!,
-            fcmToken
-        ).collect {
-            if (it.code() == 409) {
-                val message = "회원가입을 시작합니다. 닉네임을 입력해주세요."
-
+            } else
                 _eventResult.emit(
                     Pair(
-                        Events.Error.ERROR_REQUIRE_SIGNUP,
-                        message
+                        Events.SignUpNickname.ERROR,
+                        validateResult.second
                     )
                 )
-            } else
-                allComplete(it.body()!!)
         }
-    }
-
-    private fun allComplete(userInfo: UserBrief) = viewModelScope.launch {
-        OtherUtil.log(userInfo.toString())
-        DatastoreUtil.getSharedPreferences(application.applicationContext).edit {
-            putBoolean(
-                application.applicationContext.getString(R.string.SP_ACTIVATEDDEVICE),
-                true
-            )
-            putString(
-                application.applicationContext.getString(R.string.SP_USERINFO),
-                Gson().toJson(userInfo)
-            )
-            apply()
-        }
-
-        OtherUtil.log(userInfo.toString())
-        App.activeUserId = userInfo.userID
-
-        firebaseAnalytics.logEvent(
-            FirebaseAnalytics.Event.LOGIN,
-            bundleOf(
-                Pair(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.SIGNIN),
-                Pair(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.SIGNIN)
-            )
-        )
-
-        _eventResult.emit(Pair(Events.Complete.COMPLETE, null))
-    }
 
     sealed class Events {
         enum class FindPW {

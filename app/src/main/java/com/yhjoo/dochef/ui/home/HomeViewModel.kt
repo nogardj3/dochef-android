@@ -53,23 +53,27 @@ class HomeViewModel(
     private var _userDetail = MutableLiveData<UserDetail>()
     private var _allRecipes = MutableLiveData<List<Recipe>>()
     private var _allPosts = MutableLiveData<List<Post>>()
+    private var _isFollowTarget = MutableLiveData<Boolean>()
     val userDetail: LiveData<UserDetail>
         get() = _userDetail
     val allRecipes: LiveData<List<Recipe>>
         get() = _allRecipes
     val allPosts: LiveData<List<Post>>
         get() = _allPosts
+    val isFollowTarget: LiveData<Boolean>
+        get() = _isFollowTarget
 
     private var _eventResult = MutableSharedFlow<Pair<Any, String?>>()
     val eventResult = _eventResult.asSharedFlow()
 
     init {
-        requestActiveUserDetail()
+        requestTargetUserDetail()
         requestRecipeList()
         requestPostListById()
+        requestIsFollowTarget()
     }
 
-    private fun requestActiveUserDetail() = viewModelScope.launch {
+    private fun requestTargetUserDetail() = viewModelScope.launch {
         userRepository.getUserDetail(targetUserId).collect {
             _userDetail.value = it.body()
         }
@@ -91,6 +95,12 @@ class HomeViewModel(
         }
     }
 
+    private fun requestIsFollowTarget() = viewModelScope.launch {
+        userRepository.getUserDetail(activeUserId).collect {
+            _isFollowTarget.value = it.body()!!.follow.contains(targetUserId)
+        }
+    }
+
     private fun updateUser(userImg: String, nickname: String, bio: String) = viewModelScope.launch {
         accountRepository.updateUser(
             targetUserId,
@@ -101,14 +111,28 @@ class HomeViewModel(
             .collect {
                 if (it.code() == 200) {
                     _eventResult.emit(Pair(Events.UPDATE_COMPLETE, null))
-                    requestActiveUserDetail()
+                    requestTargetUserDetail()
                 } else
                     OtherUtil.log(it.code().toString())
             }
     }
 
-    fun subscribeUser() = viewModelScope.launch {
-
+    fun toggleSubscribeUser() = viewModelScope.launch {
+        if (_isFollowTarget.value == true) {
+            userRepository.unsubscribeUser(activeUserId, targetUserId).collect {
+                if (it.isSuccessful){
+                    _isFollowTarget.value = false
+                    requestTargetUserDetail()
+                }
+            }
+        } else {
+            userRepository.subscribeUser(activeUserId, targetUserId).collect {
+                if (it.isSuccessful){
+                    _isFollowTarget.value = true
+                    requestTargetUserDetail()
+                }
+            }
+        }
     }
 
     fun checkNickname(nickname: String) = viewModelScope.launch {

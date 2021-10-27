@@ -7,8 +7,10 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class SearchViewModel(
     private val userRepository: UserRepository,
@@ -30,53 +32,54 @@ class SearchViewModel(
     val queriedRecipeByTag: LiveData<List<Recipe>>
         get() = _queriedRecipeByTag
 
-    fun searchStart(keyword: String) {
-        requestUser(keyword)
-        requestRecipeByName(keyword)
-        requestRecipeByIngredients(keyword)
-        requestRecipeByTag(keyword)
-    }
-
-    private fun requestUser(query: String) = viewModelScope.launch {
+    private suspend fun requestUser(query: String) {
         userRepository.getUserByNickname(
             query
         ).collect {
-            _queriedUsers.value = it.body()
+            _queriedUsers.postValue(it.body())
         }
     }
 
-    private fun requestRecipeByName(query: String) = viewModelScope.launch {
+    private suspend fun requestRecipeByName(query: String) {
         recipeRepository.getRecipeList(
             Constants.RECIPE.SEARCHBY.RECIPENAME,
             Constants.RECIPE.SORT.POPULAR,
             query
         ).collect {
-            _queriedRecipeByName.value = it.body()
+            _queriedRecipeByName.postValue(it.body())
         }
     }
 
 
-    private fun requestRecipeByIngredients(query: String) = viewModelScope.launch {
+    private suspend fun requestRecipeByIngredients(query: String) {
         recipeRepository.getRecipeList(
             Constants.RECIPE.SEARCHBY.INGREDIENT,
             Constants.RECIPE.SORT.POPULAR,
             query
         ).collect {
-            _queriedRecipeByIngredient.value = it.body()
+            _queriedRecipeByIngredient.postValue(it.body())
         }
     }
 
 
-    private fun requestRecipeByTag(query: String) = viewModelScope.launch {
+    private suspend fun requestRecipeByTag(query: String) {
         recipeRepository.getRecipeList(
             Constants.RECIPE.SEARCHBY.TAG,
             Constants.RECIPE.SORT.POPULAR,
             query
         ).collect {
-            _queriedRecipeByTag.value = it.body()
+            _queriedRecipeByTag.postValue(it.body())
         }
     }
 
+    fun searchStart(keyword: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            requestUser(keyword)
+            requestRecipeByName(keyword)
+            requestRecipeByIngredients(keyword)
+            requestRecipeByTag(keyword)
+        }
+    }
 }
 
 class SearchViewModelFactory(

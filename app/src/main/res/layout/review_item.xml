@@ -25,6 +25,7 @@
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/review_userimg"
+            userimage="@{review.userImg}"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginLeft="5dp"
@@ -32,7 +33,6 @@
             android:background="@drawable/bg_round"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            userimage="@{review.userImg}"
             app:srcCompat="@drawable/ic_profile_black" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -42,8 +42,8 @@
             android:layout_marginStart="10dp"
             android:maxEms="5"
             android:maxLines="1"
-            android:textSize="12dp"
             android:text="@{review.nickname}"
+            android:textSize="12dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
             app:layout_constraintLeft_toRightOf="@+id/review_userimg"
@@ -54,8 +54,8 @@
             android:id="@+id/review_user_wrapper"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:onClick="@{()-> activity.goHome(review.userID)}"
             android:foreground="?selectableItemBackground"
+            android:onClick="@{()-> activity.goHome(review.userID)}"
             app:layout_constraintBottom_toBottomOf="@+id/review_userimg"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
             app:layout_constraintRight_toRightOf="@+id/review_nickname"
@@ -67,8 +67,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
-            android:textSize="12dp"
             android:text="@{review.dateTime}"
+            android:textSize="12dp"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="1일 전" />
@@ -80,8 +80,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:isIndicator="true"
+            android:max="5"
             android:numStars="5"
             android:rating="@{review.rating}"
+            android:stepSize="0.1"
             android:theme="@style/BaseTheme.RatingBar"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
             app:layout_constraintTop_toBottomOf="@+id/review_userimg" />
@@ -92,8 +94,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="4dp"
-            android:textSize="12dp"
             android:text="@{review.contents}"
+            android:textSize="12dp"
             app:layout_constraintLeft_toLeftOf="@+id/review_userimg"
             app:layout_constraintTop_toBottomOf="@+id/review_rating"
             tools:text="내용" />

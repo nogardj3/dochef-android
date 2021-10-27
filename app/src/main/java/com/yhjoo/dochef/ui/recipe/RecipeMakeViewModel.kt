@@ -5,8 +5,10 @@ import androidx.lifecycle.*
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RecipeMakeViewModel(
     private val recipeRepository: RecipeRepository,
@@ -20,10 +22,12 @@ class RecipeMakeViewModel(
         get() = _recipeDetail
 
     init {
-        requestRecipeDetail()
+        viewModelScope.launch {
+            requestRecipeDetail()
+        }
     }
 
-    private fun requestRecipeDetail() = viewModelScope.launch {
+    private suspend fun requestRecipeDetail() = withContext(Dispatchers.Main) {
         recipeRepository.getRecipeDetail(recipeId).collect {
             _recipeDetail.value = it.body()
         }

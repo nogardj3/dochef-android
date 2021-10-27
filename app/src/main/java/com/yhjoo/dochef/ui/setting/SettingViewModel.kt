@@ -4,6 +4,7 @@ import androidx.core.text.parseAsHtml
 import androidx.lifecycle.*
 import com.yhjoo.dochef.data.model.ExpandableItem
 import com.yhjoo.dochef.data.repository.BasicRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
@@ -23,26 +24,28 @@ class SettingViewModel(
         get() = _tosText
 
     init {
-        requestFAQs()
-        requestNotices()
-        requestTosText()
+        viewModelScope.launch(Dispatchers.IO) {
+            requestFAQs()
+            requestNotices()
+            requestTosText()
+        }
     }
 
-    private fun requestFAQs() = viewModelScope.launch {
+    private suspend fun requestFAQs() {
         repository.getFAQs().collect {
-            _allFAQs.value = it.body()
+            _allFAQs.postValue(it.body())
         }
     }
 
-    private fun requestNotices() = viewModelScope.launch {
+    private suspend fun requestNotices() {
         repository.getNotices().collect {
-            _allNotices.value = it.body()
+            _allNotices.postValue(it.body())
         }
     }
 
-    private fun requestTosText() = viewModelScope.launch {
+    private suspend fun requestTosText() {
         repository.getTOS().collect {
-            _tosText.value = it.body()!!["message"].asString.parseAsHtml()
+            _tosText.postValue(it.body()!!["message"].asString.parseAsHtml())
         }
     }
 }

@@ -69,10 +69,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="4dp"
                     android:layout_marginBottom="4dp"
-                    android:backgroundTint="@color/white"
                     android:onClick="@{()->activity.addImage()}"
                     android:src="@drawable/ic_mage_search_white"
                     android:tint="@color/grey_text"
+                    app:backgroundTint="@color/white"
                     app:layout_constraintBottom_toBottomOf="@+id/postwrite_postimg"
                     app:layout_constraintRight_toRightOf="parent" />
 

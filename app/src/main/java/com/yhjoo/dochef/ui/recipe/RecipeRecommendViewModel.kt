@@ -6,8 +6,10 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RecipeRecommendViewModel(
     private val recipeRepository: RecipeRepository,
@@ -21,16 +23,18 @@ class RecipeRecommendViewModel(
         get() = _allRecipeList
 
     init {
-        requestRecipeList()
+        viewModelScope.launch {
+            requestRecipeList()
+        }
     }
 
-    private fun requestRecipeList() = viewModelScope.launch {
+    private suspend fun requestRecipeList() {
         recipeRepository.getRecipeList(
             Constants.RECIPE.SEARCHBY.TAG,
             Constants.RECIPE.SORT.POPULAR,
             tagName
         ).collect {
-            _allRecipeList.postValue(it.body())
+            _allRecipeList.value = it.body()
         }
     }
 }

@@ -5,8 +5,10 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RecipeMyListViewModel(
     private val recipeRepository: RecipeRepository
@@ -18,11 +20,13 @@ class RecipeMyListViewModel(
         get() = _allRecipeList
 
     init {
-        requestRecipeList()
+        viewModelScope.launch {
+            requestRecipeList()
+        }
     }
 
-    private fun requestRecipeList() =
-        viewModelScope.launch {
+    private suspend fun requestRecipeList() =
+        withContext(Dispatchers.Main) {
             recipeRepository.getRecipeList(
                 Constants.RECIPE.SEARCHBY.USERID,
                 Constants.RECIPE.SORT.LATEST,
@@ -33,7 +37,7 @@ class RecipeMyListViewModel(
         }
 
     fun disLikeRecipe(recipeId: Int, userId: String) =
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             recipeRepository.dislikeRecipe(recipeId, userId).collect {
                 requestRecipeList()
             }

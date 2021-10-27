@@ -7,10 +7,12 @@ import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.model.Review
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RecipeDetailViewModel(
     private val recipeRepository: RecipeRepository,
@@ -32,28 +34,30 @@ class RecipeDetailViewModel(
     val eventResult = _eventResult.asSharedFlow()
 
     init {
-        requestRecipeDetail()
-        requestReviews()
-        addCount()
+        viewModelScope.launch {
+            requestRecipeDetail()
+            requestReviews()
+            addCount()
+        }
     }
 
-    private fun requestRecipeDetail() = viewModelScope.launch {
+    private suspend fun requestRecipeDetail() = withContext(Dispatchers.Main) {
         recipeRepository.getRecipeDetail(recipeId).collect {
             _recipeDetail.value = it.body()
         }
     }
 
-    private fun requestReviews() = viewModelScope.launch {
+    private suspend fun requestReviews() = withContext(Dispatchers.Main) {
         reviewRepository.getReviews(recipeId).collect {
             _allReviews.value = it.body()
         }
     }
 
-    private fun addCount() = viewModelScope.launch {
+    private suspend fun addCount() = withContext(Dispatchers.IO) {
         recipeRepository.addCount(recipeId).collect {}
     }
 
-    fun toggleLikeRecipe() = viewModelScope.launch {
+    fun toggleLikeRecipe() = viewModelScope.launch(Dispatchers.IO) {
         if (_recipeDetail.value!!.likes.contains(activeUserId))
             recipeRepository.dislikeRecipe(recipeId, activeUserId).collect {
                 requestRecipeDetail()
@@ -64,7 +68,7 @@ class RecipeDetailViewModel(
             }
     }
 
-    fun deleteRecipe() = viewModelScope.launch {
+    fun deleteRecipe() = viewModelScope.launch(Dispatchers.IO) {
         recipeRepository.deleteRecipe(recipeId, activeUserId).collect {
             if (it.isSuccessful)
                 _eventResult.emit(Pair(Events.IS_DELETED,""))

@@ -6,7 +6,7 @@
 
     <data>
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
         <variable
             name="activity"
@@ -43,9 +43,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                android:text="@{viewModel.recipeDetail.recipeName}"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
+                android:text="@{viewModel.recipeDetail.recipeName}"
                 android:textColor="@color/black"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -105,8 +105,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:text="@{viewModel.recipeDetail.contents}"
                 android:minLines="2"
+                android:text="@{viewModel.recipeDetail.contents}"
                 android:textSize="16sp"
                 app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"
                 app:layout_constraintRight_toRightOf="@+id/recipedetail_startrecipe"
@@ -183,9 +183,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:layout_marginRight="10dp"
+                android:onClick="@{()->activity.goRecipePlay(viewModel.recipeDetail)}"
                 android:text="시작하기"
                 android:textColor="@color/white"
-                android:onClick="@{()->activity.goRecipePlay(viewModel.recipeDetail)}"
                 app:backgroundTint="@color/colorPrimary"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recipedetail_tags" />
@@ -247,7 +247,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
                 android:isIndicator="true"
-                android:max="6"
+                android:max="5"
                 android:numStars="5"
                 android:rating="@{viewModel.recipeDetail.rating}"
                 android:stepSize="0.1"
@@ -258,12 +258,12 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/recipedetail_review_rating_text"
+                floatText="@{viewModel.recipeDetail.rating}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/bg_round2"
                 android:textColor="@color/black"
-                floatText="@{viewModel.recipeDetail.rating}"
                 android:textSize="32sp"
                 android:textStyle="bold"
                 app:layout_constraintLeft_toLeftOf="@+id/recipedetail_recipetitle"

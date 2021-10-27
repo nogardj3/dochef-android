@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class SplashViewModel(
     private val app: Application,
@@ -29,17 +28,15 @@ class SplashViewModel(
     val eventResult = _eventResult.asSharedFlow()
 
     init {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                FirebaseAnalytics.getInstance(app.applicationContext).apply {
-                    logEvent(FirebaseAnalytics.Event.APP_OPEN) {
-                        param(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.START)
-                        param(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.START)
-                    }
+        viewModelScope.launch(Dispatchers.IO) {
+            FirebaseAnalytics.getInstance(app.applicationContext).apply {
+                logEvent(FirebaseAnalytics.Event.APP_OPEN) {
+                    param(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.START)
+                    param(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.START)
                 }
-
-                checkServerAlive()
             }
+
+            checkServerAlive()
         }
     }
 

@@ -4,11 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <import type="com.yhjoo.dochef.ui.home.HomeActivity.UIMODE"/>
+
+        <import type="com.yhjoo.dochef.ui.home.HomeActivity.UIMODE" />
 
         <variable
             name="activity"
             type="com.yhjoo.dochef.ui.home.HomeActivity" />
+
         <variable
             name="viewModel"
             type="com.yhjoo.dochef.ui.home.HomeViewModel" />
@@ -34,7 +36,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:theme="@style/BaseTheme.Toolbar"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:title="@{viewModel.userDetail.nickname}"/>
+                    app:title="@{viewModel.userDetail.nickname}" />
 
                 <androidx.constraintlayout.widget.Group
                     android:id="@+id/home_revisegroup"
@@ -60,14 +62,15 @@
                     android:background="@drawable/bg_round"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
-                    app:userimage="@{viewModel.userDetail.userImg}"
-                    app:srcCompat="@drawable/ic_profile_black" />
+                    app:srcCompat="@drawable/ic_profile_black"
+                    app:userimage="@{viewModel.userDetail.userImg}" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/home_userimg_revise"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:background="@drawable/bg_round2"
+                    android:onClick="@{()-> activity.reviseProfileImage()}"
                     android:padding="5dp"
                     android:tint="@color/white"
                     android:visibility="gone"
@@ -75,7 +78,6 @@
                     app:layout_constraintBottom_toBottomOf="@+id/home_userimg"
                     app:layout_constraintRight_toRightOf="@+id/home_userimg"
                     app:srcCompat="@drawable/ic_build_black"
-                    android:onClick="@{()-> activity.reviseProfileImage()}"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -86,13 +88,13 @@
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="5dp"
                     android:gravity="center"
+                    android:text="@{``+viewModel.userDetail.recipeCount}"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintLeft_toRightOf="@+id/home_userimg"
                     app:layout_constraintTop_toBottomOf="@+id/home_toolbar"
                     app:layout_constraintWidth_percent="0.2"
-                    android:text="@{``+viewModel.userDetail.recipeCount}"
                     tools:text="0" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -111,18 +113,18 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:foreground="?selectableItemBackground"
+                    android:onClick="@{()->activity.goMyRecipe(viewModel.userDetail)}"
                     app:layout_constraintBottom_toBottomOf="@+id/home_recipetext"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_recipecount"
-                    app:layout_constraintTop_toTopOf="@+id/home_recipecount"
-                    android:onClick="@{()->activity.goMyRecipe(viewModel.userDetail)}"
-                    />
+                    app:layout_constraintTop_toTopOf="@+id/home_recipecount" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/home_followercount"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:text="@{``+viewModel.userDetail.followerCount}"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -130,7 +132,6 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_recipecount"
                     app:layout_constraintTop_toTopOf="@+id/home_recipecount"
                     app:layout_constraintWidth_percent="0.2"
-                    android:text="@{``+viewModel.userDetail.followerCount}"
                     tools:text="0" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -149,11 +150,11 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:foreground="?selectableItemBackground"
+                    android:onClick="@{()->activity.goFollowerList(viewModel.userDetail)}"
                     app:layout_constraintBottom_toBottomOf="@+id/home_followertext"
                     app:layout_constraintLeft_toLeftOf="@+id/home_followercount"
                     app:layout_constraintRight_toRightOf="@+id/home_followercount"
-                    app:layout_constraintTop_toTopOf="@+id/home_followercount"
-                    android:onClick="@{()->activity.goFollowerList(viewModel.userDetail)}"/>
+                    app:layout_constraintTop_toTopOf="@+id/home_followercount" />
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/home_followingcount"
@@ -161,6 +162,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="5dp"
                     android:gravity="center"
+                    android:text="@{``+viewModel.userDetail.followingCount}"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -168,7 +170,6 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_followercount"
                     app:layout_constraintTop_toTopOf="@+id/home_recipecount"
                     app:layout_constraintWidth_percent="0.2"
-                    android:text="@{``+viewModel.userDetail.followingCount}"
                     tools:text="0" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -187,26 +188,42 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:foreground="?selectableItemBackground"
+                    android:onClick="@{()->activity.goFollowingList(viewModel.userDetail)}"
                     app:layout_constraintBottom_toBottomOf="@+id/home_followingtext"
                     app:layout_constraintLeft_toLeftOf="@+id/home_followingcount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"
-                    app:layout_constraintTop_toTopOf="@+id/home_followingcount"
-                    android:onClick="@{()->activity.goFollowingList(viewModel.userDetail)}" />
+                    app:layout_constraintTop_toTopOf="@+id/home_followingcount" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/home_follow_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:onClick="@{()-> viewModel.toggleSubscribeUser()}"
                     android:text="팔로우"
                     android:textColor="@color/white"
-                    android:visibility="@{viewModel.currentMode == UIMODE.OTHERS}"
+                    android:visibility="@{viewModel.currentMode == UIMODE.OTHERS &amp;&amp; !viewModel.isFollowTarget}"
                     app:backgroundTint="@color/colorPrimary"
-                    android:onClick="@{}"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"
                     app:layout_constraintTop_toBottomOf="@+id/home_followingtext"
+                    tools:text="팔로우"
                     tools:visibility="visible" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/home_unfollow_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:onClick="@{()-> viewModel.toggleSubscribeUser()}"
+                    android:text="언팔로우"
+                    android:textColor="@color/grey_text"
+                    android:visibility="@{viewModel.currentMode == UIMODE.OTHERS &amp;&amp; viewModel.isFollowTarget}"
+                    app:backgroundTint="@color/grey"
+                    app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
+                    app:layout_constraintRight_toRightOf="@+id/home_followingcount"
+                    app:layout_constraintTop_toBottomOf="@+id/home_followingtext"
+                    tools:text="언팔로우" />
 
                 <View
                     android:id="@+id/home_divider"
@@ -223,9 +240,9 @@
                     android:layout_marginStart="4dp"
                     android:layout_marginTop="4dp"
                     android:padding="10dp"
+                    android:text="@{viewModel.userDetail.nickname}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
-                    android:text="@{viewModel.userDetail.nickname}"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/home_divider"
                     tools:text="닉네임" />
@@ -235,6 +252,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:background="@drawable/bg_round2"
+                    android:onClick="@{()-> activity.clickReviseNickname()}"
                     android:padding="5dp"
                     android:tint="@color/white"
                     android:visibility="gone"
@@ -243,7 +261,6 @@
                     app:layout_constraintLeft_toRightOf="@+id/home_nickname"
                     app:layout_constraintTop_toTopOf="@+id/home_nickname"
                     app:srcCompat="@drawable/ic_build_black"
-                    android:onClick="@{()-> activity.clickReviseNickname()}"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -267,6 +284,7 @@
                     android:layout_height="20dp"
                     android:layout_marginEnd="10dp"
                     android:background="@drawable/bg_round2"
+                    android:onClick="@{()-> activity.clickReviseContents()}"
                     android:padding="5dp"
                     android:tint="@color/white"
                     android:visibility="gone"
@@ -275,7 +293,6 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/home_profiletext"
                     app:srcCompat="@drawable/ic_build_black"
-                    android:onClick="@{()-> activity.clickReviseContents()}"
                     tools:visibility="visible" />
 
                 <androidx.appcompat.widget.AppCompatTextView
