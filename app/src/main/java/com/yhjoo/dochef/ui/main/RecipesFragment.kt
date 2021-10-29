@@ -43,11 +43,11 @@ class RecipesFragment : BaseFragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            recipesSwipe.apply {
-                setOnRefreshListener {
+            recipesSwipe.also {
+                it.setOnRefreshListener {
                     mainViewModel.refreshRecipesList()
                 }
-                setColorSchemeColors(
+                it.setColorSchemeColors(
                     resources.getColor(
                         R.color.colorPrimary,
                         null

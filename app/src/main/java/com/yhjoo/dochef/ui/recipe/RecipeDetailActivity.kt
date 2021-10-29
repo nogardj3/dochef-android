@@ -57,8 +57,8 @@ class RecipeDetailActivity : BaseActivity() {
 
             reviewListAdapter = ReviewListAdapter(this@RecipeDetailActivity)
 
-            recipedetailReviewRecycler.apply {
-                layoutManager =
+            recipedetailReviewRecycler.also {
+                it.layoutManager =
                     object : LinearLayoutManager(this@RecipeDetailActivity) {
                         override fun canScrollHorizontally(): Boolean {
                             return false
@@ -68,7 +68,7 @@ class RecipeDetailActivity : BaseActivity() {
                             return false
                         }
                     }
-                adapter = reviewListAdapter
+                it.adapter = reviewListAdapter
             }
         }
 

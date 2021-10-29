@@ -68,10 +68,8 @@ class PostWriteActivity : BaseActivity() {
             OtherUtil.log(postWriteViewModel.currentMode.toString())
 
             if (postWriteViewModel.currentMode == UIMODE.REVISE) {
-                binding.apply {
-                    postwriteToolbar.title = "수정"
-                    postwriteTags.setTags(postWriteViewModel.postInfo!!.tags.toTypedArray())
-                }
+                postwriteToolbar.title = "수정"
+                postwriteTags.setTags(postWriteViewModel.postInfo!!.tags.toTypedArray())
             }
 
             postwriteContents.addTextChangedListener(contentsTextWatcher)

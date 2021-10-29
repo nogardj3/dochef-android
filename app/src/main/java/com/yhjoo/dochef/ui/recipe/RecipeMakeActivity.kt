@@ -9,9 +9,11 @@ import com.yhjoo.dochef.databinding.RecipemakeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 
 class RecipeMakeActivity : BaseActivity() {
-    object MODE {
-        const val WRITE = 0
-        const val REVISE = 1
+    companion object{
+        object MODE {
+            const val WRITE = 0
+            const val REVISE = 1
+        }
     }
 
     private val binding: RecipemakeActivityBinding by lazy {

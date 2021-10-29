@@ -47,18 +47,18 @@ class SearchActivity : BaseActivity() {
         binding.apply {
             viewPagerAdapter = SearchViewPagerAdapter(this@SearchActivity)
 
-            searchViewpager.apply {
-                offscreenPageLimit = 4
-                adapter = viewPagerAdapter
+            searchViewpager.also {
+                it.offscreenPageLimit = 4
+                it.adapter = viewPagerAdapter
             }
 
             TabLayoutMediator(searchTablayout, searchViewpager) { tab, position ->
                 tab.text = searchTabs[position].first
             }.attach()
 
-            searchSearchview.apply {
-                isSubmitButtonEnabled = true
-                setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            searchSearchview.also {
+                it.isSubmitButtonEnabled = true
+                it.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                     override fun onQueryTextChange(newText: String?): Boolean {
                         return false
                     }

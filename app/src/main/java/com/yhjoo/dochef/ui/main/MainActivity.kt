@@ -78,10 +78,10 @@ class MainActivity : BaseActivity() {
         binding.apply {
             lifecycleOwner = this@MainActivity
 
-            mainViewpager.apply {
-                offscreenPageLimit = 5
-                adapter = mainFragmentAdapter
-                setPageTransformer(MarginPageTransformer(15))
+            mainViewpager.also {
+                it.offscreenPageLimit = 5
+                it.adapter = mainFragmentAdapter
+                it.setPageTransformer(MarginPageTransformer(15))
             }
 
             TabLayoutMediator(mainTablayout, mainViewpager) { tab, position ->

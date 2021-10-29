@@ -14,9 +14,9 @@ import kotlinx.coroutines.launch
 class RecipePlayViewModel(
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository,
-    intent: Intent?
+    intent: Intent
 ) : ViewModel() {
-    val recipeDetail = (intent!!.getSerializableExtra("recipe") as RecipeDetail)
+    val recipeDetail = intent.getSerializableExtra("recipe") as RecipeDetail
     val recipePhase = recipeDetail.phases
     val endPhase = recipePhase.last()
 
@@ -68,7 +68,7 @@ class RecipePlayViewModel(
 class RecipePlayViewModelFactory(
     private val recipeRepository: RecipeRepository,
     private val reviewRepository: ReviewRepository,
-    private val intent: Intent?
+    private val intent: Intent
 ) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

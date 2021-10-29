@@ -45,11 +45,11 @@ class TimelineFragment : BaseFragment() {
         binding.apply {
             lifecycleOwner = viewLifecycleOwner
 
-            timelineSwipe.apply {
-                setOnRefreshListener {
+            timelineSwipe.also {
+                it.setOnRefreshListener {
                     mainViewModel.refreshPostList()
                 }
-                setColorSchemeColors(
+                it.setColorSchemeColors(
                     resources.getColor(
                         R.color.colorPrimary,
                         null

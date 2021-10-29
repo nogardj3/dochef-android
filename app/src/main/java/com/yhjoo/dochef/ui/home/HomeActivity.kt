@@ -96,8 +96,8 @@ class HomeActivity : BaseActivity() {
 
             postListAdapter = PostListAdapter(this@HomeActivity)
 
-            homePostRecycler.apply {
-                layoutManager =
+            homePostRecycler.also {
+                it.layoutManager =
                     object : LinearLayoutManager(this@HomeActivity) {
                         override fun canScrollHorizontally(): Boolean {
                             return false
@@ -107,7 +107,7 @@ class HomeActivity : BaseActivity() {
                             return false
                         }
                     }
-                adapter = postListAdapter
+                it.adapter = postListAdapter
             }
         }
 
@@ -351,13 +351,15 @@ class HomeActivity : BaseActivity() {
         )
     }
 
-    object UIMODE {
-        const val OWNER = 0
-        const val OTHERS = 1
-    }
+    companion object {
+        object UIMODE{
+            const val OWNER = 0
+            const val OTHERS = 1
+        }
 
-    object OPERATION {
-        const val VIEW = 0
-        const val REVISE = 1
+        object OPERATION {
+            const val VIEW = 0
+            const val REVISE = 1
+        }
     }
 }

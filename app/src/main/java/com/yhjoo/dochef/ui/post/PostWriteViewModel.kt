@@ -25,10 +25,7 @@ class PostWriteViewModel(
 ) : ViewModel() {
     val activeUserId = App.activeUserId
     val currentMode = intent.getIntExtra("mode", PostWriteActivity.Companion.UIMODE.WRITE)
-    val postInfo: Post? = if (intent.getSerializableExtra("post") != null)
-        intent.getSerializableExtra("post") as Post
-    else
-        null
+    val postInfo: Post? = (intent.getSerializableExtra("post") as Post) ?: null
 
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference

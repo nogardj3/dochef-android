@@ -9,19 +9,19 @@ import java.util.*
 
 object DataGenerator {
     fun <T> make(resources: Resources, type: Int): T {
-        val recipeImgs = intArrayOf(
+        val recipeImgs = arrayOf(
             R.raw.dummy_recipe_0, R.raw.dummy_recipe_1,
             R.raw.dummy_recipe_2, R.raw.dummy_recipe_3, R.raw.dummy_recipe_4,
             R.raw.dummy_recipe_5, R.raw.dummy_recipe_6, R.raw.dummy_recipe_7,
             R.raw.dummy_recipe_8, R.raw.dummy_recipe_9
         )
-        val profileImgs = intArrayOf(
+        val profileImgs = arrayOf(
             R.raw.dummy_profile_0, R.raw.dummy_profile_1,
             R.raw.dummy_profile_2, R.raw.dummy_profile_3, R.raw.dummy_profile_4,
             R.raw.dummy_profile_5, R.raw.dummy_profile_6, R.raw.dummy_profile_7,
             R.raw.dummy_profile_8, R.raw.dummy_profile_9
         )
-        val postImgs = intArrayOf(
+        val postImgs = arrayOf(
             R.raw.dummy_post_0, R.raw.dummy_post_1,
             R.raw.dummy_post_2, R.raw.dummy_post_3, R.raw.dummy_post_4,
             R.raw.dummy_post_5, R.raw.dummy_post_6, R.raw.dummy_post_7,

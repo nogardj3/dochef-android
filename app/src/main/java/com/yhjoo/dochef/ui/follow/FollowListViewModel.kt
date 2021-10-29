@@ -18,7 +18,7 @@ class FollowListViewModel(
     val activeUserId = App.activeUserId
 
     private val currentUiMode = intent.getIntExtra("mode", FOLLOWER)
-    private val currentUserId = intent.getStringExtra(Constants.INTENTNAME.USER_ID)
+    private val currentUserId = intent.getStringExtra(Constants.INTENTNAME.USER_ID)?:""
     val title = if (currentUiMode == FOLLOWER) "Follower" else "Following"
 
     private var _activeUserDetail = MutableLiveData<UserDetail>()
@@ -42,11 +42,11 @@ class FollowListViewModel(
 
     private fun requestFollowLists() = viewModelScope.launch {
         if (currentUiMode == FOLLOWER)
-            repository.getFollowers(currentUserId!!).collect {
+            repository.getFollowers(currentUserId).collect {
                 _allFollowLists.value = it.body()
             }
         else
-            repository.getFollowings(currentUserId!!).collect {
+            repository.getFollowings(currentUserId).collect {
                 _allFollowLists.value = it.body()
             }
     }

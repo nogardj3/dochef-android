@@ -82,11 +82,11 @@ class PlayActivity : BaseActivity(), SensorEventListener {
             recipePhases = recipeplayViewModel.recipePhase
 
             recipePlayFragmentAdapter = RecipePlayFragmentAdapter(this@PlayActivity)
-            recipeplayViewpager.apply {
-                offscreenPageLimit = 5
-                adapter = recipePlayFragmentAdapter
-                setPageTransformer(MarginPageTransformer(15))
-                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            recipeplayViewpager.also {
+                it.offscreenPageLimit = 5
+                it.adapter = recipePlayFragmentAdapter
+                it.setPageTransformer(MarginPageTransformer(15))
+                it.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageScrolled(
                         position: Int,
                         positionOffset: Float,

@@ -6,10 +6,6 @@
     <data>
 
         <variable
-            name="activeUserId"
-            type="String" />
-
-        <variable
             name="adapter"
             type="com.yhjoo.dochef.ui.follow.FollowListAdapter" />
 

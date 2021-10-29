@@ -14,7 +14,7 @@ class RecipeRecommendViewModel(
     intent: Intent
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    private val tagName = intent.getStringExtra("tag")!!
+    private val tagName = intent.getStringExtra("tag")?:""
 
     private var _allRecipeList = MutableLiveData<List<Recipe>>()
     val allRecipeList: LiveData<List<Recipe>>
