@@ -1,20 +1,23 @@
 package com.yhjoo.dochef.ui.recipe
 
-import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeRecommendViewModel(
-    private val recipeRepository: RecipeRepository,
-    intent: Intent
+@HiltViewModel
+class RecipeRecommendViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val recipeRepository: RecipeRepository
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    private val tagName = intent.getStringExtra("tag")?:""
+    private val tagName = savedStateHandle.get<String>("tag")
+        ?: ""
 
     private var _allRecipeList = MutableLiveData<List<Recipe>>()
     val allRecipeList: LiveData<List<Recipe>>
@@ -34,18 +37,5 @@ class RecipeRecommendViewModel(
         ).collect {
             _allRecipeList.value = it.body()
         }
-    }
-}
-
-class RecipeRecommendViewModelFactory(
-    private val repository: RecipeRepository,
-    private val intent: Intent
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RecipeRecommendViewModel::class.java)) {
-            return RecipeRecommendViewModel(repository, intent) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

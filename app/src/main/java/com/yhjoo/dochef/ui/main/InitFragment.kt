@@ -13,30 +13,23 @@ import androidx.recyclerview.widget.RecyclerView
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.repository.PostRepository
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainInitFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeRecommendActivity
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class InitFragment : BaseFragment() {
     // 앱 대표계정의 레시피들을 가져옴
 
     private val imgs = arrayOf(R.raw.ad_temp_0, R.raw.ad_temp_1)
 
     private lateinit var binding: MainInitFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(
-            UserRepository(requireContext().applicationContext),
-            RecipeRepository(requireContext().applicationContext),
-            PostRepository(requireContext().applicationContext)
-        )
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var initRecipeListAdapter: InitRecipeListAdapter
 

@@ -6,17 +6,20 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipePlayViewModel(
+@HiltViewModel
+class RecipePlayViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository,
-    intent: Intent
+    private val reviewRepository: ReviewRepository
 ) : ViewModel() {
-    val recipeDetail = intent.getSerializableExtra("recipe") as RecipeDetail
+    val recipeDetail = savedStateHandle.get<RecipeDetail>("recipe")!!
     val recipePhase = recipeDetail.phases
     val endPhase = recipePhase.last()
 
@@ -62,19 +65,5 @@ class RecipePlayViewModel(
 
     enum class Events {
         REVIEW_CREATED,
-    }
-}
-
-class RecipePlayViewModelFactory(
-    private val recipeRepository: RecipeRepository,
-    private val reviewRepository: ReviewRepository,
-    private val intent: Intent
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RecipePlayViewModel::class.java)) {
-            return RecipePlayViewModel(recipeRepository, reviewRepository, intent) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

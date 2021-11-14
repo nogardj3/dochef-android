@@ -14,17 +14,13 @@ import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipeplayEndFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class PlayEndFragment : BaseFragment() {
     private lateinit var binding: RecipeplayEndFragmentBinding
-    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels {
-        RecipePlayViewModelFactory(
-            RecipeRepository(requireContext().applicationContext),
-            ReviewRepository(requireContext().applicationContext),
-            null
-        )
-    }
+    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -9,20 +9,15 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchResultFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.home.HomeActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ResultUserFragment : BaseFragment() {
     private lateinit var binding: SearchResultFragmentBinding
-    private val searchViewModel: SearchViewModel by activityViewModels {
-        SearchViewModelFactory(
-            UserRepository(requireContext().applicationContext),
-            RecipeRepository(requireContext().applicationContext)
-        )
-    }
+    private val searchViewModel: SearchViewModel by activityViewModels()
 
     private lateinit var userListAdapter: UserListAdapter
 

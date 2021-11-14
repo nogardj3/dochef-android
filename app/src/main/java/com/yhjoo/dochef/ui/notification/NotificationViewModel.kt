@@ -1,15 +1,22 @@
 package com.yhjoo.dochef.ui.notification
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.data.entity.NotificationEntity
 import com.yhjoo.dochef.data.repository.NotificationRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class NotificationViewModel(private val notificationRepository: NotificationRepository) :
-    ViewModel() {
+@HiltViewModel
+class NotificationViewModel @Inject constructor(
+    private val notificationRepository: NotificationRepository
+) : ViewModel() {
     val allnotifications: LiveData<List<NotificationEntity>> =
         notificationRepository.notifications.asLiveData()
 
@@ -23,15 +30,5 @@ class NotificationViewModel(private val notificationRepository: NotificationRepo
 
     enum class Events {
         ISCLICKED
-    }
-}
-
-class NotificationViewModelFactory(private val repository: NotificationRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(NotificationViewModel::class.java)) {
-            return NotificationViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

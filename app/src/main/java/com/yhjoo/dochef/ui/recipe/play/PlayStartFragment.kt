@@ -17,13 +17,7 @@ import com.yhjoo.dochef.ui.base.BaseFragment
 
 class PlayStartFragment : BaseFragment() {
     private lateinit var binding: RecipeplayStartFragmentBinding
-    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels{
-        RecipePlayViewModelFactory(
-            RecipeRepository(requireContext().applicationContext),
-            ReviewRepository(requireContext().applicationContext),
-            null
-        )
-    }
+    private val recipePlayViewModel: RecipePlayViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

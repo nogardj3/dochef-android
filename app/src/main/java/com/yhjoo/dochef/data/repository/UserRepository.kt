@@ -8,19 +8,20 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserRepository(
-    private val context: Context,
+@Singleton
+class UserRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val userClient: RetrofitServices.UserService
 ) {
-    private val userClient =
-        RetrofitBuilder.create(context, RetrofitServices.UserService::class.java)
-
     @WorkerThread
     suspend fun getUserDetail(userId: String): Flow<Response<UserDetail?>> {
         return flow {

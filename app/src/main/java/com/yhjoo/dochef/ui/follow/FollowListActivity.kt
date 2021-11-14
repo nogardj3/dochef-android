@@ -9,23 +9,19 @@ import androidx.databinding.DataBindingUtil
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.FollowlistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class FollowListActivity : BaseActivity() {
     private val binding: FollowlistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.followlist_activity)
     }
-    private val followListViewModel: FollowListViewModel by viewModels {
-        FollowListViewModelFactory(
-            UserRepository(applicationContext),
-            intent
-        )
-    }
+    private val followListViewModel: FollowListViewModel by viewModels()
     private lateinit var followListAdapter: FollowListAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

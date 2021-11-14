@@ -9,24 +9,17 @@ import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.repository.PostRepository
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainMyrecipeFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class MyRecipeFragment : BaseFragment() {
     private lateinit var binding: MainMyrecipeFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(
-            UserRepository(requireContext().applicationContext),
-            RecipeRepository(requireContext().applicationContext),
-            PostRepository(requireContext().applicationContext)
-        )
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var myRecipeListAdapter: MyRecipeListAdapter
 

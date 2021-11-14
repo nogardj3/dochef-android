@@ -7,30 +7,31 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.ExpandableItem
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BasicRepository(
-    private val context: Context
+@Singleton
+class BasicRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val basicService: RetrofitServices.BasicService
 ) {
-    private val basicClient =
-        RetrofitBuilder.create(context, RetrofitServices.BasicService::class.java)
-
     @WorkerThread
     suspend fun checkAlive(): Flow<Response<JsonObject?>> {
         return flow {
-            emit(basicClient.checkAlive())
+            emit(basicService.checkAlive())
         }
     }
 
     @WorkerThread
     suspend fun getFAQs(): Flow<Response<ArrayList<ExpandableItem>?>> {
         return flow {
-            if (App.isServerAlive) emit(basicClient.getFAQ())
+            if (App.isServerAlive) emit(basicService.getFAQ())
             else {
                 emit(
                     Response.success(
@@ -47,7 +48,7 @@ class BasicRepository(
     @WorkerThread
     suspend fun getNotices(): Flow<Response<ArrayList<ExpandableItem>?>> {
         return flow {
-            if (App.isServerAlive) emit(basicClient.getNotice())
+            if (App.isServerAlive) emit(basicService.getNotice())
             else {
                 emit(
                     Response.success(
@@ -64,7 +65,7 @@ class BasicRepository(
     @WorkerThread
     suspend fun getTOS(): Flow<Response<JsonObject?>> {
         return flow {
-            if (App.isServerAlive) emit(basicClient.getTOS())
+            if (App.isServerAlive) emit(basicService.getTOS())
             else {
                 emit(
                     Response.success(

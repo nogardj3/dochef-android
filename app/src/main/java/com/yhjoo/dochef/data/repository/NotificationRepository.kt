@@ -7,11 +7,15 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.dao.NotificationDao
 import com.yhjoo.dochef.data.entity.NotificationEntity
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class NotificationRepository(
-    private val context: Context,
+@Singleton
+class NotificationRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val notificationDao: NotificationDao
 ) {
     val notifications: Flow<List<NotificationEntity>> = getData()

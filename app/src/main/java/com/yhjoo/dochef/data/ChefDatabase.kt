@@ -8,26 +8,26 @@ import com.yhjoo.dochef.data.dao.NotificationDao
 import com.yhjoo.dochef.data.entity.NotificationEntity
 
 @Database(entities = [NotificationEntity::class], version = 1, exportSchema = false)
-abstract class NotificationDatabase : RoomDatabase() {
+abstract class ChefDatabase : RoomDatabase() {
     abstract fun notificationDao(): NotificationDao
 
     companion object {
         @Volatile
-        private var INSTANCE: NotificationDatabase? = null
+        private var instance: ChefDatabase? = null
 
-        fun getDatabase(
-            context: Context
-        ): NotificationDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    NotificationDatabase::class.java,
-                    "notification_table"
-                )
-                    .build()
-                INSTANCE = instance
-                instance
+        fun getInstance(context: Context): ChefDatabase {
+            return instance ?: synchronized(this) {
+                instance ?: buildDatabase(context).also { instance = it }
             }
+        }
+
+        private fun buildDatabase(context: Context): ChefDatabase {
+            return Room.databaseBuilder(
+                context.applicationContext,
+                ChefDatabase::class.java,
+                "notification_table"
+            )
+                .build()
         }
     }
 }

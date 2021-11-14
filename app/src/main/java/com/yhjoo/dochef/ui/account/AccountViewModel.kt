@@ -1,6 +1,6 @@
 package com.yhjoo.dochef.ui.account
 
-import android.app.Application
+import android.content.Context
 import android.content.Intent
 import androidx.core.content.edit
 import androidx.core.os.bundleOf
@@ -22,31 +22,35 @@ import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
 import com.yhjoo.dochef.utils.ValidateUtil
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class AccountViewModel(
-    private val accountRepository: AccountRepository,
-    private val application: Application
+@HiltViewModel
+class AccountViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val accountRepository: AccountRepository
 ) : ViewModel() {
     // TODO
     // merge validation function
 
     val googleSigninIntent: Intent by lazy {
         GoogleSignIn.getClient(
-            application.applicationContext,
+            context,
             GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(application.getString(R.string.default_web_client_id))
+                .requestIdToken(context.getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
         ).signInIntent
     }
     private val firebaseAnalytics: FirebaseAnalytics by lazy {
-        FirebaseAnalytics.getInstance(application.applicationContext)
+        FirebaseAnalytics.getInstance(context)
     }
     private val firebaseAuth: FirebaseAuth by lazy {
         FirebaseAuth.getInstance()
@@ -116,13 +120,13 @@ class AccountViewModel(
     }
 
     private suspend fun allComplete(userInfo: UserBrief) = withContext(Dispatchers.IO) {
-        DatastoreUtil.getSharedPreferences(application.applicationContext).edit {
+        DatastoreUtil.getSharedPreferences(context).edit {
             putBoolean(
-                application.applicationContext.getString(R.string.SP_ACTIVATEDDEVICE),
+                context.getString(R.string.SP_ACTIVATEDDEVICE),
                 true
             )
             putString(
-                application.applicationContext.getString(R.string.SP_USERINFO),
+                context.getString(R.string.SP_USERINFO),
                 Gson().toJson(userInfo)
             )
             apply()
@@ -396,21 +400,5 @@ class AccountViewModel(
         enum class Complete {
             COMPLETE
         }
-    }
-}
-
-class AccountViewModelFactory(
-    private val accountRepository: AccountRepository,
-    private val application: Application
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(AccountViewModel::class.java)) {
-            return AccountViewModel(
-                accountRepository,
-                application
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

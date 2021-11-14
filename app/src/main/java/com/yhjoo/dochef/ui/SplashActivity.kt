@@ -7,23 +7,19 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SplashActivityBinding
 import com.yhjoo.dochef.ui.account.AccountActivity
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.main.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class SplashActivity : BaseActivity() {
     private val binding: SplashActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.splash_activity)
     }
-    private val splashViewModel: SplashViewModel by viewModels {
-        SplashViewModelFactory(
-            application,
-            BasicRepository(applicationContext)
-        )
-    }
+    private val splashViewModel: SplashViewModel by viewModels()
 
     private var animFinished: Boolean = false
     private var lastEvent: SplashViewModel.Events? = null

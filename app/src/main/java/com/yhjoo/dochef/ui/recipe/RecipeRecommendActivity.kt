@@ -9,21 +9,17 @@ import androidx.databinding.DataBindingUtil
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.ReciperecommendActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class RecipeRecommendActivity : BaseActivity() {
     private val binding: ReciperecommendActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.reciperecommend_activity)
     }
-    private val recipeRecommendViewModel: RecipeRecommendViewModel by viewModels {
-        RecipeRecommendViewModelFactory(
-            RecipeRepository(applicationContext),
-            intent
-        )
-    }
+    private val recipeRecommendViewModel: RecipeRecommendViewModel by viewModels()
     private lateinit var recipeRecommendAdapter: RecipeRecommendAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

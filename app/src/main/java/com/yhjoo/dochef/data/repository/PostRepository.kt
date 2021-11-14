@@ -7,23 +7,24 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PostRepository(
-    private val context: Context
+@Singleton
+class PostRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val postService: RetrofitServices.PostService
 ) {
-    private val postClient =
-        RetrofitBuilder.create(context, RetrofitServices.PostService::class.java)
-
     @WorkerThread
     suspend fun getPostDetail(postId: Int): Flow<Response<Post?>> {
         return flow {
-            if (App.isServerAlive) emit(postClient.getPost(postId))
+            if (App.isServerAlive) emit(postService.getPost(postId))
             else
                 emit(
                     Response.success(
@@ -39,7 +40,7 @@ class PostRepository(
     @WorkerThread
     suspend fun getPostList(): Flow<Response<ArrayList<Post>?>> {
         return flow {
-            if (App.isServerAlive) emit(postClient.getPostList())
+            if (App.isServerAlive) emit(postService.getPostList())
             else
                 emit(
                     Response.success(
@@ -55,7 +56,7 @@ class PostRepository(
     @WorkerThread
     suspend fun getPostListByUserId(userId: String): Flow<Response<ArrayList<Post>?>> {
         return flow {
-            if (App.isServerAlive) emit(postClient.getPostListByUserID(userId))
+            if (App.isServerAlive) emit(postService.getPostListByUserID(userId))
             else
                 emit(
                     Response.success(
@@ -71,7 +72,7 @@ class PostRepository(
     @WorkerThread
     suspend fun likePost(userID: String, postID: Int): Flow<Response<JsonObject?>> {
         return flow {
-            if (App.isServerAlive) emit(postClient.setLikePost(userID, postID, 1))
+            if (App.isServerAlive) emit(postService.setLikePost(userID, postID, 1))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -82,7 +83,7 @@ class PostRepository(
     @WorkerThread
     suspend fun dislikePost(userID: String, postID: Int): Flow<Response<JsonObject?>> {
         return flow {
-            if (App.isServerAlive) emit(postClient.setLikePost(userID, postID, -1))
+            if (App.isServerAlive) emit(postService.setLikePost(userID, postID, -1))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -100,7 +101,7 @@ class PostRepository(
     ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
-                emit(postClient.createPost(userID, postImgs, contents, datetime, tags))
+                emit(postService.createPost(userID, postImgs, contents, datetime, tags))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -119,7 +120,7 @@ class PostRepository(
     ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive)
-                emit(postClient.updatePost(postID, postImgs, contents, datetime, tags))
+                emit(postService.updatePost(postID, postImgs, contents, datetime, tags))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))
@@ -130,7 +131,7 @@ class PostRepository(
     @WorkerThread
     suspend fun deletePost(postID: Int): Flow<Response<JsonObject?>> {
         return flow {
-            if (App.isServerAlive) emit(postClient.deletePost(postID))
+            if (App.isServerAlive) emit(postService.deletePost(postID))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

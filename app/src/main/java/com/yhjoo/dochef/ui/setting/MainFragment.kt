@@ -14,20 +14,17 @@ import androidx.navigation.fragment.findNavController
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.BuildConfig
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingFragmentBinding
 import com.yhjoo.dochef.ui.account.AccountActivity
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainFragment : BaseFragment() {
     private lateinit var binding: SettingFragmentBinding
-    private val settingViewModel: SettingViewModel by activityViewModels {
-        SettingViewModelFactory(
-            BasicRepository(requireContext().applicationContext)
-        )
-    }
+    private val settingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var notiSettingArray: Array<String>

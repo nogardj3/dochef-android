@@ -7,23 +7,24 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Comment
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CommentRepository(
-    private val context: Context
+@Singleton
+class CommentRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val commentService: RetrofitServices.CommentService
 ) {
-    private val commentClient =
-        RetrofitBuilder.create(context, RetrofitServices.CommentService::class.java)
-
     @WorkerThread
     suspend fun getComments(postId: Int): Flow<Response<ArrayList<Comment>?>> {
         return flow {
-            if (App.isServerAlive) emit(commentClient.getComment(postId))
+            if (App.isServerAlive) emit(commentService.getComment(postId))
             else
                 emit(
                     Response.success(
@@ -45,7 +46,7 @@ class CommentRepository(
     ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(
-                commentClient.createComment(
+                commentService.createComment(
                     postID,
                     userID,
                     contents,
@@ -62,7 +63,7 @@ class CommentRepository(
     @WorkerThread
     suspend fun deleteComment(commentId: Int): Flow<Response<JsonObject?>> {
         return flow {
-            if (App.isServerAlive) emit(commentClient.deleteComment(commentId))
+            if (App.isServerAlive) emit(commentService.deleteComment(commentId))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

@@ -9,21 +9,17 @@ import android.widget.TextView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSignupnickFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class AccountSignUpNickFragment : BaseFragment() {
     private lateinit var binding: AccountSignupnickFragmentBinding
-    private val accountViewModel: AccountViewModel by activityViewModels {
-        AccountViewModelFactory(
-            AccountRepository(requireContext().applicationContext),
-            requireActivity().application
-        )
-    }
+    private val accountViewModel: AccountViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -4,12 +4,15 @@ import androidx.core.text.parseAsHtml
 import androidx.lifecycle.*
 import com.yhjoo.dochef.data.model.ExpandableItem
 import com.yhjoo.dochef.data.repository.BasicRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-class SettingViewModel(
+@HiltViewModel
+class SettingViewModel @Inject constructor(
     private val repository: BasicRepository
 ) : ViewModel() {
     private var _allNotices = MutableLiveData<ArrayList<ExpandableItem>>()
@@ -47,15 +50,5 @@ class SettingViewModel(
         repository.getTOS().collect {
             _tosText.postValue(it.body()!!["message"].asString.parseAsHtml())
         }
-    }
-}
-
-class SettingViewModelFactory(private val repository: BasicRepository) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SettingViewModel::class.java)) {
-            return SettingViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

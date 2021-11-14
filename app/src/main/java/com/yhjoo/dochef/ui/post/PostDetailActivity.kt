@@ -23,17 +23,17 @@ import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.data.repository.CommentRepository
-import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.PostdetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
 
+@AndroidEntryPoint
 class PostDetailActivity : BaseActivity() {
     // TODO
     // menu data binding
@@ -41,13 +41,7 @@ class PostDetailActivity : BaseActivity() {
     private val binding: PostdetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.postdetail_activity)
     }
-    private val postDetailViewModel: PostDetailViewModel by viewModels {
-        PostDetailViewModelFactory(
-            PostRepository(applicationContext),
-            CommentRepository(applicationContext),
-            intent
-        )
-    }
+    private val postDetailViewModel: PostDetailViewModel by viewModels()
     private lateinit var commentListAdapter: CommentListAdapter
 
     private var reviseMenu: MenuItem? = null

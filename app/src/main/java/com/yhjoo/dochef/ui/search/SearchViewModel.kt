@@ -7,11 +7,14 @@ import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SearchViewModel(
+@HiltViewModel
+class SearchViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository
 ) : ViewModel() {
@@ -78,18 +81,5 @@ class SearchViewModel(
             requestRecipeByIngredients(keyword)
             requestRecipeByTag(keyword)
         }
-    }
-}
-
-class SearchViewModelFactory(
-    private val userRepository: UserRepository,
-    private val recipeRepository: RecipeRepository
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SearchViewModel::class.java)) {
-            return SearchViewModel(userRepository, recipeRepository) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

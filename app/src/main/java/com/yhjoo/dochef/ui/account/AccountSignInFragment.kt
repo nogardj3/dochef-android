@@ -13,23 +13,19 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.AccountRepository
 import com.yhjoo.dochef.databinding.AccountSigninFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.utils.ValidateUtil
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class AccountSignInFragment : BaseFragment() {
     // TODO
     // GoogleSignin onactivityresult
 
     private lateinit var binding: AccountSigninFragmentBinding
-    private val accountViewModel: AccountViewModel by activityViewModels {
-        AccountViewModelFactory(
-            AccountRepository(requireContext().applicationContext),
-            requireActivity().application
-        )
-    }
+    private val accountViewModel: AccountViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.follow
 
-import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
@@ -8,17 +7,20 @@ import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.ui.follow.FollowListActivity.Companion.FOLLOWER
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class FollowListViewModel(
+@HiltViewModel
+class FollowListViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: UserRepository,
-    intent: Intent,
 ) : ViewModel() {
     val activeUserId = App.activeUserId
 
-    private val currentUiMode = intent.getIntExtra("mode", FOLLOWER)
-    private val currentUserId = intent.getStringExtra(Constants.INTENTNAME.USER_ID)?:""
+    private val currentUiMode = savedStateHandle.get<Int>("mode")
+    private val currentUserId = savedStateHandle.get<String>(Constants.INTENTNAME.USER_ID)
     val title = if (currentUiMode == FOLLOWER) "Follower" else "Following"
 
     private var _activeUserDetail = MutableLiveData<UserDetail>()
@@ -42,11 +44,11 @@ class FollowListViewModel(
 
     private fun requestFollowLists() = viewModelScope.launch {
         if (currentUiMode == FOLLOWER)
-            repository.getFollowers(currentUserId).collect {
+            repository.getFollowers(currentUserId!!).collect {
                 _allFollowLists.value = it.body()
             }
         else
-            repository.getFollowings(currentUserId).collect {
+            repository.getFollowings(currentUserId!!).collect {
                 _allFollowLists.value = it.body()
             }
     }
@@ -67,18 +69,5 @@ class FollowListViewModel(
                 requestFollowLists()
             }
         }
-    }
-}
-
-class FollowListViewModelFactory(
-    private val repository: UserRepository,
-    private val intent: Intent,
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(FollowListViewModel::class.java)) {
-            return FollowListViewModel(repository, intent) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

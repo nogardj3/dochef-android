@@ -13,18 +13,18 @@ import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 
+@AndroidEntryPoint
 class NotificationActivity : BaseActivity() {
     private val binding: NotificationActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.notification_activity)
     }
-    private val notificationViewModel: NotificationViewModel by viewModels {
-        NotificationViewModelFactory((application as App).notificationRepository)
-    }
+    private val notificationViewModel: NotificationViewModel by viewModels()
 
     private lateinit var notificationListAdapter: NotificationListAdapter
 

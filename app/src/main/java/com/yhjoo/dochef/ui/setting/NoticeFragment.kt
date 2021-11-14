@@ -8,17 +8,14 @@ import androidx.core.view.isVisible
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.databinding.SettingNoticeFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NoticeFragment : BaseFragment() {
     private lateinit var binding: SettingNoticeFragmentBinding
-    private val settingViewModel: SettingViewModel by activityViewModels {
-        SettingViewModelFactory(
-            BasicRepository(requireContext().applicationContext)
-        )
-    }
+    private val settingViewModel: SettingViewModel by activityViewModels()
 
     private lateinit var expandableListAdapter: ExpandableListAdapter
 

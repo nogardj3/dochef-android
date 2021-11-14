@@ -25,9 +25,11 @@ import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.recipe.play.PlayActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.util.*
 
+@AndroidEntryPoint
 class RecipeDetailActivity : BaseActivity() {
     // TODO
     // tag, ingredients data binding
@@ -35,13 +37,8 @@ class RecipeDetailActivity : BaseActivity() {
     private val binding: RecipedetailActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipedetail_activity)
     }
-    private val recipeDetailViewModel: RecipeDetailViewModel by viewModels {
-        RecipeDetailViewModelFactory(
-            RecipeRepository(applicationContext),
-            ReviewRepository(applicationContext),
-            intent
-        )
-    }
+    private val recipeDetailViewModel: RecipeDetailViewModel by viewModels()
+
     private lateinit var reviewListAdapter: ReviewListAdapter
 
     private var powerMenu: PowerMenu? = null
@@ -164,7 +161,7 @@ class RecipeDetailActivity : BaseActivity() {
         startActivity(
             Intent(this@RecipeDetailActivity, RecipeMakeActivity::class.java)
                 .putExtra(Constants.INTENTNAME.RECIPE_ID, item.recipeID)
-                .putExtra("mode", RecipeMakeActivity.MODE.REVISE)
+                .putExtra("mode", RecipeMakeActivity.Companion.MODE.REVISE)
         )
     }
 }

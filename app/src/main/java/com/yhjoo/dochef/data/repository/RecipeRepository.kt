@@ -9,19 +9,20 @@ import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class RecipeRepository(
-    private val context: Context
+@Singleton
+class RecipeRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val recipeClient: RetrofitServices.RecipeService
 ) {
-    private val recipeClient =
-        RetrofitBuilder.create(context, RetrofitServices.RecipeService::class.java)
-
     @WorkerThread
     suspend fun getRecipeDetail(recipeId: Int): Flow<Response<RecipeDetail?>> {
         return flow {

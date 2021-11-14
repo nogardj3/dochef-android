@@ -22,9 +22,6 @@ import com.skydoves.powermenu.PowerMenu
 import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.PostRepository
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.notification.NotificationActivity
@@ -32,7 +29,9 @@ import com.yhjoo.dochef.ui.post.PostWriteActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMakeActivity
 import com.yhjoo.dochef.ui.search.SearchActivity
 import com.yhjoo.dochef.ui.setting.SettingActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : BaseActivity() {
     private val mainTabs = arrayOf(
         Pair(R.drawable.ic_home_white, InitFragment()),
@@ -45,13 +44,8 @@ class MainActivity : BaseActivity() {
     private val binding: MainActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.main_activity)
     }
-    private val mainViewModel: MainViewModel by viewModels {
-        MainViewModelFactory(
-            UserRepository(applicationContext),
-            RecipeRepository(applicationContext),
-            PostRepository(applicationContext)
-        )
-    }
+    private val mainViewModel: MainViewModel by viewModels()
+
     private lateinit var mainFragmentAdapter: FragmentStateAdapter
 
     private lateinit var powerMenu: PowerMenu

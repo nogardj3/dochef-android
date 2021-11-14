@@ -10,21 +10,18 @@ import com.afollestad.materialdialogs.MaterialDialog
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.databinding.RecipemylistActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class RecipeMyListActivity : BaseActivity() {
     private val binding: RecipemylistActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipemylist_activity)
     }
-    private val recipeListViewModel: RecipeMyListViewModel by viewModels {
-        RecipeMyListViewModelFactory(
-            RecipeRepository(applicationContext)
-        )
-    }
+    private val recipeListViewModel: RecipeMyListViewModel by viewModels()
     private lateinit var recipeMyListAdapter: RecipeMyListAdapter
 
     private lateinit var addMenu: MenuItem
