@@ -109,7 +109,6 @@
             android:theme="@style/BaseTheme"
             android:windowSoftInputMode="adjustNothing" />
 
-
         <activity
             android:name="com.yhjoo.dochef.ui.post.PostWriteActivity"
             android:screenOrientation="portrait"
