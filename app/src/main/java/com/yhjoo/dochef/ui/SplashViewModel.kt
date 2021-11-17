@@ -1,8 +1,7 @@
 package com.yhjoo.dochef.ui
 
-import android.app.Application
+import android.content.Context
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.ktx.logEvent
@@ -11,25 +10,29 @@ import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.repository.BasicRepository
 import com.yhjoo.dochef.utils.AuthUtil
 import com.yhjoo.dochef.utils.DatastoreUtil
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class SplashViewModel(
-    private val app: Application,
+@HiltViewModel
+class SplashViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val repository: BasicRepository
 ) : ViewModel() {
-    private var isLogin = AuthUtil.isLogIn(app.applicationContext)
+    private var isLogin = AuthUtil.isLogIn(context)
 
     private var _eventResult = MutableSharedFlow<Events>()
     val eventResult = _eventResult.asSharedFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            FirebaseAnalytics.getInstance(app.applicationContext).apply {
+            FirebaseAnalytics.getInstance(context).apply {
                 logEvent(FirebaseAnalytics.Event.APP_OPEN) {
                     param(FirebaseAnalytics.Param.ITEM_ID, Constants.ANALYTICS.ID.START)
                     param(FirebaseAnalytics.Param.ITEM_NAME, Constants.ANALYTICS.NAME.START)
@@ -55,7 +58,7 @@ class SplashViewModel(
 
                     if (isLogin) {
                         App.activeUserId =
-                            DatastoreUtil.getUserBrief(app.applicationContext).userID
+                            DatastoreUtil.getUserBrief(context).userID
                         _eventResult.emit(Events.ALIVE_WITH_LOGIN)
                     } else
                         _eventResult.emit(Events.ALIVE)
@@ -65,18 +68,5 @@ class SplashViewModel(
 
     enum class Events {
         ALIVE_WITH_LOGIN, ALIVE, DEAD
-    }
-}
-
-class SplashViewModelFactory(
-    private val app: Application,
-    private val repository: BasicRepository
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
-            return SplashViewModel(app, repository) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

@@ -15,13 +15,14 @@ import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
 import com.canhub.cropper.options
 import com.yhjoo.dochef.*
-import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.databinding.PostwriteActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.util.*
 
+@AndroidEntryPoint
 class PostWriteActivity : BaseActivity() {
     // TODO
     // textwatcher databinding
@@ -30,13 +31,7 @@ class PostWriteActivity : BaseActivity() {
     private val binding: PostwriteActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.postwrite_activity)
     }
-    private val postWriteViewModel: PostWriteViewModel by viewModels {
-        PostWriteViewModelFactory(
-            PostRepository(applicationContext),
-            application,
-            intent
-        )
-    }
+    private val postWriteViewModel: PostWriteViewModel by viewModels()
 
     private var imageUri: Uri? = null
 

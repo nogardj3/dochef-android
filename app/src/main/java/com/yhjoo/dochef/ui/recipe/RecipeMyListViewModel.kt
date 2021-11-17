@@ -5,12 +5,15 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipeMyListViewModel(
+@HiltViewModel
+class RecipeMyListViewModel @Inject constructor(
     private val recipeRepository: RecipeRepository
 ) : ViewModel() {
     val activeUserId = App.activeUserId
@@ -42,16 +45,4 @@ class RecipeMyListViewModel(
                 requestRecipeList()
             }
         }
-}
-
-class RecipeMyListViewModelFactory(
-    private val repository: RecipeRepository
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RecipeMyListViewModel::class.java)) {
-            return RecipeMyListViewModel(repository) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
-    }
 }

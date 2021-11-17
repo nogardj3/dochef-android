@@ -7,13 +7,15 @@ import android.media.RingtoneManager
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
+import com.yhjoo.dochef.data.ChefDatabase
 import com.yhjoo.dochef.data.entity.NotificationEntity
 import com.yhjoo.dochef.ui.notification.NotificationActivity
 import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ChefMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         OtherUtil.log("Message : " + remoteMessage.data.toString())
@@ -50,7 +52,7 @@ class ChefMessagingService : FirebaseMessagingService() {
             0
         )
 
-        (application as App).notificationRepository.insert(notiData)
+        ChefDatabase.getInstance(applicationContext).notificationDao().insert(notiData)
     }
 
     private fun sendNotification(title: String?, messageBody: String?) {

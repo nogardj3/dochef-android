@@ -23,7 +23,7 @@ import com.yhjoo.dochef.*
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.model.Recipe
 import com.yhjoo.dochef.data.model.UserDetail
-import com.yhjoo.dochef.data.network.RetrofitServices.*
+import com.yhjoo.dochef.data.RetrofitServices.*
 import com.yhjoo.dochef.data.repository.*
 import com.yhjoo.dochef.databinding.HomeActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
@@ -32,9 +32,11 @@ import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
 import com.yhjoo.dochef.ui.recipe.RecipeMyListActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import java.util.*
 
+@AndroidEntryPoint
 class HomeActivity : BaseActivity() {
     // TODO
     // menu databinding
@@ -43,16 +45,8 @@ class HomeActivity : BaseActivity() {
     private val binding: HomeActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.home_activity)
     }
-    private val homeViewModel: HomeViewModel by viewModels {
-        HomeViewModelFactory(
-            UserRepository(applicationContext),
-            RecipeRepository(applicationContext),
-            PostRepository(applicationContext),
-            AccountRepository(applicationContext),
-            application,
-            intent,
-        )
-    }
+    private val homeViewModel: HomeViewModel by viewModels ()
+
     private lateinit var recipeListAdapter: RecipeListAdapter
     private lateinit var postListAdapter: PostListAdapter
 

@@ -10,28 +10,15 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.orhanobut.logger.AndroidLogAdapter
 import com.orhanobut.logger.Logger
-import com.yhjoo.dochef.data.NotificationDatabase
-import com.yhjoo.dochef.data.repository.NotificationRepository
 import com.yhjoo.dochef.utils.DatastoreUtil
 import com.yhjoo.dochef.utils.OtherUtil
+import dagger.hilt.android.HiltAndroidApp
 
+@HiltAndroidApp
 class App : Application() {
-    private val notificationDatabase by lazy {
-        NotificationDatabase.getDatabase(
-            this
-        )
-    }
-
-    val notificationRepository by lazy {
-        NotificationRepository(
-            applicationContext,
-            notificationDatabase.notificationDao()
-        )
-    }
-
     companion object {
         var isServerAlive = false
-        lateinit var activeUserId : String
+        lateinit var activeUserId: String
         lateinit var toast: Toast
 
         fun showToast(text: String) {

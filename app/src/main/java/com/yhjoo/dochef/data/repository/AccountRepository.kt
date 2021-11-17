@@ -1,21 +1,19 @@
 package com.yhjoo.dochef.data.repository
 
-import android.content.Context
 import androidx.annotation.WorkerThread
 import com.google.gson.JsonObject
 import com.yhjoo.dochef.data.model.UserBrief
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class AccountRepository(
-    context: Context,
+@Singleton
+class AccountRepository @Inject constructor(
+    private val accountService : RetrofitServices.AccountService
 ) {
-    private val accountClient =
-        RetrofitBuilder.create(context, RetrofitServices.AccountService::class.java)
-
     @WorkerThread
     suspend fun createUser(
         token: String,
@@ -24,7 +22,7 @@ class AccountRepository(
         nickname: String
     ): Flow<Response<UserBrief?>> {
         return flow {
-            emit(accountClient.createUser(token, fcmtoken, uid, nickname))
+            emit(accountService.createUser(token, fcmtoken, uid, nickname))
         }
     }
 
@@ -35,7 +33,7 @@ class AccountRepository(
         fcmtoken: String
     ): Flow<Response<UserBrief?>> {
         return flow {
-            emit(accountClient.checkUser(token, uid, fcmtoken))
+            emit(accountService.checkUser(token, uid, fcmtoken))
         }
     }
 
@@ -47,14 +45,14 @@ class AccountRepository(
         bio: String
     ): Flow<Response<JsonObject?>> {
         return flow {
-            emit(accountClient.updateUser(userID, userImg, nickname, bio))
+            emit(accountService.updateUser(userID, userImg, nickname, bio))
         }
     }
 
     @WorkerThread
     suspend fun checkNickname(nickname: String): Flow<Response<JsonObject?>> {
         return flow {
-            emit(accountClient.checkNickname(nickname))
+            emit(accountService.checkNickname(nickname))
         }
     }
 

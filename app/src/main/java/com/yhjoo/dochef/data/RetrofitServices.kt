@@ -1,10 +1,16 @@
-package com.yhjoo.dochef.data.network
+package com.yhjoo.dochef.data
 
+import android.content.Context
 import com.google.gson.JsonObject
+import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.*
+import okhttp3.OkHttpClient
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 class RetrofitServices {
     interface BasicService {
@@ -19,6 +25,24 @@ class RetrofitServices {
 
         @GET("alive")
         suspend fun checkAlive(): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): BasicService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(BasicService::class.java)
+            }
+        }
     }
 
     interface AccountService {
@@ -51,6 +75,24 @@ class RetrofitServices {
             @Field("nickname") nickname: String,
             @Field("bio") bio: String
         ): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): AccountService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(AccountService::class.java)
+            }
+        }
     }
 
     interface UserService {
@@ -79,6 +121,24 @@ class RetrofitServices {
             @Field("user_id") user_id: String,
             @Field("target_id") target_id: String
         ): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): UserService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(UserService::class.java)
+            }
+        }
     }
 
     interface RecipeService {
@@ -136,6 +196,24 @@ class RetrofitServices {
             @Field("recipe_id") recipeId: Int,
             @Field("user_id") userId: String,
         ): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): RecipeService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(RecipeService::class.java)
+            }
+        }
     }
 
     interface ReviewService {
@@ -155,6 +233,24 @@ class RetrofitServices {
         @FormUrlEncoded
         @POST("review/delete")
         suspend fun deleteReview(@Field("recipe_id") recipeId: Int): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): ReviewService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(ReviewService::class.java)
+            }
+        }
     }
 
     interface PostService {
@@ -198,6 +294,24 @@ class RetrofitServices {
         @FormUrlEncoded
         @POST("post/delete")
         suspend fun deletePost(@Field("post_id") postID: Int): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): PostService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(PostService::class.java)
+            }
+        }
     }
 
     interface CommentService {
@@ -216,5 +330,23 @@ class RetrofitServices {
         @FormUrlEncoded
         @POST("comment/delete")
         suspend fun deleteComment(@Field("comment_id") commentID: Int): Response<JsonObject?>
+
+        companion object {
+            fun create(context: Context): CommentService {
+                val retrofitClient =
+                    OkHttpClient.Builder()
+                        .connectTimeout(3, TimeUnit.SECONDS)
+                        .writeTimeout(10, TimeUnit.SECONDS)
+                        .readTimeout(10, TimeUnit.SECONDS)
+                        .build()
+
+                return Retrofit.Builder()
+                    .client(retrofitClient)
+                    .baseUrl(context.getString(R.string.server_url))
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+                    .create(CommentService::class.java)
+            }
+        }
     }
 }

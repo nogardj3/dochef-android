@@ -31,22 +31,18 @@ import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipeplayActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import java.util.*
 import java.util.concurrent.TimeUnit
 
+@AndroidEntryPoint
 class PlayActivity : BaseActivity(), SensorEventListener {
     private val binding: RecipeplayActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.recipeplay_activity)
     }
-    private val recipeplayViewModel: RecipePlayViewModel by viewModels {
-        RecipePlayViewModelFactory(
-            RecipeRepository(applicationContext),
-            ReviewRepository(applicationContext),
-            intent
-        )
-    }
+    private val recipeplayViewModel: RecipePlayViewModel by viewModels()
     private lateinit var recipePlayFragmentAdapter: RecipePlayFragmentAdapter
 
     private lateinit var speechRecognizer: SpeechRecognizer

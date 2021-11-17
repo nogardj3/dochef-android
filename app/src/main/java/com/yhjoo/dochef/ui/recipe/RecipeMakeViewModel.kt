@@ -1,22 +1,24 @@
 package com.yhjoo.dochef.ui.recipe
 
-import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.RecipeDetail
 import com.yhjoo.dochef.data.repository.RecipeRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class RecipeMakeViewModel(
-    private val recipeRepository: RecipeRepository,
-    intent: Intent
+@HiltViewModel
+class RecipeMakeViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
+    private val recipeRepository: RecipeRepository
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    private val recipeId: Int = intent.getIntExtra(Constants.INTENTNAME.POST_ID, -1)
+    private val recipeId = savedStateHandle.get<Int>(Constants.INTENTNAME.POST_ID)!!
 
     private val _recipeDetail = MutableLiveData<RecipeDetail>()
     val recipeDetail: LiveData<RecipeDetail>
@@ -49,20 +51,4 @@ class RecipeMakeViewModel(
 //            }
 //        }
 //    }
-}
-
-class RecipeMakeViewModelFactory(
-    private val recipeRepository: RecipeRepository,
-    private val intent: Intent
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(RecipeMakeViewModel::class.java)) {
-            return RecipeMakeViewModel(
-                recipeRepository,
-                intent
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
-    }
 }

@@ -9,28 +9,21 @@ import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
-import com.yhjoo.dochef.data.repository.PostRepository
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.MainTimelineFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import com.yhjoo.dochef.ui.home.HomeActivity
 import com.yhjoo.dochef.ui.post.PostDetailActivity
 import com.yhjoo.dochef.utils.*
+import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 
+@AndroidEntryPoint
 class TimelineFragment : BaseFragment() {
     // TODO
     // swipe refresh
 
     private lateinit var binding: MainTimelineFragmentBinding
-    private val mainViewModel: MainViewModel by activityViewModels {
-        MainViewModelFactory(
-            UserRepository(requireContext().applicationContext),
-            RecipeRepository(requireContext().applicationContext),
-            PostRepository(requireContext().applicationContext)
-        )
-    }
+    private val mainViewModel: MainViewModel by activityViewModels()
 
     private lateinit var timelineListAdapter: TimelineListAdapter
 

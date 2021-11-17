@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.post
 
-import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
@@ -8,18 +7,21 @@ import com.yhjoo.dochef.data.model.Comment
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.CommentRepository
 import com.yhjoo.dochef.data.repository.PostRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class PostDetailViewModel(
+@HiltViewModel
+class PostDetailViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val postRepository: PostRepository,
-    private val commentRepository: CommentRepository,
-    intent: Intent
+    private val commentRepository: CommentRepository
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    val postId = intent.getIntExtra(Constants.INTENTNAME.POST_ID, -1)
+    val postId = savedStateHandle.get<Int>(Constants.INTENTNAME.POST_ID)!!
 
     private val _postDetail = MutableLiveData<Post>()
     private val _allComments = MutableLiveData<List<Comment>>()
@@ -89,19 +91,5 @@ class PostDetailViewModel(
 
     enum class Events {
         IS_DELETED
-    }
-}
-
-class PostDetailViewModelFactory(
-    private val postRepository: PostRepository,
-    private val commentRepository: CommentRepository,
-    private val intent: Intent
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PostDetailViewModel::class.java)) {
-            return PostDetailViewModel(postRepository, commentRepository, intent) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

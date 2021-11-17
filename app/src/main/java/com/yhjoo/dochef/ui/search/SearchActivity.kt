@@ -13,12 +13,12 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Recipe
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.databinding.SearchActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.recipe.RecipeDetailActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchActivity : BaseActivity() {
     private val searchTabs = arrayOf(
         Pair("유저", ResultUserFragment()),
@@ -30,12 +30,7 @@ class SearchActivity : BaseActivity() {
     private val binding: SearchActivityBinding by lazy {
         DataBindingUtil.setContentView(this, R.layout.search_activity)
     }
-    private val searchViewModel: SearchViewModel by viewModels {
-        SearchViewModelFactory(
-            UserRepository(applicationContext),
-            RecipeRepository(applicationContext)
-        )
-    }
+    private val searchViewModel: SearchViewModel by viewModels()
     private lateinit var viewPagerAdapter: SearchViewPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {

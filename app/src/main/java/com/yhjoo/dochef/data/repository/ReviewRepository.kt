@@ -7,23 +7,24 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.DataGenerator
 import com.yhjoo.dochef.data.model.Review
-import com.yhjoo.dochef.data.network.RetrofitBuilder
-import com.yhjoo.dochef.data.network.RetrofitServices
+import com.yhjoo.dochef.data.RetrofitServices
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.Response
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class ReviewRepository(
-    private val context: Context
+@Singleton
+class ReviewRepository @Inject constructor(
+    @ApplicationContext private val context: Context,
+    private val reviewService: RetrofitServices.ReviewService
 ) {
-    private val reviewClient =
-        RetrofitBuilder.create(context, RetrofitServices.ReviewService::class.java)
-
     @WorkerThread
     suspend fun getReviews(recipeId: Int): Flow<Response<ArrayList<Review>?>> {
         return flow {
-            if (App.isServerAlive) emit(reviewClient.getReview(recipeId))
+            if (App.isServerAlive) emit(reviewService.getReview(recipeId))
             else
                 emit(
                     Response.success(
@@ -46,7 +47,7 @@ class ReviewRepository(
     ): Flow<Response<JsonObject?>> {
         return flow {
             if (App.isServerAlive) emit(
-                reviewClient.createReview(
+                reviewService.createReview(
                     recipeID,
                     userID,
                     contents,
@@ -64,7 +65,7 @@ class ReviewRepository(
     @WorkerThread
     suspend fun deleteReview(recipeID: Int): Flow<Response<JsonObject?>> {
         return flow {
-            if (App.isServerAlive) emit(reviewClient.deleteReview(recipeID))
+            if (App.isServerAlive) emit(reviewService.deleteReview(recipeID))
             else {
                 val jsonObject = JsonObject()
                 emit(Response.success(jsonObject))

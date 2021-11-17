@@ -9,12 +9,15 @@ import com.yhjoo.dochef.data.model.UserDetail
 import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class MainViewModel(
+@HiltViewModel
+class MainViewModel @Inject constructor(
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val postRepository: PostRepository
@@ -93,19 +96,5 @@ class MainViewModel(
         postRepository.getPostList().collect {
             _allTimelines.postValue(it.body())
         }
-    }
-}
-
-class MainViewModelFactory(
-    private val userRepository: UserRepository,
-    private val recipeRepository: RecipeRepository,
-    private val postRepository: PostRepository
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(userRepository, recipeRepository, postRepository) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

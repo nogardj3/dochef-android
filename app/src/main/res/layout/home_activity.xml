@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <import type="com.yhjoo.dochef.ui.home.HomeActivity.UIMODE" />
-
         <variable
             name="activity"
             type="com.yhjoo.dochef.ui.home.HomeActivity" />
@@ -203,7 +200,7 @@
                     android:onClick="@{()-> viewModel.toggleSubscribeUser()}"
                     android:text="팔로우"
                     android:textColor="@color/white"
-                    android:visibility="@{viewModel.currentMode == UIMODE.OTHERS &amp;&amp; !viewModel.isFollowTarget}"
+                    android:visibility="@{viewModel.currentMode == 1 &amp;&amp; !viewModel.isFollowTarget}"
                     app:backgroundTint="@color/colorPrimary"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"
@@ -219,7 +216,7 @@
                     android:onClick="@{()-> viewModel.toggleSubscribeUser()}"
                     android:text="언팔로우"
                     android:textColor="@color/grey_text"
-                    android:visibility="@{viewModel.currentMode == UIMODE.OTHERS &amp;&amp; viewModel.isFollowTarget}"
+                    android:visibility="@{viewModel.currentMode == 1 &amp;&amp; viewModel.isFollowTarget}"
                     app:backgroundTint="@color/grey"
                     app:layout_constraintLeft_toLeftOf="@+id/home_recipecount"
                     app:layout_constraintRight_toRightOf="@+id/home_followingcount"

@@ -1,7 +1,6 @@
 package com.yhjoo.dochef.ui.home
 
-import android.app.Application
-import android.content.Intent
+import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.*
 import com.google.firebase.storage.FirebaseStorage
@@ -17,34 +16,38 @@ import com.yhjoo.dochef.data.repository.PostRepository
 import com.yhjoo.dochef.data.repository.RecipeRepository
 import com.yhjoo.dochef.data.repository.UserRepository
 import com.yhjoo.dochef.utils.OtherUtil
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class HomeViewModel(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    savedStateHandle: SavedStateHandle,
     private val userRepository: UserRepository,
     private val recipeRepository: RecipeRepository,
     private val postRepository: PostRepository,
     private val accountRepository: AccountRepository,
-    private val application: Application,
-    intent: Intent,
 ) : ViewModel() {
     val activeUserId = App.activeUserId
 
-    val currentMode = if (intent.getStringExtra(Constants.INTENTNAME.USER_ID) == null
-        || intent.getStringExtra(Constants.INTENTNAME.USER_ID) == activeUserId
+    val currentMode = if (savedStateHandle.get<String>(Constants.INTENTNAME.USER_ID) == null
+        || savedStateHandle.get<String>(Constants.INTENTNAME.USER_ID) == activeUserId
     )
-        HomeActivity.UIMODE.OWNER
-    else HomeActivity.UIMODE.OTHERS
+        HomeActivity.Companion.UIMODE.OWNER
+    else HomeActivity.Companion.UIMODE.OTHERS
 
     private var targetUserId: String =
-        if (intent.getStringExtra(Constants.INTENTNAME.USER_ID) == null
-            || intent.getStringExtra(Constants.INTENTNAME.USER_ID) == activeUserId
+        if (savedStateHandle.get<String>(Constants.INTENTNAME.USER_ID) == null
+            || savedStateHandle.get<String>(Constants.INTENTNAME.USER_ID) == activeUserId
         )
             activeUserId
         else
-            intent.getStringExtra(Constants.INTENTNAME.USER_ID)!!
+            savedStateHandle.get<String>(Constants.INTENTNAME.USER_ID)!!
 
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference
@@ -120,14 +123,14 @@ class HomeViewModel(
     fun toggleSubscribeUser() = viewModelScope.launch {
         if (_isFollowTarget.value == true) {
             userRepository.unsubscribeUser(activeUserId, targetUserId).collect {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     _isFollowTarget.value = false
                     requestTargetUserDetail()
                 }
             }
         } else {
             userRepository.subscribeUser(activeUserId, targetUserId).collect {
-                if (it.isSuccessful){
+                if (it.isSuccessful) {
                     _isFollowTarget.value = true
                     requestTargetUserDetail()
                 }
@@ -148,11 +151,11 @@ class HomeViewModel(
         viewModelScope.launch {
             if (imageUri != null) {
                 val imageUrl = String.format(
-                    application.applicationContext.getString(R.string.format_upload_file),
+                    context.getString(R.string.format_upload_file),
                     activeUserId, System.currentTimeMillis().toString()
                 )
                 val ref =
-                    storageReference.child(application.applicationContext.getString(R.string.storage_path_profile) + imageUrl)
+                    storageReference.child(context.getString(R.string.storage_path_profile) + imageUrl)
                 ref.putFile(imageUri)
                     .addOnSuccessListener {
                         updateUser(
@@ -173,29 +176,5 @@ class HomeViewModel(
 
     enum class Events {
         UPDATE_COMPLETE, NICKNAME_INVALID, NICKNAME_VALID
-    }
-}
-
-class HomeViewModelFactory(
-    private val userRepository: UserRepository,
-    private val recipeRepository: RecipeRepository,
-    private val postRepository: PostRepository,
-    private val accountRepository: AccountRepository,
-    private val application: Application,
-    private val intent: Intent
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(HomeViewModel::class.java)) {
-            return HomeViewModel(
-                userRepository,
-                recipeRepository,
-                postRepository,
-                accountRepository,
-                application,
-                intent
-            ) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

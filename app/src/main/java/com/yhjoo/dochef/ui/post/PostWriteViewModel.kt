@@ -1,10 +1,9 @@
 package com.yhjoo.dochef.ui.post
 
-import android.app.Application
-import android.content.Intent
+import android.content.Context
 import android.net.Uri
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -12,20 +11,24 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.Post
 import com.yhjoo.dochef.data.repository.PostRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
-class PostWriteViewModel(
+@HiltViewModel
+class PostWriteViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
+    savedStateHandle: SavedStateHandle,
     private val postRepository: PostRepository,
-    private val application: Application,
-    intent: Intent,
 ) : ViewModel() {
     val activeUserId = App.activeUserId
-    val currentMode = intent.getIntExtra("mode", PostWriteActivity.Companion.UIMODE.WRITE)
-    val postInfo: Post? = (intent.getSerializableExtra("post") as Post) ?: null
+    val currentMode: Int? = savedStateHandle.get<Int>("mode")
+    val postInfo: Post? = savedStateHandle.get<Post>("post")
 
     private val storageReference: StorageReference by lazy {
         FirebaseStorage.getInstance().reference
@@ -41,12 +44,12 @@ class PostWriteViewModel(
     ) {
         if (imageUri != null) {
             val imageString = String.format(
-                application.applicationContext.getString(R.string.format_upload_file),
+                context.getString(R.string.format_upload_file),
                 activeUserId,
                 System.currentTimeMillis().toString()
             )
             val ref =
-                storageReference.child(application.applicationContext.getString(R.string.storage_path_post) + imageString)
+                storageReference.child(context.getString(R.string.storage_path_post) + imageString)
             ref.putFile(imageUri)
                 .addOnSuccessListener {
                     if (currentMode == PostWriteActivity.Companion.UIMODE.WRITE) {
@@ -120,19 +123,5 @@ class PostWriteViewModel(
 
     enum class Events {
         CREATE_COMPLETE, UPDATE_COMPLETE
-    }
-}
-
-class PostWriteViewModelFactory(
-    private val postRepository: PostRepository,
-    private val application: Application,
-    private val intent: Intent,
-) :
-    ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(PostWriteViewModel::class.java)) {
-            return PostWriteViewModel(postRepository, application, intent) as T
-        }
-        throw IllegalArgumentException("Unknown View Model class")
     }
 }

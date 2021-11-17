@@ -11,7 +11,6 @@ import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.UserBrief
 import com.yhjoo.dochef.databinding.FollowlistItemBinding
-import com.yhjoo.dochef.ui.setting.SettingViewModel
 import java.util.*
 
 class FollowListAdapter(
