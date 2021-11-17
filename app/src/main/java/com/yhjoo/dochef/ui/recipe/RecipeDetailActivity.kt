@@ -18,8 +18,6 @@ import com.skydoves.powermenu.PowerMenuItem
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.R
 import com.yhjoo.dochef.data.model.RecipeDetail
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipedetailActivityBinding
 import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.ui.home.HomeActivity

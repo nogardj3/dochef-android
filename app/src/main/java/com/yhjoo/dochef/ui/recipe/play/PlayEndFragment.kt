@@ -10,8 +10,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.R
-import com.yhjoo.dochef.data.repository.RecipeRepository
-import com.yhjoo.dochef.data.repository.ReviewRepository
 import com.yhjoo.dochef.databinding.RecipeplayEndFragmentBinding
 import com.yhjoo.dochef.ui.base.BaseFragment
 import dagger.hilt.android.AndroidEntryPoint

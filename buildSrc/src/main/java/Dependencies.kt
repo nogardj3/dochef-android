@@ -1,5 +1,5 @@
 object Versions{
-    const val KOTLIN = "1.5.30"
+    const val KOTLIN = "1.5.31"
     const val GOOGLE_SERVICE = "4.3.10"
     const val FIREBASE_CRASHLYTICS = "2.7.1"
     const val NAVIGATION = "2.3.5"
@@ -23,7 +23,7 @@ object LibsVersion{
     const val DATASTORE = "1.0.0"
     const val PAGING = "3.0.1"
     const val WORKMANAGER = "2.5.0"
-    const val HILT = "2.28-alpha"
+    const val HILT = "2.38.1"
     const val REACTIVEX = "3.0.0"
     const val RETROFIT2 = "2.9.0"
     const val GLIDE = "4.12.0"

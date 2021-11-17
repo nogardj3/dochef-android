@@ -1,7 +1,10 @@
 package com.yhjoo.dochef.ui.setting
 
 import androidx.core.text.parseAsHtml
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.data.model.ExpandableItem
 import com.yhjoo.dochef.data.repository.BasicRepository
 import dagger.hilt.android.lifecycle.HiltViewModel

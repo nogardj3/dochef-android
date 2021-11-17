@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.ui.recipe.play
 
-import android.content.Intent
 import androidx.lifecycle.*
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.data.model.RecipeDetail

@@ -1,6 +1,9 @@
 package com.yhjoo.dochef.ui.search
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.yhjoo.dochef.App
 import com.yhjoo.dochef.Constants
 import com.yhjoo.dochef.data.model.Recipe
