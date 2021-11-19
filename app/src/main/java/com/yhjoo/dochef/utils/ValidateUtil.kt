@@ -1,6 +1,7 @@
 package com.yhjoo.dochef.utils
 
 import android.util.Patterns
+import androidx.core.util.PatternsCompat
 import java.util.regex.Pattern
 
 object ValidateUtil {
@@ -31,7 +32,7 @@ object ValidateUtil {
                     EmailResult.ERR_EMPTY,
                     "이메일을 입력 해 주세요."
                 )
-            !Patterns.EMAIL_ADDRESS.matcher(email).matches() ->
+            !PatternsCompat.EMAIL_ADDRESS.matcher(email).matches() ->
                 Pair(
                     EmailResult.ERR_INVALID,
                     "이메일 형식이 올바르지 않습니다."
