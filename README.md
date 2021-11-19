@@ -70,11 +70,11 @@
 ## Tech stack & Open-source libraries
 
 -   [Kotlin(Coroutine, Flow)](https://developer.android.com/kotlin/coroutines?hl=ko)
--   [AAC(Databinding, Lifecycle, Livedata, Viewmodel, Room, Navigation)](https://developer.android.com/topic/libraries/architecture?hl=ko)
+-   [AAC(Databinding, Lifecycle, Livedata, ViewModel, Room, Navigation)](https://developer.android.com/topic/libraries/architecture?hl=ko)
+-   [Hilt](https://developer.android.com/training/dependency-injection/hilt-android?hl=ko)
+-   [Junit, Mockito](https://developer.android.com/training/testing/unit-testing/local-unit-tests?hl=ko)
+-   [Espresso](https://developer.android.com/training/testing/espresso?hl=ko)
+-   [Firebase(Auth, Admob, Analytics, Crashlytics, Cloud Messaging, Storage)](https://firebase.google.com/docs?hl=ko)
 -   [RxJava3 / RxAndriod](http://reactivex.io/)
 -   [Retrofit2](https://square.github.io/retrofit/)
 -   [Glide](https://github.com/bumptech/glide)
--   [Firebase(Auth, Admob, Analytics, Crashlytics, Cloud Messaging, Storage)](https://firebase.google.com/docs?hl=ko)
--   ~~[Hilt](https://developer.android.com/training/dependency-injection/hilt-android?hl=ko)~~
--   ~~[Mockito](https://developer.android.com/training/testing/unit-testing/local-unit-tests?hl=ko)~~
--   ~~[Espresso](https://developer.android.com/training/testing/espresso?hl=ko)~~
