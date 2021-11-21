@@ -29,7 +29,7 @@ open class BaseActivity : AppCompatActivity() {
         if (!compositeDisposable.isDisposed) compositeDisposable.clear()
     }
 
-    // navigation up == backpressed
+    // navigation up = backpressed
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

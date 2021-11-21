@@ -1,8 +1,5 @@
 package com.yhjoo.dochef.utils
 
-import android.util.Log
-import org.junit.Assert
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertSame
 import org.junit.Test
 import org.junit.runner.RunWith

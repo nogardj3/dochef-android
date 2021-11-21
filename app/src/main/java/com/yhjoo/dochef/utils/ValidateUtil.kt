@@ -1,6 +1,5 @@
 package com.yhjoo.dochef.utils
 
-import android.util.Patterns
 import androidx.core.util.PatternsCompat
 import java.util.regex.Pattern
 

@@ -10,6 +10,7 @@ import android.view.*
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.canhub.cropper.CropImageContract
 import com.canhub.cropper.CropImageView
@@ -20,6 +21,7 @@ import com.yhjoo.dochef.ui.base.BaseActivity
 import com.yhjoo.dochef.utils.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import java.util.*
 
 @AndroidEntryPoint
@@ -69,7 +71,7 @@ class PostWriteActivity : BaseActivity() {
 
             postwriteContents.addTextChangedListener(contentsTextWatcher)
         }
-
+        
         subscribeEventOnLifecycle {
             postWriteViewModel.eventResult.collect {
                 when (it.first) {
